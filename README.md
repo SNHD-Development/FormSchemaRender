@@ -1,13 +1,12 @@
 FormSchemaRender
 ================
+Read JS object and Build the HTML Form.
 
 Version `version 0.0.1`
 
-Read JS object and Build the HTML Form.
-
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
-<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 
 ### JS Object
 1. formSchema: formSchema JS Object (Require)

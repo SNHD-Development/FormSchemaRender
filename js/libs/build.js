@@ -1,7 +1,7 @@
 ({
   appDir: '../',
   baseUrl: ".",
-  dir: '../form-render-dist'
+  dir: '../../form-render-dist'
   , modules: [
     { name: 'main' }
   ]
