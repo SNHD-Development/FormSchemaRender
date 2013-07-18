@@ -92,7 +92,11 @@ define([
           .on('changeDate', function(e){
             var _dateInput = $(e.currentTarget).removeClass('invalid').trigger('change');
             _dateInput.datepicker('hide');
-          });
+          })
+		  .on('click', function(e){
+			$('div.datepicker.dropdown-menu').css('display', 'none');
+			$(e.currentTarget).datepicker('show');
+		  });
       });
     },
     /**

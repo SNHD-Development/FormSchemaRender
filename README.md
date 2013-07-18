@@ -9,8 +9,9 @@ Please use font-awesome to add visual effect to the UI.
 `<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">`
 
 Please include these styles
-1. datepicker.css
-2. form-render.css
+
+* form-render.css (Required)
+* datepicker.css (If you use type = "date")
 
 Load JS with RequireJS
 `<script data-main="js/main" src="js/libs/require/require.js"></script>`
@@ -19,6 +20,16 @@ Load JS with RequireJS
 1. formSchema: formSchema JS Object (Require)
 2. formData: formData JS Object (Optional)
 3. mode: mode either 'read', 'edit', or 'Create' (Optional)
+4. view: view to render ("default", "horizontal", "wizard")
+
+Example:
+
+	<script type="text/javascript">
+		var formSchema = {}
+		, formData = {}
+		, mode = ""
+		, view = "";
+	</script>
 
 ### HTML Markup
 	<div id="app">

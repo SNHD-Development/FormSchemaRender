@@ -14,6 +14,9 @@
         "comment": {
 			"required" : true,
         },
+		"maxdate": {
+			"maxdate" : "today"
+		},
 		"subform" : {
 			"subformName": {
                 "required": true,
@@ -46,6 +49,16 @@
 			"Name": "petname",
 			"Type": "Text",
 			"Description": "Pet Name",
+		},
+		{
+			"Name" : "testFile",
+			"Type" : "File",
+			"Description" : "Upload File"
+		},
+		{
+			"Name" : "imageFile",
+			"Type" : "Image",
+			"Description" : "Upload Image File"
 		},
 		{
 			"Name": "email",
@@ -95,7 +108,17 @@
 		{
 				"Name" : "ChildDob",
 				"Type" : "Birthdate",
-				"Description" : "Child's Date of Birth"
+				"Description" : "Birthday Input"
+		},
+		{
+				"Name" : "date",
+				"Type" : "Date",
+				"Description" : "Date input"
+		},
+		{
+				"Name" : "maxdate",
+				"Type" : "Date",
+				"Description" : "Max Date input"
 		},
 		{
 			"Name": "Grade",
