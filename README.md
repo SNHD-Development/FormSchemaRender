@@ -8,6 +8,13 @@ Version `version 0.0.1`
 Please use font-awesome to add visual effect to the UI.
 `<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">`
 
+Please include these styles
+1. datepicker.css
+2. form-render.css
+
+Load JS with RequireJS
+`<script data-main="js/main" src="js/libs/require/require.js"></script>`
+
 ### JS Object
 1. formSchema: formSchema JS Object (Require)
 2. formData: formData JS Object (Optional)
