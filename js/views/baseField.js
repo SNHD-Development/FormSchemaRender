@@ -284,7 +284,7 @@ define([
 		  _field_data = $.trim(_field_data);
 		  if (_type === 'file') {
 			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn btn-primary');
-			field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/');
+			field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
 			delete field.attributes['accept'];
 			_.each(field.attributes, function(value, key) {
 			  _attr += ' '+key+'=\''+value+'\'';
