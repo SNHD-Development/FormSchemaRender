@@ -1,0 +1,209 @@
+{
+    "Action": "http://localhost/test/post",
+    "Category": "SNHD Development",
+    "Description": "FormSchema Kitchen Sink",
+	"FormOptions": {
+    },
+    "Name": "formSchemaKitchenSink",
+    "Title": "Demo of FormSchema",
+    "View": "default",
+    "Validation" : {
+		"self": {
+			"required" : true,
+		},
+        "comment": {
+			"required" : true,
+        },
+		"subform" : {
+			"subformName": {
+                "required": true,
+                "msg": "Please enter Subform Name"
+            },
+            "GradeSub": {
+                "required": true,
+                "msg": "Please enter Grade"
+            }
+		}
+    },
+    "Fields": [
+		{
+			"Name": "self",
+			"Type": "FullName",
+			"Description": "Full Name",
+			"Options": {
+			"MiddleName": true
+			}
+		},
+		{
+			"Name": "father",
+			"Type": "FullName",
+			"Description": "Father Full Name",
+			"Options": {
+			"MiddleName": false
+			}
+		},
+		{
+			"Name": "petname",
+			"Type": "Text",
+			"Description": "Pet Name",
+		},
+		{
+			"Name": "email",
+			"Type": "Email",
+			"Description": "Your Email",
+			"Options": {
+				"AutoComplete": "true",
+				"Default": "hotmail.com"
+			}
+		},
+		{
+			"Name": "petemail",
+			"Type": "Email",
+			"Description": "Your Email"
+		},
+		{
+			"Type": "hr",
+		},
+		{
+			"Name": "school",
+			"Type": "SchoolES",
+			"Description": "Name of School"
+		},
+		{
+			"Name": "howareyou",
+			"Type": "Select",
+			"Description": "How are you?",
+			"Values": {
+				"1": "Good",
+				"2": "Happy",
+				"3": "Sad"
+			},
+			"Attributes": {
+				"Multiple": true
+			}
+		},
+		{
+			"Name": "normalselect",
+			"Type": "Select",
+			"Description": "Test Select",
+			"Values": [
+				"Option 1",
+				"Option 2",
+				"Option 3"
+			]
+		},
+		{
+				"Name" : "ChildDob",
+				"Type" : "Birthdate",
+				"Description" : "Child's Date of Birth"
+		},
+		{
+			"Name": "Grade",
+			"Type": "Select",
+			"Description": "Grade",
+			"Values": [
+			"Second Grade",
+			"Third Grade",
+			"Fourth Grade",
+			"Fifth Grade",
+			"All Grades (2nd - 5th)"
+			]
+		},
+		{
+			'Type': "HTML",
+			"Description" : '<div class="clear"></div>'
+		},
+		{
+			"Name": "ExtraButon",
+			"Type": "Button",
+			"Description": "Extra Button",
+			"Attributes": {
+			"data-placement": "left",
+			"data-html": "true",
+			"data-trigger": "manual",
+			"data-title": "Add a Teacher",
+			"data-content": "",
+			"class": "btn btn-primary"
+			}
+		},
+		{
+			"Name": "subform",
+			"Description": "Add Data",
+			"Type": "List",
+			"View" : 'table',
+			"Options": {
+			"Btn-Align": "Right"
+			},
+			"Fields": [
+				{
+					"Name": "subformName",
+					"Type": "FullName",
+					"Description": "Full Name",
+					"Options": {
+						"MiddleName": true
+					}
+				},
+				{
+					"Name": "testtextarea",
+					"Type": "Textarea",
+					"Description": "Textarea"
+				},
+				{
+					"Name": "GradeSub",
+					"Type": "Select",
+					"Description": "Grade",
+					"Values": [
+						"Select 1",
+						"Select 2",
+						"Select 3"
+					]
+				}
+			]
+		},
+		{
+			"Name": "comment",
+			"Type": "Textarea",
+			"Description": "Comment"
+		},
+		{
+			"Type": "Action"
+		},
+		{
+            "Name": "ClientBtn",
+            "Type" : "Button",
+            "Description" : "Client Button",
+            "Url" : "/path/to/action",
+            "ShowOnStatus" : "Awaiting Completion",
+            "Attributes": {
+                "Class" : "btn btn-primary"
+            }
+        },
+        {
+            "Name": "Cancel",
+            "Type" : "Button",
+            "Description" : "Cancel",
+            "Url" : "/your/url/here",
+            "ShowOnStatus" : "Awaiting Completion",
+            "Attributes": {
+                "Class" : "btn btn-primary"
+            }
+        },
+        {
+            "Name": "ClearForm",
+            "Type" : "Clear",
+            "Description" : "Clear Form",
+            "Attributes": {
+                "Class" : "btn btn-danger"
+            }
+        },
+        {
+            "Name": "ServerSideSubmitBtn",
+            "Type" : "Submit",
+            "Description" : "Server Side Submit Button",
+            "Url" : "",
+            "Attributes": {
+                "Class" : "btn btn-primary"
+            }
+        }
+    ]
+  }
