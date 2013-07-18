@@ -34,10 +34,13 @@ define([
 			_html += '<div class="control-group">';
 			this._divcontrolgroup++;
 			_html += that.renderLabel(value, 'control-label');
+			_html += '<div class="controls">';
 		}
+
 		_html += _parentRender.call(that, value);
+
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-			_html += '</div>';
+			_html += '</div></div>';
 			this._divcontrolgroup--;
 		}
 	  });

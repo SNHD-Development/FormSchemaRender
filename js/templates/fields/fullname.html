@@ -10,7 +10,7 @@ if( typeof options.middlename !== 'undefined' && options.middlename ) {
 	_span_lastname = 5;
 }
 %>
-<div class="controls controls-row">
+<div class="controls-row">
 	<input id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>_fullname_first_name" name="<%= name %>_fullname_first_name" type="text" class="span<%= _span_firstname %>" placeholder="First Name"<%= _attr %>/>
 	<% if( _middle_name ) { %>
 	<input id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>_fullname_middle_name" name="<%= name %>_fullname_middle_name" type="text" class="span3" placeholder="Middle Initial"<%= _attr %>/>
