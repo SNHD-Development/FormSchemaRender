@@ -6,7 +6,6 @@
     },
     "Name": "formSchemaKitchenSink",
     "Title": "Demo of FormSchema",
-    "View": "default",
     "Validation" : {
 		"self": {
 			"required" : true,

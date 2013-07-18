@@ -305,10 +305,11 @@ define([
 	/**
 	 * Render Label
 	 **/
-	renderLabel: function(field) {
+	renderLabel: function(field, cssClass) {
 	  field.attributes = field.attributes || {};
 	  field.options = field.options || {};
-	  return this.inputTemplate['label'](field);
+	  var _cssClass = (typeof cssClass !== 'undefined' && cssClass) ? ' class="'+cssClass+'"': '';
+	  return this.inputTemplate['label'](_.extend({ _cssClass:_cssClass }, field));
 	},
 	/**
 	 * Render Button

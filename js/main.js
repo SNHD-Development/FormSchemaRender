@@ -69,7 +69,7 @@ require([
   'views/app',
   'vm'
 ], function(AppView, Vm){
-  var _mode;
+  var _mode, _view, _opts, appView;
 
   if (typeof formSchema === 'undefined') {
     throw 'formSchema is undefined';
@@ -83,11 +83,16 @@ require([
     _mode = (typeof mode !== 'undefined') ? mode.toLowerCase(): 'create';
   }
 
-  var _opts = {
+  _view = (typeof view !== 'undefined') ? view.toLowerCase(): 'horizontal';
+
+  _opts = {
     formSchema : formSchema,
     formData : ( (typeof formData === 'undefined') ? {}: formData ),
     mode : _mode
-  }
-  , appView = Vm.create({}, 'AppView', AppView, _opts);
+  };
+  // Setup View
+  _opts.formSchema.view = _view;
+
+  appView = Vm.create({}, 'AppView', AppView, _opts);
   appView.render();
 });

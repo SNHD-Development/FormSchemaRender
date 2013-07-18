@@ -1,5 +1,5 @@
 /**
- * Default Form Layout (Vertical)
+ * Horizontal Form Layout
  **/
 define([
   'jquery',
@@ -10,18 +10,20 @@ define([
   'modelbinder',
   'validation',
   'views/baseField',
-  'text!templates/form-layouts/default.html'
+  'text!templates/form-layouts/horizontal.html'
 ], function($, _, Backbone, Vm, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
   var AppView = BaseFieldView.extend({
 	_modelBinder: undefined,
     template: _.template(formLayoutTemplate),
     initialize: function () {
-	  BaseFieldView.prototype.initialize.call(this);
+		this._divcontrolgroup = 0;	// init div counter
+		BaseFieldView.prototype.initialize.call(this);
 
-	  if (typeof this.options.formSchema === 'undefined') {
-		  throw 'formSchema is not in the options parameters';
-	  }
-	  this.el = '#'+this.options.formSchema.name;
+		if (typeof this.options.formSchema === 'undefined') {
+			throw 'formSchema is not in the options parameters';
+		}
+		this.el = '#'+this.options.formSchema.name;
+		$(this.el).addClass('form-horizontal');
     },
     render: function () {
 		var that = this
@@ -29,9 +31,15 @@ define([
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-		  _html += that.renderLabel(value);
+			_html += '<div class="control-group">';
+			this._divcontrolgroup++;
+			_html += that.renderLabel(value, 'control-label');
 		}
 		_html += _parentRender.call(that, value);
+		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
+			_html += '</div>';
+			this._divcontrolgroup--;
+		}
 	  });
 	  // not auto rendering the button
 	  //_html += BaseFieldView.prototype.renderButton(this.options.formSchema.formoptions);

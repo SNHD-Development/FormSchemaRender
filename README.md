@@ -19,8 +19,8 @@ Load JS with RequireJS
 ### JS Object
 1. formSchema: formSchema JS Object (Require)
 2. formData: formData JS Object (Optional)
-3. mode: mode either 'read', 'edit', or 'Create' (Optional)
-4. view: view to render ("default", "horizontal", "wizard")
+3. mode: mode either "read", "edit" or "create" (Optional)
+4. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
 
 Example:
 
