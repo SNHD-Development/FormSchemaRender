@@ -48,6 +48,13 @@ define([
 	  // Bind Model
 	  that._modelBinder.bind(that.model, that.el);
 	  Backbone.Validation.bind(that, {forceUpdate: true});
+	  // Add FormWizard Reference
+	  this.$formWizard = $('.wizard-view .wizard', this.el);
+	  this.$prevBtn = $('.wizard-view .wizard-actions .btn_prev', this.el);
+	  this.$nextBtn = $('.wizard-view .wizard-actions .btn_next', this.el);
+
+	  // Attched Wizard View Events
+	  this.attachedEvents();
     },
 	/**
 	 * Render Wizard Navigation Bar
@@ -62,6 +69,40 @@ define([
 		_html += '<li data-target="#wizard_step'+(index+1)+'" class="'+element['class']+'"><span class="badge badge-info">'+(index+1)+'</span>'+element.description+'<span class="chevron"></span></li>';
 	  });
 	  $('.wizard-view ul.steps', this.el).html(_html);
+	},
+	/**
+	 * Wizard Events
+	 **/
+	attachedEvents: function() {
+	  this.$prevBtn.on('click', this, this.clickPrev);
+	  this.$nextBtn.on('click', this, this.clickNext);
+	  $(this.el).on('change', '.wizard-view .wizard', this, this.changeStep);
+	},
+	clickPrev: function(e) {
+	  console.log('prev');
+	  e.data.$formWizard.wizard('previous');
+	},
+	clickNext: function(e) {
+	  console.log('next');
+	  e.data.$formWizard.wizard('next');
+	},
+	changeStep: function(e, data) {
+	  console.log(data.step);
+	  console.log(data.direction);
+
+	  if (data.direction === 'next') {
+		switch (data.step) {
+		  case 1:
+			e.data.$prevBtn.removeAttr('disabled').fadeIn('slow');
+			break;
+		}
+	  } else {
+		switch (data.step) {
+		  case 2:
+			e.data.$prevBtn.attr('disabled', true).fadeOut('slow');
+			break;
+		}
+	  }
 	}
   });
   return AppView;
