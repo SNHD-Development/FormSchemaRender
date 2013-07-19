@@ -172,6 +172,7 @@ define([
 			}, 2000 );
 		}
 	  }
+	  $form.trigger(this.options.formSchema.name+'.validated');
 	},
     showRequest: function(formData, jqForm, options) {
       //console.log($.param(formData));

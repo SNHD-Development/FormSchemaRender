@@ -80,6 +80,8 @@ define([
 	  this.$nextBtn.on('click', this, this.clickNext);
 	  this.$formWizard.on('change', this, this.changeStep);
 	  this.$formWizard.on('finished', this, this.submittingForm);
+	  $(this.el).on(this.options.formSchema.name+'.validated', this, this.validatedForm);
+	  $(this.el).on(this.options.formSchema.name+'.postSubmit', this, this.respondResult);
 	},
 	clickPrev: function(e) {
 	  e.data.$formWizard.wizard('previous');
@@ -119,6 +121,39 @@ define([
 	  } else {
 
 	  }
+	},
+	validatedForm: function(e) {
+	  var $form = $(e.data.el)
+	  , _opt = {
+		html : true,
+		placement: 'top',
+		trigger: 'manual'
+	  };
+	  if ($form.hasClass('validation_pass')) {
+		_opt.title = 'Submitting Form, Please wait';;
+		_opt.content = '<i class="icon-spinner icon-spin icon-large"></i> Sending data...';
+		e.data.$nextBtn.attr('disabled', true).popover(_opt).popover('show')
+			.next('.popover').addClass('success');
+	  } else {
+		_opt.title = '<i class="icon-edit"></i> Validation Error';
+		_opt.content = 'Please correct the form';
+		e.data.$nextBtn.attr('disabled', true).popover(_opt).popover('show');
+
+		window.setTimeout(
+		  function() {
+			$('.invalid:first', $form).focus();
+			e.data.$nextBtn.attr('disabled', false).popover('destroy');
+			e.data.$nextBtn.next('.popover').remove();
+		  }, 2000 );
+	  }
+	},
+	respondResult: function(e) {
+	  window.setTimeout(
+          function() {
+              e.data.$nextBtn.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+          },
+          3000
+      );
 	}
   });
   return AppView;
