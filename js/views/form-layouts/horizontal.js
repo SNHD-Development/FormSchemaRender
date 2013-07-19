@@ -46,7 +46,7 @@ define([
 	  });
 
 	  // Closed open div
-	  _html += BaseFieldView.prototype.closeOpenDiv();
+	  _html += BaseFieldView.prototype.closeOpenDiv.call(this);
       $(this.el).html(this.template(_.extend({html : _html}, this.options.formSchema)));
 
 	  // Bind Model

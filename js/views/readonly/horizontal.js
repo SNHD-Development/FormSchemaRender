@@ -44,10 +44,10 @@ define([
 		}
 	  });
 	  // not auto rendering the button
-	  //_html += BaseFieldView.prototype.renderButton(this.options.formSchema.formoptions);
+	  //_html += BaseFieldView.prototype.renderButton.call(this, this.options.formSchema.formoptions);
 
 	  // Closed open div
-	  _html += BaseFieldView.prototype.closeOpenDiv();
+	  _html += BaseFieldView.prototype.closeOpenDiv.call(this);
       $(this.el).html(this.template(_.extend({html : _html}, this.options.formSchema)));
     }
   });

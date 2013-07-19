@@ -40,7 +40,8 @@ define([
 	  });
 
 	  // Closed open div
-	  _html += BaseFieldView.prototype.closeOpenDiv();
+	  _html += BaseFieldView.prototype.closeOpenDiv.call(this);
+	  _html += BaseFieldView.prototype.closeOpenDiv.call(this, '_stepDiv');
       $(this.el).html(this.template(_.extend({html : _html}, this.options.formSchema)));
 
 	  this.renderWizardNavBar();
@@ -60,7 +61,7 @@ define([
 		}
 		_html += '<li data-target="#wizard_step'+(index+1)+'" class="'+element['class']+'"><span class="badge badge-info">'+(index+1)+'</span>'+element.description+'<span class="chevron"></span></li>';
 	  });
-	  $('.wizard .steps', this.el).html(_html);
+	  $('.wizard-view ul.steps', this.el).html(_html);
 	}
   });
   return AppView;

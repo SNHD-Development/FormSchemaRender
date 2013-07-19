@@ -46,6 +46,7 @@ Required wizard.css style
 
 Field type = 'step' is unique for this view only. Other View will not render this field type.
 It will set the step for wizard view.
+Note: Require to have field type = 'step' at the beginning of fields array in formSchema.
 
 ### Build
 1. Under js/libs path will have `build.js` file.

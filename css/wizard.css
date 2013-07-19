@@ -2,7 +2,7 @@
  * Wizard Style from FuelUX
  * Version 2.3.0
  **/
-.form-render .wizard {
+.form-render .wizard-view .wizard {
   /*---------------------------------------------------
     LESS Elements 0.9
   ---------------------------------------------------
@@ -30,15 +30,16 @@
   -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
   background-color: #f9f9f9;
+  overflow: hidden;
 }
-.form-render .wizard ul {
+.form-render .wizard-view .wizard ul {
   list-style: none outside none;
   padding: 0;
   margin: 0;
   /* set z-index on steps for chevron overlap */
 
 }
-.form-render .wizard ul li {
+.form-render .wizard-view .wizard ul li {
   float: left;
   margin: 0;
   padding: 0 20px 0 30px;
@@ -50,7 +51,7 @@
   font-size: 16px;
   cursor: default;
 }
-.form-render .wizard ul li .chevron {
+.form-render .wizard-view .wizard ul li .chevron {
   border: 24px solid transparent;
   border-left: 14px solid #d4d4d4;
   border-right: 0;
@@ -59,7 +60,7 @@
   right: -14px;
   top: 0;
 }
-.form-render .wizard ul li .chevron:before {
+.form-render .wizard-view .wizard ul li .chevron:before {
   border: 24px solid transparent;
   border-left: 14px solid #ededed;
   border-right: 0;
@@ -69,82 +70,100 @@
   right: 1px;
   top: -24px;
 }
-.form-render .wizard ul li.complete {
+.form-render .wizard-view .wizard ul li.complete {
   background: #f3f4f5;
   color: #468847;
 }
-.form-render .wizard ul li.complete:hover {
+.form-render .wizard-view .wizard ul li.complete:hover {
   background: #e7eff8;
   cursor: pointer;
 }
-.form-render .wizard ul li.complete:hover .chevron:before {
+.form-render .wizard-view .wizard ul li.complete:hover .chevron:before {
   border-left: 14px solid #e7eff8;
 }
-.form-render .wizard ul li.complete .chevron:before {
+.form-render .wizard-view .wizard ul li.complete .chevron:before {
   border-left: 14px solid #f3f4f5;
 }
-.form-render .wizard ul li.active {
+.form-render .wizard-view .wizard ul li.active {
   background: #f1f6fc;
   color: #3a87ad;
 }
-.form-render .wizard ul li.active .chevron:before {
+.form-render .wizard-view .wizard ul li.active .chevron:before {
   border-left: 14px solid #f1f6fc;
 }
-.form-render .wizard ul li .badge {
+.form-render .wizard-view .wizard ul li .badge {
   margin-right: 8px;
 }
-.form-render .wizard ul li:nth-child(1) {
+.form-render .wizard-view .wizard ul li:nth-child(1) {
   border-radius: 4px 0 0 4px;
   padding-left: 20px;
   z-index: 10;
 }
-.form-render .wizard ul li:nth-child(2) {
+.form-render .wizard-view .wizard ul li:nth-child(2) {
   z-index: 9;
 }
-.form-render .wizard ul li:nth-child(3) {
+.form-render .wizard-view .wizard ul li:nth-child(3) {
   z-index: 8;
 }
-.form-render .wizard ul li:nth-child(4) {
+.form-render .wizard-view .wizard ul li:nth-child(4) {
   z-index: 7;
 }
-.form-render .wizard ul li:nth-child(5) {
+.form-render .wizard-view .wizard ul li:nth-child(5) {
   z-index: 6;
 }
-.form-render .wizard ul li:nth-child(6) {
+.form-render .wizard-view .wizard ul li:nth-child(6) {
   z-index: 5;
 }
-.form-render .wizard ul li:nth-child(7) {
+.form-render .wizard-view .wizard ul li:nth-child(7) {
   z-index: 4;
 }
-.form-render .wizard ul li:nth-child(8) {
+.form-render .wizard-view .wizard ul li:nth-child(8) {
   z-index: 3;
 }
-.form-render .wizard ul li:nth-child(9) {
+.form-render .wizard-view .wizard ul li:nth-child(9) {
   z-index: 2;
 }
-.form-render .wizard ul li:nth-child(10) {
+.form-render .wizard-view .wizard ul li:nth-child(10) {
   z-index: 1;
 }
-.form-render .wizard .actions {
+.form-render .wizard-view .wizard .actions {
   line-height: 44px;
   float: right;
   padding-right: 15px;
   vertical-align: middle;
 }
-.form-render .wizard .actions a {
+.form-render .wizard-view .wizard .actions a {
   line-height: 45px;
   font-size: 12px;
   margin-right: 8px;
 }
-.form-render .wizard .actions .btn-prev i {
+.form-render .wizard-view .wizard .actions .btn-prev i {
   margin-right: 5px;
 }
-.form-render .wizard .actions .btn-next i {
+.form-render .wizard-view .wizard .actions .btn-next i {
   margin-left: 5px;
 }
-.step-content .step-pane {
+.form-render .wizard-view .step-content {
+  padding: 20px 30px;
+}
+.form-render .wizard-view .step-content .step-pane {
   display: none;
 }
-.step-content .active {
+.form-render .wizard-view .step-content .active {
   display: block;
+}
+.form-render .wizard-view .wizard-actions {
+  overflow: hidden;
+}
+.form-render .wizard-view .wizard-actions button {
+  padding-left: 35px;
+  padding-right: 35px;
+}
+.form-render .wizard-view .wizard-actions button.btn_prev {
+  margin-left: 30px;
+  float: left;
+}
+.form-render .wizard-view .wizard-actions button.btn_next {
+  margin-right: 30px;
+  float: right;
 }

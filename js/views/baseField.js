@@ -71,6 +71,8 @@ define([
 	},
 	initialize: function(){
 	  this._div = 0;	// Number of Open Div
+	  this._stepDiv = 0;	// Count number of open div for step (wizard view)
+	  this._currentStep = 1;	// Current Step
 	  this._hasDate = false; // Tracking the dateinput element
 	  this._hasBDate = false; // Tracking the Birthdate element
 
@@ -129,9 +131,10 @@ define([
 	/**
 	 * Closed Open Div
 	 **/
-	closeOpenDiv: function() {
+	closeOpenDiv: function(property) {
+	  property = property || '_div';
 	  var _html = ''
-	  , i = 0, j = this._div;
+	  , i = 0, j = this[property];
 	  for ( ; i < j; ++i) {
 		_html += '</div>';
 	  }
@@ -261,6 +264,22 @@ define([
 			field.attributes['data-provide'] = 'typeahead';
 			field.attributes['autocomplete'] = 'off';
 			field.attributes['data-source'] = schoolesData.replace(/\n/g, '').replace(/'/g, "&#39");
+			break;
+
+		  // Step Field Type only render for wizard view
+		  case 'step':
+			if ('view' in this.options.formSchema && this.options.formSchema.view === 'wizard' ) {
+			  if (this._stepDiv !== 0) {
+				_html += '</div>';
+				this._stepDiv--;
+			  }
+			  var _active = 'step-pane' + ( (this._currentStep === 1) ? ' active': '' );
+			  _html += '<div class="'+_active+'" id="wizard_step'+this._currentStep+'">';
+			  this._stepDiv++;
+			  this._currentStep++;
+			} else {
+			  return '';
+			}
 			break;
 
 		  // Sub Form, will need to render new view to handle the event

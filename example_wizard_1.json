@@ -30,6 +30,10 @@
     },
     "Fields": [
 		{
+			"Type": "Step",
+			"Description": "Step 1",
+		},
+		{
 			"Name": "self",
 			"Type": "FullName",
 			"Description": "Full Name",
@@ -97,7 +101,7 @@
 		},
 		{
 			"Type": "Step",
-			"Description": "Step 1",
+			"Description": "Step 2",
 		},
 		{
 			"Name": "normalselect",
@@ -126,7 +130,7 @@
 		},
 		{
 			"Type": "Step",
-			"Description": "Step 2",
+			"Description": "Step 3",
 		},
 		{
 			"Name": "Grade",

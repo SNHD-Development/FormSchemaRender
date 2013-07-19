@@ -3,7 +3,7 @@
  * Version 2.3.0
  **/
 
-.form-render .wizard {
+.form-render .wizard-view .wizard {
 
 	@import "../less/elements.less";
 	@import "variables.less";
@@ -12,6 +12,7 @@
 	.border-radius(@baseBorderRadius);
 	.box-shadow(0 1px 4px rgba(0,0,0,.065));
 	background-color: @tableBackgroundAccent;
+	overflow: hidden;
 
 	ul {
 		list-style: none outside none;
@@ -142,12 +143,30 @@
 	}
 }
 
-.step-content {
+.form-render .wizard-view .step-content {
+	padding: 20px 30px;
+
 	.step-pane {
 		display: none;
 	}
 
 	.active {
 		display: block;
+	}
+}
+
+.form-render .wizard-view .wizard-actions {
+	overflow: hidden;
+	button {
+		padding-left: 35px;
+		padding-right: 35px;
+		&.btn_prev {
+			margin-left: 30px;
+			float: left;
+		}
+		&.btn_next {
+			margin-right: 30px;
+			float: right;
+		}
 	}
 }
