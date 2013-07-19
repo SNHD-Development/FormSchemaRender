@@ -2,6 +2,9 @@
     "Action": "http://localhost/test/post",
     "Category": "SNHD Development",
     "Description": "FormSchema Kitchen Sink",
+	"Options": {
+
+    },
     "Name": "formSchemaKitchenSink",
     "Title": "Demo of FormSchema",
     "Validation" : {
@@ -93,6 +96,10 @@
 			}
 		},
 		{
+			"Type": "Step",
+			"Description": "Step 1",
+		},
+		{
 			"Name": "normalselect",
 			"Type": "Select",
 			"Description": "Test Select",
@@ -116,6 +123,10 @@
 				"Name" : "maxdate",
 				"Type" : "Date",
 				"Description" : "Max Date input"
+		},
+		{
+			"Type": "Step",
+			"Description": "Step 2",
 		},
 		{
 			"Name": "Grade",

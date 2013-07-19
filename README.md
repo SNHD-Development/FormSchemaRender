@@ -10,8 +10,8 @@ Please use font-awesome to add visual effect to the UI.
 
 Please include these styles
 
-* form-render.css (Required) `<link href="css/form-render.css" rel="stylesheet">`
-* datepicker.css (If you use type = "date") `<link href="css/datepicker.css" rel="stylesheet">`
+* form-render.css (Required) `<link rel="stylesheet" href="css/form-render.css" />`
+* datepicker.css (If you use type = "date") `<link rel="stylesheet" href="css/datepicker.css" />`
 
 Load JS with RequireJS
 `<script data-main="js/main" src="js/libs/require/require.js"></script>`
@@ -42,8 +42,10 @@ Example:
 
 #### Wizard View
 Required wizard.css style
-`<link href="css/wizard.css" rel="stylesheet">`
+`<link rel="stylesheet" href="css/wizard.css">`
 
+Field type = 'step' is unique for this view only. Other View will not render this field type.
+It will set the step for wizard view.
 
 ### Build
 1. Under js/libs path will have `build.js` file.

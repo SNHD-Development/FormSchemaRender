@@ -49,6 +49,7 @@ define([
 		case 'submit':
 		case 'hr':
 		case 'html':
+		case 'step':	// Special Field Type for Wizard View
 		  break;
 
 		default:

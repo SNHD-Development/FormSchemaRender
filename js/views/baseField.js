@@ -87,7 +87,7 @@ define([
 	  };
 	  // Not render label
 	  this.notRenderLabel = [
-		'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend'
+		'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step'
 	  ];
 	  // Set up the input template
 	  this.inputTemplate = {
