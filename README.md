@@ -38,6 +38,11 @@ Example:
 		</p>
 	</div>
 
+### Views
+
+#### Wizard View
+
+
 ### Build
 1. Under js/libs path will have `build.js` file.
 2. run with this command at the app root `r.js -o js/libs/build.js`

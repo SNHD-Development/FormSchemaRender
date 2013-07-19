@@ -1,3 +1,7 @@
+/**
+ * Main View Controller
+ **/
+
 define([
   'jquery',
   'lodash',

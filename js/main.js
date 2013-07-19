@@ -1,9 +1,13 @@
 /**
+ * Form Render
+ * https://github.com/SNHD-Development/FormSchemaRender
+ *
+ * Copyright (c) 2013 SNHD
+ * Licensed under the MIT license.
+ *
  * Version 0.0.1
  **/
 
-// Require.js allows us to configure shortcut alias
-// Their usage will become more apparent futher along in the tutorial.
 require.config({
   paths: {
     // Major libraries
@@ -23,6 +27,7 @@ require.config({
     "jquery.dateinput": 'libs/jquery-tools/jquery.tools.dateinput.min',
     "jquery.ajaxsubmit": 'libs/jquery-form-plugin/jquery.form.min',
     "jquery.birthdaypicker": 'libs/jquery-form-plugin/bdate-picker',
+    "jquery.wizard": 'libs/fuelux/wizard',
 
     // Bootstrap Plugin
     "jquery.datepicker": 'libs/bootstrap-datepicker/bootstrap-datepicker',
@@ -69,7 +74,11 @@ require([
   'views/app',
   'vm'
 ], function(AppView, Vm){
-  var _mode, _view, _opts, appView;
+  var _mode, _view, _opts, appView
+  , config = {
+    mode : ["read", "edit", "create"],
+    view : ["default", "horizontal", "wizard"]
+  };
 
   if (typeof formSchema === 'undefined') {
     throw 'formSchema is undefined';
@@ -78,9 +87,9 @@ require([
   Vm.toLower(formSchema);
   if (typeof formData !== 'undefined') {
     Vm.toLower(formData, 'fields');
-    _mode = (typeof mode !== 'undefined') ? mode.toLowerCase(): 'edit';
+    _mode = (typeof mode !== 'undefined' && config.mode.indexOf(mode.toLowerCase()) > -1) ? mode.toLowerCase(): 'edit';
   } else {
-    _mode = (typeof mode !== 'undefined') ? mode.toLowerCase(): 'create';
+    _mode = (typeof mode !== 'undefined' && config.view.indexOf(view.toLowerCase()) > -1) ? mode.toLowerCase(): 'create';
   }
 
   _view = (typeof view !== 'undefined') ? view.toLowerCase(): 'horizontal';
