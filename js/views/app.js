@@ -122,13 +122,14 @@ define([
       if ($form.hasClass('form_submitted')) {
         return;
       }
-      $form.addClass('form_submitted');
+      $form.addClass('form_submitted').removeClass('validation_pass validation_error');
       this.getBDateinput();
       // Remove Not needed input from submitting data
       $('.not_sending', $form).attr('disabled', true);
 
       // Check Data
       if (this.formView.model.isValid(true)) {
+		$form.addClass('validation_pass');
         $('input.subform_before_submit', this.el).remove();
         this.formView.model.appendSubFormInput(this.options.formSchema.name);
         _options = {
@@ -136,35 +137,41 @@ define([
           success: this.showResponse
         };
         $form.ajaxSubmit(_options);
-        _opt = {
-          html : true,
-          placement: 'top',
-          trigger: 'manual',
-          title: 'Submitting Form, Please wait',
-          content: '<i class="icon-spinner icon-spin icon-large"></i> Sending data...'
-        };
-        $submitBtn.attr('disabled', true).popover(_opt).popover('show')
-          .next('.popover').addClass('success');
+		if (this.formView.options.formSchema.view !== 'wizard') {
+		  _opt = {
+			html : true,
+			placement: 'top',
+			trigger: 'manual',
+			title: 'Submitting Form, Please wait',
+			content: '<i class="icon-spinner icon-spin icon-large"></i> Sending data...'
+		  };
+		  $submitBtn.attr('disabled', true).popover(_opt).popover('show')
+			.next('.popover').addClass('success');
+		}
       } else {
+		$form.addClass('validation_error');
         $form.removeClass('form_submitted');
         // Error Message
         $('.not_sending', $form).attr('disabled', false);
-        _opt = {
-          html : true,
-          placement: 'top',
-          trigger: 'manual',
-          title: '<i class="icon-edit"></i> Validation Error',
-          content: 'Please correct the form'
-        };
-        $submitBtn.attr('disabled', true).popover(_opt).popover('show');
 
-		window.setTimeout(
-		  function() {
-            $('.invalid:first', $form).focus();
-			$submitBtn.attr('disabled', false).popover('destroy');
-			$submitBtn.next('.popover').remove();
-		  }, 2000 );
-      }
+		if (this.formView.options.formSchema.view !== 'wizard') {
+		  _opt = {
+			html : true,
+			placement: 'top',
+			trigger: 'manual',
+			title: '<i class="icon-edit"></i> Validation Error',
+			content: 'Please correct the form'
+		  };
+		  $submitBtn.attr('disabled', true).popover(_opt).popover('show');
+
+		  window.setTimeout(
+			function() {
+			  $('.invalid:first', $form).focus();
+			  $submitBtn.attr('disabled', false).popover('destroy');
+			  $submitBtn.next('.popover').remove();
+			}, 2000 );
+		}
+	  }
 	},
     showRequest: function(formData, jqForm, options) {
       //console.log($.param(formData));

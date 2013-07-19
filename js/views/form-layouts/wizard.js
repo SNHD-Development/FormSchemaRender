@@ -78,7 +78,8 @@ define([
 	attachedEvents: function() {
 	  this.$prevBtn.on('click', this, this.clickPrev);
 	  this.$nextBtn.on('click', this, this.clickNext);
-	  $(this.el).on('change', '.wizard-view .wizard', this, this.changeStep);
+	  this.$formWizard.on('change', this, this.changeStep);
+	  this.$formWizard.on('finished', this, this.submittingForm);
 	},
 	clickPrev: function(e) {
 	  e.data.$formWizard.wizard('previous');
@@ -108,6 +109,15 @@ define([
 			e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
 			break;
 		}
+	  }
+	},
+	submittingForm: function(e) {
+	  // Check to see if this form has submit button
+	  var $submitBtn = $(':submit', e.data.el);
+	  if ($submitBtn.length > 0) {
+		$submitBtn.trigger('click');
+	  } else {
+
 	  }
 	}
   });
