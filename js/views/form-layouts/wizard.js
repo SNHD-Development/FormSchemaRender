@@ -53,6 +53,8 @@ define([
 	  this.$prevBtn = $('.wizard-view .wizard-actions .btn_prev', this.el);
 	  this.$nextBtn = $('.wizard-view .wizard-actions .btn_next', this.el);
 
+	  // hide original actions div
+	  $('.step-content .step-pane .form-actions', this.el).hide();
 	  // Attched Wizard View Events
 	  this.attachedEvents();
     },
@@ -79,27 +81,31 @@ define([
 	  $(this.el).on('change', '.wizard-view .wizard', this, this.changeStep);
 	},
 	clickPrev: function(e) {
-	  console.log('prev');
 	  e.data.$formWizard.wizard('previous');
 	},
 	clickNext: function(e) {
-	  console.log('next');
 	  e.data.$formWizard.wizard('next');
 	},
 	changeStep: function(e, data) {
-	  console.log(data.step);
-	  console.log(data.direction);
-
+	  var _numSteps = e.data._steps.length;
 	  if (data.direction === 'next') {
 		switch (data.step) {
 		  case 1:
 			e.data.$prevBtn.removeAttr('disabled').fadeIn('slow');
+			break;
+
+		  case ( _numSteps - 1 ):
+			e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> Submit');
 			break;
 		}
 	  } else {
 		switch (data.step) {
 		  case 2:
 			e.data.$prevBtn.attr('disabled', true).fadeOut('slow');
+			break;
+
+		  case _numSteps:
+			e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
 			break;
 		}
 	  }
