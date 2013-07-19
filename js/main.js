@@ -57,6 +57,10 @@ require.config({
       deps: ['jquery', 'bootstrap'],
       exports: 'jQuery.datepicker'
     },
+    "jquery.wizard": {
+      deps: ['jquery', 'bootstrap'],
+      exports: 'jQuery.wizard'
+    },
     "jquery.ajaxsubmit": {
       deps: ['jquery'],
       exports: 'jQuery.ajaxSubmit'
