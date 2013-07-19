@@ -10,8 +10,8 @@ Please use font-awesome to add visual effect to the UI.
 
 Please include these styles
 
-* form-render.css (Required)
-* datepicker.css (If you use type = "date")
+* form-render.css (Required) `<link href="css/form-render.css" rel="stylesheet">`
+* datepicker.css (If you use type = "date") `<link href="css/datepicker.css" rel="stylesheet">`
 
 Load JS with RequireJS
 `<script data-main="js/main" src="js/libs/require/require.js"></script>`
@@ -41,6 +41,8 @@ Example:
 ### Views
 
 #### Wizard View
+Required wizard.css style
+`<link href="css/wizard.css" rel="stylesheet">`
 
 
 ### Build
