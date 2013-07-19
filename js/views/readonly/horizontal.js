@@ -1,5 +1,5 @@
 /**
- * Default Read Mode Layout (Vertical)
+ * Horizontal Read Mode Layout
  **/
 define([
   'jquery',
@@ -8,12 +8,14 @@ define([
   'vm',
   'events',
   'views/baseField',
-  'text!templates/readonly/default.html'
+  'text!templates/readonly/horizontal.html'
 ], function($, _, Backbone, Vm, Events, BaseFieldView, readLayoutTemplate){
   var AppView = BaseFieldView.extend({
     template: _.template(readLayoutTemplate),
     initialize: function () {
 	  BaseFieldView.prototype.initialize.call(this);
+
+	  this._divcontrolgroup = 0;	// init div counter
 
 	  if (typeof this.options.formSchema === 'undefined') {
 		throw 'formSchema is not in the options parameters';
@@ -22,6 +24,7 @@ define([
 		throw 'formData is not in the options parameters';
 	  }
 	  this.el = '#'+this.options.formSchema.name;
+	  $(this.el).addClass('form-horizontal');
     },
     render: function () {
 		var that = this
@@ -29,9 +32,16 @@ define([
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-		  _html += that.renderLabel(value);
+			_html += '<div class="control-group">';
+			this._divcontrolgroup++;
+			_html += that.renderLabel(value, 'control-label');
+			_html += '<div class="controls">';
 		}
 		_html += _parentRender.call(that, value, true);
+		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
+			_html += '</div></div>';
+			this._divcontrolgroup--;
+		}
 	  });
 	  // not auto rendering the button
 	  //_html += BaseFieldView.prototype.renderButton(this.options.formSchema.formoptions);

@@ -16,9 +16,9 @@ define([
 	_modelBinder: undefined,
     template: _.template(formLayoutTemplate),
     initialize: function () {
-		this._divcontrolgroup = 0;	// init div counter
 		BaseFieldView.prototype.initialize.call(this);
 
+		this._divcontrolgroup = 0;	// init div counter
 		if (typeof this.options.formSchema === 'undefined') {
 			throw 'formSchema is not in the options parameters';
 		}

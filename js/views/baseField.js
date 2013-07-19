@@ -290,6 +290,8 @@ define([
 			  _attr += ' '+key+'=\''+value+'\'';
 			});
 			_html += that.inputTemplate['uneditablefile']({value: _field_data, text: field.description, _attr : _attr});
+		  } else if (_type === 'list') {
+			_html += '';
 		  } else {
 			_html += that.inputTemplate['uneditableinput']({value: _field_data});
 		  }

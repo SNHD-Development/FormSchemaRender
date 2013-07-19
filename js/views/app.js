@@ -28,7 +28,7 @@ define([
       this.$el.html(this.template(this.options.formSchema));
 
       if (typeof this.options.mode !== 'undefined' && this.options.mode === 'read') {
-        require(['views/readonly/default'], function (ReadView) {
+        require(['views/readonly/'+formLayout], function (ReadView) {
           var readView = Vm.create(that, 'ReadView', ReadView, _opts);
           readView.render();
         });
