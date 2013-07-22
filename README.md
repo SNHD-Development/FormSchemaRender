@@ -48,6 +48,16 @@ Field type = 'step' is unique for this view only. Other View will not render thi
 It will set the step for wizard view.
 Note: Require to have field type = 'step' at the beginning of fields array in formSchema.
 
+Ex:
+
+	{
+		"Type": "Step",
+		"Icon": "icon-user",
+		"Description": "Step 1"
+	}
+
+For Icon, we are using [Font-Awesome](http://fortawesome.github.io/Font-Awesome/).
+
 ### Build
 1. Under js/libs path will have `build.js` file.
 2. run with this command at the app root `r.js -o js/libs/build.js`

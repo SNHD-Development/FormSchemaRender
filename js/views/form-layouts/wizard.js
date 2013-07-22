@@ -62,15 +62,22 @@ define([
 	 * Render Wizard Navigation Bar
 	 **/
 	renderWizardNavBar: function() {
-	  var _html = '';
+	  var _html = '', _icon, $steps, _stepWidth, _offset;
 	  _.each(this._steps, function(element, index) {
 		element['class'] = element['class'] || '';
 		if (index === 0) {
 		  element['class'] += ' active';
 		}
-		_html += '<li data-target="#wizard_step'+(index+1)+'" class="'+element['class']+'"><span class="badge badge-info">'+(index+1)+'</span>'+element.description+'<span class="chevron"></span></li>';
+		// If has an icon will include here
+		_icon = (typeof element.icon === 'undefined') ? '': '<i class="icon '+element.icon+' icon-3x"></i>';
+		_html += '<li data-target="#wizard_step'+(index+1)+'" class="'+element['class']+'">'+_icon+'<span class="badge badge-info">'+(index+1)+'</span>'+element.description+'</li>';
 	  });
-	  $('.wizard-view ul.steps', this.el).html(_html);
+	  $steps = $('.wizard-view ul.steps', this.el).html(_html);
+
+	  // Calculated the Step Width
+	  _stepWidth = Math.floor( ( $steps.width() - this._steps.length ) / this._steps.length );
+	  _offset = $steps.width() - ( _stepWidth * this._steps.length) - 2;
+	  $('li', $steps).css('width', _stepWidth).last().css('width', _stepWidth+_offset);
 	},
 	/**
 	 * Wizard Events

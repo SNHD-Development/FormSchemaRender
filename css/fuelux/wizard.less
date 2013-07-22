@@ -22,14 +22,21 @@
 		li {
 			float: left;
 			margin: 0;
-			padding: 0 20px 0 30px;
-			height: 46px;
-			line-height: 46px;
+			padding: 10px 0;
+			//height: 46px;
+			//line-height: 46px;
 			position: relative;
 			background: #ededed;
 			color: @grayLight;
 			font-size: 16px;
 			cursor: default;
+			text-transform: uppercase;
+			text-align: center;
+			border-right: solid 1px @navbarBorder;
+
+			&:last-child {
+				border-right: none;
+			}
 
 			.chevron {
 				border: 24px solid transparent;
@@ -80,12 +87,19 @@
 			.badge {
 				margin-right: 8px;
 			}
+
+			i {
+				&.icon {
+					display: block;
+					margin-bottom: 10px;
+				}
+			}
 		}
 
 		/* set z-index on steps for chevron overlap */
 		li:nth-child(1) {
 			border-radius: 4px 0 0 4px;
-			padding-left: 20px;
+			//padding-left: 20px;
 			z-index: 10;
 		}
 		li:nth-child(2) {

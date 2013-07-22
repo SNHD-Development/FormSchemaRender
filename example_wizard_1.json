@@ -32,6 +32,7 @@
     "Fields": [
 		{
 			"Type": "Step",
+			"Icon": "icon-user",
 			"Description": "Step 1",
 		},
 		{
@@ -102,6 +103,7 @@
 		},
 		{
 			"Type": "Step",
+			"Icon": "icon-edit",
 			"Description": "Step 2",
 		},
 		{
@@ -131,6 +133,7 @@
 		},
 		{
 			"Type": "Step",
+			"Icon": "icon-book",
 			"Description": "Step 3",
 		},
 		{
