@@ -1,1 +1,1 @@
-define(function() { var str ='<fieldset><% if(typeof(description) !== \'undefined\') {%><legend><%= description %></legend><% }; %><%= html %></fieldset>';return str;});
+define(function() { var str ='<fieldset><%= html %></fieldset>';return str;});
