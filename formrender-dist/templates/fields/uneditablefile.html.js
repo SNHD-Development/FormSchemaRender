@@ -1,0 +1,1 @@
+define([],function(){var e="<a<%= _attr %>><%= text %></a>";return e});

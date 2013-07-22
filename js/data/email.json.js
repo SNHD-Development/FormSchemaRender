@@ -1,0 +1,1 @@
+define(function() { var str ='["interact.ccsd.net","gmail.com","hotmail.com","yahoo.com","snhdmail.org"]';return str;});

@@ -1,0 +1,1 @@
+define([],function(){var e='<div class="sub_form_render"><div class="row-fluid"><div class="span12"><%= html %></div></div></div>';return e});

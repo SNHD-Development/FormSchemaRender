@@ -1,0 +1,1 @@
+define([],function(){var e='<form id="<%= name %>"<%= (typeof action !== \'undefined\') ? \' action="\'+action+\'"\': \'\'%> class="form-render" method="post" novalidate=""></form>';return e});

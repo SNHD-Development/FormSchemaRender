@@ -1,0 +1,1 @@
+define([],function(){var e='<input id="<%= (typeof attributes.id !== \'undefined\') ? attributes.id: name %>" name="<%= name %>" type="text" placeholder="Post Code"<%= _attr %>/>';return e});

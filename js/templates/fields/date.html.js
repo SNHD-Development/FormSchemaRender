@@ -1,0 +1,1 @@
+define(function() { var str ='<input id="<%= (typeof attributes.id !== \'undefined\') ? attributes.id: name %>" name="<%= name %>" type="date"<%= _attr %>/>';return str;});

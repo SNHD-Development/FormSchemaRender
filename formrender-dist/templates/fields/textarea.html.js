@@ -1,0 +1,1 @@
+define([],function(){var e='<textarea id="<%= (typeof attributes.id !== \'undefined\') ? attributes.id: name %>" name="<%= name %>"<%= _attr %>></textarea>';return e});

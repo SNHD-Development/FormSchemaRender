@@ -1,0 +1,1 @@
+define(function() { var str ='<a<%= _attr %>><%= text %></a>';return str;});

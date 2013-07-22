@@ -1,0 +1,1 @@
+define([],function(){var e='["interact.ccsd.net","gmail.com","hotmail.com","yahoo.com","snhdmail.org"]';return e});

@@ -1,0 +1,1 @@
+define(function() { var str ='<span class="input-xlarge uneditable-input"><%= value %></span>';return str;});

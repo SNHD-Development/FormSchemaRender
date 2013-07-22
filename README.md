@@ -60,8 +60,13 @@ Ex:
 For Icon, we are using [Font-Awesome](http://fortawesome.github.io/Font-Awesome/).
 
 ### Build
-1. Under js/libs path will have `build.js` file.
-2. run with this command at the app root `r.js -o js/libs/build.js`
+1. Under js/libs path will have `build.js` and `parsetmpl.pl` file.
+2. If this project need to call from another domain, will need to use `perl js/libs/parsetmpl.pl` from app root.
+3. run with this command at the app root `r.js -o js/libs/build.js`
+
+Note:
+If calling this script from different domain will need to run this build script `perl js/libs/parsetmpl.pl` from the app root.
+This script will parse html into requireJS in order to work around XHR restrictions.
 
 ### Version
 
