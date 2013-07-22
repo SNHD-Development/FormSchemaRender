@@ -80,6 +80,7 @@ define([
 	  this.$nextBtn.on('click', this, this.clickNext);
 	  this.$formWizard.on('change', this, this.changeStep);
 	  this.$formWizard.on('finished', this, this.submittingForm);
+	  this.$formWizard.on('stepclick', this, this.stepClicked);
 	  $(this.el).on(this.options.formSchema.name+'.validated', this, this.validatedForm);
 	  $(this.el).on(this.options.formSchema.name+'.postSubmit', this, this.respondResult);
 	},
@@ -88,6 +89,19 @@ define([
 	},
 	clickNext: function(e) {
 	  e.data.$formWizard.wizard('next');
+	},
+	/**
+	 * Step Click
+	 **/
+	stepClicked: function(e, data) {
+	  switch (data.step) {
+		case 1:
+		  e.data.$prevBtn.attr('disabled', true).fadeOut('slow');
+		  break;
+
+		default:
+		  e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
+	  }
 	},
 	/**
 	 * When step about to change
