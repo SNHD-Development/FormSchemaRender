@@ -11,6 +11,7 @@ Please use font-awesome to add visual effect to the UI.
 Please include these styles
 
 * form-render.css (Required) `<link rel="stylesheet" href="css/form-render.css" />`
+* wizard.css (Required: if rendering with Wizard View) `<link rel="stylesheet" href="css/wizard.css">`
 * datepicker.css (If you use type = "date") `<link rel="stylesheet" href="css/datepicker.css" />`
 
 Load JS with RequireJS

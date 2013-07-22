@@ -1,5 +1,5 @@
 <% if( typeof options.autocomplete !== 'undefined' && options.autocomplete ) { %>
-<div class="controls">
+<div class="controls-row">
 	<input id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>" name="<%= name %>" type="text" placeholder="username"/>
 	<span class="add-on">@</span>
 	<input id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>_server" name="<%= name %>_server" type="text" placeholder="example.com"<%= _attr %>/>
