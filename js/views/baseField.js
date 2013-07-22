@@ -159,6 +159,8 @@ define([
 		this.options.formData = this.options.formData || {};
 
 		switch (_type) {
+		  case 'image':
+			field.attributes.accept = 'image/*';
 		  case 'file':
 			$('form'+this.el).attr('enctype', 'multipart/form-data');
 			var _validation_tmp = this.getFormValidationData(field.name);
@@ -336,6 +338,10 @@ define([
 			_attr += ' '+key+'=\''+value+'\'';
 		  });
 
+		  // Convert to file type
+		  if (_type === 'image') {
+			_type = 'file';
+		  }
 		  _html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({_attr:_attr}, field)): '';
 		}
 		return _html;
