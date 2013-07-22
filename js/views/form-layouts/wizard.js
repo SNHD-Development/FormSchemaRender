@@ -89,39 +89,83 @@ define([
 	clickNext: function(e) {
 	  e.data.$formWizard.wizard('next');
 	},
+	/**
+	 * When step about to change
+	 **/
 	changeStep: function(e, data) {
 	  var _numSteps = e.data._steps.length;
 	  if (data.direction === 'next') {
-		switch (data.step) {
-		  case 1:
-			e.data.$prevBtn.removeAttr('disabled').fadeIn('slow');
-			break;
+		// Validate this step
+		if ( ! e.data.isStepValid(data.step - 1)) {
+		  e.preventDefault();
+		} else {
+		  switch (data.step) {
+			case 1:
+			  e.data.$prevBtn.removeAttr('disabled').fadeIn('slow');
+			  break;
 
-		  case ( _numSteps - 1 ):
-			e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> Submit');
-			break;
+			case ( _numSteps - 1 ):
+			  e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> Submit');
+			  break;
+		  }
 		}
 	  } else {
-		switch (data.step) {
-		  case 2:
-			e.data.$prevBtn.attr('disabled', true).fadeOut('slow');
-			break;
+		// Validate this step
+		if ( ! e.data.isStepValid(data.step - 2)) {
+		  e.preventDefault();
+		} else {
+		  switch (data.step) {
+			case 2:
+			  e.data.$prevBtn.attr('disabled', true).fadeOut('slow');
+			  break;
 
-		  case _numSteps:
-			e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
-			break;
+			case _numSteps:
+			  e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
+			  break;
+		  }
 		}
 	  }
+	},
+	/**
+	 * Validated Each Step
+	 **/
+	isStepValid: function(index) {
+	  var that = this, _error = false, _elementError, $element;
+	  if (typeof this._stepValidated[index] !== 'undefined') {
+		_.each(this._stepValidated[index], function(element) {
+		  $element = $(':input[name="'+element+'"]', that.el).removeClass('invalid');
+		  _elementError = that.model.isValid(element);
+		  if ( ! _elementError) {
+			$element.addClass('invalid');
+			_error = true;
+		  }
+		});
+		if (_error) {
+		  var _opt = {
+			html : true,
+			placement: 'top',
+			trigger: 'manual',
+			title: '<i class="icon-edit"></i> Validation Error',
+			content: 'Please correct the form'
+		  };
+		  this.renderErrorPopover(this.$nextBtn, $(this.el), _opt)
+		}
+	  }
+	  return ! _error;
 	},
 	submittingForm: function(e) {
 	  // Check to see if this form has submit button
 	  var $submitBtn = $(':submit', e.data.el);
+
 	  if ($submitBtn.length > 0) {
 		$submitBtn.trigger('click');
 	  } else {
 
 	  }
 	},
+	/**
+	 * Submitting Event
+	 **/
 	validatedForm: function(e) {
 	  var $form = $(e.data.el)
 	  , _opt = {
@@ -130,22 +174,28 @@ define([
 		trigger: 'manual'
 	  };
 	  if ($form.hasClass('validation_pass')) {
-		_opt.title = 'Submitting Form, Please wait';;
+		_opt.title = 'Submitting Form, Please wait';
 		_opt.content = '<i class="icon-spinner icon-spin icon-large"></i> Sending data...';
 		e.data.$nextBtn.attr('disabled', true).popover(_opt).popover('show')
 			.next('.popover').addClass('success');
 	  } else {
 		_opt.title = '<i class="icon-edit"></i> Validation Error';
 		_opt.content = 'Please correct the form';
-		e.data.$nextBtn.attr('disabled', true).popover(_opt).popover('show');
+		e.data.renderErrorPopover(e.data.$nextBtn, $form, _opt);
+	  }
+	},
+	/**
+	 * Popover UI for error
+	 **/
+	renderErrorPopover: function($btn, $form, opts) {
+		$btn.attr('disabled', true).popover(opts).popover('show');
 
 		window.setTimeout(
-		  function() {
-			$('.invalid:first', $form).focus();
-			e.data.$nextBtn.attr('disabled', false).popover('destroy');
-			e.data.$nextBtn.next('.popover').remove();
-		  }, 2000 );
-	  }
+		function() {
+		  $('.invalid:first', $form).focus();
+		  $btn.attr('disabled', false).popover('destroy');
+		  $btn.next('.popover').remove();
+		}, 2000 );
 	},
 	respondResult: function(e) {
 	  window.setTimeout(

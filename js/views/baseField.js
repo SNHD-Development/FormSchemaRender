@@ -71,10 +71,13 @@ define([
 	},
 	initialize: function(){
 	  this._div = 0;	// Number of Open Div
-	  this._stepDiv = 0;	// Count number of open div for step (wizard view)
-	  this._currentStep = 1;	// Current Step
 	  this._hasDate = false; // Tracking the dateinput element
 	  this._hasBDate = false; // Tracking the Birthdate element
+
+	  // Wizard View Counters
+	  this._stepDiv = 0;	// Count number of open div for step (wizard view)
+	  this._currentStep = 1;	// Current Step
+	  this._stepValidated = [];	// Hold the field names for each validation step
 
 	  this._modelBinder = new Modelbinder();
 	  this.model = new Model(this.options.formSchema);
@@ -228,8 +231,10 @@ define([
 			delete field.attributes['placeholder'];
 			_name = [];
 			_name.push(field.name+'_fullname_first_name');
-			_name.push(field.name+'_fullname_middle_name');
 			_name.push(field.name+'_fullname_last_name');
+			if (typeof field.options.middlename !== 'undefined' && field.options.middlename) {
+			  _name.push(field.name+'_fullname_middle_name');
+			}
 			break;
 
 		  case 'clear':
@@ -273,6 +278,9 @@ define([
 				_html += '</div>';
 				this._stepDiv--;
 			  }
+			  if (typeof this._stepValidated[(this._currentStep)-1] === 'undefined') {
+				this._stepValidated[this._currentStep-1] = [];
+			  }
 			  var _active = 'step-pane' + ( (this._currentStep === 1) ? ' active': '' );
 			  _html += '<div class="'+_active+'" id="wizard_step'+this._currentStep+'">';
 			  this._stepDiv++;
@@ -291,6 +299,15 @@ define([
 			var _validation = (typeof this.options.formSchema.validation[field.name] !== 'undefined') ? this.options.formSchema.validation[field.name] : {};
 			this.attachSubFormEvent(field.attributes.id, field, _validation);
 			break;
+		}
+
+		// Check to see if step validation has been init (wizard view)
+		if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined'
+			&& ! ( _type === 'step' || _type === 'list')
+			&& (typeof this.options.formSchema.validation[field.name] !== 'undefined') ) {
+		  _.each(_name, function(element) {
+			that._stepValidated[(that._currentStep)-2].push(element);
+		  });
 		}
 
 		// If this is read mode will need to render read template
