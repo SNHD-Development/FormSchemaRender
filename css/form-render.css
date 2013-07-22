@@ -30,7 +30,8 @@
     .form-render .subform-container .active {
       padding: 30px 20px 0;
       border: 1px solid #D5D5D5;
-      border-radius: 8px; }
+      border-radius: 8px;
+      background: #FFF; }
       .form-render .subform-container .active form {
         margin-bottom: 0; }
         .form-render .subform-container .active form .form-actions {
