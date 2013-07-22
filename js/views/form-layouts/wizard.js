@@ -104,8 +104,6 @@ define([
 	  switch (data.step) {
 		case 1:
 		  e.data.$prevBtn.attr('disabled', true).fadeOut('slow');
-		  break;
-
 		default:
 		  e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
 	  }
