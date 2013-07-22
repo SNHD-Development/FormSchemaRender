@@ -4,6 +4,18 @@
 .form-render {
 
 	/**
+	 * Birthday Picker
+	 **/
+	.birthday-picker {
+		select {
+			margin-right: 10px;
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
+
+	/**
 	 * Popover Form
 	 **/
 	.popover-form {

@@ -155,12 +155,10 @@ define([
 	},
 	submittingForm: function(e) {
 	  // Check to see if this form has submit button
-	  var $submitBtn = $(':submit', e.data.el);
+	  var $submitBtn = $(':submit[type="submit"]', e.data.el);
 
 	  if ($submitBtn.length > 0) {
 		$submitBtn.trigger('click');
-	  } else {
-
 	  }
 	},
 	/**

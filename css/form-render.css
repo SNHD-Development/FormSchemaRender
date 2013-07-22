@@ -3,6 +3,9 @@
  **/
 .form-render {
   /**
+   * Birthday Picker
+   **/
+  /**
    * Popover Form
    **/
   /**
@@ -14,6 +17,10 @@
   /**
    * Error Styles
    **/ }
+  .form-render .birthday-picker select {
+    margin-right: 10px; }
+    .form-render .birthday-picker select:last-child {
+      margin-right: 0; }
   .form-render .popover-form .popover-action {
     text-align: center; }
     .form-render .popover-form .popover-action .popover-submit {
