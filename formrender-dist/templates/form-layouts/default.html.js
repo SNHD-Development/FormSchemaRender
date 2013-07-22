@@ -1,1 +1,1 @@
-define([],function(){var e="<fieldset><% if(typeof(description) !== 'undefined') {%><legend><%= description %></legend><% }; %><%= html %></fieldset>";return e});
+define([],function(){var e="<fieldset><%= html %></fieldset>";return e});

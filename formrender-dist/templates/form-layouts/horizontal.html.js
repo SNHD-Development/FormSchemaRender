@@ -1,1 +1,1 @@
-define([],function(){var e='<% if(typeof(description) !== \'undefined\') {%><legend><%= description %></legend><% }; %><div class="row-fluid"><div class="span12"><%= html %></div></div>';return e});
+define([],function(){var e='<div class="row-fluid"><div class="span12"><%= html %></div></div>';return e});
