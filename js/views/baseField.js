@@ -421,6 +421,7 @@ define([
 	  $.mask.close();
 	  $('.actions', list.$el.parent('.subform-container')).fadeIn('slow');
 	  Vm.remove('SubFormView'+list.options.formId, true);
+	  Vm.remove('SubFormViewEdit'+list.options.formId, true);
 	},
 	addSubformData: function(e, list) {
 	  var _view = (list.options.formSchema.view === '') ? 'table': list.options.formSchema.view

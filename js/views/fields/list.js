@@ -169,6 +169,8 @@ define([
 	},
 	clickCancel: function(e) {
 	  e.preventDefault();
+	  Vm.remove('SubFormView'+this.options.formId, true);
+	  Vm.remove('SubFormViewEdit'+this.options.formId, true);
 	  this.$el.trigger(this.options.formId+'.close', this);
 	},
 	/**
