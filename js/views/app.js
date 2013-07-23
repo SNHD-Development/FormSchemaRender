@@ -49,6 +49,9 @@ define([
           if (that.formView._hasBDate) {
             that.setupBDateInput();
           }
+		  if (that.formView._hasEmailPicker) {
+            that.setupEmailInput();
+          }
           // Render Form Complete
           // Send view at second parameter
           $('#'+that.options.formSchema.name, this.el).trigger(that.options.formSchema.name+'.renderCompleted', that);
@@ -64,7 +67,7 @@ define([
       });
     },
     /**
-     *
+     * Get BDate Input
      **/
     getBDateinput: function() {
       $('fieldset.birthday-picker').each(function() {
@@ -75,6 +78,22 @@ define([
         }
       });
     },
+	/**
+     * Init Emailinput
+     **/
+	setupEmailInput: function() {
+	  $('.emailpicker', this.el).each(function () {
+		var $server = $('.emailpicker_server', this)
+		, $notsending = $('.not_sending', this);
+		$server.val($server.attr('data-value'));
+		$notsending.on('change', this, function(e) {
+		  var $hidden = $(':hidden', e.data)
+		  , $username = $('.emailpicker_username', e.data)
+		  , $server = $('.emailpicker_server', e.data);
+		  $hidden.val($.trim($username.val()+'@'+$server.val()));
+		});
+      });
+	},
     /**
      * Init Dateinput
      **/

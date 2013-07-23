@@ -73,6 +73,7 @@ define([
 	  this._div = 0;	// Number of Open Div
 	  this._hasDate = false; // Tracking the dateinput element
 	  this._hasBDate = false; // Tracking the Birthdate element
+	  this._hasEmailPicker = false; // Tracking the EmailPicker element
 
 	  // Wizard View Counters
 	  this._stepDiv = 0;	// Count number of open div for step (wizard view)
@@ -216,12 +217,14 @@ define([
 
 		  case 'email':
 			if (typeof field.options.autocomplete !== 'undefined' && field.options.autocomplete) {
+			  this._hasEmailPicker = true;
 			  field.attributes = {};
 			  field.attributes['data-provide'] = 'typeahead';
 			  field.attributes['autocomplete'] = 'off';
+			  field.attributes['class'] = 'not_sending emailpicker_server' + ((typeof field.attributes['class'] === 'undefined') ? '': field.attributes['class']);
 			  field.attributes['data-source'] = emailData.replace(/\n/g, '').replace(/'/g, "&#39");
 			  if (typeof field.options['default'] !== 'undefined') {
-				field.attributes['value'] = field.options['default'];
+				field.attributes['data-value'] = field.options['default'];
 			  }
 			}
 			break;

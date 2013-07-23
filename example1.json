@@ -177,7 +177,16 @@
 						"Select 2",
 						"Select 3"
 					]
-				}
+				},
+				{
+					"Name": "subemail",
+					"Type": "Email",
+					"Description": "Sub Email",
+					"Options": {
+						"AutoComplete": "true",
+						"Default": "hotmail.com"
+					}
+				},
 			]
 		},
 		{
