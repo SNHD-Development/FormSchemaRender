@@ -37,7 +37,7 @@
 			"Type": "FullName",
 			"Description": "Full Name",
 			"Options": {
-			"MiddleName": true
+				"MiddleName": true
 			}
 		},
 		{
@@ -45,7 +45,7 @@
 			"Type": "FullName",
 			"Description": "Father Full Name",
 			"Options": {
-			"MiddleName": false
+				"MiddleName": false
 			}
 		},
 		{

@@ -27,12 +27,13 @@ define([
 	  this.el = '#'+this.options.formSchema.name;
     },
     render: function () {
-		var that = this
+		var that = this, _required
 		, _parentRender = BaseFieldView.prototype.render
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-		  _html += that.renderLabel(value);
+		  _required = (typeof that.options.formSchema.validation[value.name] !== 'undefined' && that.options.formSchema.validation[value.name].required) ? true: false;
+		  _html += that.renderLabel(value, _required);
 		} else if (value.type.toLowerCase() === 'step') {
 		  that._steps.push(value);
 		}

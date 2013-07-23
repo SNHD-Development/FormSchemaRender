@@ -28,12 +28,15 @@ define([
     render: function () {
 		var that = this
 		, _parentRender = BaseFieldView.prototype.render
-		, _html = '';
+		, _html = ''
+		, _required;
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
 			_html += '<div class="control-group">';
 			this._divcontrolgroup++;
-			_html += that.renderLabel(value, 'control-label');
+
+			_required = (typeof that.options.formSchema.validation[value.name] !== 'undefined' && that.options.formSchema.validation[value.name].required) ? true: false;
+			_html += that.renderLabel(value, _required, 'control-label');
 			_html += '<div class="controls">';
 		}
 

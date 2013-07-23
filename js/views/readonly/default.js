@@ -29,7 +29,7 @@ define([
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-		  _html += that.renderLabel(value);
+		  _html += that.renderLabel(value, false);
 		}
 		_html += _parentRender.call(that, value, true);
 	  });

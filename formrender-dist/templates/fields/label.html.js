@@ -1,1 +1,1 @@
-define([],function(){var e="<label for=\"<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>\"<%= _cssClass %>><%= description %></label>";return e});
+define([],function(){var e="<%_required = (_required) ? ' <span class=\"required\">*</span>': '';%><label for=\"<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>\"<%= _cssClass %>><%= description %><%= _required %></label>";return e});

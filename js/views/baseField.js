@@ -359,11 +359,12 @@ define([
 	/**
 	 * Render Label
 	 **/
-	renderLabel: function(field, cssClass) {
+	renderLabel: function(field, required, cssClass) {
+	  required = required || false;
 	  field.attributes = field.attributes || {};
 	  field.options = field.options || {};
 	  var _cssClass = (typeof cssClass !== 'undefined' && cssClass) ? ' class="'+cssClass+'"': '';
-	  return this.inputTemplate['label'](_.extend({ _cssClass:_cssClass }, field));
+	  return this.inputTemplate['label'](_.extend({ _cssClass:_cssClass, _required: required }, field));
 	},
 	/**
 	 * Render Button
@@ -373,6 +374,7 @@ define([
 	  if (formOptions.submitbutton || formOptions.resetbutton) {
 		_html += '<div class="form-actions">';
 	  }
+
 	  if (formOptions.submitbutton && ! formOptions.subForm) {
 		_html += '<button type="submit" class="btn btn-primary btn-submit">'+formOptions.submitbutton+'</button>';
 	  } else {

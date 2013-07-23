@@ -58,11 +58,12 @@ define([
 	  var that = this, _defaultEmail = '';
 	  // Render Fields
 	  require(['views/baseField'], function (BaseField) {
-        var _html = ''
+        var _html = '', _required
 		  , formView = Vm.create(that, 'BaseField', BaseField, { formSchema: that.options.formSchema });
 		_.each(that.options.formSchema.fields, function(value, key, list) {
 		  if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-			_html += formView.renderLabel(value);
+			_required = (typeof that.options.formSchema.validation[value.name] !== 'undefined' && that.options.formSchema.validation[value.name].required) ? true: false;
+			_html += formView.renderLabel(value, _required);
 		  }
 
 		  if (value.type.toLowerCase() === 'email' && value.options.autocomplete) {

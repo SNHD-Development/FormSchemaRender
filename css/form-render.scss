@@ -3,6 +3,18 @@
  **/
 .form-render {
 	margin: 25px 20px;
+
+	label {
+		span {
+			&.required {
+				color: #B94A48;
+				font-size: 18px;
+				font-weight: bold;
+				margin-left: 5px;
+			}
+		}
+	}
+
 	/**
 	 * Birthday Picker
 	 **/
@@ -31,6 +43,10 @@
 	 * SubForm Style
 	 **/
 	.subform-container {
+
+		input, select, textarea {
+			margin-bottom: 15px;
+		}
 
 		.active {
 			padding: 30px 20px 0;
