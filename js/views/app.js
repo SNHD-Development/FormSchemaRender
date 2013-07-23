@@ -204,6 +204,7 @@ define([
           that.formView.model.get(key).reset();
         } else {
           $(':input[name="'+key+'"]', that.el).val('').trigger('change');
+		  that.formView.model.set(key, '');
         }
       });
     }
