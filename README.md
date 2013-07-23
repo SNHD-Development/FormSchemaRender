@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.0.1`
+Version `version 0.0.2`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -69,5 +69,7 @@ If calling this script from different domain will need to run this build script 
 This script will parse html into requireJS in order to work around XHR restrictions.
 
 ### Version
+
+* 0.0.2 - Add Wizard View.
 
 * 0.0.1 - Init Project.
