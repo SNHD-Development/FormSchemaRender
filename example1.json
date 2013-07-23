@@ -183,7 +183,7 @@
 					"Type": "Email",
 					"Description": "Sub Email",
 					"Options": {
-						"AutoComplete": "true",
+						"AutoComplete": true,
 						"Default": "hotmail.com"
 					}
 				},
