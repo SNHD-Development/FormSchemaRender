@@ -7,11 +7,12 @@ define([
   'lodash',
   'backbone',
   'vm',
+  'utils',
   'events',
   'jquery.ajaxsubmit',
   'text!templates/layout.html',
   'jquery.datepicker',
-], function($, _, Backbone, Vm, Events, AjaxSubmit, layoutTemplate){
+], function($, _, Backbone, Vm, Utils, Events, AjaxSubmit, layoutTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),
     el: '#app',
@@ -62,73 +63,40 @@ define([
      * Init BDateinput
      **/
     setupBDateInput: function() {
-      $('.birthdaypicker', this.el).each(function () {
-        $(this).birthdaypicker($(this).attr('data-options'));
-      });
+      Utils.setupBDateInput(this.el);
     },
     /**
      * Get BDate Input
      **/
     getBDateinput: function() {
-      $('fieldset.birthday-picker').each(function() {
-        $('.not_sending', this).trigger('change');
-        var _nan =/NaN/i;
-        if ($(':hidden', this).val().match(_nan)) {
-          $(':hidden', this).val('');
-        }
-      });
+      Utils.getBDateinput(this.el);
     },
 	/**
      * Init Emailinput
      **/
 	setupEmailInput: function() {
-	  $('.emailpicker', this.el).each(function () {
-		var $server = $('.emailpicker_server', this)
-		, $notsending = $('.not_sending', this);
-		$server.val($server.attr('data-value'));
-		$notsending.on('change', this, function(e) {
-		  var $hidden = $(':hidden', e.data)
-		  , $username = $('.emailpicker_username', e.data)
-		  , $server = $('.emailpicker_server', e.data);
-		  $hidden.val($.trim($username.val()+'@'+$server.val()));
-		});
-      });
+	  Utils.setupEmailInput(this.el);
 	},
     /**
      * Init Dateinput
      **/
     setupDateInput: function() {
-      $('.datepicker', this.el).each(function () {
-        var _options = {}, maxDate, nowTemp;
-        if ($(this).attr('data-maxdate')) {
-          switch ($(this).attr('data-maxdate').toLowerCase()) {
-            case 'today':
-              nowTemp = new Date();
-              maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-              _options.onRender = function(date) {
-                return date.valueOf() > maxDate.valueOf() ? 'disabled' : '';
-              };
-              break;
-          }
-        }
-        $(this).datepicker(_options)
-          .on('changeDate', function(e){
-            var _dateInput = $(e.currentTarget).removeClass('invalid').trigger('change');
-            _dateInput.datepicker('hide');
-          })
-		  .on('click', function(e){
-			$('div.datepicker.dropdown-menu').css('display', 'none');
-			$(e.currentTarget).datepicker('show');
-		  });
-      });
+      Utils.setupDateInput(this.el);
     },
+	/**
+	 * Prevent Space Bar
+	 **/
+	preventSpace: function(e) {
+	  Utils.preventSpace(e);
+	},
     /**
 	 * View Events
 	 **/
 	events: {
 	  'submit form.form-render': 'submitForm',
-      'click .form-actions .btn-clear-form': 'clearForm',
-      'blur :input:not(:button)' : 'preValidate'
+	  'click .form-actions .btn-clear-form': 'clearForm',
+	  'blur :input:not(:button)' : 'preValidate',
+	  'keydown :input[type="email"]': 'preventSpace'
 	},
 	/**
 	 * Submit Form

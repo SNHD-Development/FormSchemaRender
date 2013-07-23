@@ -9,9 +9,10 @@ define([
   'modelbinder',
   'validation',
   'vm',
+  'utils',
   'events',
   'text!templates/subform-layouts/default.html'
-], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Events
+], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events
 	, subFormLayoutTemplate
 	){
   return Backbone.View.extend({
@@ -177,19 +178,7 @@ define([
      * Init Emailinput
      **/
 	setupEmailInput: function() {
-	  $('.emailpicker', this.el).each(function () {
-		var $server = $('.emailpicker_server', this)
-		, $notsending = $('.not_sending', this);
-		$server.val($server.attr('data-value')).trigger('change');
-		$notsending.on('change', this, function(e) {
-		  var $hidden = $(':hidden', e.data)
-		  , $username = $('.emailpicker_username', e.data)
-		  , $server = $('.emailpicker_server', e.data);
-		  if ($username.val() !== '' && $server.val() !== '') {
-			$hidden.val($.trim($username.val()+'@'+$server.val())).trigger('change');
-		  }
-		});
-      });
+	  Utils.setupEmailInput(this.el);
 	},
   });
 });
