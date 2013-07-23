@@ -105,9 +105,21 @@ define([
 	 * Events
 	 **/
 	events: {
+	  'keypress div.sub_form_render :input': 'preventEnterPressed',
 	  'click div.form-actions .btn-submit' : 'sendForm',
 	  'click div.form-actions .btn-cancel' : 'clickCancel',
 	  'blur :input:not(:button)' : 'preValidate'
+	},
+	/**
+	 * User pressed a key
+	 **/
+	preventEnterPressed: function(e) {
+	  if ( e.keyCode === 13 ) {
+		if ($(e.currentTarget).is('input')) {
+		  e.stopPropagation();
+		  return false;
+		}
+	  }
 	},
 	preValidate: function(e) {
 	  e.stopPropagation();
