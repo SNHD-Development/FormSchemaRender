@@ -190,6 +190,10 @@ define([
 			_type = 'text';
 			break;
 
+		  case 'textarea':
+			field.attributes['class'] = 'span10 '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+			break;
+
 		  case 'action':
 			this._div++;
 			return '<div class="form-actions">';
