@@ -89,6 +89,12 @@ define([
 	preventSpace: function(e) {
 	  Utils.preventSpace(e);
 	},
+	/**
+	 *
+	 **/
+	allowNumber: function(e) {
+	  Utils.allowNumber(e);
+	},
     /**
 	 * View Events
 	 **/
@@ -96,7 +102,8 @@ define([
 	  'submit form.form-render': 'submitForm',
 	  'click .form-actions .btn-clear-form': 'clearForm',
 	  'blur :input:not(:button)' : 'preValidate',
-	  'keydown :input[type="email"]': 'preventSpace'
+	  'keydown :input[type="email"]': 'preventSpace',
+	  'keydown :input[type="number"]': 'allowNumber',
 	},
 	/**
 	 * Submit Form

@@ -46,6 +46,16 @@
 			}
 		},
 		{
+			"Name" : "total_students",
+			"Type" : "Number",
+			"Description" : "Number of Students"
+		},
+		{
+			"Name" : "total_classes",
+			"Type" : "Number",
+			"Description" : "Number of Classes"
+		},
+		{
 			"Name": "petname",
 			"Type": "Text",
 			"Description": "Pet Name",

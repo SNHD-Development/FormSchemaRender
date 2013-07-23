@@ -75,6 +75,15 @@ define([
 				e.preventDefault();
 				return false;
 			}
+		},
+		allowNumber: function(e) {
+			if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46
+				|| e.keyCode === 9) {
+				return true;
+			} else if (( ! ( e.keyCode === 46 || e.keyCode === 190 ) || $(e.currentTarget).val().indexOf('.') != -1 )
+				&& ( e.keyCode < 48 || e.keyCode > 57 ) ) {
+				e.preventDefault();
+			}
 		}
 	};
 });
