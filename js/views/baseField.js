@@ -80,6 +80,9 @@ define([
 	  this._stepValidated = [];	// Hold the field names for each validation step
 
 	  this._modelBinder = new Modelbinder();
+
+	  // Setup Keys
+	  this.options.formSchema.validation = this.options.formSchema.validation || {};
 	  this.model = new Model(this.options.formSchema);
 	  if ( ! $.isEmptyObject(this.options.formData)) {
 		this.model.set(this.options.formData.fields);
