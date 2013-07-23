@@ -1,1 +1,1 @@
-define([],function(){var e="<fieldset><%= html %></fieldset>";return e});
+define([],function(){var e='<div class="row-fluid"><div class="span12"><%= html %></div></div>';return e});

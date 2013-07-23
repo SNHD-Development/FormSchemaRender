@@ -1,1 +1,1 @@
-define(function() { var str ='<fieldset><%= html %></fieldset>';return str;});
+define(function() { var str ='<div class="row-fluid"><div class="span12"><%= html %></div></div>';return str;});
