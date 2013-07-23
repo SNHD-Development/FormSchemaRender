@@ -8,6 +8,21 @@ define([
   'backbone'
 ], function($, _, Backbone){
 	return {
+		/**
+		 * Prevalidation, on blur event
+		 **/
+		preValidate: function(e, model) {
+			var $e = $(e.currentTarget)
+			, _name = $e.attr('name')
+			, _val = $.trim($e.val());
+			$e.val(_val).trigger('change');
+			model.set(_name, _val);
+			if (model.isValid(_name, _val)) {
+				$e.removeClass('invalid');
+			} else {
+				$e.addClass('invalid');
+			}
+		},
 		setupEmailInput: function(el) {
 			$('.emailpicker', el).each(function () {
 				var $server = $('.emailpicker_server', this)
@@ -31,18 +46,26 @@ define([
 				});
 			});
 		},
+		/**
+		 * Init BDate
+		 **/
 		setupBDateInput: function(el) {
 			$('.birthdaypicker', el).each(function () {
 				$(this).birthdaypicker($(this).attr('data-options'));
 			});
 		},
-		getBDateinput: function(el) {
+		/**
+		 * Get BDate Values
+		 **/
+		getBDateinput: function(el, model) {
 			$('fieldset.birthday-picker', el).each(function() {
 				$('.not_sending', this).trigger('change');
-				var _nan =/NaN/i;
-				if ($(':hidden', this).val().match(_nan)) {
+				var _nan =/NaN/i
+				, $bdateInput = $(':hidden', this);
+				if ($bdateInput.val().match(_nan)) {
 					$(':hidden', this).val('');
 				}
+				model.set($bdateInput.attr('name'), $bdateInput.val());
 			});
 		},
 		setupDateInput: function(el) {

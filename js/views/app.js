@@ -68,8 +68,8 @@ define([
     /**
      * Get BDate Input
      **/
-    getBDateinput: function() {
-      Utils.getBDateinput(this.el);
+    getBDateinput: function(el, model) {
+      Utils.getBDateinput(el, model);
     },
 	/**
      * Init Emailinput
@@ -117,7 +117,7 @@ define([
         return;
       }
       $form.addClass('form_submitted').removeClass('validation_pass validation_error');
-      this.getBDateinput();
+      this.getBDateinput(this.el, this.formView.model);
       // Remove Not needed input from submitting data
       $('.not_sending', $form).attr('disabled', true);
 
@@ -192,15 +192,7 @@ define([
      * Update the View Model
      **/
     preValidate: function(e) {
-      var $e = $(e.currentTarget)
-	  , _name = $e.attr('name')
-	  , _val = $.trim($e.val());
-	  $e.val(_val).trigger('change');
-	  if (this.formView.model.isValid(_name, _val)) {
-		$e.removeClass('invalid');
-	  } else {
-		$e.addClass('invalid');
-	  }
+      Utils.preValidate(e, this.formView.model);
     },
     /**
      * Clear Form Data

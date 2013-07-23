@@ -124,15 +124,7 @@ define([
 	},
 	preValidate: function(e) {
 	  e.stopPropagation();
-	  var $e = $(e.currentTarget)
-	  , _name = $e.attr('name')
-	  , _val = $.trim($e.val());
-	  $e.val(_val).trigger('change');
-	  if (this.model.isValid(_name, _val)) {
-		$e.removeClass('invalid');
-	  } else {
-		$e.addClass('invalid');
-	  }
+	  Utils.preValidate(e, this.model);
 	},
 	sendForm: function(e) {
 	  e.preventDefault();

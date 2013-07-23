@@ -8,6 +8,9 @@
 		"self": {
 			"required" : true,
 		},
+		"ChildDob": {
+			"required" : true,
+		},
         "comment": {
 			"required" : true,
         },
