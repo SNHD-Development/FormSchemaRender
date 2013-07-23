@@ -48,7 +48,8 @@
       .form-render .subform-container .subform-actions .popover-title {
         padding: 12px; }
   .form-render .form-actions {
-    text-align: center; }
+    text-align: center;
+    padding: 19px 20px 20px; }
     .form-render .form-actions .btn {
       margin-right: 50px; }
       .form-render .form-actions .btn:last-child {
