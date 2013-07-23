@@ -52,6 +52,17 @@ define([
 		case 'step':	// Special Field Type for Wizard View
 		  break;
 
+		case 'email':
+		  _attrs[value.name] = '';
+		  if (typeof attrs.validation[value.name] !== 'undefined') {
+			_validation[value.name] = _.clone(attrs.validation[value.name]);
+			if (value.options.autocomplete) {
+			  _validation[value.name+'_username'] = _.clone(attrs.validation[value.name]);
+			  _validation[value.name+'_server'] = _.clone(attrs.validation[value.name]);
+			}
+		  }
+		  break;
+
 		default:
 		  _attrs[value.name] = '';
 		  if (typeof attrs.validation[value.name] !== 'undefined') {

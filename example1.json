@@ -22,7 +22,10 @@
             "GradeSub": {
                 "required": true,
                 "msg": "Please enter Grade"
-            }
+            },
+			"subemail": {
+				"required": true
+			}
 		}
     },
     "Fields": [
