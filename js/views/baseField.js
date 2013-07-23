@@ -411,7 +411,7 @@ define([
 	  require(['views/fields/list'], function (SubFormView) {
 		var subFormView = Vm.create(this, _id, SubFormView, _data);
 		subFormView.render();
-		$(subFormView.el).addClass('active').expose({ closeOnEsc: false, closeOnClick: false, color: '#000' });
+		$(subFormView.el).addClass('active').expose({ closeOnEsc: false, closeOnClick: false, color: '#000', zIndex: 1000 });
 	  });
 	  $(this).parents('div.actions').fadeOut();
 	},
