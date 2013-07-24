@@ -6,13 +6,14 @@ define([
   'lodash',
   'backbone',
   'vm',
+  'utils',
   'events',
   'modelbinder',
   'validation',
   'views/baseField',
   'text!templates/form-layouts/wizard.html',
   'jquery.wizard'
-], function($, _, Backbone, Vm, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
+], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
   var AppView = BaseFieldView.extend({
 	_modelBinder: undefined,
     template: _.template(formLayoutTemplate),
