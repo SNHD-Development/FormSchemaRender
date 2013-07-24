@@ -115,6 +115,7 @@ define([
 	 **/
 	changeStep: function(e, data) {
 	  var _numSteps = e.data._steps.length;
+	  Utils.getBDateinput(e.data.el, e.data.model);
 	  if (data.direction === 'next') {
 		// Validate this step
 		if ( ! e.data.isStepValid(data.step - 1)) {

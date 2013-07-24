@@ -93,6 +93,7 @@ define([
 				if ($bdateInput.val().match(_nan)) {
 					$(':hidden', this).val('');
 				}
+				$bdateInput.trigger('change');
 				model.set($bdateInput.attr('name'), $bdateInput.val());
 			});
 		},
