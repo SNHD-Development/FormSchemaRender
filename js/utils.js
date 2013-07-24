@@ -8,6 +8,17 @@ define([
   'backbone'
 ], function($, _, Backbone){
 	return {
+		setupOldBrowser: function() {
+			// Object Method
+			Object.keys = Object.keys || function(o) {
+				var result = [], name;
+				for(name in o) {
+					if (o.hasOwnProperty(name))
+					result.push(name);
+				}
+				return result;
+			};
+		},
 		// http://kevin.vanzonneveld.net
 		// +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
 		// +   improved by: Waldo Malqui Silva

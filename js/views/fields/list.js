@@ -172,6 +172,6 @@ define([
      **/
 	setupEmailInput: function() {
 	  Utils.setupEmailInput(this.el);
-	},
+	}
   });
 });

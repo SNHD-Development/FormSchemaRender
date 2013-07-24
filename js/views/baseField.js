@@ -92,7 +92,7 @@ define([
 	  this.prefixedName = {
 		'list' : 'subform_',
 		'listdisplayid' : '_form_content',
-		'collectiondisplayid' : '_form_collection',
+		'collectiondisplayid' : '_form_collection'
 	  };
 	  // Not render label
 	  this.notRenderLabel = [

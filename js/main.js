@@ -38,7 +38,7 @@ require.config({
     // Just a short cut so we can put our html outside the js dir
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: 'templates',
-    views: 'views',
+    views: 'views'
   },
   shim: {
     "jquery.expose": {
@@ -68,7 +68,7 @@ require.config({
     "jquery.birthdaypicker": {
       deps: ['jquery'],
       exports: 'jQuery.birthdaypicker'
-    },
+    }
   }
 });
 
@@ -76,8 +76,12 @@ require.config({
 
 require([
   'views/app',
-  'vm'
-], function(AppView, Vm){
+  'vm',
+  'utils'
+], function(AppView, Vm, Utils){
+
+  Utils.setupOldBrowser();
+
   var _mode, _view, _token, _opts, appView
   , config = {
     mode : ["read", "edit", "create"],

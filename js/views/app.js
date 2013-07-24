@@ -11,7 +11,7 @@ define([
   'events',
   'jquery.ajaxsubmit',
   'text!templates/layout.html',
-  'jquery.datepicker',
+  'jquery.datepicker'
 ], function($, _, Backbone, Vm, Utils, Events, AjaxSubmit, layoutTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),
@@ -110,7 +110,7 @@ define([
 	  'blur :input:not(:button)' : 'preValidate',
 	  'keydown :input[type="email"]': 'preventSpace',
 	  'keydown :input[type="number"], :input.number': 'allowNumber',
-	  'keydown :input.allowzipcode': 'allowZipCode',
+	  'keydown :input.allowzipcode': 'allowZipCode'
 	},
 	/**
 	 * Submit Form

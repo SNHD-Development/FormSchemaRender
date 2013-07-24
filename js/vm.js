@@ -7,7 +7,7 @@ define([
   var views = {}
 
   , remove = function(name, clean) {
-    clean = clean || false
+    clean = clean || false;
     if(typeof views[name] !== 'undefined') {
       views[name].undelegateEvents();
       if(typeof views[name].clean === 'function') {
