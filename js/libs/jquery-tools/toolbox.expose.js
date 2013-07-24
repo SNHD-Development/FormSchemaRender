@@ -89,7 +89,6 @@
 			mask = $("#" + conf.maskId);
 
 			// or create it
-			console.log(els);
 			if (!mask.length) {
 				mask = $('<div/>').attr("id", conf.maskId);
 				if (conf.renderBody) {
