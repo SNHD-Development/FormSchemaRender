@@ -424,7 +424,7 @@ define([
 		, $subFormView = $(subFormView.el);
 		subFormView.render();
 		$subFormView.addClass('active');
-		$subFormView.expose({ closeOnEsc: false, closeOnClick: false, color: '#000', zIndex: 1000 });
+		$subFormView.expose({ closeOnEsc: false, closeOnClick: false, color: '#000', zIndex: 3000, renderBody: false });
 	  });
 	  $(this).parents('div.actions').fadeOut();
 	},

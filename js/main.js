@@ -22,7 +22,7 @@ require.config({
     validation: 'libs/backbone-validation/backbone-validation-amd',
 
     // jQuery Plugin
-    "jquery.expose": 'libs/jquery-tools/jquery.tools.expose.min',
+    "jquery.expose": 'libs/jquery-tools/toolbox.expose',
     "jquery.overlay": 'libs/jquery-tools/jquery.tools.overlay.min',
     "jquery.dateinput": 'libs/jquery-tools/jquery.tools.dateinput.min',
     "jquery.ajaxsubmit": 'libs/jquery-form-plugin/jquery.form.min',
