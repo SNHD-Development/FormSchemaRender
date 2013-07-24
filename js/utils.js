@@ -8,13 +8,41 @@ define([
   'backbone'
 ], function($, _, Backbone){
 	return {
+		// http://kevin.vanzonneveld.net
+		// +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
+		// +   improved by: Waldo Malqui Silva
+		// +   bugfixed by: Onno Marsman
+		// +   improved by: Robin
+		// +      input by: James (http://www.james-bell.co.uk/)
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// *     example 1: ucwords('kevin van  zonneveld');
+		// *     returns 1: 'Kevin Van  Zonneveld'
+		// *     example 2: ucwords('HELLO WORLD');
+		// *     returns 2: 'HELLO WORLD'
+		ucwords: function(str) {
+			return (str + '').replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function ($1) {
+				return $1.toUpperCase();
+			});
+		},
 		/**
 		 * Prevalidation, on blur event
 		 **/
 		preValidate: function(e, model) {
 			var $e = $(e.currentTarget)
 			, _name = $e.attr('name')
-			, _val = $.trim($e.val());
+			, _val;
+
+			_val = $.trim($e.val());
+
+			// Convert to lowercase
+			if ($e.hasClass('tolowercase')) {
+				_val = _val.toLowerCase();
+			}
+			// Convert to ucwords
+			if ($e.hasClass('toucwords')) {
+				_val = this.ucwords(_val);
+			}
+
 			$e.val(_val).trigger('change');
 			model.set(_name, _val);
 			if (model.isValid(_name, _val)) {
@@ -103,8 +131,16 @@ define([
 			if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46
 				|| e.keyCode === 9) {
 				return true;
-			} else if (( ! ( e.keyCode === 46 || e.keyCode === 190 ) || $(e.currentTarget).val().indexOf('.') != -1 )
+			} else if (( ! ( e.keyCode === 46 || e.keyCode === 190 ) || $(e.currentTarget).val().indexOf('.') !== -1 )
 				&& ( e.keyCode < 48 || e.keyCode > 57 ) ) {
+				e.preventDefault();
+			}
+		},
+		allowZipCode: function(e) {
+			if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46
+				|| e.keyCode === 9) {
+				return true;
+			} else if ( e.keyCode < 48 || e.keyCode > 57 ) {
 				e.preventDefault();
 			}
 		}

@@ -49,6 +49,11 @@
 			}
 		},
 		{
+			"Name": "address_fields",
+			"Type": "Address",
+			"Description": "Your Address"
+		},
+		{
 			"Name" : "total_students",
 			"Type" : "Number",
 			"Description" : "Number of Students"

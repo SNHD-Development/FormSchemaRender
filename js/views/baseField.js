@@ -220,12 +220,13 @@ define([
 			break;
 
 		  case 'email':
+			field.attributes['class'] = 'tolowercase '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
 			if (typeof field.options.autocomplete !== 'undefined' && field.options.autocomplete) {
 			  this._hasEmailPicker = true;
 			  field.attributes = {};
 			  field.attributes['data-provide'] = 'typeahead';
 			  field.attributes['autocomplete'] = 'off';
-			  field.attributes['class'] = 'not_sending emailpicker_server' + ((typeof field.attributes['class'] === 'undefined') ? '': field.attributes['class']);
+			  field.attributes['class'] = 'not_sending emailpicker_server tolowercase';
 			  field.attributes['data-source'] = emailData.replace(/\n/g, '').replace(/'/g, "&#39");
 			  if (typeof field.options['default'] !== 'undefined') {
 				field.attributes['data-value'] = field.options['default'];

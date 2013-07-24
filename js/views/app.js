@@ -90,10 +90,16 @@ define([
 	  Utils.preventSpace(e);
 	},
 	/**
-	 *
+	 * Valid Number and Decimal
 	 **/
 	allowNumber: function(e) {
 	  Utils.allowNumber(e);
+	},
+	/**
+	 *
+	 **/
+	allowZipCode: function(e) {
+	  Utils.allowZipCode(e);
 	},
     /**
 	 * View Events
@@ -103,7 +109,8 @@ define([
 	  'click .form-actions .btn-clear-form': 'clearForm',
 	  'blur :input:not(:button)' : 'preValidate',
 	  'keydown :input[type="email"]': 'preventSpace',
-	  'keydown :input[type="number"]': 'allowNumber',
+	  'keydown :input[type="number"], :input.number': 'allowNumber',
+	  'keydown :input.allowzipcode': 'allowZipCode',
 	},
 	/**
 	 * Submit Form
