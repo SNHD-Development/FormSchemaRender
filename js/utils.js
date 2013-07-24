@@ -89,7 +89,7 @@ define([
 			$('fieldset.birthday-picker', el).each(function() {
 				$('.not_sending', this).trigger('change');
 				var _nan =/NaN/i
-				, $bdateInput = $(':hidden', this);
+				, $bdateInput = $(':input[type="hidden"]', this);
 				if ($bdateInput.val().match(_nan)) {
 					$(':hidden', this).val('');
 				}
