@@ -9,10 +9,11 @@ define([
   'vm',
   'utils',
   'events',
-  'jquery.ajaxsubmit',
   'text!templates/layout.html',
-  'jquery.datepicker'
-], function($, _, Backbone, Vm, Utils, Events, AjaxSubmit, layoutTemplate){
+  'jquery.ajaxsubmit',
+  'jquery.datepicker',
+  'jquery.placeholder'
+], function($, _, Backbone, Vm, Utils, Events, layoutTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),
     el: '#app',
@@ -53,6 +54,10 @@ define([
 		  if (that.formView._hasEmailPicker) {
             that.setupEmailInput();
           }
+
+		  // Placeholder Setup for Older Browser
+		  Utils.setupPlaceHolder(this.el);
+
           // Render Form Complete
           // Send view at second parameter
           $('#'+that.options.formSchema.name, this.el).trigger(that.options.formSchema.name+'.renderCompleted', that);

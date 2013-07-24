@@ -8,10 +8,11 @@ libs/backbone/backbone-min.js
 events.js
 vm.js
 utils.js
-libs/jquery-form-plugin/jquery.form.min.js
 libs/require/text.js
 text!templates/layout.html
+libs/jquery-form-plugin/jquery.form.min.js
 libs/bootstrap/bootstrap.js
 libs/bootstrap-datepicker/bootstrap-datepicker.js
+libs/jquery-form-plugin/jquery.placeholder.min.js
 views/app.js
 main.js

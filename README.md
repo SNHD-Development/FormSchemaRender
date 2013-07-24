@@ -6,7 +6,15 @@ Version `version 0.0.2`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
+
 `<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">`
+
+If need IE7 supports for font-awesome,
+
+	<!--[if IE 7]>
+		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet">
+	<![endif]-->
+
 
 Please include these styles
 

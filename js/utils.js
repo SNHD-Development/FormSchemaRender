@@ -8,6 +8,9 @@ define([
   'backbone'
 ], function($, _, Backbone){
 	return {
+		/**
+		 * Some Older Browser might not have these methods build in
+		 **/
 		setupOldBrowser: function() {
 			// Object Method
 			Object.keys = Object.keys || function(o) {
@@ -62,6 +65,15 @@ define([
 				$e.addClass('invalid');
 			}
 		},
+		/**
+		 * Setup Placeholder in older browser
+		 **/
+		setupPlaceHolder: function(el) {
+			$('input, textarea', el).placeholder();
+		},
+		/**
+		 * Setup Email Events
+		 **/
 		setupEmailInput: function(el) {
 			$('.emailpicker', el).each(function () {
 				var $server = $('.emailpicker_server', this)
@@ -108,6 +120,9 @@ define([
 				model.set($bdateInput.attr('name'), $bdateInput.val());
 			});
 		},
+		/**
+		 * Setup Date Input
+		 **/
 		setupDateInput: function(el) {
 			$('.datepicker', el).each(function () {
 			var _options = {}, maxDate, nowTemp;

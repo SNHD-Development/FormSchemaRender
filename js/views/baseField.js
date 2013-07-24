@@ -239,6 +239,10 @@ define([
 			delete field.attributes['placeholder'];
 			break;
 
+		  case 'number':
+			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '') + ' number';
+			break;
+
 		  case 'fullname':
 			delete field.attributes['class'];
 			delete field.attributes['placeholder'];
