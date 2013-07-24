@@ -124,6 +124,7 @@ define([
       // Check Data
       if (this.formView.model.isValid(true)) {
 		$form.addClass('validation_pass');
+		$form.prepend('<input type="hidden" name="token" value="'+this.options.token+'"/>');
         $('input.subform_before_submit', this.el).remove();
         this.formView.model.appendSubFormInput(this.options.formSchema.name);
         _options = {
@@ -178,6 +179,7 @@ define([
       }
     },
     showResponse: function(responseText, statusText, xhr, $form) {
+	  $(':hidden[name="token"]', $form).remove();
       $form.removeClass('form_submitted');
       $('.not_sending', $form).attr('disabled', false);
       $form.trigger($form.attr('id')+'.postSubmit', [responseText, statusText, xhr, $form]);

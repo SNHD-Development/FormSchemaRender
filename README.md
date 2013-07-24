@@ -22,6 +22,7 @@ Load JS with RequireJS
 2. formData: formData JS Object (Optional)
 3. mode: mode either "read", "edit" or "create" (Optional)
 4. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
+5. token: if you want to add token in your form, you can add it here (Optional, but recommended)
 
 Example:
 
@@ -29,7 +30,8 @@ Example:
 		var formSchema = {}
 		, formData = {}
 		, mode = ""
-		, view = "";
+		, view = ""
+		, token = "";
 	</script>
 
 ### HTML Markup

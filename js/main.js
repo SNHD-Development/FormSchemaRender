@@ -78,7 +78,7 @@ require([
   'views/app',
   'vm'
 ], function(AppView, Vm){
-  var _mode, _view, _opts, appView
+  var _mode, _view, _token, _opts, appView
   , config = {
     mode : ["read", "edit", "create"],
     view : ["default", "horizontal", "wizard"]
@@ -97,11 +97,13 @@ require([
   }
 
   _view = (typeof view !== 'undefined') ? view.toLowerCase(): 'horizontal';
+  _token = (typeof token !== 'undefined' && _mode !== 'read') ? token: '';
 
   _opts = {
     formSchema : formSchema,
     formData : ( (typeof formData === 'undefined') ? {}: formData ),
-    mode : _mode
+    mode : _mode,
+    token : _token
   };
   // Setup View
   _opts.formSchema.view = _view;
