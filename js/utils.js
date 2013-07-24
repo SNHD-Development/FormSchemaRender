@@ -158,8 +158,8 @@ define([
 			if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46
 				|| e.keyCode === 9) {
 				return true;
-			} else if (( ! ( e.keyCode === 46 || e.keyCode === 190 ) || $(e.currentTarget).val().indexOf('.') !== -1 )
-				&& ( e.keyCode < 48 || e.keyCode > 57 ) ) {
+			} else if ( e.shiftKey || ( ! ( e.keyCode === 46 || e.keyCode === 190 || e.keyCode === 110) || $(e.currentTarget).val().indexOf('.') !== -1 )
+				&& ( e.keyCode < 48 || ( e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105 ) ) {
 				e.preventDefault();
 			}
 		},
@@ -167,7 +167,7 @@ define([
 			if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46
 				|| e.keyCode === 9) {
 				return true;
-			} else if ( e.keyCode < 48 || e.keyCode > 57 ) {
+			} else if ( e.shiftKey || e.keyCode < 48 || ( e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105 ) {
 				e.preventDefault();
 			}
 		}
