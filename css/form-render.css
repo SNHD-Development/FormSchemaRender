@@ -1,8 +1,14 @@
 /**
+ * Global Variables
+ **/
+/**
  * Form Render Global Styles
  **/
 .form-render {
   margin: 25px 20px;
+  /**
+   * Override Text Area
+   **/
   /**
    * Birthday Picker
    **/
@@ -23,6 +29,10 @@
     font-size: 18px;
     font-weight: bold;
     margin-left: 5px; }
+  .form-render textarea {
+    min-height: 100px; }
+  .form-render .row-fluid [class*="span"] textarea {
+    min-height: 100px; }
   .form-render .birthday-picker select {
     margin-right: 10px; }
     .form-render .birthday-picker select:last-child {

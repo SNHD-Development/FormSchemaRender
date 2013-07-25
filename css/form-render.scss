@@ -1,4 +1,9 @@
 /**
+ * Global Variables
+ **/
+$text_area_min_height:  100px;
+
+/**
  * Form Render Global Styles
  **/
 .form-render {
@@ -12,6 +17,19 @@
 				font-weight: bold;
 				margin-left: 5px;
 			}
+		}
+	}
+
+	/**
+	 * Override Text Area
+	 **/
+	textarea {
+		min-height: $text_area_min_height;
+	}
+
+	.row-fluid [class*="span"] {
+		textarea {
+			min-height: $text_area_min_height;
 		}
 	}
 
