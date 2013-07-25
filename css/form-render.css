@@ -33,6 +33,11 @@
       margin-right: 30px; }
   .form-render .controls-row input, .form-render .controls-row select, .form-render .controls-row textarea {
     margin-bottom: 15px; }
+  .form-render .controls-row .add-on {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin-left: 3px;
+    margin-right: 3px;
+    font-size: 18px; }
   .form-render .subform-container {
     padding: 20px; }
     .form-render .subform-container input, .form-render .subform-container select, .form-render .subform-container textarea {
