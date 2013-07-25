@@ -56,11 +56,11 @@ define([
           }
 
 		  // Placeholder Setup for Older Browser
-		  Utils.setupPlaceHolder(this.el);
+		  Utils.setupPlaceHolder(that.el);
 
           // Render Form Complete
           // Send view at second parameter
-          $('#'+that.options.formSchema.name, this.el).trigger(that.options.formSchema.name+'.renderCompleted', that);
+          $('#'+that.options.formSchema.name, that.el).trigger(that.options.formSchema.name+'.renderCompleted', that);
         });
       }
     },

@@ -25,6 +25,8 @@
 	<?php
 	$content = file_get_contents("example1.json");
     echo 'var formSchema = ' . $content . ';';
+	$content = file_get_contents("formEvents.json");
+	echo 'var formEvents = ' . $content . ';';
 	?>
   </script>
   <!-- Initially populated by templates/layout.html -->

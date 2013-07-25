@@ -119,4 +119,11 @@ require([
 
   appView = Vm.create({}, 'AppView', AppView, _opts);
   appView.render();
+
+  // Render Custom Script Here
+  if (typeof formEvents !== 'undefined') {
+    _.each(formEvents, function(value, key) {
+      $('div#app').on(formSchema.name+'.'+key, value);
+    });
+  }
 });

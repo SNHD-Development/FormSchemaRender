@@ -31,6 +31,7 @@ Load JS with RequireJS
 3. mode: mode either "read", "edit" or "create" (Optional)
 4. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
 5. token: if you want to add token in your form, you can add it here (Optional, but recommended)
+6. formEvents: custom events JS code that will need to run in form render scope. (Optional)
 
 Example:
 
@@ -39,7 +40,8 @@ Example:
 		, formData = {}
 		, mode = ""
 		, view = ""
-		, token = "";
+		, token = ""
+		, formEvents = { event : function };
 	</script>
 
 ### HTML Markup
@@ -77,6 +79,29 @@ For Icon, we are using [Font-Awesome](http://fortawesome.github.io/Font-Awesome/
 Note:
 If calling this script from different domain will need to run this build script `perl js/libs/parsetmpl.pl` from the app root.
 This script will parse html into requireJS in order to work around XHR restrictions.
+
+### Events
+
+Every events in our form render will follow this namespace `"form_id.event_name"`. Simply listen to these events.
+
+* Form render completed Event: `form_id.renderCompleted`
+* Form before submit Event: `form_id.preSubmit`
+* Form when received respond back Event: `form_id.postSubmit`
+
+Then you need to pass your custom event into
+
+	var formEvents = {
+		'renderCompleted' : function() {
+			console.log('Render Form Completed.');
+		},
+		'preSubmit' : function() {
+			console.log('Before Submitting this form.');
+		},
+		'postSubmit' : function () {
+			console.log('Let\'s check the respond.');
+		}
+	};
+
 
 ### Version
 

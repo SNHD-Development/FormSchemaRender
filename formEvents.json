@@ -1,0 +1,11 @@
+{
+	'renderCompleted' : function() {
+		console.log('Render Form Completed.');
+	},
+	'preSubmit' : function() {
+		console.log('Before Submitting this form.');
+	},
+	'postSubmit' : function () {
+		console.log('Let\'s check the respond.');
+	}
+}
