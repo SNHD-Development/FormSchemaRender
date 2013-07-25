@@ -101,6 +101,9 @@ define([
 		if (formView._hasEmailPicker) {
           that.setupEmailInput();
         }
+
+		// Placeholder Setup for Older Browser
+		Utils.setupPlaceHolder(that.el);
       });
     },
 	/**
