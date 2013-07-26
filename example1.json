@@ -56,7 +56,10 @@
 		{
 			"Name" : "total_students",
 			"Type" : "Number",
-			"Description" : "Number of Students"
+			"Description" : "Number of Students",
+			"Options": {
+				"Spinner": true
+			}
 		},
 		{
 			"Name" : "total_classes",

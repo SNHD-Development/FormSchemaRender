@@ -22,6 +22,14 @@
       deps: ['jquery', 'bootstrap'],
       exports: 'jQuery.datepicker'
     },
+    "jquery.wizard": {
+      deps: ['jquery', 'bootstrap'],
+      exports: 'jQuery.wizard'
+    },
+    "jquery.spinner": {
+      deps: ['jquery', 'bootstrap'],
+      exports: 'jQuery.spinner'
+    },
     "jquery.ajaxsubmit": {
       deps: ['jquery'],
       exports: 'jQuery.ajaxSubmit'
@@ -54,6 +62,8 @@
     "jquery.ajaxsubmit": 'libs/jquery-form-plugin/jquery.form.min',
     "jquery.placeholder": 'libs/jquery-form-plugin/jquery.placeholder.min',
     "jquery.birthdaypicker": 'libs/jquery-form-plugin/bdate-picker',
+    "jquery.wizard": 'libs/fuelux/wizard',
+    "jquery.spinner": 'libs/fuelux/spinner',
 
     // Bootstrap Plugin
     "jquery.datepicker": 'libs/bootstrap-datepicker/bootstrap-datepicker',
