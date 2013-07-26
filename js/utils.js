@@ -45,20 +45,24 @@ define([
 		preValidate: function(e, model) {
 			var $e = $(e.currentTarget)
 			, _name = $e.attr('name')
+			, _isFile = $e.is(':file')
 			, _val;
 
-			_val = $.trim($e.val());
+			_val = (_isFile) ? $e.val(): $.trim($e.val());
 
-			// Convert to lowercase
-			if ($e.hasClass('tolowercase')) {
-				_val = _val.toLowerCase();
-			}
-			// Convert to ucwords
-			if ($e.hasClass('toucwords')) {
-				_val = this.ucwords(_val);
+			if ( ! _isFile) {
+				// Convert to lowercase
+				if ($e.hasClass('tolowercase')) {
+					_val = _val.toLowerCase();
+				}
+				// Convert to ucwords
+				if ($e.hasClass('toucwords')) {
+					_val = this.ucwords(_val);
+				}
+
+				$e.val(_val).trigger('change');
 			}
 
-			$e.val(_val).trigger('change');
 			model.set(_name, _val);
 			if (model.isValid(_name, _val)) {
 				$e.removeClass('invalid');
@@ -119,6 +123,12 @@ define([
 				}
 				model.set($bdateInput.attr('name'), $bdateInput.val());
 			});
+		},
+		/**
+		 * Some select, check might have default value need to send change event
+		 **/
+		getDefaultValues: function(el) {
+			$('.has-default-val', el).trigger('change');
 		},
 		/**
 		 * Setup Date Input

@@ -11,6 +11,30 @@ define([
 	_.each(attrs.fields, function(value) {
 	  value.options = value.options || {};
 	  switch (value.type.toLowerCase()) {
+		case 'address':
+		  var _hasValidation = (typeof attrs.validation[value.name] !== 'undefined')
+		  , _msg = (_hasValidation && attrs.validation[value.name].msg) ? attrs.validation[value.name].msg: false;
+		  _attrs[value.name+'_address_street'] = '';
+		  _attrs[value.name+'_address_city'] = '';
+		  _attrs[value.name+'_address_state'] = '';
+		  _attrs[value.name+'_address_zip'] = '';
+		  _attrs[value.name+'_address_country'] = '';
+		  if (_hasValidation) {
+			_validation[value.name+'_address_street'] = _.clone(attrs.validation[value.name]);
+			_validation[value.name+'_address_city'] = _.clone(attrs.validation[value.name]);
+			_validation[value.name+'_address_state'] = _.clone(attrs.validation[value.name]);
+			_validation[value.name+'_address_zip'] = _.clone(attrs.validation[value.name]);
+			_validation[value.name+'_address_country'] = _.clone(attrs.validation[value.name]);
+			if (_msg) {
+			  _validation[value.name+'_address_street'].msg = attrs.validation[value.name].msg + ' (Street)';
+			  _validation[value.name+'_address_city'].msg = attrs.validation[value.name].msg + ' (City)';
+			  _validation[value.name+'_address_state'].msg = attrs.validation[value.name].msg + ' (State)';
+			  _validation[value.name+'_address_zip'].msg = attrs.validation[value.name].msg + ' (ZIP)';
+			  _validation[value.name+'_address_country'].msg = attrs.validation[value.name].msg + ' (Country)';
+			}
+		  }
+		  break;
+
 		case 'fullname':
 		  var _hasValidation = (typeof attrs.validation[value.name] !== 'undefined')
 		  , _msg = (_hasValidation && attrs.validation[value.name].msg) ? attrs.validation[value.name].msg: false;
@@ -21,11 +45,9 @@ define([
 		  _attrs[value.name+'_fullname_last_name'] = '';
 		  if (_hasValidation) {
 			_validation[value.name+'_fullname_first_name'] = _.clone(attrs.validation[value.name]);
-			if (_msg) {
-			  _validation[value.name+'_fullname_first_name'].msg = attrs.validation[value.name].msg + ' (First Name)';
-			}
 			_validation[value.name+'_fullname_last_name'] = _.clone(attrs.validation[value.name]);
 			if (_msg) {
+			  _validation[value.name+'_fullname_first_name'].msg = attrs.validation[value.name].msg + ' (First Name)';
 			  _validation[value.name+'_fullname_last_name'].msg = attrs.validation[value.name].msg + ' (Last Name)';
 			}
 		  }

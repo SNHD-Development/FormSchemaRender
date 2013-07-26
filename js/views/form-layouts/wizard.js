@@ -116,6 +116,7 @@ define([
 	changeStep: function(e, data) {
 	  var _numSteps = e.data._steps.length;
 	  Utils.getBDateinput(e.data.el, e.data.model);
+	  Utils.getDefaultValues(e.data.el);
 	  if (data.direction === 'next') {
 		// Validate this step
 		if ( ! e.data.isStepValid(data.step - 1)) {
@@ -153,6 +154,7 @@ define([
 	 **/
 	isStepValid: function(index) {
 	  var that = this, _error = false, _elementError, $element;
+
 	  if (typeof this._stepValidated[index] !== 'undefined') {
 		_.each(this._stepValidated[index], function(element) {
 		  $element = $(':input[name="'+element+'"]', that.el).removeClass('invalid');

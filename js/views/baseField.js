@@ -244,6 +244,17 @@ define([
 		  case 'address':
 			delete field.attributes['class'];
 			delete field.attributes['placeholder'];
+
+			var _validation_tmp = this.getFormValidationData(field.name);
+
+			// For Wizard View
+			if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_street');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_city');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_state');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_zip');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_country');
+			}
 			break;
 
 		  case 'number':
@@ -330,7 +341,7 @@ define([
 
 		// Check to see if step validation has been init (wizard view)
 		if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined'
-			&& ! ( _type === 'step' || _type === 'list')
+			&& ! ( _type === 'step' || _type === 'list' || _type === 'address' )
 			&& (typeof this.options.formSchema.validation[field.name] !== 'undefined') ) {
 		  _.each(_name, function(element) {
 			that._stepValidated[(that._currentStep)-2].push(element);

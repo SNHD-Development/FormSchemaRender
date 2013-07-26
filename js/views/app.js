@@ -116,6 +116,7 @@ define([
 	  'submit form.form-render': 'submitForm',
 	  'click .form-actions .btn-clear-form': 'clearForm',
 	  'blur :input:not(:button)' : 'preValidate',
+	  'change :file' : 'preValidate',
 	  'keydown :input[type="email"]': 'preventSpace',
 	  'keydown :input[type="number"], :input.number': 'allowNumber',
 	  'keydown :input.allowzipcode': 'allowZipCode'
