@@ -29,6 +29,8 @@
     font-size: 18px;
     font-weight: bold;
     margin-left: 5px; }
+  .form-render fieldset {
+    clear: both; }
   .form-render textarea {
     min-height: 100px; }
   .form-render .row-fluid [class*="span"] textarea {
