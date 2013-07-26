@@ -22,6 +22,10 @@ $text_area_min_height:  100px;
 
 	fieldset {
 		clear: both;
+
+		&.birthday-picker {
+			clear: none;
+		}
 	}
 
 	/**

@@ -17,6 +17,9 @@
 		"maxdate": {
 			"maxdate" : "today"
 		},
+		"total_students": {
+			"required" : true,
+		},
 		"subform" : {
 			"subformName": {
                 "required": true,
@@ -57,6 +60,14 @@
 			"Name" : "total_students",
 			"Type" : "Number",
 			"Description" : "Number of Students",
+			"Options": {
+				"Spinner": true
+			}
+		},
+		{
+			"Name" : "total_rooms",
+			"Type" : "Number",
+			"Description" : "Number of Rooms",
 			"Options": {
 				"Spinner": true
 			}

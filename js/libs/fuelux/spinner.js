@@ -57,7 +57,7 @@ define(['require','jquery'],function(require) {
 		constructor: Spinner,
 
 		render: function () {
-			this.$input.val(this.options.value);
+			this.$input.val(this.options.value).trigger('change');
 			this.$input.attr('maxlength',(this.options.max + '').split('').length);
 		},
 
@@ -68,7 +68,7 @@ define(['require','jquery'],function(require) {
 				this.options.value = newVal/1;
 			}else{
 				newVal = newVal.replace(/[^0-9]/g,'');
-				this.$input.val(newVal);
+				this.$input.val(newVal).trigger('change');
 				this.options.value = newVal/1;
 			}
 
@@ -139,7 +139,7 @@ define(['require','jquery'],function(require) {
 			if (!isNaN(parseFloat(value)) && isFinite(value)) {
 				value = parseFloat(value);
 				this.options.value = value;
-				this.$input.val(value);
+				this.$input.val(value).trigger('change');
 				return this;
 			} else {
 				return this.options.value;
