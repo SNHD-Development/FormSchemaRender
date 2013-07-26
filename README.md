@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.0.2`
+Version `version 0.0.3`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -107,6 +107,8 @@ Then you need to pass your custom event into
 
 
 ### Version
+
+* 0.0.3 - Fix IE when render List Type. Fix validation in special field type.
 
 * 0.0.2 - Add Wizard View.
 
