@@ -115,9 +115,8 @@ define([
 				var _nan =/NaN/i
 				, $bdateInput = $(':input[type="hidden"]', this);
 				if ($bdateInput.val().match(_nan)) {
-					$(':hidden', this).val('');
+					$bdateInput.val('');
 				}
-				$bdateInput.trigger('change');
 				model.set($bdateInput.attr('name'), $bdateInput.val());
 			});
 		},

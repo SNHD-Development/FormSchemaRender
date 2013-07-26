@@ -184,6 +184,13 @@ define([
 			  _options['defaultdate'] = this.options.formData.fields[field.name];
 			}
 			field.attributes['data-options'] = JSON.stringify(_.extend(_options, _validation_tmp));
+
+			// For Wizard View
+			if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[month]');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[day]');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[year]');
+			}
 			break;
 
 		  case 'textbox':
