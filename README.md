@@ -32,7 +32,8 @@ Load JS with RequireJS
 3. mode: mode either "read", "edit" or "create" (Optional)
 4. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
 5. token: if you want to add token in your form, you can add it here (Optional, but recommended)
-6. formEvents: custom events JS code that will need to run in form render scope. (Optional)
+6. internal: When we want to add internal only fileds, if any fields that has `options.internal = true` will only get render if this flag set to true. (Optional, default value is false)
+7. formEvents: custom events JS code that will need to run in form render scope. (Optional)
 
 Example:
 
@@ -42,6 +43,7 @@ Example:
 		, mode = ""
 		, view = ""
 		, token = ""
+		, internal = boolean
 		, formEvents = { event : function };
 	</script>
 

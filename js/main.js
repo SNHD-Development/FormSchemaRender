@@ -117,7 +117,8 @@ require([
     formSchema : formSchema,
     formData : ( (typeof formData === 'undefined') ? {}: formData ),
     mode : _mode,
-    token : _token
+    token : _token,
+    internal: ( (typeof internal === 'undefined') ? false: internal )
   };
   // Setup View
   _opts.formSchema.view = _view;

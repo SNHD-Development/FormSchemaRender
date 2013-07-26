@@ -28,7 +28,8 @@ define([
       , _opts = {
           formSchema: that.options.formSchema,
           formData: that.options.formData,
-          mode : that.options.mode
+          mode : that.options.mode,
+		  internal : that.options.internal
         };
 
       this.$el.html(this.template(this.options.formSchema));
