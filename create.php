@@ -14,6 +14,7 @@
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
   <link rel="stylesheet" href="css/datepicker.css" />
+  <link rel="stylesheet" href="css/spinner.css">
   <link rel="stylesheet" href="css/form-render.css" />
 
   <script data-main="js/main" src="js/libs/require/require.js"></script>

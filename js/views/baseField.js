@@ -241,6 +241,9 @@ define([
 
 		  case 'number':
 			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '') + ' number';
+			if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
+			  field.attributes['class'] += ' spinner-input';
+			}
 			break;
 
 		  case 'fullname':

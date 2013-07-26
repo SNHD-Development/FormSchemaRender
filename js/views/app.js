@@ -55,6 +55,9 @@ define([
             that.setupEmailInput();
           }
 
+		  // Setup Spinner
+		  Utils.setupSpinner(that.el);
+
 		  // Placeholder Setup for Older Browser
 		  Utils.setupPlaceHolder(that.el);
 

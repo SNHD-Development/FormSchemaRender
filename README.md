@@ -20,6 +20,7 @@ Please include these styles
 
 * form-render.css (Required) `<link rel="stylesheet" href="css/form-render.css" />`
 * wizard.css (Required: if rendering with Wizard View) `<link rel="stylesheet" href="css/wizard.css">`
+* spinner.css (Required: if setting type 'Number' with options 'Spinner = true' ) `<link rel="stylesheet" href="css/spinner.css">`
 * datepicker.css (If you use type = "date") `<link rel="stylesheet" href="css/datepicker.css" />`
 
 Load JS with RequireJS

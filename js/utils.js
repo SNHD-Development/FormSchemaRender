@@ -5,7 +5,8 @@
 define([
   'jquery',
   'underscore',
-  'backbone'
+  'backbone',
+  'jquery.spinner'
 ], function($, _, Backbone){
 	return {
 		/**
@@ -148,12 +149,24 @@ define([
 				});
 			});
 		},
+		/**
+		 * Setup Spinner
+		 **/
+		setupSpinner: function(el) {
+			$('.spinner', el).spinner();
+		},
+		/**
+		 * Prevent Space in Keypress Event
+		 **/
 		preventSpace: function(e) {
 			if (e.keyCode === 32) {
 				e.preventDefault();
 				return false;
 			}
 		},
+		/**
+		 * Allow Only valid Number in Keypress Event
+		 **/
 		allowNumber: function(e) {
 			if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46
 				|| e.keyCode === 9) {
@@ -163,6 +176,9 @@ define([
 				e.preventDefault();
 			}
 		},
+		/**
+		 * Allow Only Integer Number in Keypress Event
+		 **/
 		allowZipCode: function(e) {
 			if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46
 				|| e.keyCode === 9) {
