@@ -7,7 +7,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-  <title>Form Render Boilerplate (Edit Mode)</title>
+  <title>Form Render Boilerplate (Update Mode)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="Front-End Form Render Engine" />
 
@@ -33,7 +33,7 @@
 		"petname" : "My Dog"
 	  }
 	}';
-	echo ', mode = "edit";';
+	echo ', mode = "update";';
 	?>
   </script>
   <!-- Initially populated by templates/layout.html -->

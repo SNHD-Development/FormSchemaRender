@@ -94,7 +94,7 @@ require([
 
   var _mode, _view, _token, _opts, appView
   , config = {
-    mode : ["read", "edit", "create"],
+    mode : ["read", "update", "create"],
     view : ["default", "horizontal", "wizard"]
   };
 
@@ -105,7 +105,7 @@ require([
   Vm.toLower(formSchema);
   if (typeof formData !== 'undefined') {
     Vm.toLower(formData, 'fields');
-    _mode = (typeof mode !== 'undefined' && config.mode.indexOf(mode.toLowerCase()) > -1) ? mode.toLowerCase(): 'edit';
+    _mode = (typeof mode !== 'undefined' && config.mode.indexOf(mode.toLowerCase()) > -1) ? mode.toLowerCase(): 'update';
   } else {
     _mode = (typeof mode !== 'undefined' && config.view.indexOf(view.toLowerCase()) > -1) ? mode.toLowerCase(): 'create';
   }

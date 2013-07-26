@@ -29,7 +29,7 @@ Load JS with RequireJS
 ### JS Object
 1. formSchema: formSchema JS Object (Require)
 2. formData: formData JS Object (Optional)
-3. mode: mode either "read", "edit" or "create" (Optional)
+3. mode: mode either "read", "update" or "create" (Optional, default is create mode)
 4. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
 5. token: if you want to add token in your form, you can add it here (Optional, but recommended)
 6. internal: When we want to add internal only fileds, if any fields that has `options.internal = true` will only get render if this flag set to true. (Optional, default value is false)
