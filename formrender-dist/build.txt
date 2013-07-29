@@ -16,5 +16,6 @@ text!templates/layout.html
 libs/jquery-form-plugin/jquery.form.min.js
 libs/bootstrap-datepicker/bootstrap-datepicker.js
 libs/jquery-form-plugin/jquery.placeholder.min.js
+libs/lightbox/lightbox-2.6.min.js
 views/app.js
 main.js

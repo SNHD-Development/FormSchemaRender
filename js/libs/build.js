@@ -42,6 +42,10 @@
       deps: ['jquery'],
       exports: 'jQuery.birthdaypicker'
     },
+    "jquery.lightbox": {
+      deps: ['jquery'],
+      exports: 'jQuery.lightbox'
+    }
   }
   , paths: {
     // Major libraries
@@ -64,6 +68,7 @@
     "jquery.birthdaypicker": 'libs/jquery-form-plugin/bdate-picker',
     "jquery.wizard": 'libs/fuelux/wizard',
     "jquery.spinner": 'libs/fuelux/spinner',
+    "jquery.lightbox": 'libs/lightbox/lightbox-2.6.min',
 
     // Bootstrap Plugin
     "jquery.datepicker": 'libs/bootstrap-datepicker/bootstrap-datepicker',

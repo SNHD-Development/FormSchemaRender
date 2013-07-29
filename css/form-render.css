@@ -103,3 +103,6 @@
     width: 80%; }
   .form-render .uneditable-input-textarea {
     height: auto; }
+  .form-render .uneditable-input-image {
+    max-height: 250px;
+    max-width: 500px; }

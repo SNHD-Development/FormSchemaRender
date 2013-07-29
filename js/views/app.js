@@ -12,7 +12,8 @@ define([
   'text!templates/layout.html',
   'jquery.ajaxsubmit',
   'jquery.datepicker',
-  'jquery.placeholder'
+  'jquery.placeholder',
+  'jquery.lightbox'
 ], function($, _, Backbone, Vm, Utils, Events, layoutTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),

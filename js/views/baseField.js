@@ -365,14 +365,15 @@ define([
 		// If this is read mode will need to render read template
 		if ( typeof readMode !== 'undefined' && readMode && typeof _name[0] !== 'undefined'
 			&&  _type !== 'button' ) {
-		  var _field_data = '';
+		  var _field_data = '', _href = '';
 		  _.each(_name, function(element) {
 			_field_data += ( (typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element]: '') + ' ';
-		  })
+		  });
 		  _field_data = $.trim(_field_data);
 		  if (_type === 'file' || _type === 'image') {
 			if (_type === 'image') {
 			  field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src']: '/form/getFile/')+that.options.formData.fields[field.name];
+			  _href = field.attributes['src'];
 			} else {
 			  field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn btn-primary');
 			  field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
@@ -381,7 +382,7 @@ define([
 			_.each(field.attributes, function(value, key) {
 			  _attr += ' '+key+'=\''+value+'\'';
 			});
-			_html += that.inputTemplate['uneditable'+_type]({value: _field_data, text: field.description, _attr : _attr});
+			_html += that.inputTemplate['uneditable'+_type]({value: _field_data, text: field.description, _attr : _attr, id: field.name, href: _href});
 		  } else if (_type === 'list') {
 			_html += '';
 		  } else {
