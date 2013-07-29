@@ -73,7 +73,8 @@ define([
 		this._modelBinder.unbind();
 	  }
 	},
-	initialize: function(){
+	initialize: function() {
+	  var that = this;
 	  this._div = 0;	// Number of Open Div
 	  this._hasDate = false; // Tracking the dateinput element
 	  this._hasBDate = false; // Tracking the Birthdate element
@@ -89,8 +90,16 @@ define([
 	  // Setup Keys
 	  this.options.formSchema.validation = this.options.formSchema.validation || {};
 	  this.model = new Model(this.options.formSchema);
+	  // If user pass in formData
 	  if ( ! $.isEmptyObject(this.options.formData)) {
-		this.model.set(this.options.formData.fields);
+		_.each(this.model.attributes, function(element, index) {
+		  if (typeof element === 'object') {
+		  } else {
+			var _obj = {};
+			_obj[index] = that.options.formData.fields[index];
+			that.model.set(_obj);
+		  }
+		});
 	  }
 	  // Prefixed Name
 	  this.prefixedName = {
