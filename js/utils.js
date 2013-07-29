@@ -107,7 +107,12 @@ define([
 		 **/
 		setupBDateInput: function(el) {
 			$('.birthdaypicker', el).each(function () {
-				$(this).birthdaypicker($(this).attr('data-options'));
+				if (typeof $(this).birthdaypicker !== 'function') {
+					var that = this;
+					window.setTimeout(function() { $(that).birthdaypicker($(that).attr('data-options')); }, 2000);
+				} else {
+					$(this).birthdaypicker($(this).attr('data-options'));
+				}
 			});
 		},
 		/**

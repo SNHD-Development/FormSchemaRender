@@ -303,6 +303,10 @@ define([
 			$(this.el).attr('action', field.url);
 		  case 'button':
 			field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
+			// AppendId
+			if (field.options.appendid) {
+			  field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
+			}
 			break;
 
 		  case 'schooles':
