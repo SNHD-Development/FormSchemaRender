@@ -112,13 +112,28 @@ define([
 		/**
 		 * Init BDate
 		 **/
-		setupBDateInput: function(el) {
+		setupBDateInput: function(el, model) {
 			$('.birthdaypicker', el).each(function () {
-				if (typeof $(this).birthdaypicker !== 'function') {
-					var that = this;
-					window.setTimeout(function() { $(that).birthdaypicker($(that).attr('data-options')); }, 2000);
-				} else {
-					$(this).birthdaypicker($(this).attr('data-options'));
+				$(this).birthdaypicker($(this).attr('data-options'));
+				var $hidden = $(':hidden', this), _token, $month, $day, $year;
+				if ($hidden.val() !== '') {
+					_token = $hidden.val().split("/");
+					if (_token.length === 3) {
+						if (_token[0][0] === '0') {
+							_token[0] = _token[0].substr(1);
+						}
+						if (_token[1][0] === '0') {
+							_token[1] = _token[1].substr(1);
+						}
+
+						$month = $('.birth-month', this).val(_token[0]);
+						$day = $('.birth-day', this).val(_token[1]);
+						$year = $('.birth-year', this).val(_token[2]);
+
+						model.set($month.attr('name'), _token[0]);
+						model.set($day.attr('name'), _token[1]);
+						model.set($year.attr('name'), _token[2]);
+					}
 				}
 			});
 		},

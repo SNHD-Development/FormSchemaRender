@@ -73,7 +73,7 @@ define([
      * Init BDateinput
      **/
     setupBDateInput: function() {
-      Utils.setupBDateInput(this.el);
+      Utils.setupBDateInput(this.el, this.formView.model);
     },
     /**
      * Get BDate Input
