@@ -253,14 +253,21 @@ define([
 
 			var _validation_tmp = this.getFormValidationData(field.name);
 
-			// For Wizard View
-			if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_street');
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_city');
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_state');
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_zip');
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_address_country');
+			_name = [];
+			_name.push(field.name+'_address_street');
+			_name.push(field.name+'_address_city');
+			_name.push(field.name+'_address_state');
+			_name.push(field.name+'_address_zip');
+			_name.push(field.name+'_address_country');
+
+			// Format Data
+			if (typeof readMode !== 'undefined' && typeof this.options.formData !== 'undefined') {
+			  if (this.options.formData.fields[field.name+'_address_street'] && this.options.formData.fields[field.name+'_address_street'].charAt(this.options.formData.fields[field.name+'_address_street'].length-1) !== '.') {
+				this.options.formData.fields[field.name+'_address_street'] += '.';
+			  }
+			  this.options.formData.fields[field.name+'_address_city'] += ',';
 			}
+
 			break;
 
 		  case 'number':
