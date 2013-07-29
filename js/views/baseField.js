@@ -433,8 +433,9 @@ define([
 	/**
 	 * Show On Mode
 	 **/
-	checkShowOnMode: function(value) {
-	  if ( ! this.options.internal && value.options.hideonexternalread) {
+	checkShowOnMode: function(value, readMode) {
+	  readMode = readMode || false;
+	  if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
 		return false;
 	  }
 	  return true;

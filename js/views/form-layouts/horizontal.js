@@ -31,6 +31,11 @@ define([
 		, _html = ''
 		, _required;
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
+		// Check for Show On Mode
+		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value) ) {
+		  return '';
+		}
+
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
 			_html += '<div class="control-group">';
 			this._divcontrolgroup++;
