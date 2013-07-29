@@ -268,6 +268,7 @@ define([
 			  if (this.options.formData.fields[field.name+'_address_street'] && this.options.formData.fields[field.name+'_address_street'].charAt(this.options.formData.fields[field.name+'_address_street'].length-1) !== '.') {
 				this.options.formData.fields[field.name+'_address_street'] += '.';
 			  }
+			  this.options.formData.fields[field.name+'_address_street'] += '<br>';
 			  this.options.formData.fields[field.name+'_address_city'] += ',';
 			}
 
@@ -377,7 +378,13 @@ define([
 		  } else if (_type === 'list') {
 			_html += '';
 		  } else {
-			_html += that.inputTemplate['uneditableinput']({value: _field_data});
+			var _textarea = '';
+			switch (_type) {
+			  case 'address':
+				_textarea = ' uneditable-input-textarea';
+				break;
+			}
+			_html += that.inputTemplate['uneditableinput']({value: _field_data, css_class: _textarea});
 		  }
 		} else {
 		  _.each(field.attributes, function(value, key) {
