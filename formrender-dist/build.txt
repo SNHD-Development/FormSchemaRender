@@ -9,6 +9,7 @@ events.js
 vm.js
 libs/bootstrap/bootstrap.js
 libs/fuelux/spinner.js
+libs/jquery-form-plugin/bdate-picker.js
 utils.js
 libs/require/text.js
 text!templates/layout.html

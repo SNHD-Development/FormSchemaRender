@@ -6,7 +6,8 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'jquery.spinner'
+  'jquery.spinner',
+  'jquery.birthdaypicker'
 ], function($, _, Backbone){
 	return {
 		/**
