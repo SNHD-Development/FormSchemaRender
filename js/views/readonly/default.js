@@ -28,8 +28,8 @@ define([
 		, _parentRender = BaseFieldView.prototype.render
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
-		// Check for HideOnExternalRead
-		if ( ! that.options.internal && value.options.hideonexternalread) {
+		// Check for Show On Mode
+		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value) ) {
 		  return '';
 		}
 

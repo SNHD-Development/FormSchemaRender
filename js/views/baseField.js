@@ -431,6 +431,15 @@ define([
 	  return _html;
 	},
 	/**
+	 * Show On Mode
+	 **/
+	checkShowOnMode: function(value) {
+	  if ( ! this.options.internal && value.options.hideonexternalread) {
+		return false;
+	  }
+	  return true;
+	},
+	/**
 	 * Subform Events
 	 **/
 	attachSubFormEvent: function(id, field, validation) {
