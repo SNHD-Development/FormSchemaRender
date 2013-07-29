@@ -83,12 +83,11 @@ define([
 		setupEmailInput: function(el) {
 			$('.emailpicker', el).each(function () {
 				var $server = $('.emailpicker_server', this)
+				, $username = $('.emailpicker_username', this)
+				, $hidden = $(':hidden', this)
 				, $notsending = $('.not_sending', this);
 				$server.val($server.attr('data-value')).trigger('change');
 				$notsending.on('change', this, function(e) {
-					var $hidden = $(':hidden', e.data)
-					, $username = $('.emailpicker_username', e.data)
-					, $server = $('.emailpicker_server', e.data);
 					if ($username.val() !== '' && $server.val() !== '') {
 						$hidden.val($.trim($username.val()+'@'+$server.val())).trigger('change');
 					} else {
@@ -101,6 +100,13 @@ define([
 						return false;
 					}
 				});
+				if ($hidden.val() !== '') {
+					var _token = $hidden.val().split("@");
+					if (_token.length === 2) {
+						$username.val(_token[0]).trigger('change');
+						$server.val(_token[1]).trigger('change');
+					}
+				}
 			});
 		},
 		/**
