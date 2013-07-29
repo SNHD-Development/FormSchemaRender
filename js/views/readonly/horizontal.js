@@ -31,6 +31,11 @@ define([
 		, _parentRender = BaseFieldView.prototype.render
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
+		// Check for HideOnExternalRead
+		if ( ! that.options.internal && value.options.hideonexternalread) {
+		  return '';
+		}
+
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
 			_html += '<div class="control-group">';
 			this._divcontrolgroup++;
