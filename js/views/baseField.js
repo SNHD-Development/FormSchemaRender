@@ -244,6 +244,9 @@ define([
 			  if (typeof field.options['default'] !== 'undefined') {
 				field.attributes['data-value'] = field.options['default'];
 			  }
+
+			  _name.push(field.name+'_username');
+			  _name.push(field.name+'_server');
 			}
 			break;
 
