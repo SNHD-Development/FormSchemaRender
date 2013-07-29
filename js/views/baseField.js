@@ -348,7 +348,7 @@ define([
 
 		// Check to see if step validation has been init (wizard view)
 		if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined'
-			&& ! ( _type === 'step' || _type === 'list' || _type === 'address' )
+			&& ! ( _type === 'step' || _type === 'list' )
 			&& (typeof this.options.formSchema.validation[field.name] !== 'undefined') ) {
 		  _.each(_name, function(element) {
 			that._stepValidated[(that._currentStep)-2].push(element);
