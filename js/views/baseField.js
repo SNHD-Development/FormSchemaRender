@@ -183,6 +183,11 @@ define([
 		  return '';
 		}
 
+		// If this is internal fields, we need to append _internal at the name
+		if (field.options.internal) {
+		  field.attributes['data-internal'] = 'internal';
+		}
+
 		switch (_type) {
 		  case 'image':
 			field.attributes.accept = 'image/*';
