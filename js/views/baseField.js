@@ -437,6 +437,8 @@ define([
 	  readMode = readMode || false;
 	  if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
 		return false;
+	  } else if (typeof value.options.showonmode !== 'undefined' && value.options.showonmode.indexOf(readMode) === -1) {
+		return false;
 	  }
 	  return true;
 	},
