@@ -1,1 +1,1 @@
-define(function() { var str ='<a class="" data-lightbox="<%= id %>" href="<%= href %>"><img class="uneditable-input-image" alt="<%= text %>"<%= _attr %>/></a>';return str;});
+define(function() { var str ='<a class="" data-lightbox="<%= id %>" href="<%= href %>" title="<%= text %>"><img class="uneditable-input-image" alt="<%= text %>"<%= _attr %>/></a>';return str;});
