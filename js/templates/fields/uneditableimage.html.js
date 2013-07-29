@@ -1,0 +1,1 @@
+define(function() { var str ='<img class="uneditable-input-image" alt="<%= text %>"<%= _attr %>/>';return str;});

@@ -31,6 +31,7 @@ define([
   'text!templates/fields/list.html',
   'text!templates/fields/uneditableinput.html',
   'text!templates/fields/uneditablefile.html',
+  'text!templates/fields/uneditableimage.html',
   'jquery.expose',
   'jquery.datepicker',
   'jquery.birthdaypicker'
@@ -57,6 +58,7 @@ define([
 	, listTemplate
 	, uneditableinputTemplate
 	, uneditablefileTemplate
+	, uneditableimageTemplate
 	){
   return Backbone.View.extend({
 	_modelBinder: undefined,
@@ -118,7 +120,8 @@ define([
 		"button" : _.template(buttonTemplate),
 		"list" : _.template(listTemplate),
 		"uneditableinput" : _.template(uneditableinputTemplate),
-		"uneditablefile" : _.template(uneditablefileTemplate)
+		"uneditablefile" : _.template(uneditablefileTemplate),
+		"uneditableimage" : _.template(uneditableimageTemplate)
 	  };
 
 	  // Init Form Options
@@ -367,14 +370,18 @@ define([
 			_field_data += ( (typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element]: '') + ' ';
 		  })
 		  _field_data = $.trim(_field_data);
-		  if (_type === 'file') {
-			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn btn-primary');
-			field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
+		  if (_type === 'file' || _type === 'image') {
+			if (_type === 'image') {
+			  field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src']: '/form/getFile/')+that.options.formData.fields[field.name];
+			} else {
+			  field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn btn-primary');
+			  field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
+			}
 			delete field.attributes['accept'];
 			_.each(field.attributes, function(value, key) {
 			  _attr += ' '+key+'=\''+value+'\'';
 			});
-			_html += that.inputTemplate['uneditablefile']({value: _field_data, text: field.description, _attr : _attr});
+			_html += that.inputTemplate['uneditable'+_type]({value: _field_data, text: field.description, _attr : _attr});
 		  } else if (_type === 'list') {
 			_html += '';
 		  } else {

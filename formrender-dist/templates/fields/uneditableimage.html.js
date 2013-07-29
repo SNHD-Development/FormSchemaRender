@@ -1,0 +1,1 @@
+define([],function(){var e='<img class="uneditable-input-image" alt="<%= text %>"<%= _attr %>/>';return e});
