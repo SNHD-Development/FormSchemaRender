@@ -117,6 +117,15 @@ define([
 			});
 		},
 		/**
+		 * Set the value of hidden field that contain data-value
+		 **/
+		setHiddenField: function(el) {
+			$(':hidden[data-value!=""]', el).each(function() {
+				var $this = $(this);
+				$this.val($this.attr('data-value')).trigger('change');
+			});
+		},
+		/**
 		 * Get BDate Values
 		 **/
 		getBDateinput: function(el, model) {
@@ -201,6 +210,39 @@ define([
 			} else if ( e.shiftKey || e.keyCode < 48 || ( e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105 ) {
 				e.preventDefault();
 			}
+		},
+		/**
+		 * Convert Unix TimeStamp to Human Readable
+		 **/
+		getHumanTime: function(unixTime) {
+			var time = new Date(unixTime*1000)
+			, months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+			, year = time.getFullYear()
+			, month = months[time.getMonth()]
+			, date = time.getDate()
+			, hour = time.getHours()
+			, min = time.getMinutes()
+			, sec = time.getSeconds()
+			, format = 'AM';
+
+			if (hour >= 12) {
+				hour = hour-12;
+				format = "PM";
+			}
+
+			if (hour < 10) {
+				hour = '0'+hour;
+			}
+
+			if (min < 10) {
+				min = '0'+min;
+			}
+
+			if (sec < 10) {
+				sec = '0'+sec;
+			}
+
+			return month+' '+date+', '+year+' '+hour+':'+min+':'+sec+' '+format;
 		}
 	};
 });

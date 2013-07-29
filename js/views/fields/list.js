@@ -138,6 +138,8 @@ define([
 	  }
 	  _submitBtn.addClass('submitted');
 
+	  Utils.setHiddenField(this.el);
+
 	  if (this.model.isValid(true)) {
 		var $not_sending = $('.not_sending', this.el).trigger('change').attr('disabled', true);
 		$not_sending.each(function() {

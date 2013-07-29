@@ -6,10 +6,11 @@ define([
   'lodash',
   'backbone',
   'vm',
+  'utils',
   'events',
   'text!templates/subform-layouts/table.html',
   'text!templates/notice/confirmation.html'
-], function($, _, Backbone, Vm, Events, tableTemplate, popoverTemplate){
+], function($, _, Backbone, Vm, Utils, Events, tableTemplate, popoverTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(tableTemplate),
     popTemplate: _.template(popoverTemplate),
@@ -31,10 +32,15 @@ define([
           var model = modelObj.toJSON(), _fullName;
           if (typeof _values[index] === 'undefined') {
             _values[index] = [];
-            //console.log(model.cid);
             _models[index] = modelObj.cid;
           }
           switch (element.type.toLowerCase()) {
+			case 'timestamp':
+			  _labels[_labels.length-1] = 'Time';
+			  // Convert to Human Readable Time
+			  _values[index].push(Utils.getHumanTime(model[element.name]));
+			  break;
+
             case 'fullname':
               _fullName = model[element.name+'_fullname_first_name'];
               if (typeof model[element.name+'_fullname_middle_name'] !== 'undefined') {

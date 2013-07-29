@@ -15,6 +15,7 @@ define([
   'text!templates/fields/html.html',
   'text!templates/fields/label.html',
   'text!templates/fields/text.html',
+  'text!templates/fields/timestamp.html',
   'text!templates/fields/file.html',
   'text!templates/fields/state.html',
   'text!templates/fields/zipcode.html',
@@ -42,6 +43,7 @@ define([
 	, htmlTemplate
 	, labelTemplate
 	, textTemplate
+	, timestampTemplate
 	, fileTemplate
 	, stateTemplate
 	, zipcodeTemplate
@@ -105,6 +107,7 @@ define([
 		"html" : _.template(htmlTemplate),
 		"label" : _.template(labelTemplate),
 		"text" : _.template(textTemplate),
+		"timestamp" : _.template(timestampTemplate),
 		"file" : _.template(fileTemplate),
 		"state" : _.template(stateTemplate),
 		"zipcode" : _.template(zipcodeTemplate),
