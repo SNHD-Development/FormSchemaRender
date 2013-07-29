@@ -313,13 +313,20 @@ define([
 			break;
 
 		  case 'submit':
+			field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
 			_type = 'button';
 			field['_submit'] = true;
 			// If this is submit button will override the action of this form
 			if (typeof field.url === 'undefined') {
 			  throw 'In order to use submit button, must pass the Url value in the formSchema';
 			}
+			// AppendId
+			if (field.options.appendid) {
+			  field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
+			}
 			$(this.el).attr('action', field.url);
+			break;
+
 		  case 'button':
 			field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
 			// AppendId
