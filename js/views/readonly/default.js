@@ -29,7 +29,7 @@ define([
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 		// Check for Show On Mode
-		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, 'read') ) {
+		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, 'read', that.options.formData.status) ) {
 		  return '';
 		}
 

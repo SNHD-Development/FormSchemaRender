@@ -303,16 +303,6 @@ define([
 			$(this.el).attr('action', field.url);
 		  case 'button':
 			field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
-
-			if ( typeof field.showonstatus !== 'undefined'
-				&& typeof this.options.formData.status === 'string'
-				&& this.options.formData.status !== field.showonstatus ) {
-			  return '';
-			} else if (this.options.mode === 'create' && typeof field.showonstatus !== 'undefined') {
-			  return '';
-			} else if (this.options.mode !== 'create' && typeof field.showonstatus === 'undefined') {
-			  return '';
-			}
 			break;
 
 		  case 'schooles':
@@ -433,12 +423,18 @@ define([
 	/**
 	 * Show On Mode
 	 **/
-	checkShowOnMode: function(value, readMode) {
+	checkShowOnMode: function(value, readMode, status) {
 	  readMode = readMode || false;
+	  status = status || false;
 	  if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
 		return false;
 	  } else if (typeof value.options.showonmode !== 'undefined' && value.options.showonmode.indexOf(readMode) === -1) {
 		return false;
+	  } else if (typeof value.options.showonstatus !== 'undefined') {
+		var _showOnStatus = _.map(value.options.showonstatus, function(element){ return element.toLowerCase(); });
+		if (status === false || _showOnStatus.indexOf(status.toLowerCase()) === -1) {
+		  return false;
+		}
 	  }
 	  return true;
 	},
