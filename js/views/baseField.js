@@ -80,6 +80,7 @@ define([
 	  this._hasBDate = false; // Tracking the Birthdate element
 	  this._hasEmailPicker = false; // Tracking the EmailPicker element
 	  this._internalFields = []; // Internal Fields Array
+	  this._ajaxSubmit = true;
 
 	  // Wizard View Counters
 	  this._stepDiv = 0;	// Count number of open div for step (wizard view)
@@ -331,6 +332,12 @@ define([
 			  field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
 			}
 			$(this.el).attr('action', field.url);
+
+			// Check for Ajax Submit
+			if (typeof field.options.ajaxsubmit !== 'undefined') {
+			  this._ajaxSubmit = field.options.ajaxsubmit;
+			}
+
 			break;
 
 		  case 'button':

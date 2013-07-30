@@ -136,7 +136,6 @@ define([
       var $form = $('#'+this.options.formSchema.name, this.el)
       , $submitBtn = $('.form-actions button[type="submit"]', this.el)
       , _opt, _options;
-	  e.preventDefault();
       if ($form.hasClass('form_submitted')) {
         return;
       }
@@ -158,7 +157,12 @@ define([
           beforeSubmit: this.showRequest,
           success: this.showResponse
         };
-        $form.ajaxSubmit(_options);
+
+		if (this.formView._ajaxSubmit) {
+		  e.preventDefault();
+		  $form.ajaxSubmit(_options);
+		}
+
 		if (this.formView.options.formSchema.view !== 'wizard') {
 		  _opt = {
 			html : true,
@@ -171,6 +175,7 @@ define([
 			.next('.popover').addClass('success');
 		}
       } else {
+		e.preventDefault();
 		$form.addClass('validation_error');
         $form.removeClass('form_submitted');
         // Error Message
