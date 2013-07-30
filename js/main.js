@@ -44,6 +44,10 @@ require.config({
     views: 'views'
   },
   shim: {
+    "bootstrap": {
+      deps: ['jquery'],
+      exports: 'jQuery'
+    },
     "jquery.expose": {
       deps: ['jquery'],
       exports: 'jQuery.expose'
