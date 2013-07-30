@@ -1,0 +1,1 @@
+define(function() { var str ='<form id="form-render-hidden-form" method="post" action="<%= action %>"><% _.each(hidden, function(val, key) { %><input type="hidden" name="<%= key %>" value="<%= val %>" /><% }); %></form>';return str;});

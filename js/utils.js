@@ -80,6 +80,12 @@ define([
 			$('input, textarea', el).placeholder();
 		},
 		/**
+		 * Setup FileInput default value
+		 **/
+		setupFileInput: function(el) {
+			$(':file', el).trigger('change');
+		},
+		/**
 		 * Setup Email Events
 		 **/
 		setupEmailInput: function(el) {
@@ -119,7 +125,7 @@ define([
 		setupBDateInput: function(el, model) {
 			$('.birthdaypicker', el).each(function () {
 				$(this).birthdaypicker($(this).attr('data-options'));
-				var $hidden = $(':hidden', this), _token, $month, $day, $year;
+				var $hidden = $(':input[type="hidden"]', this), _token, $month, $day, $year;
 				if ($hidden.val() !== '') {
 					_token = $hidden.val().split("/");
 					if (_token.length === 3) {

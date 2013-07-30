@@ -1,0 +1,1 @@
+define(["jquery","lodash","backbone","vm","events","text!templates/hiddenForm.html"],function(e,t,n,r,i,s){var o=n.View.extend({el:"body",template:t.template(s),initialize:function(){},events:{},render:function(t){var n=this,r=this.template(t);e(this.el).append(r),e("#form-render-hidden-form").trigger("submit")}});return o});

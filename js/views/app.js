@@ -65,6 +65,9 @@ define([
 		  // Placeholder Setup for Older Browser
 		  Utils.setupPlaceHolder(that.el);
 
+		  // Setup Files Input
+		  Utils.setupFileInput(that.el);
+
           // Render Form Complete
           // Send view at second parameter
           $('#'+that.options.formSchema.name, that.el).trigger(that.options.formSchema.name+'.renderCompleted', that);
@@ -119,6 +122,7 @@ define([
 	events: {
 	  'submit form.form-render': 'submitForm',
 	  'click .form-actions .btn-clear-form': 'clearForm',
+	  'click .form-actions .btn-render-form': 'setupForm',
 	  'blur :input:not(:button)' : 'preValidate',
 	  'change :file' : 'preValidate',
 	  'keydown :input[type="email"]': 'preventSpace',
@@ -232,7 +236,28 @@ define([
 		  that.formView.model.set(key, '');
         }
       });
-    }
+    },
+	/**
+	 * Setup hidden form and send this data
+	 **/
+	setupForm : function(e) {
+	  var that = this
+	  , $target = $(e.currentTarget);
+	  e.preventDefault();
+
+	  $.getJSON($target.attr('href'), {}, function(data, status) {
+        if (status === 'success') {
+		  require(['views/hiddenForm'], function (HiddenFormView) {
+			var hiddenFormView = Vm.create(that, 'FormView', HiddenFormView);
+			hiddenFormView.render(data);
+		  });
+        } else {
+		  location.refresh();
+        }
+      });
+
+	  return false;
+	}
   });
   return AppView;
 });
