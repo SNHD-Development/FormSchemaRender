@@ -12,7 +12,8 @@ define([
   'utils',
   'events',
   'text!templates/subform-layouts/default.html',
-  'jquery.expose'
+  'jquery.expose',
+  'bootstrap'
 ], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events
 	, subFormLayoutTemplate
 	){

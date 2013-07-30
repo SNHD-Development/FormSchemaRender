@@ -14,7 +14,8 @@ define([
   'jquery.datepicker',
   'jquery.placeholder',
   'jquery.lightbox',
-  'jquery.expose'
+  'jquery.expose',
+  'bootstrap'
 ], function($, _, Backbone, Vm, Utils, Events, layoutTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),
