@@ -95,20 +95,26 @@
         $("<option value=''>Day:</option>").appendTo($day);
       }
 
-      var hiddendate, _tmp , defDate;
+      var hiddendate, _tmp , defDate
+	  , defYear, defMonth, defDay;
       if (settings["defaultdate"]) {
 		_tmp = settings['defaultdate'].split('/');
 		if ($.isArray(_tmp) && _tmp.length === 3) {
 		  defDate = new Date(_tmp[2], _tmp[0], _tmp[1]);
+		  defYear = defDate.getFullYear();
+		  defMonth = defDate.getMonth();
 		} else {
 		  defDate = new Date(settings["defaultdate"] + "T00:00:00");
+		  defYear = defDate.getFullYear();
+		  defMonth = defDate.getMonth();
 		}
       } else {
         defDate = new Date();
+		defYear = defDate.getFullYear() - 1;
+		defMonth = defDate.getMonth() + 1;
       }
-      var defYear = defDate.getFullYear() - 1,
-        defMonth = defDate.getMonth() + 1,
-        defDay = defDate.getDate();
+	  defDay = defDate.getDate();
+
       //hiddendate = defYear + "-" + defMonth + "-" + defDay;
       defMonth = (defMonth < 10) ? '0'+defMonth: defMonth;
       defDay = (defDay < 10) ? '0'+defDay: defDay;

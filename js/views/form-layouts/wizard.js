@@ -13,7 +13,8 @@ define([
   'views/baseField',
   'text!templates/form-layouts/wizard.html',
   'jquery.wizard',
-  'bootstrap'
+  'bootstrap',
+  'jquery.birthdaypicker'
 ], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
   var AppView = BaseFieldView.extend({
 	_modelBinder: undefined,
