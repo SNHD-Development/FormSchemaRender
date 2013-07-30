@@ -9,7 +9,8 @@ define([
   'utils',
   'events',
   'text!templates/subform-layouts/table.html',
-  'text!templates/notice/confirmation.html'
+  'text!templates/notice/confirmation.html',
+  'bootstrap'
 ], function($, _, Backbone, Vm, Utils, Events, tableTemplate, popoverTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(tableTemplate),
