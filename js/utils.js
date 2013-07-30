@@ -7,7 +7,9 @@ define([
   'underscore',
   'backbone',
   'jquery.spinner',
-  'jquery.birthdaypicker'
+  'jquery.birthdaypicker',
+  'jquery.placeholder',
+  'jquery.expose'
 ], function($, _, Backbone){
 	return {
 		/**
@@ -143,7 +145,9 @@ define([
 		setHiddenField: function(el) {
 			$(':hidden[data-value!=""]', el).each(function() {
 				var $this = $(this);
-				$this.val($this.attr('data-value')).trigger('change');
+				if (typeof $this.attr('data-value') !== 'undefined' && $this.attr('data-value')) {
+					$this.val($this.attr('data-value')).trigger('change');
+				}
 			});
 		},
 		/**

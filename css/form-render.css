@@ -26,6 +26,9 @@
    **/
   /**
    * Read Mode Styles
+   **/
+  /**
+   * Fields Style
    **/ }
   .form-render label span.required {
     color: #B94A48;
@@ -106,3 +109,8 @@
   .form-render .uneditable-input-image {
     max-height: 250px;
     max-width: 500px; }
+  .form-render .emailpicker .add-on {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    position: relative;
+    top: -3px;
+    font-size: 16px; }

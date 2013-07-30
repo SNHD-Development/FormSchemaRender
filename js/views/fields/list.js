@@ -11,7 +11,8 @@ define([
   'vm',
   'utils',
   'events',
-  'text!templates/subform-layouts/default.html'
+  'text!templates/subform-layouts/default.html',
+  'jquery.expose'
 ], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events
 	, subFormLayoutTemplate
 	){
@@ -42,7 +43,7 @@ define([
 		this.model = new Model(this.options.formSchema);
 		this._btn_title = 'Add';
 	  } else {
-		this._btn_title = 'Edit';
+		this._btn_title = 'Done';
 	  }
 
 	  this.options.formSchema.view = this.options.formSchema.view || '';

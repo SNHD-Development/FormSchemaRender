@@ -10,12 +10,13 @@ vm.js
 libs/bootstrap/bootstrap.js
 libs/fuelux/spinner.js
 libs/jquery-form-plugin/bdate-picker.js
+libs/jquery-form-plugin/jquery.placeholder.min.js
+libs/jquery-tools/toolbox.expose.js
 utils.js
 libs/require/text.js
 text!templates/layout.html
 libs/jquery-form-plugin/jquery.form.min.js
 libs/bootstrap-datepicker/bootstrap-datepicker.js
-libs/jquery-form-plugin/jquery.placeholder.min.js
 libs/lightbox/lightbox-2.6.min.js
 views/app.js
 main.js

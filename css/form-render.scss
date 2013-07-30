@@ -187,4 +187,15 @@ $text_area_min_height:  100px;
 		max-width: 500px;
 	}
 
+	/**
+	 * Fields Style
+	 **/
+	.emailpicker {
+		.add-on {
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			position: relative;
+			top: -3px;
+			font-size: 16px;
+		}
+	}
 }
