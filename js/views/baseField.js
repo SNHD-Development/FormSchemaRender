@@ -187,6 +187,8 @@ define([
 		// In options keys: internal
 		if ( ! this.options.internal && field.options.internal ) {
 		  return '';
+		} else if ( ( _type === 'button' || _type === 'submit' ) && ! field.options.internal && this.options.internal ) {
+		  return '';
 		}
 
 		switch (_type) {
