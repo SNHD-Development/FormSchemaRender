@@ -275,8 +275,6 @@ define([
 			delete field.attributes['class'];
 			delete field.attributes['placeholder'];
 
-			var _validation_tmp = this.getFormValidationData(field.name);
-
 			_name = [];
 			_name.push(field.name+'_address_street');
 			_name.push(field.name+'_address_city');

@@ -7,58 +7,56 @@ define([
 ], function($, _, Backbone, Collections){
   var parseFields = function(model, attrs) {
 	var _attrs = {}
-	, _validation = {};
+	, _validation = {}
+	, _name;
 	_.each(attrs.fields, function(value) {
 	  value.options = value.options || {};
 	  switch (value.type.toLowerCase()) {
 		case 'address':
-		  var _hasValidation = (typeof attrs.validation[value.name] !== 'undefined')
-		  , _msg = (_hasValidation && attrs.validation[value.name].msg) ? attrs.validation[value.name].msg: false;
-		  _attrs[value.name+'_address_street'] = '';
-		  _attrs[value.name+'_address_city'] = '';
-		  _attrs[value.name+'_address_state'] = '';
-		  _attrs[value.name+'_address_zip'] = '';
-		  _attrs[value.name+'_address_country'] = '';
-		  if (_hasValidation) {
-			_validation[value.name+'_address_street'] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_address_city'] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_address_state'] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_address_zip'] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_address_country'] = _.clone(attrs.validation[value.name]);
-			if (_msg) {
-			  _validation[value.name+'_address_street'].msg = attrs.validation[value.name].msg + ' (Street)';
-			  _validation[value.name+'_address_city'].msg = attrs.validation[value.name].msg + ' (City)';
-			  _validation[value.name+'_address_state'].msg = attrs.validation[value.name].msg + ' (State)';
-			  _validation[value.name+'_address_zip'].msg = attrs.validation[value.name].msg + ' (ZIP)';
-			  _validation[value.name+'_address_country'].msg = attrs.validation[value.name].msg + ' (Country)';
-			}
-		  }
+		  _name = value.name+'_address_street';
+		  _attrs[_name] = '';
+		  setValidationData(_name, attrs, _validation, ' (Street)');
+
+		  _name = value.name+'_address_city';
+		  _attrs[_name] = '';
+		  setValidationData(_name, attrs, _validation, ' (City)');
+
+		  _name = value.name+'_address_state';
+		  _attrs[_name] = '';
+		  setValidationData(_name, attrs, _validation, ' (State)');
+
+		  _name = value.name+'_address_zip';
+		  _attrs[_name] = '';
+		  setValidationData(_name, attrs, _validation, ' (ZIP)');
+
+		  _name = value.name+'_address_country';
+		  _attrs[_name] = '';
+		  setValidationData(_name, attrs, _validation, ' (Country)');
+
 		  break;
 
 		case 'fullname':
-		  var _hasValidation = (typeof attrs.validation[value.name] !== 'undefined')
-		  , _msg = (_hasValidation && attrs.validation[value.name].msg) ? attrs.validation[value.name].msg: false;
 		  if (typeof value.options.middlename !== 'undefined' && value.options.middlename) {
-			_attrs[value.name+'_fullname_middle_name'] = '';
+			_name = value.name+'_fullname_middle_name';
+			_attrs[_name] = '';
+			setValidationData(_name, attrs, _validation, ' (Middle Name)');
 		  }
-		  _attrs[value.name+'_fullname_first_name'] = '';
-		  _attrs[value.name+'_fullname_last_name'] = '';
-		  if (_hasValidation) {
-			_validation[value.name+'_fullname_first_name'] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_fullname_last_name'] = _.clone(attrs.validation[value.name]);
-			if (_msg) {
-			  _validation[value.name+'_fullname_first_name'].msg = attrs.validation[value.name].msg + ' (First Name)';
-			  _validation[value.name+'_fullname_last_name'].msg = attrs.validation[value.name].msg + ' (Last Name)';
-			}
-		  }
+
+		  _name = value.name+'_fullname_first_name';
+		  _attrs[_name] = '';
+		  setValidationData(_name, attrs, _validation, ' (First Name)');
+
+
+		  _name = value.name+'_fullname_last_name';
+		  _attrs[_name] = '';
+		  setValidationData(_name, attrs, _validation, ' (Last Name)');
+
 		  break;
 
 		// If this is list (subform) will need collection
 		case 'list':
 		  _attrs[value.name] = new Collections();
-		  if (typeof attrs.validation[value.name] !== 'undefined') {
-			_validation[value.name] = _.clone(attrs.validation[value.name]);
-		  }
+		  setValidationData(value.name, attrs, _validation, '');
 		  break;
 
 		// Will ignore these types
@@ -100,14 +98,24 @@ define([
 
 		default:
 		  _attrs[value.name] = '';
-		  if (typeof attrs.validation[value.name] !== 'undefined') {
-			_validation[value.name] = _.clone(attrs.validation[value.name]);
-		  }
+		  setValidationData(value.name, attrs, _validation, '');
 	  }
 	});
 	model.validation = _validation;
 	return _attrs;
+  },
+  /**
+   * Set Validation Data
+   **/
+  setValidationData = function(name, attrs, validation, msg) {
+	if ((typeof attrs.validation[name] !== 'undefined')) {
+	  validation[name] = _.clone(attrs.validation[name]);
+	  if (attrs.validation[name].msg) {
+		validation[name].msg = attrs.validation[name].msg + msg;
+	  }
+	}
   };
+
   return Backbone.Model.extend({
 	initialize: function() {
 	  var _attrs = parseFields(this, this.attributes);
