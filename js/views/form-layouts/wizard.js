@@ -12,7 +12,8 @@ define([
   'validation',
   'views/baseField',
   'text!templates/form-layouts/wizard.html',
-  'jquery.wizard'
+  'jquery.wizard',
+  'bootstrap'
 ], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
   var AppView = BaseFieldView.extend({
 	_modelBinder: undefined,

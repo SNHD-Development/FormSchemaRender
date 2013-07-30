@@ -148,13 +148,14 @@ define([
 	/**
 	 * Parse nested JSON data, case Model -> Collection and append to the form input
 	 **/
-	appendSubFormInput: function(formId) {
+	appendSubFormInput: function(formId, internalField) {
 	  var _data = _.clone(this.toJSON()), _postfix;
 	  _.each(_data, function(value, key) {
+		_postfix = (internalField.indexOf(key) > -1) ? '_internal': '';
 		if (typeof value.toJSON === 'function') {
-		  _postfix = ($('#subform_'+key).attr('data-internal') === 'internal') ? '_internal': '';
 		  $('#'+formId).prepend('<input type="hidden" name="'+key+_postfix+'" value=\''+JSON.stringify(value.toJSON())+'\' class="subform_before_submit">');
-        }
+        } else {
+		}
 	  });
 	}
   });

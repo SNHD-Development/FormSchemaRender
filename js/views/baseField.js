@@ -79,6 +79,7 @@ define([
 	  this._hasDate = false; // Tracking the dateinput element
 	  this._hasBDate = false; // Tracking the Birthdate element
 	  this._hasEmailPicker = false; // Tracking the EmailPicker element
+	  this._internalFields = []; // Internal Fields Array
 
 	  // Wizard View Counters
 	  this._stepDiv = 0;	// Count number of open div for step (wizard view)
@@ -177,15 +178,15 @@ define([
 		this.options.formSchema.validation = this.options.formSchema.validation || {};
 		this.options.formData = this.options.formData || {};
 
+		// If this is internal fields, we need to push to _internalFields array
+		if (field.options.internal === true) {
+		  this._internalFields.push(field.name);
+		}
+
 		// Check to see if this is render internal, external and match with the current display mode or not
 		// In options keys: internal
 		if ( ! this.options.internal && field.options.internal ) {
 		  return '';
-		}
-
-		// If this is internal fields, we need to append _internal at the name
-		if (field.options.internal) {
-		  field.attributes['data-internal'] = 'internal';
 		}
 
 		switch (_type) {

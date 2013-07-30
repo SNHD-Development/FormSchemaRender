@@ -149,7 +149,7 @@ define([
 		}
 		$form.prepend('<input type="hidden" name="form_name" value="'+this.options.formSchema.name+'"/>');
         $('input.subform_before_submit', this.el).remove();
-        this.formView.model.appendSubFormInput(this.options.formSchema.name);
+        this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
         _options = {
           beforeSubmit: this.showRequest,
           success: this.showResponse
