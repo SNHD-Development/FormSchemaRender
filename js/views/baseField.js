@@ -537,14 +537,28 @@ define([
 	attachSubFormEvent: function(id, field, validation) {
 	  field = _.extend(field, { validation: validation} );
 	  // Click add button
-	  $(this.el).on('click', '#'+id+'_add_btn', {el:'#'+id+this.prefixedName['listdisplayid'], formSchema:field, formId: id}, this.displaySubForm)
+	  var that = this
+	  , _options = {el:'#'+id+this.prefixedName['listdisplayid'], formSchema:field, formId: id}
+	  , _listView = _.extend({}, Backbone.Events);
+	  $(this.el).on('click', '#'+id+'_add_btn', _options, this.displaySubForm)
 	  // User click cancel button
 	  .on(id+'.close', this.closeSubForm)
 	  // User added a model
-	  .on(id+'.add', this, this.addSubformData);
+	  .on(id+'.add', _.extend({formId: id}, this), this.addSubformData);
+
+	  // If there are subform data
+	  if (this.options.mode === 'update' && typeof this.options.formData.fields[field.name] !== 'undefined') {
+		_listView.on(_options.formId+'.listViewCreated', function(list) {
+		  $(that.el).trigger(id+'.add', [list, that.options.formData.fields[field.name]]);
+		  _listView.off();
+		});
+		this.displaySubForm( { data: _options }, {}, true, _listView );
+	  }
 	},
-	displaySubForm: function(e, model) {
+	displaySubForm: function(e, model, hidden, listView) {
 	  model = model || {};
+	  hidden = hidden || false;
+	  listView = listView || false;
 	  var _id
 	  , _data = _.clone(e.data);
 	  // Load Subform View
@@ -554,14 +568,24 @@ define([
 		_data.model = model;
 		_id = 'SubFormViewEdit' + e.data.formId;
 	  }
+	  $(this).parents('div.actions').fadeOut();
+
 	  require(['views/fields/list'], function (SubFormView) {
 		var subFormView = Vm.create(this, _id, SubFormView, _data)
 		, $subFormView = $(subFormView.el);
+		if (hidden) {
+		  $subFormView.hide();
+		}
 		subFormView.render();
-		$subFormView.addClass('active');
-		$subFormView.expose({ closeOnEsc: false, closeOnClick: false, color: '#000', zIndex: 1025, renderBody: false });
+		if ( ! hidden) {
+		  $subFormView.show();
+		  $subFormView.addClass('active');
+		  $subFormView.expose({ closeOnEsc: false, closeOnClick: false, color: '#000', zIndex: 1025, renderBody: false });
+		}
+		if (listView) {
+		  listView.trigger(e.data.formId+'.listViewCreated', subFormView);
+		}
 	  });
-	  $(this).parents('div.actions').fadeOut();
 	},
 	closeSubForm: function(e, list) {
 	  list.$el.fadeOut();
@@ -571,11 +595,21 @@ define([
 	  Vm.remove('SubFormView'+list.options.formId, true);
 	  Vm.remove('SubFormViewEdit'+list.options.formId, true);
 	},
-	addSubformData: function(e, list) {
-	  var _view = (list.options.formSchema.view === '') ? 'table': list.options.formSchema.view
+	addSubformData: function(e, list, models) {
+	  models = models || false;
+	  var that = this, _view = (list.options.formSchema.view === '') ? 'table': list.options.formSchema.view
 	  , _key = list.options.formSchema.name;
-	  e.data.closeSubForm(e, list);
-	  e.data.model.get(_key).add(list.model);
+
+	  if (models) {
+		var _model = Backbone.Model.extend({});
+		_.each(models, function(element) {
+		  var _element = new _model;
+		  _element.set(element);
+		  e.data.model.get(_key).add(_element);
+		});
+	  } else {
+		e.data.model.get(_key).add(list.model);
+	  }
 	  // Render View
 	  require(['views/subform-layouts/'+_view], function (CollectionView) {
 		var _data = {
@@ -585,6 +619,9 @@ define([
 		}
 		, collectionView = Vm.create(this, 'CollectionView'+e.data.formId, CollectionView, _data);
 		collectionView.render();
+
+		// Closed Subform
+		e.data.closeSubForm(e, list);
 	  });
 	}
   });
