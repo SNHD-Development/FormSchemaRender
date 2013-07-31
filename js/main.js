@@ -113,8 +113,12 @@ require([
   // Cast to lowercase
   Vm.toLower(formSchema);
   if (typeof formData !== 'undefined') {
-    Vm.toLower(formData, 'fields');
+    Vm.toLower(formData, ['fields', 'internalfields'] );
     _mode = (typeof mode !== 'undefined' && config.mode.indexOf(mode.toLowerCase()) > -1) ? mode.toLowerCase(): 'update';
+    if (typeof formData.internalfields !== 'undefined') {
+      formData.fields = _.extend(formData.fields, formData.internalfields);
+      delete formData.internalfields;
+    }
   } else {
     _mode = (typeof mode !== 'undefined' && config.view.indexOf(view.toLowerCase()) > -1) ? mode.toLowerCase(): 'create';
   }

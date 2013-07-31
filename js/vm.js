@@ -52,7 +52,9 @@ define([
         // Validation need to match exactly with the name of the input
         if (keyLower === 'validation') {
           continue;
-        } else if (typeof skipKey !== 'undefined' && keyLower === skipKey) {
+        } else if (typeof skipKey !== 'undefined'
+            && ( ( ! _.isArray(skipKey) && keyLower === skipKey )
+            || ( _.isArray(skipKey) && _.indexOf(skipKey, keyLower) > -1 )) ) {
           continue;
         }
         this.toLower(obj[keyLower]);

@@ -34,6 +34,7 @@ define([
   'text!templates/fields/uneditableinput.html',
   'text!templates/fields/uneditablefile.html',
   'text!templates/fields/uneditableimage.html',
+  'text!templates/subform-layouts/table.html',
   'jquery.expose',
   'jquery.datepicker',
   'jquery.birthdaypicker'
@@ -62,6 +63,7 @@ define([
 	, uneditableinputTemplate
 	, uneditablefileTemplate
 	, uneditableimageTemplate
+	, tableTemplate
 	){
   return Backbone.View.extend({
 	_modelBinder: undefined,
@@ -136,7 +138,8 @@ define([
 		"list" : _.template(listTemplate),
 		"uneditableinput" : _.template(uneditableinputTemplate),
 		"uneditablefile" : _.template(uneditablefileTemplate),
-		"uneditableimage" : _.template(uneditableimageTemplate)
+		"uneditableimage" : _.template(uneditableimageTemplate),
+		'subform-table' : _.template(tableTemplate)
 	  };
 
 	  // Init Form Options
@@ -417,7 +420,42 @@ define([
 			});
 			_html += that.inputTemplate['uneditable'+_type]({value: _field_data, text: field.description, _attr : _attr, id: field.name, href: _href});
 		  } else if (_type === 'list') {
-			_html += '';
+			// If this is 'list' type
+			if (this.options.formData.fields[field.name] !== 'undefined') {
+			  var _labels = []
+			  , _values = new Array (this.options.formData.fields[field.name].length)
+			  _.each(field.fields, function(element, index) {
+				_labels.push(element.description);
+				_.each(that.options.formData.fields[field.name], function(modelData, index) {
+				  var _fullName;
+				  if (typeof _values[index] === 'undefined') {
+					_values[index] = [];
+				  }
+				  switch (element.type.toLowerCase()) {
+					case 'timestamp':
+					  _labels[_labels.length-1] = 'Time';
+					  // Convert to Human Readable Time
+					  _values[index].push(Utils.getHumanTime(modelData[element.name]));
+					  break;
+
+					case 'fullname':
+					  _fullName = modelData[element.name+'_fullname_first_name'];
+					  if (typeof modelData[element.name+'_fullname_middle_name'] !== 'undefined') {
+						_fullName += ' ' + modelData[element.name+'_fullname_middle_name'];
+					  }
+					  _fullName += ' ' + modelData[element.name+'_fullname_last_name'];
+					  _values[index].push(_fullName);
+					  break;
+
+					default:
+					  _values[index].push(modelData[element.name]);
+				  }
+				});
+			  });
+			  _html += that.inputTemplate['subform-table']({ labels:_labels, values:_values, heading: ( (typeof field.options.readmodedescription === 'undefined') ? field.description: field.options.readmodedescription ) });
+			} else {
+			  _html += '';
+			}
 		  } else {
 			var _textarea = '';
 			switch (_type) {
