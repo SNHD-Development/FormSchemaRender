@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.0.3`
+Version `version 0.0.4`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -106,8 +106,30 @@ Then you need to pass your custom event into
 		}
 	};
 
+### Submit Form
+
+By default, the submit event will use Ajax call to submit data. When passing `Options.AjaxSubmit = false` in Submit field type, it will use normal post form without Ajax.
+
+Example: Setting Button type option to prevent Ajax form submit
+
+	{
+		"Name" : "SubmitBtn",
+		"Type" : "Submit",
+		"Description" : "Submit Button",
+		"Url" : "/controller/action",
+		"Attributes" : {
+			"Class" : "btn btn-primary"
+		},
+		"Options" : {
+			"AppendId" : true,
+			"AjaxSubmit": false
+		}
+	}
+
 
 ### Version
+
+* 0.0.4 - SubForm can render the data in all the mode now. Fixed minor bug for validation methods and schema.
 
 * 0.0.3 - Fix IE when render List Type. Fix validation in special field type.
 
