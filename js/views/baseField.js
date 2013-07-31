@@ -6,6 +6,7 @@ define([
   'bootstrap',
   'events',
   'vm',
+  'utils',
   'models/model',
   'modelbinder',
   'validation',
@@ -36,7 +37,7 @@ define([
   'jquery.expose',
   'jquery.datepicker',
   'jquery.birthdaypicker'
-], function($, _, Backbone, Bootstrap, Events, Vm, Model, Modelbinder, Validation
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation
 	, listView
 	, emailData
 	, schoolesData
@@ -388,7 +389,7 @@ define([
 		// Check to see if step validation has been init (wizard view)
 		if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined'
 			&& ! ( _type === 'step' || _type === 'list' )
-			&& (typeof this.options.formSchema.validation[field.name] !== 'undefined') ) {
+			&& Utils.checkRequireFields(field, this.options.formSchema.validation) ) {
 		  _.each(_name, function(element) {
 			that._stepValidated[(that._currentStep)-2].push(element);
 		  });
