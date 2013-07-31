@@ -32,25 +32,38 @@ define([
 		, _html = ''
 		, _required;
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
+		var _temp = '';
 		// Check for Show On Mode
 		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status) ) {
 		  return '';
 		}
 
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-			_html += '<div class="control-group">';
-			this._divcontrolgroup++;
+		  var _visibleon = '', _style = '';
+		  if (value.options.visibleon) {
+			_visibleon = ' options-visible-on-'+value.name;
+			_style = ' style="display:none"';
+		  }
+		  _temp += '<div class="control-group'+_visibleon+'"'+_style+'>';
+		  this._divcontrolgroup++;
 
-			_required = Utils.checkRequireFields(value, that.options.formSchema.validation);
-			_html += that.renderLabel(value, _required, 'control-label');
-			_html += '<div class="controls">';
+		  _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
+		  _temp += that.renderLabel(value, _required, 'control-label');
+		  _temp += '<div class="controls">';
 		}
 
-		_html += _parentRender.call(that, value);
+		_temp += _parentRender.call(that, value);
 
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-			_html += '</div></div>';
-			this._divcontrolgroup--;
+		  _temp += '</div></div>';
+		  this._divcontrolgroup--;
+		}
+
+		// If this has VisibleOn in options
+		if (value.options.visibleon) {
+		  BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
+		} else {
+		  _html += _temp;
 		}
 	  });
 

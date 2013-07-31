@@ -478,6 +478,14 @@ define([
 		}
 		_html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({_attr:_attr}, field)): '';
 	  }
+
+	  // Checking for the VisibleOn options, if it is existed will need to check for the depend value
+	  if (field.options.visibleon) {
+		if ( ! field.options.visibleon.name || ! $.isArray(field.options.visibleon.values) ) {
+		  throw field.name + '.Options.VisibleOn need Name and Values!';
+		}
+	  }
+
 	  return _html;
 	},
 	/**
@@ -591,6 +599,9 @@ define([
 		}
 	  });
 	},
+	/**
+	 * Closed Sub Form
+	 **/
 	closeSubForm: function(e, list) {
 	  list.$el.fadeOut();
 	  // Close mask bg
@@ -599,9 +610,12 @@ define([
 	  Vm.remove('SubFormView'+list.options.formId, true);
 	  Vm.remove('SubFormViewEdit'+list.options.formId, true);
 	},
+	/**
+	 * Add model to List
+	 **/
 	addSubformData: function(e, list, models) {
 	  models = models || false;
-	  var that = this, _view = (list.options.formSchema.view === '') ? 'table': list.options.formSchema.view
+	  var _view = (list.options.formSchema.view === '') ? 'table': list.options.formSchema.view
 	  , _key = list.options.formSchema.name;
 
 	  if (models) {
@@ -626,6 +640,27 @@ define([
 
 		// Closed Subform
 		e.data.closeSubForm(e, list);
+	  });
+	},
+	/**
+	 * Setup the VisibleOn Options
+	 **/
+	setupVisibleOn: function (field, htmlTmpl, parentContainer) {
+	  parentContainer = parentContainer || false;
+	  var that = this;
+	  $(this.el).on('change', ':input[name="'+field.options.visibleon.name+'"]', function(e) {
+		var $currentTarget = $(e.currentTarget)
+		, $container = (parentContainer) ? $currentTarget.parents(parentContainer): $currentTarget;
+		if (_.indexOf(field.options.visibleon.values, $currentTarget.val()) > -1 ) {
+		  // Insert this into markup
+		  if ($('.options-visible-on-'+field.name, that.el).length < 1) {
+			$container.after(htmlTmpl);
+			$container.next('.options-visible-on-'+field.name).fadeIn('slow');
+		  }
+		} else {
+		  // Remove this out of the markup
+		  $('.options-visible-on-'+field.name, that.el).remove();
+		}
 	  });
 	}
   });
