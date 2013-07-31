@@ -180,7 +180,7 @@ define([
 			$('.birthdaypicker', el).each(function () {
 				$(this).birthdaypicker($(this).attr('data-options'));
 				var $hidden = $(':input[type="hidden"]', this), _token, $month, $day, $year;
-				if ($hidden.val() !== '') {
+				if ($hidden.val() !== '' && model.get($hidden.attr('name')) !== '') {
 					_token = $hidden.val().split("/");
 					if (_token.length === 3) {
 						if (_token[0][0] === '0') {
