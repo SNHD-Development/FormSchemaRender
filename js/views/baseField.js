@@ -660,6 +660,7 @@ define([
 		} else {
 		  // Remove this out of the markup
 		  $('.options-visible-on-'+field.name, that.el).remove();
+		  that.model.set(field.name, '');
 		}
 	  });
 	}
