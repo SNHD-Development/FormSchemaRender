@@ -56,7 +56,7 @@ define([
           }
         });
       });
-      $(this.el).html(this.template({ labels:_labels, values:_values, modelId: _models }));
+      $(this.el).html(this.template({ labels:_labels, values:_values, modelId: _models, heading: ( (typeof this.options.formSchema.options.readmodedescription !== 'undefined') ? this.options.formSchema.options.readmodedescription: this.options.formSchema.name) }));
     },
     events: {
       'click .subform-edit-model' : 'editModel',
