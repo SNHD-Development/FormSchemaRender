@@ -421,7 +421,8 @@ define([
 			_html += that.inputTemplate['uneditable'+_type]({value: _field_data, text: field.description, _attr : _attr, id: field.name, href: _href});
 		  } else if (_type === 'list') {
 			// If this is 'list' type
-			if (this.options.formData.fields[field.name] !== 'undefined') {
+			if ( typeof this.options.formData.fields[field.name] !== 'undefined'
+				&& this.options.formData.fields[field.name].length > 0 ) {
 			  var _labels = []
 			  , _values = new Array (this.options.formData.fields[field.name].length)
 			  _.each(field.fields, function(element, index) {
@@ -547,7 +548,9 @@ define([
 	  .on(id+'.add', _.extend({formId: id}, this), this.addSubformData);
 
 	  // If there are subform data
-	  if (this.options.mode === 'update' && typeof this.options.formData.fields[field.name] !== 'undefined') {
+	  if (this.options.mode === 'update'
+		  && typeof this.options.formData.fields[field.name] !== 'undefined'
+		  && this.options.formData.fields[field.name].length > 0 ) {
 		_listView.on(_options.formId+'.listViewCreated', function(list) {
 		  $(that.el).trigger(id+'.add', [list, that.options.formData.fields[field.name]]);
 		  _listView.off();
