@@ -173,311 +173,312 @@ define([
 	 * Render HTML
 	 **/
 	render: function(field, readMode) {
-		var that = this
-		, _html = ''
-		, _name = [field.name]
-		, _type = field.type.toLowerCase()
-		, _attr = '';
-		field.attributes = field.attributes || {};
-		field.options = field.options || {};
-		this.options.formSchema.validation = this.options.formSchema.validation || {};
-		this.options.formData = this.options.formData || {};
 
-		// If this is internal fields, we need to push to _internalFields array
-		if (field.options.internal === true) {
-		  this._internalFields.push(field.name);
-		}
+	  var that = this
+	  , _html = ''
+	  , _name = [field.name]
+	  , _type = field.type.toLowerCase()
+	  , _attr = '';
+	  field.attributes = field.attributes || {};
+	  field.options = field.options || {};
+	  this.options.formSchema.validation = this.options.formSchema.validation || {};
+	  this.options.formData = this.options.formData || {};
 
-		// Check to see if this is render internal, external and match with the current display mode or not
-		// In options keys: internal
-		if ( ! this.options.internal && field.options.internal ) {
-		  return '';
-		} else if ( ( _type === 'button' || _type === 'submit' ) && ! field.options.internal && this.options.internal ) {
-		  return '';
-		}
+	  // If this is internal fields, we need to push to _internalFields array
+	  if (field.options.internal === true) {
+		this._internalFields.push(field.name);
+	  }
 
-		switch (_type) {
-		  case 'image':
-			field.attributes.accept = 'image/*';
-		  case 'file':
-			$('form'+this.el).attr('enctype', 'multipart/form-data');
-			var _validation_tmp = this.getFormValidationData(field.name);
-			if (_validation_tmp.accept) {
-			  field.attributes.accept = _validation_tmp.accept;
-			}
-			break;
+	  // Check to see if this is render internal, external and match with the current display mode or not
+	  // In options keys: internal
+	  if ( ! this.options.internal && field.options.internal ) {
+		return '';
+	  } else if ( ( _type === 'button' || _type === 'submit' ) && ! field.options.internal && this.options.internal ) {
+		return '';
+	  }
 
-		  case 'birthdate':
-			this._hasBDate = true;
-			field.attributes['class'] = 'birthdaypicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
-			var _validation_tmp = this.getFormValidationData(field.name)
-			, _options = {
-			  id: field.name
-			};
-			if (typeof this.options.formData.fields !== 'undefined') {
-			  _options['defaultdate'] = this.options.formData.fields[field.name];
-			}
-			field.attributes['data-options'] = JSON.stringify(_.extend(_options, _validation_tmp));
+	  switch (_type) {
+		case 'image':
+		  field.attributes.accept = 'image/*';
+		case 'file':
+		  $('form'+this.el).attr('enctype', 'multipart/form-data');
+		  var _validation_tmp = this.getFormValidationData(field.name);
+		  if (_validation_tmp.accept) {
+			field.attributes.accept = _validation_tmp.accept;
+		  }
+		  break;
 
-			// For Wizard View
-			if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[month]');
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[day]');
-			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[year]');
-			}
-			break;
+		case 'birthdate':
+		  this._hasBDate = true;
+		  field.attributes['class'] = 'birthdaypicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+		  var _validation_tmp = this.getFormValidationData(field.name)
+		  , _options = {
+			id: field.name
+		  };
+		  if (typeof this.options.formData.fields !== 'undefined') {
+			_options['defaultdate'] = this.options.formData.fields[field.name];
+		  }
+		  field.attributes['data-options'] = JSON.stringify(_.extend(_options, _validation_tmp));
 
-		  case 'textbox':
-			_type = 'text';
-			break;
+		  // For Wizard View
+		  if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
+			this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[month]');
+			this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[day]');
+			this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[year]');
+		  }
+		  break;
 
-		  case 'textarea':
-			field.attributes['class'] = 'span10 '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
-			break;
+		case 'textbox':
+		  _type = 'text';
+		  break;
 
-		  case 'action':
-			this._div++;
-			return '<div class="form-actions">';
+		case 'textarea':
+		  field.attributes['class'] = 'span10 '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+		  break;
 
-		  case 'fieldsetstart':
-			return '<fieldset><legend>'+field.description+'</legend>';
+		case 'action':
+		  this._div++;
+		  return '<div class="form-actions">';
 
-		  case 'fieldsetend':
-			return '</fieldset>';
+		case 'fieldsetstart':
+		  return '<fieldset><legend>'+field.description+'</legend>';
 
-		  case 'hr':
-			return '<hr>';
+		case 'fieldsetend':
+		  return '</fieldset>';
 
-		  case 'dateinput':
-			_type = 'date';
-		  case 'date':
-			this._hasDate = true;
-			field.attributes['class'] = 'datepicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
-			var _validation_tmp = this.getFormValidationData(field.name);
-			// Setup Max Date
-			if (_validation_tmp.maxdate) {
-			  field.attributes['data-maxdate'] = _validation_tmp.maxdate;
-			}
-			break;
+		case 'hr':
+		  return '<hr>';
 
-		  case 'email':
-			field.attributes['class'] = 'tolowercase '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
-			if (typeof field.options.autocomplete !== 'undefined' && field.options.autocomplete) {
-			  this._hasEmailPicker = true;
-			  field.attributes = {};
-			  field.attributes['data-provide'] = 'typeahead';
-			  field.attributes['autocomplete'] = 'off';
-			  field.attributes['class'] = 'not_sending emailpicker_server tolowercase';
-			  field.attributes['data-source'] = emailData.replace(/\n/g, '').replace(/'/g, "&#39");
-			  if (typeof field.options['default'] !== 'undefined') {
-				field.attributes['data-value'] = field.options['default'];
-			  }
+		case 'dateinput':
+		  _type = 'date';
+		case 'date':
+		  this._hasDate = true;
+		  field.attributes['class'] = 'datepicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+		  var _validation_tmp = this.getFormValidationData(field.name);
+		  // Setup Max Date
+		  if (_validation_tmp.maxdate) {
+			field.attributes['data-maxdate'] = _validation_tmp.maxdate;
+		  }
+		  break;
 
-			  _name.push(field.name+'_username');
-			  _name.push(field.name+'_server');
-			}
-			break;
-
-		  case 'address':
-			delete field.attributes['class'];
-			delete field.attributes['placeholder'];
-
-			_name = [];
-			_name.push(field.name+'_address_street');
-			_name.push(field.name+'_address_city');
-			_name.push(field.name+'_address_state');
-			_name.push(field.name+'_address_zip');
-			_name.push(field.name+'_address_country');
-
-			// Format Data
-			if (typeof readMode !== 'undefined' && typeof this.options.formData !== 'undefined') {
-			  if (this.options.formData.fields[field.name+'_address_street'] && this.options.formData.fields[field.name+'_address_street'].charAt(this.options.formData.fields[field.name+'_address_street'].length-1) !== '.') {
-				this.options.formData.fields[field.name+'_address_street'] += '.';
-			  }
-			  this.options.formData.fields[field.name+'_address_street'] += '<br>';
-			  this.options.formData.fields[field.name+'_address_city'] += ',';
-			}
-
-			break;
-
-		  case 'number':
-			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '') + ' number';
-			if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
-			  field.attributes['class'] += ' spinner-input';
-			}
-			break;
-
-		  case 'fullname':
-			delete field.attributes['class'];
-			delete field.attributes['placeholder'];
-			_name = [];
-			_name.push(field.name+'_fullname_first_name');
-			_name.push(field.name+'_fullname_last_name');
-			if (typeof field.options.middlename !== 'undefined' && field.options.middlename) {
-			  _name.push(field.name+'_fullname_middle_name');
-			}
-			break;
-
-		  case 'clear':
-			_type = 'button';
-			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn') + ' btn-clear-form';
-			break;
-
-		  case 'submit':
-			field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
-			_type = 'button';
-			field['_submit'] = true;
-			// If this is submit button will override the action of this form
-			if (typeof field.url === 'undefined') {
-			  throw 'In order to use submit button, must pass the Url value in the formSchema';
-			}
-			// AppendId
-			if (field.options.appendid) {
-			  field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
-			}
-			$(this.el).attr('action', field.url);
-
-			// Check for Ajax Submit
-			if (typeof field.options.ajaxsubmit !== 'undefined') {
-			  this._ajaxSubmit = field.options.ajaxsubmit;
-			}
-
-			break;
-
-		  case 'button':
-			field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
-			// AppendId
-			if (field.options.appendid) {
-			  field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
-			}
-			break;
-
-		  case 'schooles':
-			_type = 'text';
+		case 'email':
+		  field.attributes['class'] = 'tolowercase '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+		  if (typeof field.options.autocomplete !== 'undefined' && field.options.autocomplete) {
+			this._hasEmailPicker = true;
+			field.attributes = {};
 			field.attributes['data-provide'] = 'typeahead';
 			field.attributes['autocomplete'] = 'off';
-			field.attributes['data-source'] = schoolesData.replace(/\n/g, '').replace(/'/g, "&#39");
-			break;
-
-		  // Step Field Type only render for wizard view
-		  case 'step':
-			if ('view' in this.options.formSchema && this.options.formSchema.view === 'wizard' ) {
-			  if (this._stepDiv !== 0) {
-				_html += '</div>';
-				this._stepDiv--;
-			  }
-			  if (typeof this._stepValidated[(this._currentStep)-1] === 'undefined') {
-				this._stepValidated[this._currentStep-1] = [];
-			  }
-			  var _active = 'step-pane' + ( (this._currentStep === 1) ? ' active': '' );
-			  _html += '<div class="'+_active+'" id="wizard_step'+this._currentStep+'">';
-			  this._stepDiv++;
-			  this._currentStep++;
-			} else {
-			  return '';
+			field.attributes['class'] = 'not_sending emailpicker_server tolowercase';
+			field.attributes['data-source'] = emailData.replace(/\n/g, '').replace(/'/g, "&#39");
+			if (typeof field.options['default'] !== 'undefined') {
+			  field.attributes['data-value'] = field.options['default'];
 			}
-			break;
 
-		  // Sub Form, will need to render new view to handle the event
-		  case 'list':
-			field.attributes.id = this.prefixedName['list'] + ( (typeof field.attributes.id !== 'undefined') ? field.attributes.id: field.name );
-			field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'subform-container';
-			// Attached Event
-
-			var _validation = (typeof this.options.formSchema.validation[field.name] !== 'undefined') ? this.options.formSchema.validation[field.name] : {};
-			this.attachSubFormEvent(field.attributes.id, field, _validation);
-			break;
-		}
-
-		// Check to see if step validation has been init (wizard view)
-		if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined'
-			&& ! ( _type === 'step' || _type === 'list' )
-			&& Utils.checkRequireFields(field, this.options.formSchema.validation) ) {
-		  _.each(_name, function(element) {
-			that._stepValidated[(that._currentStep)-2].push(element);
-		  });
-		}
-
-		// If this is read mode will need to render read template
-		if ( typeof readMode !== 'undefined' && readMode && typeof _name[0] !== 'undefined'
-			&&  _type !== 'button' ) {
-		  var _field_data = '', _href = '';
-		  _.each(_name, function(element) {
-			_field_data += ( (typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element]: '') + ' ';
-		  });
-		  _field_data = $.trim(_field_data);
-		  if (_type === 'file' || _type === 'image') {
-			if (_type === 'image') {
-			  field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src']: '/form/getFile/')+that.options.formData.fields[field.name];
-			  _href = field.attributes['src'];
-			} else {
-			  field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn btn-primary');
-			  field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
-			}
-			delete field.attributes['accept'];
-			_.each(field.attributes, function(value, key) {
-			  _attr += ' '+key+'=\''+value+'\'';
-			});
-			_html += that.inputTemplate['uneditable'+_type]({value: _field_data, text: field.description, _attr : _attr, id: field.name, href: _href});
-		  } else if (_type === 'list') {
-			// If this is 'list' type
-			if ( typeof this.options.formData.fields[field.name] !== 'undefined'
-				&& this.options.formData.fields[field.name].length > 0 ) {
-			  var _labels = []
-			  , _values = new Array (this.options.formData.fields[field.name].length)
-			  _.each(field.fields, function(element, index) {
-				_labels.push(element.description);
-				_.each(that.options.formData.fields[field.name], function(modelData, index) {
-				  var _fullName;
-				  if (typeof _values[index] === 'undefined') {
-					_values[index] = [];
-				  }
-				  switch (element.type.toLowerCase()) {
-					case 'timestamp':
-					  _labels[_labels.length-1] = 'Time';
-					  // Convert to Human Readable Time
-					  _values[index].push(Utils.getHumanTime(modelData[element.name]));
-					  break;
-
-					case 'fullname':
-					  _fullName = modelData[element.name+'_fullname_first_name'];
-					  if (typeof modelData[element.name+'_fullname_middle_name'] !== 'undefined') {
-						_fullName += ' ' + modelData[element.name+'_fullname_middle_name'];
-					  }
-					  _fullName += ' ' + modelData[element.name+'_fullname_last_name'];
-					  _values[index].push(_fullName);
-					  break;
-
-					default:
-					  _values[index].push(modelData[element.name]);
-				  }
-				});
-			  });
-			  _html += that.inputTemplate['subform-table']({ labels:_labels, values:_values, heading: ( (typeof field.options.readmodedescription === 'undefined') ? field.description: field.options.readmodedescription ) });
-			} else {
-			  _html += '';
-			}
-		  } else {
-			var _textarea = '';
-			switch (_type) {
-			  case 'address':
-				_textarea = ' uneditable-input-textarea';
-				break;
-			}
-			_html += that.inputTemplate['uneditableinput']({value: _field_data, css_class: _textarea});
+			_name.push(field.name+'_username');
+			_name.push(field.name+'_server');
 		  }
-		} else {
+		  break;
+
+		case 'address':
+		  delete field.attributes['class'];
+		  delete field.attributes['placeholder'];
+
+		  _name = [];
+		  _name.push(field.name+'_address_street');
+		  _name.push(field.name+'_address_city');
+		  _name.push(field.name+'_address_state');
+		  _name.push(field.name+'_address_zip');
+		  _name.push(field.name+'_address_country');
+
+		  // Format Data
+		  if (typeof readMode !== 'undefined' && typeof this.options.formData !== 'undefined') {
+			if (this.options.formData.fields[field.name+'_address_street'] && this.options.formData.fields[field.name+'_address_street'].charAt(this.options.formData.fields[field.name+'_address_street'].length-1) !== '.') {
+			  this.options.formData.fields[field.name+'_address_street'] += '.';
+			}
+			this.options.formData.fields[field.name+'_address_street'] += '<br>';
+			this.options.formData.fields[field.name+'_address_city'] += ',';
+		  }
+
+		  break;
+
+		case 'number':
+		  field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '') + ' number';
+		  if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
+			field.attributes['class'] += ' spinner-input';
+		  }
+		  break;
+
+		case 'fullname':
+		  delete field.attributes['class'];
+		  delete field.attributes['placeholder'];
+		  _name = [];
+		  _name.push(field.name+'_fullname_first_name');
+		  _name.push(field.name+'_fullname_last_name');
+		  if (typeof field.options.middlename !== 'undefined' && field.options.middlename) {
+			_name.push(field.name+'_fullname_middle_name');
+		  }
+		  break;
+
+		case 'clear':
+		  _type = 'button';
+		  field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn') + ' btn-clear-form';
+		  break;
+
+		case 'submit':
+		  field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
+		  _type = 'button';
+		  field['_submit'] = true;
+		  // If this is submit button will override the action of this form
+		  if (typeof field.url === 'undefined') {
+			throw 'In order to use submit button, must pass the Url value in the formSchema';
+		  }
+		  // AppendId
+		  if (field.options.appendid) {
+			field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
+		  }
+		  $(this.el).attr('action', field.url);
+
+		  // Check for Ajax Submit
+		  if (typeof field.options.ajaxsubmit !== 'undefined') {
+			this._ajaxSubmit = field.options.ajaxsubmit;
+		  }
+
+		  break;
+
+		case 'button':
+		  field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
+		  // AppendId
+		  if (field.options.appendid) {
+			field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
+		  }
+		  break;
+
+		case 'schooles':
+		  _type = 'text';
+		  field.attributes['data-provide'] = 'typeahead';
+		  field.attributes['autocomplete'] = 'off';
+		  field.attributes['data-source'] = schoolesData.replace(/\n/g, '').replace(/'/g, "&#39");
+		  break;
+
+		// Step Field Type only render for wizard view
+		case 'step':
+		  if ('view' in this.options.formSchema && this.options.formSchema.view === 'wizard' ) {
+			if (this._stepDiv !== 0) {
+			  _html += '</div>';
+			  this._stepDiv--;
+			}
+			if (typeof this._stepValidated[(this._currentStep)-1] === 'undefined') {
+			  this._stepValidated[this._currentStep-1] = [];
+			}
+			var _active = 'step-pane' + ( (this._currentStep === 1) ? ' active': '' );
+			_html += '<div class="'+_active+'" id="wizard_step'+this._currentStep+'">';
+			this._stepDiv++;
+			this._currentStep++;
+		  } else {
+			return '';
+		  }
+		  break;
+
+		// Sub Form, will need to render new view to handle the event
+		case 'list':
+		  field.attributes.id = this.prefixedName['list'] + ( (typeof field.attributes.id !== 'undefined') ? field.attributes.id: field.name );
+		  field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'subform-container';
+		  // Attached Event
+
+		  var _validation = (typeof this.options.formSchema.validation[field.name] !== 'undefined') ? this.options.formSchema.validation[field.name] : {};
+		  this.attachSubFormEvent(field.attributes.id, field, _validation);
+		  break;
+	  }
+
+	  // Check to see if step validation has been init (wizard view)
+	  if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined'
+		  && ! ( _type === 'step' || _type === 'list' )
+		  && Utils.checkRequireFields(field, this.options.formSchema.validation) ) {
+		_.each(_name, function(element) {
+		  that._stepValidated[(that._currentStep)-2].push(element);
+		});
+	  }
+
+	  // If this is read mode will need to render read template
+	  if ( typeof readMode !== 'undefined' && readMode && typeof _name[0] !== 'undefined'
+		  &&  _type !== 'button' ) {
+		var _field_data = '', _href = '';
+		_.each(_name, function(element) {
+		  _field_data += ( (typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element]: '') + ' ';
+		});
+		_field_data = $.trim(_field_data);
+		if (_type === 'file' || _type === 'image') {
+		  if (_type === 'image') {
+			field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src']: '/form/getFile/')+that.options.formData.fields[field.name];
+			_href = field.attributes['src'];
+		  } else {
+			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn btn-primary');
+			field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
+		  }
+		  delete field.attributes['accept'];
 		  _.each(field.attributes, function(value, key) {
 			_attr += ' '+key+'=\''+value+'\'';
 		  });
+		  _html += that.inputTemplate['uneditable'+_type]({value: _field_data, text: field.description, _attr : _attr, id: field.name, href: _href});
+		} else if (_type === 'list') {
+		  // If this is 'list' type
+		  if ( typeof this.options.formData.fields[field.name] !== 'undefined'
+			  && this.options.formData.fields[field.name].length > 0 ) {
+			var _labels = []
+			, _values = new Array (this.options.formData.fields[field.name].length)
+			_.each(field.fields, function(element, index) {
+			  _labels.push(element.description);
+			  _.each(that.options.formData.fields[field.name], function(modelData, index) {
+				var _fullName;
+				if (typeof _values[index] === 'undefined') {
+				  _values[index] = [];
+				}
+				switch (element.type.toLowerCase()) {
+				  case 'timestamp':
+					_labels[_labels.length-1] = 'Time';
+					// Convert to Human Readable Time
+					_values[index].push(Utils.getHumanTime(modelData[element.name]));
+					break;
 
-		  // Convert to file type
-		  if (_type === 'image') {
-			_type = 'file';
+				  case 'fullname':
+					_fullName = modelData[element.name+'_fullname_first_name'];
+					if (typeof modelData[element.name+'_fullname_middle_name'] !== 'undefined') {
+					  _fullName += ' ' + modelData[element.name+'_fullname_middle_name'];
+					}
+					_fullName += ' ' + modelData[element.name+'_fullname_last_name'];
+					_values[index].push(_fullName);
+					break;
+
+				  default:
+					_values[index].push(modelData[element.name]);
+				}
+			  });
+			});
+			_html += that.inputTemplate['subform-table']({ labels:_labels, values:_values, heading: ( (typeof field.options.readmodedescription === 'undefined') ? field.description: field.options.readmodedescription ) });
+		  } else {
+			_html += '';
 		  }
-		  _html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({_attr:_attr}, field)): '';
+		} else {
+		  var _textarea = '';
+		  switch (_type) {
+			case 'address':
+			  _textarea = ' uneditable-input-textarea';
+			  break;
+		  }
+		  _html += that.inputTemplate['uneditableinput']({value: _field_data, css_class: _textarea});
 		}
-		return _html;
+	  } else {
+		_.each(field.attributes, function(value, key) {
+		  _attr += ' '+key+'=\''+value+'\'';
+		});
+
+		// Convert to file type
+		if (_type === 'image') {
+		  _type = 'file';
+		}
+		_html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({_attr:_attr}, field)): '';
+	  }
+	  return _html;
 	},
 	/**
 	 * Render Label

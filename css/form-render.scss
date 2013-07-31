@@ -29,6 +29,14 @@ $text_area_min_height:  100px;
 	}
 
 	/**
+	 * Select
+	 **/
+	select {
+		min-width: 220px;
+		width: auto;
+	}
+
+	/**
 	 * Override Text Area
 	 **/
 	textarea {

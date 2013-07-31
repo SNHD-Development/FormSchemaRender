@@ -7,6 +7,9 @@
 .form-render {
   margin: 25px 20px;
   /**
+   * Select
+   **/
+  /**
    * Override Text Area
    **/
   /**
@@ -39,6 +42,9 @@
     clear: both; }
     .form-render fieldset.birthday-picker {
       clear: none; }
+  .form-render select {
+    min-width: 220px;
+    width: auto; }
   .form-render textarea {
     min-height: 100px; }
   .form-render .row-fluid [class*="span"] textarea {

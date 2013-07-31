@@ -126,6 +126,70 @@ Example: Setting Button type option to prevent Ajax form submit
 		}
 	}
 
+### Depend Options
+
+There are sometime that the value from another field will effect the flow of the form. In this case, we will use `Options.DependOn = { Name: 'Name of other field', Values: 'Array of that field values that will trigger this field' };` to handle this situation.
+
+Example: If a user select on a value in select area, this will trigger the Depend field.
+
+Select Type (Value of this field will trigger the event of Depend Field)
+
+	{
+		"Name" : "SelectMe",
+		"Type" : "Select",
+		"Description" : "Please select me to trigger another field",
+		"Values": [
+			"Option 1",
+			"Option 2",
+			"Option 3",
+			"Option 4"
+		]
+	}
+
+Depend Options
+
+	{
+		"Name" : "OptionOne",
+		"Type" : "TextBox",
+		"Description" : "If user selected 'Option 1' and 'Option 3' in 'SelectMe' I will show!",
+		"Options": {
+			"VisibleOn": {
+				"Name": "SelectMe",
+				"Values": [
+					"Option 1",
+					"Option 3"
+				]
+			}
+		}
+	},
+	{
+		Name: "Test",
+		Type: "HTML",
+		Description: "<div>Hello to 'Option 2' or 'Option 4'</div>",
+		"Options": {
+			"VisibleOn": {
+				"Name": "SelectMe",
+				"Values": [
+					"Option 2",
+					"Option 4"
+				]
+			}
+		}
+	}
+
+Validation FormSchema
+
+	{
+		Validation: {
+			SelectMe: {
+				"required": true
+			},
+			OptionOne: {
+				"required": true
+			}
+		}
+	}
+
 
 ### Version
 
