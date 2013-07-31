@@ -45,6 +45,8 @@
   .form-render select {
     min-width: 220px;
     width: auto; }
+    .form-render select[class^="birth-"] {
+      min-width: 0; }
   .form-render textarea {
     min-height: 100px; }
   .form-render .row-fluid [class*="span"] textarea {

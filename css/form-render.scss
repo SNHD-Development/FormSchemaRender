@@ -34,6 +34,9 @@ $text_area_min_height:  100px;
 	select {
 		min-width: 220px;
 		width: auto;
+		&[class^="birth-"] {
+			min-width: 0;
+		}
 	}
 
 	/**
