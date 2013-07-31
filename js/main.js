@@ -133,6 +133,16 @@ require([
     token : _token,
     internal: ( (typeof internal === 'undefined') ? false: internal )
   };
+
+  // Clean Up Global Object
+  formSchema = null;
+  formData = null;
+  mode = null;
+  view = null;
+  token = null;
+  internal = null;
+
+
   // Setup View
   _opts.formSchema.view = _view;
 
@@ -145,4 +155,8 @@ require([
       $('div#app').on(formSchema.name+'.'+key, value);
     });
   }
+
+  // Clean Up Form Event Object
+  formEvents = null;
+
 });
