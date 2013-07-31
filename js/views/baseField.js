@@ -648,6 +648,9 @@ define([
 	setupVisibleOn: function (field, htmlTmpl, parentContainer) {
 	  parentContainer = parentContainer || false;
 	  var that = this;
+	  if ( ! field.name) {
+		throw 'In order to use VisibleOn option, we need to pass in the Name';
+	  }
 	  $(this.el).on('change', ':input[name="'+field.options.visibleon.name+'"]', function(e) {
 		var $currentTarget = $(e.currentTarget)
 		, $container = (parentContainer) ? $currentTarget.parents(parentContainer): $currentTarget;
@@ -656,11 +659,19 @@ define([
 		  if ($('.options-visible-on-'+field.name, that.el).length < 1) {
 			$container.after(htmlTmpl);
 			$container.next('.options-visible-on-'+field.name).fadeIn('slow');
+			// Adding Validation Scheme, if has one
+			if (that.options.formSchema.validation[field.name]) {
+			  that.model.validation[field.name] = that.options.formSchema.validation[field.name];
+			}
 		  }
 		} else {
 		  // Remove this out of the markup
 		  $('.options-visible-on-'+field.name, that.el).remove();
 		  that.model.set(field.name, '');
+		  if (that.model.validation[field.name]) {
+			// Remove Validation Scheme, if has one
+			delete that.model.validation[field.name];
+		  }
 		}
 	  });
 	}
