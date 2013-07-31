@@ -46,6 +46,54 @@ define([
 		 * Need to find the required field for label
 		 **/
 		checkRequireFields: function(field, validation) {
+			var _name;
+			switch (field.type.toLowerCase()) {
+				case 'address':
+					_name = field.name+'_address_street';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					_name = field.name+'_address_city';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					_name = field.name+'_address_state';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					_name = field.name+'_address_zip';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					_name = field.name+'_address_country';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					return false;
+
+				case 'fullname':
+					_name = field.name+'_fullname_middle_name';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					_name = field.name+'_fullname_first_name';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					_name = field.name+'_fullname_last_name';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+
+					return false;
+			}
 			return (typeof validation[field.name] !== 'undefined' && validation[field.name].required) ? true: false;
 		},
 		/**
