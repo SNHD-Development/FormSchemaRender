@@ -43,6 +43,12 @@ define([
 			});
 		},
 		/**
+		 * Need to find the required field for label
+		 **/
+		checkRequireFields: function(field, validation) {
+			return (typeof validation[field.name] !== 'undefined' && validation[field.name].required) ? true: false;
+		},
+		/**
 		 * Prevalidation, on blur event
 		 **/
 		preValidate: function(e, model) {

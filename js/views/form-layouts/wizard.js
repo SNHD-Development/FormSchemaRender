@@ -40,7 +40,7 @@ define([
 		}
 
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-		  _required = (typeof that.options.formSchema.validation[value.name] !== 'undefined' && that.options.formSchema.validation[value.name].required) ? true: false;
+		  _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
 		  _html += that.renderLabel(value, _required);
 		} else if (value.type.toLowerCase() === 'step') {
 		  that._steps.push(value);

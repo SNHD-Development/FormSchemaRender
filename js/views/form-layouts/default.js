@@ -6,12 +6,13 @@ define([
   'lodash',
   'backbone',
   'vm',
+  'utils',
   'events',
   'modelbinder',
   'validation',
   'views/baseField',
   'text!templates/form-layouts/default.html'
-], function($, _, Backbone, Vm, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
+], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
   var AppView = BaseFieldView.extend({
 	_modelBinder: undefined,
     template: _.template(formLayoutTemplate),
@@ -34,7 +35,7 @@ define([
 		}
 
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-		  _required = (typeof that.options.formSchema.validation[value.name] !== 'undefined' && that.options.formSchema.validation[value.name].required) ? true: false;
+		  _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
 		  _html += that.renderLabel(value, _required);
 		}
 		_html += _parentRender.call(that, value);

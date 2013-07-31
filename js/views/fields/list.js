@@ -64,7 +64,7 @@ define([
 		  , formView = Vm.create(that, 'BaseField', BaseField, { formSchema: that.options.formSchema });
 		_.each(that.options.formSchema.fields, function(value, key, list) {
 		  if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-			_required = (typeof that.options.formSchema.validation[value.name] !== 'undefined' && that.options.formSchema.validation[value.name].required) ? true: false;
+			_required = Utils.checkRequireFields(value, that.options.formSchema.validation);
 			_html += formView.renderLabel(value, _required);
 		  }
 

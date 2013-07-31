@@ -6,12 +6,13 @@ define([
   'lodash',
   'backbone',
   'vm',
+  'utils',
   'events',
   'modelbinder',
   'validation',
   'views/baseField',
   'text!templates/form-layouts/horizontal.html'
-], function($, _, Backbone, Vm, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
+], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate){
   var AppView = BaseFieldView.extend({
 	_modelBinder: undefined,
     template: _.template(formLayoutTemplate),
@@ -40,7 +41,7 @@ define([
 			_html += '<div class="control-group">';
 			this._divcontrolgroup++;
 
-			_required = (typeof that.options.formSchema.validation[value.name] !== 'undefined' && that.options.formSchema.validation[value.name].required) ? true: false;
+			_required = Utils.checkRequireFields(value, that.options.formSchema.validation);
 			_html += that.renderLabel(value, _required, 'control-label');
 			_html += '<div class="controls">';
 		}
