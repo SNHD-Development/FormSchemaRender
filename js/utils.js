@@ -363,7 +363,7 @@ define([
 			values = values || false;
 			_.each(names, function(element, index) {
 				var _val = (values && values[index] ) ? values[index]: '';
-				$(':input[name="'+element+'"]', el).val(_val);
+				$(':input[name="'+element+'"]', el).val(_val).trigger('change');
 				model.set(element, _val);
 			});
 		}
