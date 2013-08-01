@@ -30,6 +30,7 @@ define([
   'text!templates/fields/select.html',
   'text!templates/fields/birthdate.html',
   'text!templates/fields/button.html',
+  'text!templates/fields/buttongroup.html',
   'text!templates/fields/list.html',
   'text!templates/fields/uneditableinput.html',
   'text!templates/fields/uneditablefile.html',
@@ -59,6 +60,7 @@ define([
 	, selectTemplate
 	, bdateTemplate
 	, buttonTemplate
+	, buttongroupTemplate
 	, listTemplate
 	, uneditableinputTemplate
 	, uneditablefileTemplate
@@ -135,6 +137,7 @@ define([
 		"select" : _.template(selectTemplate),
 		"birthdate" : _.template(bdateTemplate),
 		"button" : _.template(buttonTemplate),
+		"buttongroup" : _.template(buttongroupTemplate),
 		"list" : _.template(listTemplate),
 		"uneditableinput" : _.template(uneditableinputTemplate),
 		"uneditablefile" : _.template(uneditablefileTemplate),
@@ -678,6 +681,35 @@ define([
 		  }
 		}
 	  });
+	},
+	/**
+	 * Setup Copy Values From Options
+	 **/
+	setupCopyValuesFrom: function(field) {
+	  if ( ! field.options.copyvaluesfrom.name || ! field.options.copyvaluesfrom.description) {
+		throw 'In order to use CopyValuesFrom options, need to have Name and Description';
+	  }
+	  var that = this, _html = '';
+
+	  _html += '<div class="copy-values-from '+field.options.copyvaluesfrom.name+'">' + this.inputTemplate['buttongroup']({ description: field.options.copyvaluesfrom.description }) + '</div>';
+
+	  $(this.el).on('click', '.copy-values-from.'+field.options.copyvaluesfrom.name+' .btn-group button', function(e) {
+		var $currentTarget = $(e.currentTarget)
+		, _fields, _currentFields, _values = [];
+		if ($currentTarget.hasClass('btn-yes')) {
+		  _fields = Utils.getSpecialFieldsName(field.options.copyvaluesfrom.name, field.type);
+		  _.each(_fields, function(element) {
+			_values.push($(':input[name="'+element+'"]', that.el).val());
+		  });
+		  _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
+		  Utils.setFieldsValues(that.el, _currentFields, _values);
+		} else {
+		  _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
+		  Utils.setFieldsValues(that.el, _currentFields);
+		}
+	  });
+
+	  return _html;
 	}
   });
 });

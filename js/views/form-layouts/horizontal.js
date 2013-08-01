@@ -59,6 +59,11 @@ define([
 		  this._divcontrolgroup--;
 		}
 
+		// If this field has CopyValuesFrom
+		if (value.options.copyvaluesfrom) {
+		  _html += BaseFieldView.prototype.setupCopyValuesFrom.call(that, value);
+		}
+
 		// If this has VisibleOn in options
 		if (value.options.visibleon) {
 		  BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');

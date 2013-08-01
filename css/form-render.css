@@ -32,6 +32,12 @@
    **/
   /**
    * Fields Style
+   **/
+  /**
+   * CopyValuesFrom Options
+   **/
+  /**
+   * For btn-group in Wizard View
    **/ }
   .form-render label span.required {
     color: #B94A48;
@@ -122,3 +128,11 @@
     position: relative;
     top: -3px;
     font-size: 16px; }
+  .form-render .copy-values-from {
+    margin: 20px auto; }
+    .form-render .copy-values-from label {
+      display: inline; }
+    .form-render .copy-values-from .btn-group {
+      margin-left: 30px; }
+  .form-render .wizard-view .step-content .btn-group .active {
+    display: inline; }

@@ -209,4 +209,31 @@ $text_area_min_height:  100px;
 			font-size: 16px;
 		}
 	}
+
+	/**
+	 * CopyValuesFrom Options
+	 **/
+	.copy-values-from {
+		margin: 20px auto;
+
+		label {
+			display: inline;
+		}
+		.btn-group {
+			margin-left: 30px;
+		}
+	}
+
+	/**
+	 * For btn-group in Wizard View
+	 **/
+	.wizard-view {
+		.step-content {
+			.btn-group {
+				.active {
+					display: inline;
+				}
+			}
+		}
+	}
 }

@@ -190,6 +190,30 @@ Validation FormSchema
 		}
 	}
 
+### CopyValuesFrom Options
+
+Sometime we might run into billing address and shipping address that a user might have the same values in this field. We want to provide the nice UX for our user by adding a button to ask them either this has the same values as previous field.
+By passing, `Options.CopyValuesFrom = "Name of the field that we want to copy data from"`.
+Note: in order to make this work, it must be the same field type.
+
+	{
+		Name: "MyBillingAddress",
+		Type: "Address",
+		Description: "Your Billing Address"
+	},
+	{
+		Name: "MyShippingAddress",
+		Type: "Address",
+		Description: "Your Shipping Address",
+		Options: {
+			CopyValuesFrom: {
+				Name: "MyBillingAddress",
+				Description: "Is your shipping same as billing address?"
+			}
+		}
+	}
+
+
 ### Date Field
 
 By default `Type = "Date"` will render as DatePicker, However sometime it is very difficult to select birthday with Datepicker, so if you set `Options.Render = "Select"`. This will render the date field as select box.

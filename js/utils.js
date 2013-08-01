@@ -330,6 +330,40 @@ define([
 			}
 
 			return month+' '+date+', '+year+' '+hour+':'+min+':'+sec+' '+format;
+		},
+		/**
+		 * Return Special Fields Name Type
+		 **/
+		getSpecialFieldsName: function(name, type) {
+			var _fields = [];
+			switch (type.toLowerCase()) {
+				case 'fullname':
+					_fields.push(name+'_fullname_first_name');
+					_fields.push(name+'_fullname_middle_name');
+					_fields.push(name+'_fullname_last_name');
+					break;
+
+				case 'address':
+					_fields.push(name+'_address_street');
+					_fields.push(name+'_address_city');
+					_fields.push(name+'_address_state');
+					_fields.push(name+'_address_zip');
+					_fields.push(name+'_address_country');
+					break;
+
+				default:
+					_fields.push(field.options.copyvaluesfrom.name);
+			}
+			return _fields;
+		},
+		/**
+		 * Set Values from Fields Name
+		 **/
+		setFieldsValues: function(el, names, values) {
+			values = values || false;
+			_.each(names, function(element, index) {
+				$(':input[name="'+element+'"]', el).val( ( (values && values[index] ) ? values[index]: '' ) );
+			});
 		}
 	};
 });

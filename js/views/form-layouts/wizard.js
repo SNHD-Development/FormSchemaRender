@@ -48,6 +48,11 @@ define([
 		}
 		_temp += _parentRender.call(that, value);
 
+		// If this field has CopyValuesFrom
+		if (value.options.copyvaluesfrom) {
+		  _html += BaseFieldView.prototype.setupCopyValuesFrom.call(that, value);
+		}
+
 		// If this has VisibleOn in options
 		if (value.options.visibleon) {
 		  _temp = '<div class="options-visible-on-'+value.name+'" style="display:none">'+_temp+'</div>';
