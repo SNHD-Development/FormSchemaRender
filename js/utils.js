@@ -359,10 +359,12 @@ define([
 		/**
 		 * Set Values from Fields Name
 		 **/
-		setFieldsValues: function(el, names, values) {
+		setFieldsValues: function(el, model, names, values) {
 			values = values || false;
 			_.each(names, function(element, index) {
-				$(':input[name="'+element+'"]', el).val( ( (values && values[index] ) ? values[index]: '' ) );
+				var _val = (values && values[index] ) ? values[index]: '';
+				$(':input[name="'+element+'"]', el).val(_val);
+				model.set(element, _val);
 			});
 		}
 	};

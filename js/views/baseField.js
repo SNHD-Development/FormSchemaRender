@@ -702,10 +702,10 @@ define([
 			_values.push($(':input[name="'+element+'"]', that.el).val());
 		  });
 		  _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
-		  Utils.setFieldsValues(that.el, _currentFields, _values);
+		  Utils.setFieldsValues(that.el, that.model,  _currentFields, _values);
 		} else {
 		  _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
-		  Utils.setFieldsValues(that.el, _currentFields);
+		  Utils.setFieldsValues(that.el, that.model, _currentFields);
 		}
 	  });
 
