@@ -134,21 +134,6 @@ require([
     internal: ( (typeof internal === 'undefined') ? false: internal )
   };
 
-  // Clean Up Global Object
-  formSchema = null;
-  formData = null;
-  mode = null;
-  view = null;
-  token = null;
-  internal = null;
-
-
-  // Setup View
-  _opts.formSchema.view = _view;
-
-  appView = Vm.create({}, 'AppView', AppView, _opts);
-  appView.render();
-
   // Render Custom Script Here
   if (typeof formEvents !== 'undefined') {
     _.each(formEvents, function(value, key) {
@@ -156,7 +141,19 @@ require([
     });
   }
 
-  // Clean Up Form Event Object
+  // Clean Up Global Object
+  formSchema = null;
+  formData = null;
+  mode = null;
+  view = null;
+  token = null;
+  internal = null;
   formEvents = null;
+
+  // Setup View
+  _opts.formSchema.view = _view;
+
+  appView = Vm.create({}, 'AppView', AppView, _opts);
+  appView.render();
 
 });
