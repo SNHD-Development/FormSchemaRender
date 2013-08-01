@@ -16,6 +16,12 @@ define([
 	  if ( ! _internal && value.options.internal) {
 		return;
 	  }
+	  if (typeof attrs.validation[value.name] !== 'undefined' ) {
+		_.each(attrs.validation[value.name], function(validationValue, key) {
+		  delete attrs.validation[value.name][key];
+		  attrs.validation[value.name][key.toLowerCase()] = validationValue;
+		});
+	  }
 	  switch (value.type.toLowerCase()) {
 		case 'address':
 		  _name = value.name+'_address_street';
@@ -85,9 +91,19 @@ define([
 			_attrs[value.name+'_birth[year]'] = '';
 			if (typeof attrs.validation[value.name] !== 'undefined') {
 			  _validation[value.name] = _.clone(attrs.validation[value.name]);
-			  _validation[value.name+'_birth[month]'] = _.clone(attrs.validation[value.name]);
-			  _validation[value.name+'_birth[day]'] = _.clone(attrs.validation[value.name]);
-			  _validation[value.name+'_birth[year]'] = _.clone(attrs.validation[value.name]);
+
+			  var _dateValidation = _.clone(attrs.validation[value.name]);
+
+			  if (_dateValidation.mindate) {
+				delete _dateValidation.mindate;
+			  }
+			  if (_dateValidation.maxdate) {
+				delete _dateValidation.maxdate;
+			  }
+
+			  _validation[value.name+'_birth[month]'] = _.clone(_dateValidation);
+			  _validation[value.name+'_birth[day]'] = _.clone(_dateValidation);
+			  _validation[value.name+'_birth[year]'] = _.clone(_dateValidation);
 			}
 		  } else {
 			_attrs[value.name] = '';

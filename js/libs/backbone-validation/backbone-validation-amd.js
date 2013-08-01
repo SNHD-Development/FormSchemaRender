@@ -414,7 +414,9 @@
       rangeLength: '{0} must be between {1} and {2} characters',
       oneOf: '{0} must be one of: {1}',
       equalTo: '{0} must be the same as {1}',
-      pattern: '{0} must be a valid {1}'
+      pattern: '{0} must be a valid {1}',
+      mindate: '{0} must be before {1}',
+      maxdate: '{0} must be after {1}'
     };
 
     // Label formatters
@@ -534,6 +536,42 @@
           if (!isNumber(value) || value > maxValue) {
             return this.format(defaultMessages.max, this.formatLabel(attr, model), maxValue);
           }
+        },
+
+        // minDate validator
+        // Validate that the value has to be greater than minDate
+        mindate: function(value, attr, minDate, model) {
+          var _val = value.split('/');
+          if (_val.length === 3) {
+            var valDate = new Date()
+            , validateDate = new Date()
+            , _minDateVal = minDate.split('/');
+            valDate.setFullYear(parseInt(_val[2]), parseInt(_val[0])-1, parseInt(_val[1]));
+            validateDate.setFullYear(parseInt(_minDateVal[2]), parseInt(_minDateVal[0])-1, parseInt(_minDateVal[1]));
+            if (valDate >= validateDate)
+            {
+              return ;
+            }
+          }
+          return this.format(defaultMessages.mindate, this.formatLabel(attr, model));
+        },
+
+        // maxDate validator
+        // Validate that the value has to be greater than minDate
+        maxdate: function(value, attr, minDate, model) {
+          var _val = value.split('/');
+          if (_val.length === 3) {
+            var valDate = new Date()
+            , validateDate = new Date()
+            , _minDateVal = minDate.split('/');
+            valDate.setFullYear(parseInt(_val[2]), parseInt(_val[0])-1, parseInt(_val[1]));
+            validateDate.setFullYear(parseInt(_minDateVal[2]), parseInt(_minDateVal[0])-1, parseInt(_minDateVal[1]));
+            if (valDate <= validateDate)
+            {
+              return ;
+            }
+          }
+          return this.format(defaultMessages.maxdate, this.formatLabel(attr, model));
         },
 
         // Range validator
