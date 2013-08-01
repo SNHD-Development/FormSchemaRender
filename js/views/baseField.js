@@ -531,9 +531,15 @@ define([
 	  if (value.options.internal === true && value.name) {
 		this._internalFields.push(value.name);
 	  }
+
 	  readMode = readMode || false;
 	  status = status || false;
-	  if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
+
+	  if (readMode === 'update' && ! this.options.internal
+		  && typeof value.options.hideonexternalupdate !== 'undefined'
+		  && ! value.options.hideonexternalupdate ) {
+		return true;
+	  } else if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
 		return false;
 	  } else if (typeof value.options.showonmode !== 'undefined' && value.options.showonmode.indexOf(readMode) === -1) {
 		return false;
@@ -543,6 +549,7 @@ define([
 		  return false;
 		}
 	  }
+
 	  return true;
 	},
 	/**
