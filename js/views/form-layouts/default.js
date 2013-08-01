@@ -29,6 +29,7 @@ define([
 		, _parentRender = BaseFieldView.prototype.render
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
+		var _temp = '';
 		// Check for Show On Mode
 		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status) ) {
 		  return '';
@@ -36,9 +37,17 @@ define([
 
 		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
 		  _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
-		  _html += that.renderLabel(value, _required);
+		  _temp += that.renderLabel(value, _required);
 		}
-		_html += _parentRender.call(that, value);
+		_temp += _parentRender.call(that, value);
+
+		// If this has VisibleOn in options
+		if (value.options.visibleon) {
+		  _temp = '<div class="options-visible-on-'+value.name+'" style="display:none">'+_temp+'</div>';
+		  BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp);
+		} else {
+		  _html += _temp;
+		}
 	  });
 	  // not auto rendering the button
 	  //_html += BaseFieldView.prototype.renderButton.call(this, this.options.formSchema.formoptions);
