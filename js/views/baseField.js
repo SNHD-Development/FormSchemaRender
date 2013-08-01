@@ -660,17 +660,19 @@ define([
 			$container.after(htmlTmpl);
 			$container.next('.options-visible-on-'+field.name).fadeIn('slow');
 			// Adding Validation Scheme, if has one
-			if (that.options.formSchema.validation[field.name]) {
+			if (that.options.formSchema.validation[field.name] && field.type.toLowerCase() !== 'html') {
 			  that.model.validation[field.name] = that.options.formSchema.validation[field.name];
 			}
 		  }
 		} else {
 		  // Remove this out of the markup
 		  $('.options-visible-on-'+field.name, that.el).remove();
-		  that.model.set(field.name, '');
-		  if (that.model.validation[field.name]) {
-			// Remove Validation Scheme, if has one
-			delete that.model.validation[field.name];
+		  if (field.type.toLowerCase() !== 'html') {
+			that.model.set(field.name, '');
+			if (that.model.validation[field.name]) {
+			  // Remove Validation Scheme, if has one
+			  delete that.model.validation[field.name];
+			}
 		  }
 		}
 	  });
