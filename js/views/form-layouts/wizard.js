@@ -170,7 +170,6 @@ define([
 	 **/
 	isStepValid: function(index) {
 	  var that = this, _error = false, _elementError, $element;
-
 	  if (typeof this._stepValidated[index] !== 'undefined') {
 		_.each(this._stepValidated[index], function(element) {
 		  $element = $(':input[name="'+element+'"]', that.el).removeClass('invalid');

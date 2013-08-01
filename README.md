@@ -182,14 +182,51 @@ Validation FormSchema
 	{
 		Validation: {
 			SelectMe: {
-				"required": true
+				required: true
 			},
 			OptionOne: {
-				"required": true
+				required: true
 			}
 		}
 	}
 
+### Date Field
+
+By default `Type = "Date"` will render as DatePicker, However sometime it is very difficult to select birthday with Datepicker, so if you set `Options.Render = "Select"`. This will render the date field as select box.
+
+	{
+		Name: "MyDate",
+		Type: "Date",
+		Description: "Your DatePicker",
+		Options: {
+			Render: "Datepicker"
+		}
+	}
+
+	{
+		Name: "MySecondDate",
+		Type: "Date",
+		Description: "Your Birthday",
+		Options: {
+			Render: "Select"
+		}
+	}
+
+Validation FormSchema
+
+	{
+		Validation: {
+			MyDate: {
+				required: true,
+				maxDate: "today",
+				minDate: "01/01/1950"
+			},
+			MySecondDate: {
+				required: true,
+				maxDate: "08/14/1995"
+			}
+		}
+	}
 
 ### Version
 

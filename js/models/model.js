@@ -72,16 +72,21 @@ define([
 		case 'step':	// Special Field Type for Wizard View
 		  break;
 
-		case 'birthdate':
-		  _attrs[value.name] = '';
-		  _attrs[value.name+'_birth[month]'] = '';
-		  _attrs[value.name+'_birth[day]'] = '';
-		  _attrs[value.name+'_birth[year]'] = '';
-		  if (typeof attrs.validation[value.name] !== 'undefined') {
-			_validation[value.name] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_birth[month]'] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_birth[day]'] = _.clone(attrs.validation[value.name]);
-			_validation[value.name+'_birth[year]'] = _.clone(attrs.validation[value.name]);
+		case 'date':
+		  if (value.options.render && value.options.render.toLowerCase() === 'select') {
+			_attrs[value.name] = '';
+			_attrs[value.name+'_birth[month]'] = '';
+			_attrs[value.name+'_birth[day]'] = '';
+			_attrs[value.name+'_birth[year]'] = '';
+			if (typeof attrs.validation[value.name] !== 'undefined') {
+			  _validation[value.name] = _.clone(attrs.validation[value.name]);
+			  _validation[value.name+'_birth[month]'] = _.clone(attrs.validation[value.name]);
+			  _validation[value.name+'_birth[day]'] = _.clone(attrs.validation[value.name]);
+			  _validation[value.name+'_birth[year]'] = _.clone(attrs.validation[value.name]);
+			}
+		  } else {
+			_attrs[value.name] = '';
+			setValidationData(value.name, attrs, _validation, '');
 		  }
 		  break;
 

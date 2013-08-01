@@ -208,26 +208,6 @@ define([
 		  }
 		  break;
 
-		case 'birthdate':
-		  this._hasBDate = true;
-		  field.attributes['class'] = 'birthdaypicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
-		  var _validation_tmp = this.getFormValidationData(field.name)
-		  , _options = {
-			id: field.name
-		  };
-		  if (typeof this.options.formData.fields !== 'undefined') {
-			_options['defaultdate'] = this.options.formData.fields[field.name];
-		  }
-		  field.attributes['data-options'] = JSON.stringify(_.extend(_options, _validation_tmp));
-
-		  // For Wizard View
-		  if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
-			this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[month]');
-			this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[day]');
-			this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[year]');
-		  }
-		  break;
-
 		case 'textbox':
 		  _type = 'text';
 		  break;
@@ -252,12 +232,34 @@ define([
 		case 'dateinput':
 		  _type = 'date';
 		case 'date':
-		  this._hasDate = true;
-		  field.attributes['class'] = 'datepicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
-		  var _validation_tmp = this.getFormValidationData(field.name);
-		  // Setup Max Date
-		  if (_validation_tmp.maxdate) {
-			field.attributes['data-maxdate'] = _validation_tmp.maxdate;
+		  // If pass in options.render, by default will render as 'DatePicker'
+		  if (field.options.render && field.options.render.toLowerCase() === 'select') {
+			_type = 'birthdate'
+			this._hasBDate = true;
+			field.attributes['class'] = 'birthdaypicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+			var _validation_tmp = this.getFormValidationData(field.name)
+			, _options = {
+			  id: field.name
+			};
+			if (typeof this.options.formData.fields !== 'undefined') {
+			  _options['defaultdate'] = this.options.formData.fields[field.name];
+			}
+			field.attributes['data-options'] = JSON.stringify(_.extend(_options, _validation_tmp));
+
+			// For Wizard View
+			if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[month]');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[day]');
+			  this._stepValidated[(this._currentStep)-2].push(field.name+'_birth[year]');
+			}
+		  } else {
+			this._hasDate = true;
+			field.attributes['class'] = 'datepicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+			var _validation_tmp = this.getFormValidationData(field.name);
+			// Setup Max Date
+			if (_validation_tmp.maxdate) {
+			  field.attributes['data-maxdate'] = _validation_tmp.maxdate;
+			}
 		  }
 		  break;
 
