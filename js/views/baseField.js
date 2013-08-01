@@ -96,7 +96,7 @@ define([
 
 	  // Setup Keys
 	  this.options.formSchema.validation = this.options.formSchema.validation || {};
-	  this.model = new Model(this.options.formSchema);
+	  this.model = new Model( _.extend(this.options.formSchema, { is_internal: this.options.internal } ) );
 	  // If user pass in formData
 	  if ( ! $.isEmptyObject(this.options.formData)) {
 		_.each(this.model.attributes, function(element, index) {

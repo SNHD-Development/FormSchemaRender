@@ -8,9 +8,14 @@ define([
   var parseFields = function(model, attrs) {
 	var _attrs = {}
 	, _validation = {}
-	, _name;
+	, _name
+	, _internal = ( attrs.is_internal ) ? true: false;
+
 	_.each(attrs.fields, function(value) {
 	  value.options = value.options || {};
+	  if ( ! _internal && value.options.internal) {
+		return;
+	  }
 	  switch (value.type.toLowerCase()) {
 		case 'address':
 		  _name = value.name+'_address_street';
