@@ -42,12 +42,28 @@
       "tabindex"      : null,
       "required"  : false,
       'errorname' : '',
-	  'id' : ''
+	  'id' : '',
+	  'mindate': '',
+	  'maxdate': ''
     };
 
     return this.each(function() {
 
-      if (options) { $.extend(settings, options); }
+      if (options) {
+		_.each(options, function(value, key) {
+		  delete options[key];
+		  options[key.toLowerCase()] = value;
+		});
+		$.extend(settings, options);
+	  }
+
+	  // Setup the minDate
+	  if (settings.mindate !== '') {
+		var _dates = settings.mindate.split('/');
+		if (_dates.length === 3) {
+		  settings.minyear = _dates[2];
+		}
+	  }
 
       // Create the html picker skeleton
       var req_field = (settings['required']) ? ' required': '';
