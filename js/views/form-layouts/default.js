@@ -42,7 +42,7 @@ define([
 		_temp += _parentRender.call(that, value);
 
 		// If this field has CopyValuesFrom
-		if (value.options.copyvaluesfrom) {
+		if (that.options.mode === 'create' && value.options.copyvaluesfrom) {
 		  _html += BaseFieldView.prototype.setupCopyValuesFrom.call(that, value);
 		}
 

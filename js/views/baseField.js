@@ -187,11 +187,6 @@ define([
 	  this.options.formSchema.validation = this.options.formSchema.validation || {};
 	  this.options.formData = this.options.formData || {};
 
-	  // If this is internal fields, we need to push to _internalFields array
-	  if (field.options.internal === true) {
-		this._internalFields.push(field.name);
-	  }
-
 	  // Check to see if this is render internal, external and match with the current display mode or not
 	  // In options keys: internal
 	  if ( ! this.options.internal && field.options.internal ) {
@@ -532,6 +527,10 @@ define([
 	 * Show On Mode
 	 **/
 	checkShowOnMode: function(value, readMode, status) {
+	  // If this is internal fields, we need to push to _internalFields array
+	  if (value.options.internal === true && value.name) {
+		this._internalFields.push(value.name);
+	  }
 	  readMode = readMode || false;
 	  status = status || false;
 	  if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
