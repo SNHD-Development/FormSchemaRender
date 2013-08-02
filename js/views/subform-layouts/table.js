@@ -42,6 +42,11 @@ define([
 			  _values[index].push(Utils.getHumanTime(model[element.name]));
 			  break;
 
+			case 'useraccount':
+			  _labels[_labels.length-1] = 'User';
+			  _values[index].push(model[element.name]);
+			  break;
+
             case 'fullname':
               _fullName = model[element.name+'_fullname_first_name'];
               if (typeof model[element.name+'_fullname_middle_name'] !== 'undefined') {

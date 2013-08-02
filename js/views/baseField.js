@@ -17,6 +17,7 @@ define([
   'text!templates/fields/label.html',
   'text!templates/fields/text.html',
   'text!templates/fields/timestamp.html',
+  'text!templates/fields/useraccount.html',
   'text!templates/fields/file.html',
   'text!templates/fields/state.html',
   'text!templates/fields/zipcode.html',
@@ -47,6 +48,7 @@ define([
 	, labelTemplate
 	, textTemplate
 	, timestampTemplate
+	, useraccountTemplate
 	, fileTemplate
 	, stateTemplate
 	, zipcodeTemplate
@@ -124,6 +126,7 @@ define([
 		"label" : _.template(labelTemplate),
 		"text" : _.template(textTemplate),
 		"timestamp" : _.template(timestampTemplate),
+		"useraccount" : _.template(useraccountTemplate),
 		"file" : _.template(fileTemplate),
 		"state" : _.template(stateTemplate),
 		"zipcode" : _.template(zipcodeTemplate),
@@ -379,6 +382,13 @@ define([
 		  }
 		  break;
 
+		case 'useraccount':
+		  field['data_value'] = '';
+		  if (field.options.getvaluefromid) {
+			field['data_value'] = $('#'+field.options.getvaluefromid).text();
+		  }
+		  break;
+
 		// Sub Form, will need to render new view to handle the event
 		case 'list':
 		  field.attributes.id = this.prefixedName['list'] + ( (typeof field.attributes.id !== 'undefined') ? field.attributes.id: field.name );
@@ -438,6 +448,11 @@ define([
 					_labels[_labels.length-1] = 'Time';
 					// Convert to Human Readable Time
 					_values[index].push(Utils.getHumanTime(modelData[element.name]));
+					break;
+
+				  case 'useraccount':
+					_labels[_labels.length-1] = 'User';
+					_values[index].push(modelData[element.name]);
 					break;
 
 				  case 'fullname':
