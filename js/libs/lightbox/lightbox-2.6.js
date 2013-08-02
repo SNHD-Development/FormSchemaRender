@@ -163,8 +163,9 @@ Licensed under the Creative Commons Attribution 2.5 License - http://creativecom
     };
 
     Lightbox.prototype.changeImage = function(imageNumber) {
-      var $image, preloader,
-        _this = this;
+      var $image, preloader
+        , _this = this
+        , _width , _height;
       this.disableKeyboardNav();
       $image = this.$lightbox.find('.lb-image');
       this.sizeOverlay();
@@ -199,7 +200,10 @@ Licensed under the Creative Commons Attribution 2.5 License - http://creativecom
           }
         }
 
-        return _this.sizeContainer(_this.album[imageNumber].width, _this.album[imageNumber].height);
+        _width = (imageWidth) ? imageWidth: _this.album[imageNumber].width;
+        _height = (imageHeight) ? imageHeight: _this.album[imageNumber].height;
+
+        return _this.sizeContainer(_width, _height);
       };
       preloader.src = this.album[imageNumber].link;
       this.currentImageIndex = imageNumber;
