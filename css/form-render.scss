@@ -93,6 +93,9 @@ $text_area_min_height:  100px;
 	 **/
 	.subform-container {
 
+		padding: 20px;
+		margin-bottom: 30px;
+
 		input, select, textarea {
 			margin-bottom: 15px;
 		}
@@ -112,7 +115,6 @@ $text_area_min_height:  100px;
 			}
 		}
 
-		padding: 20px;
 		.actions {
 			padding: 15px 25px 0;
 		}
@@ -185,6 +187,14 @@ $text_area_min_height:  100px;
 	/**
 	 * Read Mode Styles
 	 **/
+	&.read-mode {
+		fieldset {
+			&.table-view {
+				margin-bottom: 30px;
+			}
+		}
+	}
+
 	.uneditable-input {
 		width: 80%;
 	}
