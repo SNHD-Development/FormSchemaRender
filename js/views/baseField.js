@@ -214,7 +214,7 @@ define([
 		  break;
 
 		case 'textarea':
-		  field.attributes['class'] = 'span10 '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span10');
 		  break;
 
 		case 'action':
@@ -237,7 +237,7 @@ define([
 		  if (field.options.render && field.options.render.toLowerCase() === 'select') {
 			_type = 'birthdate'
 			this._hasBDate = true;
-			field.attributes['class'] = 'birthdaypicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'birthdaypicker');
 			var _validation_tmp = this.getFormValidationData(field.name)
 			, _options = {
 			  id: field.name
@@ -255,7 +255,7 @@ define([
 			}
 		  } else {
 			this._hasDate = true;
-			field.attributes['class'] = 'datepicker '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'datepicker');
 			var _validation_tmp = this.getFormValidationData(field.name);
 			// Setup Max Date
 			if (_validation_tmp.maxdate) {
@@ -265,7 +265,7 @@ define([
 		  break;
 
 		case 'email':
-		  field.attributes['class'] = 'tolowercase '+((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '');
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'tolowercase');
 		  if (typeof field.options.autocomplete !== 'undefined' && field.options.autocomplete) {
 			this._hasEmailPicker = true;
 			field.attributes = {};
@@ -305,9 +305,9 @@ define([
 		  break;
 
 		case 'number':
-		  field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: '') + ' number';
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'number');
 		  if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
-			field.attributes['class'] += ' spinner-input';
+			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'spinner-input');
 		  }
 		  break;
 
@@ -324,11 +324,11 @@ define([
 
 		case 'clear':
 		  _type = 'button';
-		  field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn') + ' btn-clear-form';
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-clear-form');
 		  break;
 
 		case 'submit':
-		  field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
 		  _type = 'button';
 		  field['_submit'] = true;
 		  // If this is submit button will override the action of this form
@@ -349,7 +349,7 @@ define([
 		  break;
 
 		case 'button':
-		  field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn';
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
 		  // AppendId
 		  if (field.options.appendid) {
 			field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
@@ -392,7 +392,7 @@ define([
 		// Sub Form, will need to render new view to handle the event
 		case 'list':
 		  field.attributes.id = this.prefixedName['list'] + ( (typeof field.attributes.id !== 'undefined') ? field.attributes.id: field.name );
-		  field.attributes['class'] = (typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'subform-container';
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'subform-container');
 		  // Attached Event
 
 		  var _validation = (typeof this.options.formSchema.validation[field.name] !== 'undefined') ? this.options.formSchema.validation[field.name] : {};
@@ -422,7 +422,7 @@ define([
 			field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src']: '/form/getFile/')+that.options.formData.fields[field.name];
 			_href = field.attributes['src'];
 		  } else {
-			field.attributes['class'] = ((typeof field.attributes['class'] !== 'undefined') ? field.attributes['class']: 'btn btn-primary');
+			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
 			field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
 		  }
 		  delete field.attributes['accept'];

@@ -369,6 +369,24 @@ define([
 					$input.removeClass('invalid');
 				}
 			});
+		},
+		/**
+		 * Setup Class Attr for Field
+		 **/
+		setupClassAttr: function(classAttr, appendClass) {
+			classAttr = classAttr || false;
+			appendClass = appendClass || '';
+			appendClass.toLowerCase();
+			if (classAttr) {
+				classAttr = classAttr.toLowerCase();
+				var reg = new RegExp(appendClass, "i");
+				if (reg.test(classAttr)) {
+					return classAttr;
+				} else {
+					return classAttr + ' ' + appendClass;
+				}
+			}
+			return appendClass;
 		}
 	};
 });
