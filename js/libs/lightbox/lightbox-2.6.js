@@ -105,7 +105,7 @@ Licensed under the Creative Commons Attribution 2.5 License - http://creativecom
     };
 
     Lightbox.prototype.start = function($link) {
-      var $window, a, dataLightboxValue, i, imageNumber, left, top, _i, _j, _len, _len1, _ref, _ref1;
+      var that = this, $window, a, dataLightboxValue, i, imageNumber, left, top, _i, _j, _len, _len1, _ref, _ref1, _img;
       $(window).on("resize", this.sizeOverlay);
       $('select, object, embed').css({
         visibility: "hidden"
@@ -122,6 +122,12 @@ Licensed under the Creative Commons Attribution 2.5 License - http://creativecom
             link: $(a).attr('href'),
             title: $(a).attr('title')
           });
+          _img = new Image();
+          _img.src = $(a).attr('href');
+          _img.onload = function() {
+            that.album[that.album.length-1].width = this.width;
+            that.album[that.album.length-1].height = this.height;
+          };
           if ($(a).attr('href') === $link.attr('href')) {
             imageNumber = i;
           }
@@ -192,7 +198,8 @@ Licensed under the Creative Commons Attribution 2.5 License - http://creativecom
             }
           }
         }
-        return _this.sizeContainer($image.width(), $image.height());
+
+        return _this.sizeContainer(_this.album[imageNumber].width, _this.album[imageNumber].height);
       };
       preloader.src = this.album[imageNumber].link;
       this.currentImageIndex = imageNumber;
@@ -205,6 +212,7 @@ Licensed under the Creative Commons Attribution 2.5 License - http://creativecom
     Lightbox.prototype.sizeContainer = function(imageWidth, imageHeight) {
       var newHeight, newWidth, oldHeight, oldWidth,
         _this = this;
+
       oldWidth = this.$outerContainer.outerWidth();
       oldHeight = this.$outerContainer.outerHeight();
       newWidth = imageWidth + this.containerLeftPadding + this.containerRightPadding;
