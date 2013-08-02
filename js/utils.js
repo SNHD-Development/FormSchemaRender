@@ -362,9 +362,12 @@ define([
 		setFieldsValues: function(el, model, names, values) {
 			values = values || false;
 			_.each(names, function(element, index) {
-				var _val = (values && values[index] ) ? values[index]: '';
-				$(':input[name="'+element+'"]', el).val(_val).trigger('change');
+				var _val = (values && values[index] ) ? values[index]: ''
+				, $input = $(':input[name="'+element+'"]', el).val(_val).trigger('change');
 				model.set(element, _val);
+				if (model.isValid(element)) {
+					$input.removeClass('invalid');
+				}
 			});
 		}
 	};
