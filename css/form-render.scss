@@ -173,6 +173,9 @@ $text_area_min_height:  100px;
 	 * Error Styles
 	 **/
 	input, select, textarea {
+
+		margin-bottom: 10px;
+
 		&[type="file"].invalid {
 			border: solid 1px #b94a48;
 		}
