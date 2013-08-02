@@ -264,7 +264,12 @@ define([
 		 * Setup Spinner
 		 **/
 		setupSpinner: function(el) {
-			$('.spinner', el).spinner();
+			$('.spinner', el).each(function() {
+				var _opt = {
+					value: parseInt($(':input.spinner-input', this).val()) || 1
+				};
+				$(this).spinner(_opt)
+			});
 		},
 		/**
 		 * Prevent Space in Keypress Event

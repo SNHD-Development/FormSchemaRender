@@ -308,6 +308,9 @@ define([
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'number');
 		  if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
 			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'spinner-input');
+			if (this.options.mode === 'update' && this.options.formData.fields[field.name]) {
+			  field.attributes['data-value'] = this.options.formData.fields[field.name];
+			}
 		  }
 		  break;
 
