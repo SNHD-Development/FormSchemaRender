@@ -150,7 +150,9 @@ define([
 		if (this.options.token !== '') {
 		  $form.prepend('<input type="hidden" name="token" value="'+this.options.token+'"/>');
 		}
-		$form.prepend('<input type="hidden" name="form_name" value="'+this.options.formSchema.name+'"/>');
+		if (this.options.mode === 'create') {
+		  $form.prepend('<input type="hidden" name="form_name" value="'+this.options.formSchema.name+'"/>');
+		}
         $('input.subform_before_submit', this.el).remove();
         this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
         _options = {
