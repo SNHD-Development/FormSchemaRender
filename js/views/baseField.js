@@ -476,6 +476,7 @@ define([
 		} else {
 		  var _textarea = '';
 		  switch (_type) {
+			case 'textarea':
 			case 'address':
 			  _textarea = ' uneditable-input-textarea';
 			  break;
