@@ -11,6 +11,22 @@ define([
   'jquery.placeholder',
   'jquery.expose'
 ], function($, _, Backbone){
+
+	/**
+	 * Setup DependOn Options (Values)
+	 **/
+	function setValueDependOn(el, visibleOnObj, formData) {
+		_.each(visibleOnObj, function (value) {
+			if (formData.fields[value.name]) {
+				$(el).on('visibleOnRenderComplete', ':input[name="'+value.name+'"]', function () {
+					$(this).val(formData.fields[value.name]).trigger('change');
+				});
+				// Need to trigger the value
+				$(':input[name="'+value.options.visibleon.name+'"]').trigger('change');
+			}
+		});
+	}
+
 	return {
 		/**
 		 * Some Older Browser might not have these methods build in
@@ -392,6 +408,14 @@ define([
 				}
 			}
 			return appendClass;
+		},
+		/**
+		 * Final Setup before Render the form
+		 **/
+		finalSetup: function (view) {
+			if (view.options.mode === 'update' && view._visibleOn.length > 0 && view.options.formData) {
+				setValueDependOn(view.el, view._visibleOn, view.options.formData);
+			}
 		}
 	};
 });

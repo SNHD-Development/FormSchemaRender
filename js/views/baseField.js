@@ -87,6 +87,7 @@ define([
 	  this._hasBDate = false; // Tracking the Birthdate element
 	  this._hasEmailPicker = false; // Tracking the EmailPicker element
 	  this._internalFields = []; // Internal Fields Array
+	  this._visibleOn = []; // Field that has visibleOn Options
 	  this._ajaxSubmit = true;
 
 	  // Wizard View Counters
@@ -503,8 +504,8 @@ define([
 		if ( ! field.options.visibleon.name || ! $.isArray(field.options.visibleon.values) ) {
 		  throw field.name + '.Options.VisibleOn need Name and Values!';
 		}
+		this._visibleOn.push(field);
 	  }
-
 	  return _html;
 	},
 	/**
@@ -694,7 +695,14 @@ define([
 		  // Insert this into markup
 		  if ($('.options-visible-on-'+field.name, that.el).length < 1) {
 			$container.after(htmlTmpl);
-			$container.next('.options-visible-on-'+field.name).fadeIn('slow');
+			$container.next('.options-visible-on-'+field.name).fadeIn('slow', function() {
+			  $(this).addClass('visible-parent-'+field.options.visibleon.name);
+
+			  // Remove the class that not belong to this visibleOn
+			  $('[class*="visible-parent"]', that.el).not('.visible-parent-'+field.options.visibleon.name+',.options-visible-on-'+field.options.visibleon.name).remove();
+
+			  $(':input[name="'+field.name+'"]', this).trigger('visibleOnRenderComplete');
+			});
 			// Adding Validation Scheme, if has one
 			if (that.options.formSchema.validation[field.name] && field.type.toLowerCase() !== 'html') {
 			  that.model.validation[field.name] = that.options.formSchema.validation[field.name];

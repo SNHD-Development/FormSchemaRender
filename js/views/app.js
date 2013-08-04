@@ -69,6 +69,9 @@ define([
 		  // Setup Files Input
 		  Utils.setupFileInput(that.el);
 
+		  // Final Setup
+		  Utils.finalSetup(that.formView);
+
           // Render Form Complete
           // Send view at second parameter
           $('#'+that.options.formSchema.name, that.el).trigger(that.options.formSchema.name+'.renderCompleted', that);

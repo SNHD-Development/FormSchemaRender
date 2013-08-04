@@ -76,6 +76,12 @@ Ex:
 For Icon, we are using [Font-Awesome](http://fortawesome.github.io/Font-Awesome/).
 
 ### Build
+
+Automatic Build
+1. run this command in terminal `perl compile.pl` form app root.
+
+Manual Build
+
 1. Under js/libs path will have `build.js` and `parsetmpl.pl` file.
 2. If this project need to call from another domain, will need to use `perl js/libs/parsetmpl.pl` from app root.
 3. run with this command at the app root `r.js -o js/libs/build.js`

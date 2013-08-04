@@ -32,13 +32,18 @@ define([
 		, _html = ''
 		, _required;
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
-		var _temp = '';
+		var _temp = '', _wrapper = false;
 		// Check for Show On Mode
 		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status) ) {
 		  return '';
 		}
 
-		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
+		if ( typeof value.description !== 'undefined' && ( _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1
+			|| value.type.toLowerCase() === 'html' && value.options.visibleon ) ) {
+		  _wrapper = true;
+		}
+
+		if (_wrapper) {
 		  var _visibleon = '', _style = '';
 		  if (value.options.visibleon) {
 			_visibleon = ' options-visible-on-'+value.name;
@@ -47,15 +52,21 @@ define([
 		  _temp += '<div class="control-group'+_visibleon+'"'+_style+'>';
 		  this._divcontrolgroup++;
 
-		  _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
-		  _temp += that.renderLabel(value, _required, 'control-label');
-		  _temp += '<div class="controls">';
+		  if (value.type.toLowerCase() !== 'html') {
+			_required = Utils.checkRequireFields(value, that.options.formSchema.validation);
+			_temp += that.renderLabel(value, _required, 'control-label');
+			_temp += '<div class="controls">';
+		  }
+
 		}
 
 		_temp += _parentRender.call(that, value);
 
-		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
-		  _temp += '</div></div>';
+		if (_wrapper) {
+		  _temp += '</div>';
+		  if (value.type.toLowerCase() !== 'html') {
+			_temp += '</div>';
+		  }
 		  this._divcontrolgroup--;
 		}
 
