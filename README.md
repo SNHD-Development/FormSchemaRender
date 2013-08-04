@@ -258,6 +258,23 @@ Validation FormSchema
 		}
 	}
 
+## Internal Only Options
+
+These options will be used in internal only mode.
+
+### InternalCanUpdate Options
+
+Sometime there are some fileds that internal should not be able to update these fields. In order to implement this use case, we will need to set `Options.InternalCanUpdate = false`. This will prevent the user to update this field. The FormRender will just render as hidden field.
+
+	{
+		"Name" : "ImageId",
+		"Type" : "Image",
+		"Description" : "Your Image",
+		"Options" : {
+			"InternalCanUpdate": false
+		}
+	}
+
 ### Version
 
 * 0.0.4 - SubForm can render the data in all the mode now. Fixed minor bug for validation methods and schema.

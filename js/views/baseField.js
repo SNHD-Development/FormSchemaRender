@@ -16,6 +16,7 @@ define([
   'text!templates/fields/html.html',
   'text!templates/fields/label.html',
   'text!templates/fields/text.html',
+  'text!templates/fields/hidden.html',
   'text!templates/fields/timestamp.html',
   'text!templates/fields/useraccount.html',
   'text!templates/fields/file.html',
@@ -47,6 +48,7 @@ define([
 	, htmlTemplate
 	, labelTemplate
 	, textTemplate
+	, hiddenTemplate
 	, timestampTemplate
 	, useraccountTemplate
 	, fileTemplate
@@ -126,6 +128,7 @@ define([
 		"html" : _.template(htmlTemplate),
 		"label" : _.template(labelTemplate),
 		"text" : _.template(textTemplate),
+		"hidden" : _.template(hiddenTemplate),
 		"timestamp" : _.template(timestampTemplate),
 		"useraccount" : _.template(useraccountTemplate),
 		"file" : _.template(fileTemplate),
@@ -203,7 +206,9 @@ define([
 		case 'image':
 		  field.attributes.accept = 'image/*';
 		case 'file':
-		  $('form'+this.el).attr('enctype', 'multipart/form-data');
+		  if ( ! ( this.options.internal && typeof field.options.internalcanupdate !== 'undefined' && ! field.options.internalcanupdate) ) {
+			$('form'+this.el).attr('enctype', 'multipart/form-data');
+		  }
 		  var _validation_tmp = this.getFormValidationData(field.name);
 		  if (_validation_tmp.accept) {
 			field.attributes.accept = _validation_tmp.accept;
@@ -488,14 +493,21 @@ define([
 		  _html += that.inputTemplate['uneditableinput']({value: _field_data, css_class: _textarea});
 		}
 	  } else {
-		_.each(field.attributes, function(value, key) {
-		  _attr += ' '+key+'=\''+value+'\'';
-		});
+
+		// Check if this is internal and has InternalCanUpdate Options
+		if (this.options.internal && typeof field.options.internalcanupdate !== 'undefined' && ! field.options.internalcanupdate) {
+		  _type = 'hidden';
+		} else {
+		  _.each(field.attributes, function(value, key) {
+			_attr += ' '+key+'=\''+value+'\'';
+		  });
+		}
 
 		// Convert to file type
 		if (_type === 'image') {
 		  _type = 'file';
 		}
+
 		_html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({_attr:_attr}, field)): '';
 	  }
 

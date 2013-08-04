@@ -38,7 +38,8 @@ define([
 		  return '';
 		}
 
-		if ( typeof value.description !== 'undefined' && ( _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1
+		if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && ! value.options.internalcanupdate) {
+		} else if ( typeof value.description !== 'undefined' && ( _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1
 			|| value.type.toLowerCase() === 'html' && value.options.visibleon ) ) {
 		  _wrapper = true;
 		}

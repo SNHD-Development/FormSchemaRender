@@ -40,7 +40,8 @@ define([
 		  return '';
 		}
 
-		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
+		if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && ! value.options.internalcanupdate) {
+		} else if ( typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1 ) {
 		  _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
 		  _temp += that.renderLabel(value, _required);
 		} else if (value.type.toLowerCase() === 'step') {
