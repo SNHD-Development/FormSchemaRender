@@ -47,7 +47,7 @@ define([
 		  break;
 
 		case 'fullname':
-		  if (typeof value.options.middlename !== 'undefined' && value.options.middlename) {
+		  if ( typeof value.options.middlename === 'undefined' || value.options.middlename ) {
 			_name = value.name+'_fullname_middle_name';
 			_attrs[_name] = '';
 			setValidationData(_name, attrs, _validation, ' (Middle Name)');

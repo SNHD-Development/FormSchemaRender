@@ -326,7 +326,7 @@ define([
 		  _name = [];
 		  _name.push(field.name+'_fullname_first_name');
 		  _name.push(field.name+'_fullname_last_name');
-		  if (typeof field.options.middlename !== 'undefined' && field.options.middlename) {
+		  if ( typeof field.options.middlename === 'undefined' || field.options.middlename ) {
 			_name.push(field.name+'_fullname_middle_name');
 		  }
 		  break;
