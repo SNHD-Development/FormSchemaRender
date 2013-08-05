@@ -565,7 +565,7 @@ define([
 		this._internalFields.push(value.name);
 	  }
 
-	  if ( this.options.hideButtons && (_type === 'button' || _type === 'submit' || _type === 'reset') ) {
+	  if ( this.options.hideButtons && (_type === 'button' || _type === 'submit' || _type === 'reset' || _type ==='action' ) ) {
 		return false;
 	  }
 
