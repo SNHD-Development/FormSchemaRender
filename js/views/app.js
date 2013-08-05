@@ -32,7 +32,8 @@ define([
           formSchema: that.options.formSchema,
           formData: that.options.formData,
           mode : that.options.mode,
-		  internal : that.options.internal
+		  internal : that.options.internal,
+		  hideButtons : that.options.hideButtons
         };
 
       this.$el.html(this.template(this.options.formSchema));
