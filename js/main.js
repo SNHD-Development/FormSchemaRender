@@ -131,7 +131,8 @@ require([
     formData : ( (typeof formData === 'undefined') ? {}: formData ),
     mode : _mode,
     token : _token,
-    internal: ( (typeof internal === 'undefined') ? false: internal )
+    internal: ( (typeof internal === 'undefined') ? false: internal ),
+    hideButtons: ( (typeof hideButtons === 'undefined') ? false: hideButtons )
   };
 
   // Render Custom Script Here
@@ -149,6 +150,7 @@ require([
   token = null;
   internal = null;
   formEvents = null;
+  hideButtons = null;
 
   // Setup View
   _opts.formSchema.view = _view;

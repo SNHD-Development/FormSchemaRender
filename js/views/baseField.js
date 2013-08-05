@@ -559,15 +559,20 @@ define([
 	 * Show On Mode
 	 **/
 	checkShowOnMode: function(value, readMode, status) {
+	  var _type = value.type.toLowerCase();
 	  // If this is internal fields, we need to push to _internalFields array
 	  if (value.options.internal === true && value.name) {
 		this._internalFields.push(value.name);
 	  }
 
+	  if ( this.options.hideButtons && (_type === 'button' || _type === 'submit' || _type === 'reset') ) {
+		return false;
+	  }
+
 	  // If this is type VisibleOn and in Read Mode will not render if does not have data
 	  if (this.options.mode === 'read' && ! $.isEmptyObject(value.options.visibleon)
 		&& ! this.options.formData.fields[value.name]) {
-		return '';
+		return false;
 	  }
 
 	  readMode = readMode || false;
