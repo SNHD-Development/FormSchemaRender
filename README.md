@@ -132,9 +132,9 @@ Example: Setting Button type option to prevent Ajax form submit
 		}
 	}
 
-### Depend Options
+### VisibleOn Options
 
-There are sometime that the value from another field will effect the flow of the form. In this case, we will use `Options.DependOn = { Name: 'Name of other field', Values: 'Array of that field values that will trigger this field' };` to handle this situation.
+There are sometime that the value from another field will effect the flow of the form. In this case, we will use `Options.VisibleOn = { Name: 'Name of other field', Values: 'Array of that field values that will trigger this field' };` to handle this situation.
 
 Example: If a user select on a value in select area, this will trigger the Depend field.
 
@@ -152,7 +152,7 @@ Select Type (Value of this field will trigger the event of Depend Field)
 		]
 	}
 
-Depend Options
+VisibleOn Options
 
 	{
 		"Name" : "OptionOne",

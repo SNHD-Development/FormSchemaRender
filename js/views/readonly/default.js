@@ -28,6 +28,13 @@ define([
 		, _parentRender = BaseFieldView.prototype.render
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
+
+		// VisibleOn Options
+		if (value.options.visibleon && value.type.toLowerCase() !== 'html' &&
+			value.options.visibleon.values.indexOf(that.options.formData.fields[value.options.visibleon.name]) === -1) {
+		  return '';
+		}
+
 		// Check for Show On Mode
 		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, 'read', that.options.formData.status) ) {
 		  return '';
