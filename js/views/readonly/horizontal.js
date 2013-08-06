@@ -6,10 +6,11 @@ define([
   'lodash',
   'backbone',
   'vm',
+  'utils',
   'events',
   'views/baseField',
   'text!templates/readonly/horizontal.html'
-], function($, _, Backbone, Vm, Events, BaseFieldView, readLayoutTemplate){
+], function($, _, Backbone, Vm, Utils, Events, BaseFieldView, readLayoutTemplate){
   var AppView = BaseFieldView.extend({
     template: _.template(readLayoutTemplate),
     initialize: function () {
@@ -33,7 +34,7 @@ define([
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 
 		// Check if the data is empty, will not render
-		if (that.options.formData.fields[value.name] === '') {
+		if ( ! Utils.isRenderReadMode(that, value)) {
 		  return '';
 		}
 

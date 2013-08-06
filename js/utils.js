@@ -373,7 +373,7 @@ define([
 					break;
 
 				default:
-					_fields.push(field.options.copyvaluesfrom.name);
+					_fields.push(name);
 			}
 			return _fields;
 		},
@@ -416,6 +416,27 @@ define([
 			if (view.options.mode === 'update' && view._visibleOn.length > 0 && view.options.formData) {
 				setValueDependOn(view.el, view._visibleOn, view.options.formData);
 			}
+		},
+		/**
+		 * Setup Read Mode
+		 * Check for valid data to be rendered
+		 **/
+		isRenderReadMode: function (view, value) {
+
+			if (view.options.formData.fields[value.name] === '') {
+				return false;
+			} else if (value.type.toLowerCase() === 'fullname') {
+				var _name = this.getSpecialFieldsName(value.name, value.type)
+				, _result = false;
+				_.each(_name, function (element) {
+					if ( ! _result && view.options.formData.fields[element] && view.options.formData.fields[element] !== '') {
+						_result = true;
+					}
+				});
+				return _result;
+			}
+
+			return true;
 		}
 	};
 });
