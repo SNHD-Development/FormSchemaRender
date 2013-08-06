@@ -19,6 +19,8 @@ define([
 		return;
 	  } else if (_render_mode && value.options.showonmode && value.options.showonmode.indexOf(_render_mode) === -1) {
 		return;
+	  } else if (_internal && typeof value.options.internalcanupdate !== 'undefined' && ! value.options.internalcanupdate) {
+		return;
 	  }
 	  if (typeof attrs.validation[value.name] !== 'undefined' ) {
 		_.each(attrs.validation[value.name], function(validationValue, key) {
