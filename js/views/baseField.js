@@ -431,6 +431,7 @@ define([
 			field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src']: '/form/getFile/')+that.options.formData.fields[field.name];
 			_href = field.attributes['src'];
 		  } else {
+			field.attributes['target'] = '_blank';
 			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
 			field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href']: '/form/getFile/')+that.options.formData.fields[field.name];
 		  }

@@ -29,6 +29,11 @@ define([
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 
+		// Check if the data is empty, will not render
+		if (that.options.formData.fields[value.name] === '') {
+		  return '';
+		}
+
 		// VisibleOn Options
 		if (value.options.visibleon && value.type.toLowerCase() !== 'html' &&
 			value.options.visibleon.values.indexOf(that.options.formData.fields[value.options.visibleon.name]) === -1) {

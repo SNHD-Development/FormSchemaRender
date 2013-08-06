@@ -1,1 +1,1 @@
-define([],function(){var e="<a<%= _attr %>><%= text %></a>";return e});
+define([],function(){var e="<a<%= _attr %>>Download</a>";return e});
