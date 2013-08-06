@@ -589,6 +589,8 @@ define([
 		if (status === false || _showOnStatus.indexOf(status.toLowerCase()) === -1) {
 		  return false;
 		}
+	  } else if (this.options.internal && typeof value.options.internalcanupdate !== 'undefined' && ! value.options.internalcanupdate) {
+		return false;
 	  }
 
 	  return true;
