@@ -101,7 +101,7 @@ define([
 
 	  // Setup Keys
 	  this.options.formSchema.validation = this.options.formSchema.validation || {};
-	  this.model = new Model( _.extend(this.options.formSchema, { is_internal: this.options.internal } ) );
+	  this.model = new Model( _.extend(this.options.formSchema, { is_internal: this.options.internal, render_mode : this.options.mode } ) );
 	  // If user pass in formData
 	  if ( ! $.isEmptyObject(this.options.formData)) {
 		_.each(this.model.attributes, function(element, index) {
@@ -561,6 +561,7 @@ define([
 	 **/
 	checkShowOnMode: function(value, readMode, status) {
 	  var _type = value.type.toLowerCase();
+
 	  // If this is internal fields, we need to push to _internalFields array
 	  if (value.options.internal === true && value.name) {
 		this._internalFields.push(value.name);
@@ -579,11 +580,7 @@ define([
 	  readMode = readMode || false;
 	  status = status || false;
 
-	  if (readMode === 'update' && ! this.options.internal
-		  && typeof value.options.hideonexternalupdate !== 'undefined'
-		  && ! value.options.hideonexternalupdate ) {
-		return true;
-	  } else if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
+	  if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
 		return false;
 	  } else if (typeof value.options.showonmode !== 'undefined' && value.options.showonmode.indexOf(readMode) === -1) {
 		return false;

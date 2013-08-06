@@ -9,11 +9,15 @@ define([
 	var _attrs = {}
 	, _validation = {}
 	, _name
-	, _internal = ( attrs.is_internal ) ? true: false;
+	, _internal = ( attrs.is_internal ) ? true: false
+	, _render_mode = attrs.render_mode || false;
 
 	_.each(attrs.fields, function(value) {
 	  value.options = value.options || {};
+
 	  if ( ! _internal && value.options.internal) {
+		return;
+	  } else if (_render_mode && value.options.showonmode && value.options.showonmode.indexOf(_render_mode) === -1) {
 		return;
 	  }
 	  if (typeof attrs.validation[value.name] !== 'undefined' ) {
@@ -193,7 +197,7 @@ define([
 	  var _data = _.clone(this.toJSON()), _postfix;
 	  _.each(_data, function(value, key) {
 		_postfix = (internalField.indexOf(key) > -1) ? '_internal': '';
-		if (typeof value.toJSON === 'function') {
+		if (typeof value !== 'undefined' && typeof value.toJSON === 'function') {
 		  $('#'+formId).prepend('<input type="hidden" name="'+key+_postfix+'" value=\''+JSON.stringify(value.toJSON())+'\' class="subform_before_submit">');
         } else {
 		}

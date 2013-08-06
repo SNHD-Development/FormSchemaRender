@@ -41,7 +41,7 @@ define([
 	  var _tmp;
 
 	  if (typeof this.options.model === 'undefined') {
-		this.model = new Model( _.extend(this.options.formSchema, { is_internal: this.options.internal } ) );
+		this.model = new Model( _.extend(this.options.formSchema, { is_internal: this.options.internal, render_mode : this.options.mode } ) );
 		this._btn_title = 'Add';
 	  } else {
 		this._btn_title = 'Done';
