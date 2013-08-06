@@ -451,7 +451,7 @@ define([
 		 * Reset Placeholder in older browser
 		 **/
 		resetPlaceHolderValue: function (el) {
-			_isSetting = $(':input[_isSetting="false"]', el);
+			_isSetting = $(':input.placeholder', el);
 			_isSetting.each(function () {
 				var $this = $(this);
 				if ($this.attr('placeholder') === $this.val()) {
