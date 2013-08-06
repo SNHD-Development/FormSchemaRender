@@ -165,10 +165,14 @@ define([
           success: this.showResponse
         };
 
+		// Some Browser Does not support placeholder, will need to check for it.
+		Utils.resetPlaceHolderValue(this.el);
+
 		if (this.formView._ajaxSubmit) {
 		  e.preventDefault();
 		  $form.ajaxSubmit(_options);
 		}
+
 
 		if (this.formView.options.formSchema.view !== 'wizard') {
 		  _opt = {
@@ -218,10 +222,16 @@ define([
       }
     },
     showResponse: function(responseText, statusText, xhr, $form) {
+	  var _jsonText = $.parseJSON(responseText);
+	  _.each(_jsonText, function (value, key) {
+		if (typeof value === 'string') {
+		  _jsonText[key] = _.unescape(value);
+		}
+	  });
 	  $(':hidden[name="token"], :hidden[name="form_name"]', $form).remove();
       $form.removeClass('form_submitted');
       $('.not_sending', $form).attr('disabled', false);
-      $form.trigger($form.attr('id')+'.postSubmit', [responseText, statusText, xhr, $form]);
+      $form.trigger($form.attr('id')+'.postSubmit', [responseText, _jsonText, statusText, xhr, $form]);
       window.setTimeout(
           function() {
               $('.form-actions button[type="submit"]', $form).attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();

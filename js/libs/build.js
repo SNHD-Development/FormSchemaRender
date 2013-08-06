@@ -58,6 +58,7 @@
     lodash: 'libs/lodash/lodash', // alternative to underscore
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
     bootstrap: 'libs/bootstrap/bootstrap',
+    json: 'libs/json/json3.min',
 
     // Backbone Plugin
     modelbinder: 'libs/backbone-binder/Backbone.ModelBinder.min',

@@ -446,6 +446,18 @@ define([
 			}
 
 			return true;
+		},
+		/**
+		 * Reset Placeholder in older browser
+		 **/
+		resetPlaceHolderValue: function (el) {
+			_isSetting = $(':input[_isSetting="false"]', el);
+			_isSetting.each(function () {
+				var $this = $(this);
+				if ($this.attr('placeholder') === $this.val()) {
+					$this.val('');
+				}
+			});
 		}
 	};
 });

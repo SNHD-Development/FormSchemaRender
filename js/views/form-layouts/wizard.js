@@ -100,7 +100,7 @@ define([
 
 	  // Calculated the Step Width
 	  _stepWidth = Math.floor( ( $steps.width() - this._steps.length ) / this._steps.length );
-	  _offset = $steps.width() - ( _stepWidth * this._steps.length) - 2;
+	  _offset = $steps.width() - ( _stepWidth * this._steps.length) - 3;
 	  $('li', $steps).css('width', _stepWidth).last().css('width', _stepWidth+_offset);
 	},
 	/**
@@ -243,7 +243,9 @@ define([
 	respondResult: function(e) {
 	  window.setTimeout(
           function() {
-              e.data.$nextBtn.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+			if (typeof e.data !== 'undefined' && typeof e.data.$nextBtn !== 'undefined') {
+			  e.data.$nextBtn.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+			}
           },
           3000
       );
