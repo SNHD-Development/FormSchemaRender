@@ -69,7 +69,7 @@
     "jquery.overlay": 'libs/jquery-tools/jquery.tools.overlay.min',
     "jquery.dateinput": 'libs/jquery-tools/jquery.tools.dateinput.min',
     "jquery.ajaxsubmit": 'libs/jquery-form-plugin/jquery.form.min',
-    "jquery.placeholder": 'libs/jquery-form-plugin/jquery.placeholder.min',
+    "jquery.placeholder": 'libs/jquery-form-plugin/jquery.placeholder',
     "jquery.birthdaypicker": 'libs/jquery-form-plugin/bdate-picker',
     "jquery.wizard": 'libs/fuelux/wizard',
     "jquery.spinner": 'libs/fuelux/spinner',
