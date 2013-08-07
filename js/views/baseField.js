@@ -92,6 +92,7 @@ define([
 	  this._hasEmailPicker = false; // Tracking the EmailPicker element
 	  this._internalFields = []; // Internal Fields Array
 	  this._visibleOn = []; // Field that has visibleOn Options
+	  this._multiFiles = []; // MultiFiles Field
 	  this._ajaxSubmit = true;
 
 	  // Wizard View Counters
@@ -206,6 +207,10 @@ define([
 	  }
 
 	  switch (_type) {
+
+		case 'multifiles':
+		  this._multiFiles.push(field);
+		  break;
 
 		case 'image':
 		  field.attributes.accept = 'image/*';

@@ -6,11 +6,12 @@ define([
   'jquery',
   'underscore',
   'backbone',
+  'vm',
   'jquery.spinner',
   'jquery.birthdaypicker',
   'jquery.placeholder',
   'jquery.expose'
-], function($, _, Backbone){
+], function($, _, Backbone, Vm){
 
 	/**
 	 * Setup DependOn Options (Values)
@@ -422,8 +423,18 @@ define([
 		 * Final Setup before Render the form
 		 **/
 		finalSetup: function (view) {
+			var that = this;
 			if (view.options.mode === 'update' && view._visibleOn.length > 0 && view.options.formData) {
 				setValueDependOn(view.el, view._visibleOn, view.options.formData);
+			}
+
+			if (view._multiFiles.length > 0) {
+				_.each(view._multiFiles, function (value) {
+					require(['views/file-upload/multifiles'], function (MultifilesView) {
+						var multifilesView = Vm.create(that, 'MultiFilesView'+value.name, MultifilesView, value);
+						multifilesView.render();
+					});
+				});
 			}
 		},
 		/**

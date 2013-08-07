@@ -19,8 +19,8 @@
         define([
             'jquery',
             'underscore',
-            'text!templates/template-upload',
-            'text!templates/template-download',
+            'text!templates/file-upload/template-upload.html',
+            'text!templates/file-upload/template-download.html',
             'jquery.fileupload-image',
             'jquery.fileupload-audio',
             'jquery.fileupload-video',
