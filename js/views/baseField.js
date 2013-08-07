@@ -20,6 +20,7 @@ define([
   'text!templates/fields/timestamp.html',
   'text!templates/fields/useraccount.html',
   'text!templates/fields/file.html',
+  'text!templates/fields/multifiles.html',
   'text!templates/fields/state.html',
   'text!templates/fields/zipcode.html',
   'text!templates/fields/country.html',
@@ -52,6 +53,7 @@ define([
 	, timestampTemplate
 	, useraccountTemplate
 	, fileTemplate
+	, multifilesTemplate
 	, stateTemplate
 	, zipcodeTemplate
 	, countryTemplate
@@ -132,6 +134,7 @@ define([
 		"timestamp" : _.template(timestampTemplate),
 		"useraccount" : _.template(useraccountTemplate),
 		"file" : _.template(fileTemplate),
+		"multifiles" : _.template(multifilesTemplate),
 		"state" : _.template(stateTemplate),
 		"zipcode" : _.template(zipcodeTemplate),
 		"country" : _.template(countryTemplate),
@@ -203,6 +206,13 @@ define([
 	  }
 
 	  switch (_type) {
+
+		case 'multifiles':
+
+
+
+		  break;
+
 		case 'image':
 		  field.attributes.accept = 'image/*';
 		case 'file':
