@@ -207,12 +207,6 @@ define([
 
 	  switch (_type) {
 
-		case 'multifiles':
-
-
-
-		  break;
-
 		case 'image':
 		  field.attributes.accept = 'image/*';
 		case 'file':

@@ -38,6 +38,7 @@ require.config({
     'jquery.fileupload-audio': 'libs/file-upload/jquery.fileupload-audio',
     'jquery.fileupload-video': 'libs/file-upload/jquery.fileupload-video',
     'jquery.fileupload-validate': 'libs/file-upload/jquery.fileupload-validate',
+    'jquery.fileupload': 'libs/file-upload/jquery.fileupload',
     'jquery.fileupload-ui': 'libs/file-upload/jquery.fileupload-ui',
 
     // Bootstrap Plugin

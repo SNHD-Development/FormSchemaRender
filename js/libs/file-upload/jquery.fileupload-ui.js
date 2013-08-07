@@ -18,7 +18,9 @@
         // Register as an anonymous AMD module:
         define([
             'jquery',
-            'tmpl',
+            'underscore',
+            'text!templates/template-upload',
+            'text!templates/template-download',
             'jquery.fileupload-image',
             'jquery.fileupload-audio',
             'jquery.fileupload-video',
@@ -31,7 +33,7 @@
             window.tmpl
         );
     }
-}(function ($, tmpl, loadImage) {
+}(function ($, _, uploadTmpl, downloadTmpl, loadImage) {
     'use strict';
 
     $.blueimp.fileupload.prototype._specialOptions.push(
@@ -585,12 +587,12 @@
             options.templatesContainer = this.document[0].createElement(
                 options.filesContainer.prop('nodeName')
             );
-            if (tmpl) {
+            if (_) {
                 if (options.uploadTemplateId) {
-                    options.uploadTemplate = tmpl(options.uploadTemplateId);
+                    options.uploadTemplate = _.template(uploadTmpl);
                 }
                 if (options.downloadTemplateId) {
-                    options.downloadTemplate = tmpl(options.downloadTemplateId);
+                    options.downloadTemplate = _.template(downloadTmpl);
                 }
             }
         },
