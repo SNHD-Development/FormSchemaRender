@@ -19,10 +19,12 @@ define([
 	){
   return Backbone.View.extend({
 	/**
-	 * Init List View
+	 * Init File Upload View
 	 **/
     initialize: function () {
+	  this.el = '#'+this.options.field.name+'_multifiles_wrapper';
 
+	  $(this.options.name).on('visibleOnRenderComplete', ':input[name="'+this.options.field.name+'"]', { view : this }, this.addEvents);
     },
     render: function () {
 
@@ -31,6 +33,13 @@ define([
 	 * Events
 	 **/
 	events: {
+
+	},
+
+	/**
+	 * Add all the event
+	 **/
+	addEvents: function (e) {
 
 	}
 

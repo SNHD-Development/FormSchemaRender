@@ -431,7 +431,10 @@ define([
 			if (view._multiFiles.length > 0) {
 				_.each(view._multiFiles, function (value) {
 					require(['views/file-upload/multifiles'], function (MultifilesView) {
-						var multifilesView = Vm.create(that, 'MultiFilesView'+value.name, MultifilesView, value);
+						var multifilesView = Vm.create(that, 'MultiFilesView'+value.name, MultifilesView, {
+							field : value,
+							name : view.el
+						});
 						multifilesView.render();
 					});
 				});
