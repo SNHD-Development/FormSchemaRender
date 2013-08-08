@@ -7,6 +7,11 @@ $text_area_min_height:  100px;
  * Form Render Global Styles
  **/
 .form-render {
+
+	input[class="placeholder"] {
+		color: #888;
+	}
+
 	margin: 25px 20px;
 
 	label {
@@ -265,6 +270,8 @@ $text_area_min_height:  100px;
 	}
 
 	.table-multi-files {
+		margin-top: 20px;
+
 		input[type="file"] {
 			display: none;
 		}

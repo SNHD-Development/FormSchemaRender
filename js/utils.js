@@ -434,7 +434,8 @@ define([
 						var multifilesView = Vm.create(that, 'MultiFilesView'+value.name, MultifilesView, {
 							field : value,
 							name : view.el,
-							model : view.model
+							model : view.model,
+							validation: view.options.formSchema.validation
 						});
 						multifilesView.render();
 					});

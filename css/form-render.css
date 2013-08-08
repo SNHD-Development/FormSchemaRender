@@ -42,6 +42,8 @@
   /**
    * For MultiFiles Field Type
    **/ }
+  .form-render input[class="placeholder"] {
+    color: #888; }
   .form-render label span.required {
     color: #B94A48;
     font-size: 18px;
@@ -148,5 +150,7 @@
     display: none; }
   .form-render .fileupload-buttonbar .fileinput-button {
     margin-right: 30px; }
-  .form-render .table-multi-files input[type="file"] {
-    display: none; }
+  .form-render .table-multi-files {
+    margin-top: 20px; }
+    .form-render .table-multi-files input[type="file"] {
+      display: none; }

@@ -210,6 +210,10 @@ define([
 
 		case 'multifiles':
 		  this._multiFiles.push(field);
+		  var _validation_tmp = this.getFormValidationData(field.name+'[]');
+		  if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
+			this._stepValidated[(this._currentStep)-2].push(field.name+'[]');
+		  }
 		  break;
 
 		case 'image':
@@ -714,6 +718,16 @@ define([
 	  if ( ! field.name) {
 		throw 'In order to use VisibleOn option, we need to pass in the Name';
 	  }
+
+	  switch (field.type.toLowerCase()) {
+		case 'multifiles':
+		  delete this.model.validation[field.name+'[]'];
+		  break;
+
+		default:
+		  delete this.model.validation[field.name];
+	  }
+
 	  $(this.el).on('change', ':input[name="'+field.options.visibleon.name+'"]', function(e) {
 		var $currentTarget = $(e.currentTarget)
 		, $container = (parentContainer) ? $currentTarget.parents(parentContainer): $currentTarget;
@@ -736,6 +750,8 @@ define([
 			// Adding Validation Scheme, if has one
 			if (that.options.formSchema.validation[field.name] && field.type.toLowerCase() !== 'html') {
 			  that.model.validation[field.name] = that.options.formSchema.validation[field.name];
+			} else if (that.options.formSchema.validation[field.name+'[]']) {
+			  that.model.validation[field.name+'[]'] = that.options.formSchema.validation[field.name+'[]'];
 			}
 		  }
 		} else {
@@ -746,6 +762,7 @@ define([
 			if (that.model.validation[field.name]) {
 			  // Remove Validation Scheme, if has one
 			  delete that.model.validation[field.name];
+			  delete that.model.validation[field.name+'[]'];
 			}
 		  }
 		}

@@ -25,7 +25,12 @@ define([
 	  this.el = '#'+this.options.field.name+'_multifiles_wrapper';
 	  this.template = _.template(uploadTmpl);
 	  this.collection = new Backbone.Collection([]);
-	  this._validation = _.clone(this.model.validation) || false;
+	  this._validation = _.clone(this.options.validation[this.options.field.name+'[]']) || false;
+	  this._init = false;
+
+	  if (this.options.field.options.visibleon) {
+		delete this.model.validation[this.options.field.name+'[]'];
+	  }
 
 	  if ( ! $.isEmptyObject(this.options.field.options.visibleon) ) {
 		$(this.options.name).on('visibleOnRenderComplete', this.el, { view : this }, this.addEvents);
@@ -37,10 +42,11 @@ define([
 	  var $renderArea = $('#'+this.options.field.name+'_multifiles_table .files', this.el);
 	  $renderArea.html(this.template({ collection : this.collection.toJSON(), convertFileSize : this.convertFileSize }));
 
-	  if (this.collection.length === 0 && this._validation) {
-		this.model.validation[this.options.field.name+'[]'] = this._validation[this.options.field.name+'[]'];
+	  if ( this._init && this.collection.length === 0 && this._validation) {
+		this.model.validation[this.options.field.name+'[]'] = this._validation;
 	  }
 
+	  this._init = true;
     },
 	/**
 	 * Events
@@ -64,6 +70,8 @@ define([
 	 * Setup Events
 	 **/
 	setupEvents: function (el, view) {
+	  view.model.validation[view.options.field.name+'[]'] = view._validation;
+
 	  $('.fileinput-button', el).on('click', { view : this }, view.clickFileUploadButton);
 	  $('.delete', el).on('click', { view : this }, function (e) {
 		var view = e.data.view || false;
