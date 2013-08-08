@@ -19,7 +19,8 @@
         define([
             'jquery',
             'load-image',
-            './jquery.fileupload-process'
+            'jquery.fileupload-process',
+            'jquery.blueimp-gallery'
         ], factory);
     } else {
         // Browser globals:

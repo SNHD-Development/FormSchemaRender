@@ -727,7 +727,11 @@ define([
 			  // Remove the class that not belong to this visibleOn
 			  $('[class*="visible-parent"]', that.el).not('.visible-parent-'+field.options.visibleon.name+',.options-visible-on-'+field.options.visibleon.name).remove();
 
-			  $(':input[name="'+field.name+'"]', this).trigger('visibleOnRenderComplete');
+			  if (field.type.toLowerCase() === 'multifiles') {
+				$('#'+field.name+'_multifiles_wrapper', this).trigger('visibleOnRenderComplete');
+			  } else {
+				$(':input[name="'+field.name+'"]', this).trigger('visibleOnRenderComplete');
+			  }
 			});
 			// Adding Validation Scheme, if has one
 			if (that.options.formSchema.validation[field.name] && field.type.toLowerCase() !== 'html') {

@@ -34,6 +34,12 @@ require.config({
     "jquery.lightbox": 'libs/lightbox/lightbox-2.6',
 
     // FileUpload
+    'blueimp-helper': 'libs/file-upload/dependency/load-image.min',
+    'load-image': 'libs/file-upload/dependency/load-image.min',
+    'blueimp-gallery': 'libs/file-upload/dependency/blueimp-gallery',
+    'jquery.blueimp-gallery': 'libs/file-upload/dependency/jquery.blueimp-gallery.min',
+    'jquery.fileupload-process': 'libs/file-upload/jquery.fileupload-process',
+    'jquery.ui.widget': 'libs/file-upload/jquery.ui.widget',
     'jquery.fileupload-image': 'libs/file-upload/jquery.fileupload-image',
     'jquery.fileupload-audio': 'libs/file-upload/jquery.fileupload-audio',
     'jquery.fileupload-video': 'libs/file-upload/jquery.fileupload-video',
