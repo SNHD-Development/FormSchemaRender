@@ -254,13 +254,13 @@ $text_area_min_height:  100px;
 	 * For MultiFiles Field Type
 	 **/
 	.fileupload-buttonbar {
+
+		input[type="file"] {
+			display: none;
+		}
+
 		.fileinput-button {
-
 			margin-right: 30px;
-
-			input[type="file"] {
-				display: none;
-			}
 		}
 	}
 }

@@ -5,10 +5,12 @@
 	<div class="row-fluid fileupload-buttonbar">
 
 		<div class="span10">
+
+			<input type="file" name="<%= name %>_multifiles[]" multiple id="<%= name %>_multifiles">
+
 			<span class="btn btn-success fileinput-button">
 				<i class="icon-plus icon-white"></i>
 				<span>Add Files</span>
-				<input type="file" name="<%= name %>_multifiles[]" multiple>
 			</span>
 			<button type="button" class="btn btn-danger delete">
 				<i class="icon-trash icon-white"></i>
