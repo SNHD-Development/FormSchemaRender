@@ -214,6 +214,10 @@ define([
 		  if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined' && ! $.isEmptyObject(_validation_tmp)) {
 			this._stepValidated[(this._currentStep)-2].push(field.name+'[]');
 		  }
+
+		  if (this.options.mode === 'read') {
+			_type = 'file';
+		  }
 		  break;
 
 		case 'image':
