@@ -82,7 +82,7 @@ define([
 	  $('.delete', el).on('click', { view : this }, function (e) {
 		var view = e.data.view || false;
 		view.collection.reset();
-		$('#'+view.options.field.name+'_multifiles_table :input.hidden-multi-files').remove();
+		$('#'+view.options.field.name+'_multifiles_wrapper :input.hidden-multi-files').remove();
 		view.render();
 	  });
 	  $('#'+view.options.field.name+'_multifiles', el).on('change', { view : this }, view.changeFileInput);
@@ -116,11 +116,13 @@ define([
 	  _.each($file.get(0).files, function (element) {
 		if (typeof view.collection.findWhere( { name : element.name, size : element.size } ) === 'undefined') {
 		  view.collection.add(element);
-		  var $fileInput = $('#'+view.options.field.name+'_multifiles').clone()
-		  , _model = view.collection.at(view.collection.length-1);
-		  $fileInput.attr('id', view.options.field.name+'_'+_model.cid).removeClass('not_sending').addClass('hidden-multi-files').attr('name', view.options.field.name+'[]');
-		  $('#'+view.options.field.name+'_multifiles_table').prepend($fileInput);
+		  var _model = view.collection.at(view.collection.length-1)
+		  , $fileInput = $('#'+view.options.field.name+'_multifiles').removeClass('not_sending').attr('id', view.options.field.name+'_'+_model.cid).addClass('hidden-multi-files')
+		  , newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending">';
 
+		  $fileInput.parent().prepend(newFileInput);
+
+		  $('#'+view.options.field.name+'_multifiles').on('change', { view : view }, view.changeFileInput);
 		  delete view.model.validation[view.options.field.name+'[]'];
 		}
 	  });
