@@ -24,6 +24,8 @@ define([
 	 **/
     initialize: function () {
 	  this.el = '#'+this.options.field.name+'_multifiles_wrapper';
+	  this.template = _.template(uploadTmpl);
+	  this.collection = new Backbone.Collection([]);
 
 	  if ( ! $.isEmptyObject(this.options.field.options.visibleon) ) {
 		$(this.options.name).on('visibleOnRenderComplete', this.el, { view : this }, this.addEvents);
@@ -32,7 +34,8 @@ define([
 	  }
     },
     render: function () {
-
+	  var $renderArea = $('#'+this.options.field.name+'_multifiles_table .files', this.el);
+	  $renderArea.html(this.template({ collection : this.collection.toJSON(), convertFileSize : this.convertFileSize }));
     },
 	/**
 	 * Events
@@ -42,10 +45,28 @@ define([
 	},
 
 	/**
+	 * Convert File Type
+	 **/
+	convertFileSize : function (value) {
+	  var sOutput;
+	  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = value / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+		sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple];
+	  }
+	  return sOutput;
+	},
+
+	/**
 	 * Setup Events
 	 **/
 	setupEvents: function (el, view) {
 	  $('.fileinput-button', el).on('click', { view : this }, view.clickFileUploadButton);
+	  $('.delete', el).on('click', { view : this }, function (e) {
+		var view = e.data.view || false;
+		view.collection.reset();
+		view.render();
+	  });
+	  $('#'+view.options.field.name+'_multifiles', el).on('change', { view : this }, view.changeFileInput);
+	  $('#'+view.options.field.name+'_multifiles_table', el).on('click', 'button.cancel', { view : this }, view.removeFile);
 	},
 
 	/**
@@ -64,6 +85,27 @@ define([
 	  var $currentTarget = $(e.currentTarget)
 	  , view = e.data.view || false;
 	  $('#'+view.options.field.name+'_multifiles', $currentTarget.parent()).trigger('click');
+	},
+
+	/**
+	 * File Upload Change
+	 **/
+	changeFileInput: function (e) {
+	  var view = e.data.view || false
+	  , $file = $(this);
+	  _.each($file.get(0).files, function (element) {
+		view.collection.add(element);
+	  });
+	  view.render();
+	},
+
+	/**
+	 * Remove File
+	 **/
+	removeFile: function (e) {
+	  var view = e.data.view || false;
+	  view.collection.remove( view.collection.findWhere( { name: $(this).parents('.template-upload').find('.name').text() } ) );
+	  view.render();
 	}
 
   });
