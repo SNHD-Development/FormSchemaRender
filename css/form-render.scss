@@ -281,6 +281,14 @@ $text_area_min_height:  100px;
 		input[type="file"] {
 			display: none;
 		}
+
+		td {
+			.btn {
+				i {
+					margin-right: 3px;
+				}
+			}
+		}
 	}
 
 }

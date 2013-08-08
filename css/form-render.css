@@ -156,3 +156,5 @@
     margin-top: 20px; }
     .form-render .table-multi-files input[type="file"] {
       display: none; }
+    .form-render .table-multi-files td .btn i {
+      margin-right: 3px; }
