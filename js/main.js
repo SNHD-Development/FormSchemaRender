@@ -47,9 +47,6 @@ require.config({
     //'jquery.fileupload': 'libs/file-upload/jquery.fileupload',
     //'jquery.fileupload-ui': 'libs/file-upload/jquery.fileupload-ui',
 
-    // Multiple File Upload
-    'jquery.MultiFile': 'libs/multiple-file-upload/jquery.MultiFile',
-
     // Bootstrap Plugin
     "jquery.datepicker": 'libs/bootstrap-datepicker/bootstrap-datepicker',
 
@@ -105,10 +102,6 @@ require.config({
     "jquery.lightbox": {
       deps: ['jquery'],
       exports: 'jQuery.lightbox'
-    },
-    "jquery.MultiFile": {
-      deps: ['jquery'],
-      exports: 'jQuery.MultiFile'
     }
   }
 });

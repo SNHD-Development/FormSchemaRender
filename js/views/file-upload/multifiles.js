@@ -12,8 +12,7 @@ define([
 	'utils',
 	'events',
 	'text!templates/file-upload/template-upload.html',
-	'text!templates/file-upload/template-download.html',
-	'jquery.MultiFile'
+	'text!templates/file-upload/template-download.html'
 ], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events
 	, uploadTmpl
 	, downloadTmpl
