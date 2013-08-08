@@ -63,6 +63,7 @@ define([
 	  $('.delete', el).on('click', { view : this }, function (e) {
 		var view = e.data.view || false;
 		view.collection.reset();
+		$('#'+view.options.field.name+'_multifiles_table :input.hidden-multi-files').remove();
 		view.render();
 	  });
 	  $('#'+view.options.field.name+'_multifiles', el).on('change', { view : this }, view.changeFileInput);
@@ -98,7 +99,7 @@ define([
 		  view.collection.add(element);
 		  var $file = $('#'+view.options.field.name+'_multifiles').clone()
 		  , _model = view.collection.at(view.collection.length-1);
-		  $file.attr('id', view.options.field.name+'_'+_model.cid).removeClass('not_sending');
+		  $file.attr('id', view.options.field.name+'_'+_model.cid).removeClass('not_sending').addClass('hidden-multi-files');
 		  $('#'+view.options.field.name+'_multifiles_table').prepend($file);
 		}
 	  });
@@ -110,8 +111,10 @@ define([
 	 **/
 	removeFile: function (e) {
 	  var view = e.data.view || false
-	  , $parent = $(this).parents('.template-upload');
-	  view.collection.remove( view.collection.findWhere( { name: $parent.find('.name').text(), size : parseInt($parent.find('.size').attr('data-size')) } ) );
+	  , $parent = $(this).parents('.template-upload')
+	  , _model = view.collection.findWhere( { name: $parent.find('.name').text(), size : parseInt($parent.find('.size').attr('data-size')) } );
+	  view.collection.remove( _model );
+	  $('#'+view.options.field.name+'_'+_model.cid).remove();
 	  view.render();
 	}
 
