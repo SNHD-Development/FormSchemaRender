@@ -36,6 +36,12 @@ define([
 		$(this.options.name).on('visibleOnRenderComplete', this.el, { view : this }, this.addEvents);
 	  } else {
 		// If this field already rendered
+		var opt = {
+		  data : {
+			view : this
+		  }
+		};
+		this.addEvents(opt);
 	  }
     },
     render: function () {
