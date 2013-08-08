@@ -29,6 +29,17 @@ define([
 		});
 	  }
 	  switch (value.type.toLowerCase()) {
+
+		case 'multifiles':
+		  _name = value.name+'[]';
+		  _attrs[_name] = '';
+		  if (typeof attrs.validation[value.name] !== 'undefined') {
+			attrs.validation[_name] = _.clone(attrs.validation[value.name]);
+			delete attrs.validation[value.name];
+		  }
+		  setValidationData(_name, attrs, _validation, '');
+		  break;
+
 		case 'address':
 		  _name = value.name+'_address_street';
 		  _attrs[_name] = '';

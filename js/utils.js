@@ -433,7 +433,8 @@ define([
 					require(['views/file-upload/multifiles'], function (MultifilesView) {
 						var multifilesView = Vm.create(that, 'MultiFilesView'+value.name, MultifilesView, {
 							field : value,
-							name : view.el
+							name : view.el,
+							model : view.model
 						});
 						multifilesView.render();
 					});

@@ -25,6 +25,7 @@ define([
 	  this.el = '#'+this.options.field.name+'_multifiles_wrapper';
 	  this.template = _.template(uploadTmpl);
 	  this.collection = new Backbone.Collection([]);
+	  this._validation = _.clone(this.model.validation) || false;
 
 	  if ( ! $.isEmptyObject(this.options.field.options.visibleon) ) {
 		$(this.options.name).on('visibleOnRenderComplete', this.el, { view : this }, this.addEvents);
@@ -35,6 +36,11 @@ define([
     render: function () {
 	  var $renderArea = $('#'+this.options.field.name+'_multifiles_table .files', this.el);
 	  $renderArea.html(this.template({ collection : this.collection.toJSON(), convertFileSize : this.convertFileSize }));
+
+	  if (this.collection.length === 0 && this._validation) {
+		this.model.validation[this.options.field.name+'[]'] = this._validation[this.options.field.name+'[]'];
+	  }
+
     },
 	/**
 	 * Events
@@ -100,6 +106,8 @@ define([
 		  , _model = view.collection.at(view.collection.length-1);
 		  $fileInput.attr('id', view.options.field.name+'_'+_model.cid).removeClass('not_sending').addClass('hidden-multi-files').attr('name', view.options.field.name+'[]');
 		  $('#'+view.options.field.name+'_multifiles_table').prepend($fileInput);
+
+		  delete view.model.validation[view.options.field.name+'[]'];
 		}
 	  });
 	  view.render();
