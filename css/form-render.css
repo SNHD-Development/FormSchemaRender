@@ -148,3 +148,5 @@
     display: none; }
   .form-render .fileupload-buttonbar .fileinput-button {
     margin-right: 30px; }
+  .form-render .table-multi-files input[type="file"] {
+    display: none; }
