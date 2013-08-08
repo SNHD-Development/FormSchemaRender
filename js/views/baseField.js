@@ -762,6 +762,7 @@ define([
 			if (that.model.validation[field.name]) {
 			  // Remove Validation Scheme, if has one
 			  delete that.model.validation[field.name];
+			} else if (that.model.validation[field.name+'[]']) {
 			  delete that.model.validation[field.name+'[]'];
 			}
 		  }
