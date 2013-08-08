@@ -10,7 +10,7 @@
             <% } %>
         </td>
         <td>
-            <p class="size"><%=convertFileSize(file.size)%></p>
+            <p class="size" data-size="<%= file.size %>"><%=convertFileSize(file.size)%></p>
         </td>
         <td>
             <button class="btn btn-danger cancel" type="button">

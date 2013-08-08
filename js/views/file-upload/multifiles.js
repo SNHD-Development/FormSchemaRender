@@ -94,7 +94,9 @@ define([
 	  var view = e.data.view || false
 	  , $file = $(this);
 	  _.each($file.get(0).files, function (element) {
-		view.collection.add(element);
+		if (typeof view.collection.findWhere( { name : element.name, size : element.size } ) === 'undefined') {
+		  view.collection.add(element);
+		}
 	  });
 	  view.render();
 	},
@@ -103,8 +105,9 @@ define([
 	 * Remove File
 	 **/
 	removeFile: function (e) {
-	  var view = e.data.view || false;
-	  view.collection.remove( view.collection.findWhere( { name: $(this).parents('.template-upload').find('.name').text() } ) );
+	  var view = e.data.view || false
+	  , $parent = $(this).parents('.template-upload');
+	  view.collection.remove( view.collection.findWhere( { name: $parent.find('.name').text(), size : parseInt($parent.find('.size').attr('data-size')) } ) );
 	  view.render();
 	}
 
