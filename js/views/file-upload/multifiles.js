@@ -96,10 +96,10 @@ define([
 	  _.each($file.get(0).files, function (element) {
 		if (typeof view.collection.findWhere( { name : element.name, size : element.size } ) === 'undefined') {
 		  view.collection.add(element);
-		  var $file = $('#'+view.options.field.name+'_multifiles').clone()
+		  var $fileInput = $('#'+view.options.field.name+'_multifiles').clone()
 		  , _model = view.collection.at(view.collection.length-1);
-		  $file.attr('id', view.options.field.name+'_'+_model.cid).removeClass('not_sending').addClass('hidden-multi-files');
-		  $('#'+view.options.field.name+'_multifiles_table').prepend($file);
+		  $fileInput.attr('id', view.options.field.name+'_'+_model.cid).removeClass('not_sending').addClass('hidden-multi-files').attr('name', view.options.field.name+'[]');
+		  $('#'+view.options.field.name+'_multifiles_table').prepend($fileInput);
 		}
 	  });
 	  view.render();
