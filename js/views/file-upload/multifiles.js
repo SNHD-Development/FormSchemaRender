@@ -78,7 +78,7 @@ define([
 	setupEvents: function (el, view) {
 	  view.model.validation[view.options.field.name+'[]'] = view._validation;
 
-	  $('.fileinput-button', el).on('click', { view : this }, view.clickFileUploadButton);
+	  //$('.fileinput-button', el).on('click', { view : this }, view.clickFileUploadButton);
 	  $('.delete', el).on('click', { view : this }, function (e) {
 		var view = e.data.view || false;
 		view.collection.reset();
@@ -112,8 +112,10 @@ define([
 	 **/
 	changeFileInput: function (e) {
 	  var view = e.data.view || false
+	  , _fileName = e.target.value
 	  , $file = $(this);
 	  if ($file.get(0).files) {
+		// Support File API
 		_.each($file.get(0).files, function (element) {
 		  if (typeof view.collection.findWhere( { name : element.name, size : element.size } ) === 'undefined') {
 			view.collection.add(element);
@@ -129,7 +131,17 @@ define([
 		});
 	  } else {
 		// IE 9 and Below
+		if (typeof view.collection.findWhere( { name : _fileName } ) === 'undefined') {
+		  view.collection.add( { name : _fileName } );
+		  var _model = view.collection.at(view.collection.length-1)
+		  , $fileInput = $('#'+view.options.field.name+'_multifiles').removeClass('not_sending').attr('id', view.options.field.name+'_'+_model.cid).addClass('hidden-multi-files')
+			, newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending">';
 
+			$fileInput.parent().prepend(newFileInput);
+
+			$('#'+view.options.field.name+'_multifiles').on('change', { view : view }, view.changeFileInput);
+			delete view.model.validation[view.options.field.name+'[]'];
+		}
 	  }
 	  view.render();
 	},
@@ -140,7 +152,14 @@ define([
 	removeFile: function (e) {
 	  var view = e.data.view || false
 	  , $parent = $(this).parents('.template-upload')
-	  , _model = view.collection.findWhere( { name: $parent.find('.name').text(), size : parseInt($parent.find('.size').attr('data-size')) } );
+	  , $size = $parent.find('.size')
+	  , _model
+	  , _opts = { name: $parent.find('.name').text() };
+
+	  if ($size.length > 0) {
+		_opts.size = parseInt($size.attr('data-size'));
+	  }
+	  _model = view.collection.findWhere(_opts);
 	  view.collection.remove( _model );
 	  $('#'+view.options.field.name+'_'+_model.cid).remove();
 	  view.render();

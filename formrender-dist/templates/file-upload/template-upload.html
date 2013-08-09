@@ -9,9 +9,11 @@
                 <div><span class="label label-important">Error</span> <%=file.error%></div>
             <% } %>
         </td>
+        <% if (file.size) { %>
         <td>
             <p class="size" data-size="<%= file.size %>"><%=convertFileSize(file.size)%></p>
         </td>
+        <% } %>
         <td>
             <button class="btn btn-danger cancel" type="button">
                 <i class="icon-trash icon-white"></i>

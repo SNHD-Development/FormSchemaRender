@@ -170,6 +170,9 @@ require([
   // Setup View
   _opts.formSchema.view = _view;
 
+  // Check Browser
+  Utils.checkBrowser();
+
   appView = Vm.create({}, 'AppView', AppView, _opts);
   appView.render();
 

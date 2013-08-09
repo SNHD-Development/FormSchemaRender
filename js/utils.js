@@ -30,6 +30,19 @@ define([
 
 	return {
 		/**
+		 * Check Browser Agent
+		 **/
+		checkBrowser: function () {
+			if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
+				var ieversion= parseInt(RegExp.$1);
+				if (ieversion <= 9) {
+					$('body').addClass('ielte9');
+				} else {
+					$('body').addClass('ie'+ieversion);
+				}
+			}
+		},
+		/**
 		 * Some Older Browser might not have these methods build in
 		 **/
 		setupOldBrowser: function() {
