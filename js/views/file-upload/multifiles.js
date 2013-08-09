@@ -133,7 +133,7 @@ define([
 		// IE 9 and Below
 		if (typeof view.collection.findWhere( { name : _fileName } ) === 'undefined') {
 		  view.collection.add( { name : _fileName } );
-		  var _class = ($('body').hasClass('ielte8')) ? ' hideInputFile': ''
+		  var _class = ($('body').hasClass('ie8')) ? ' hideInputFile': ''
 		  , _model = view.collection.at(view.collection.length-1)
 		  , $fileInput = $('#'+view.options.field.name+'_multifiles').removeClass('not_sending hideInputFile').attr('id', view.options.field.name+'_'+_model.cid).addClass('hidden-multi-files')
 			, newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending'+_class+'">';
