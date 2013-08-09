@@ -436,9 +436,16 @@ define([
 		 * Final Setup before Render the form
 		 **/
 		finalSetup: function (view) {
-			var that = this;
+			var that = this
+			, $select = $('select.has-default-val', view.el);
 			if (view.options.mode === 'update' && view._visibleOn.length > 0 && view.options.formData) {
 				setValueDependOn(view.el, view._visibleOn, view.options.formData);
+			}
+
+			if (view.options.mode === 'create' && $select.length > 0) {
+				$select.each(function () {
+					$(this).val($('option[selected=""],option[selected="selected"]', this).val());
+				});
 			}
 
 			if (view._multiFiles.length > 0) {
