@@ -1,12 +1,15 @@
 <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
 
+<%
+var _ie8 = $('body').hasClass('ielte8')
+, _class = (_ie8) ? ' hideInputFile': '';
+%>
+
 <div id="<%= name %>_multifiles_wrapper">
 
 	<div class="row-fluid fileupload-buttonbar">
 
 		<div class="span10">
-
-			<input type="file" name="<%= name %>[]" id="<%= name %>_multifiles" class="not_sending">
 
 			<label for="<%= name %>_multifiles" style="display:inline;">
 				<span class="btn btn-success fileinput-button">
@@ -14,10 +17,14 @@
 					<span>Add File</span>
 				</span>
 			</label>
+
 			<button type="button" class="btn btn-danger delete">
 				<i class="icon-trash icon-white"></i>
 				<span>Remove Files</span>
 			</button>
+
+			<input type="file" name="<%= name %>[]" id="<%= name %>_multifiles" class="not_sending<%= _class %>"/>
+
 		</div>
 
 	</div>

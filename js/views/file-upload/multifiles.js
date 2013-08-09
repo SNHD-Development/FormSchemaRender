@@ -123,7 +123,7 @@ define([
 			, $fileInput = $('#'+view.options.field.name+'_multifiles').removeClass('not_sending').attr('id', view.options.field.name+'_'+_model.cid).addClass('hidden-multi-files')
 			, newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending">';
 
-			$fileInput.parent().prepend(newFileInput);
+			$fileInput.parent().append(newFileInput);
 
 			$('#'+view.options.field.name+'_multifiles').on('change', { view : view }, view.changeFileInput);
 			delete view.model.validation[view.options.field.name+'[]'];
@@ -133,11 +133,12 @@ define([
 		// IE 9 and Below
 		if (typeof view.collection.findWhere( { name : _fileName } ) === 'undefined') {
 		  view.collection.add( { name : _fileName } );
-		  var _model = view.collection.at(view.collection.length-1)
-		  , $fileInput = $('#'+view.options.field.name+'_multifiles').removeClass('not_sending').attr('id', view.options.field.name+'_'+_model.cid).addClass('hidden-multi-files')
-			, newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending">';
+		  var _class = ($('body').hasClass('ielte8')) ? ' hideInputFile': ''
+		  , _model = view.collection.at(view.collection.length-1)
+		  , $fileInput = $('#'+view.options.field.name+'_multifiles').removeClass('not_sending hideInputFile').attr('id', view.options.field.name+'_'+_model.cid).addClass('hidden-multi-files')
+			, newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending'+_class+'">';
 
-			$fileInput.parent().prepend(newFileInput);
+			$fileInput.parent().append(newFileInput);
 
 			$('#'+view.options.field.name+'_multifiles').on('change', { view : view }, view.changeFileInput);
 			delete view.model.validation[view.options.field.name+'[]'];

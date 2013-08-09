@@ -35,7 +35,9 @@ define([
 		checkBrowser: function () {
 			if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
 				var ieversion= parseInt(RegExp.$1);
-				if (ieversion <= 9) {
+				if (ieversion <= 8) {
+					$('body').addClass('ielte8');
+				} else if (ieversion <= 9) {
 					$('body').addClass('ielte9');
 				} else {
 					$('body').addClass('ie'+ieversion);
@@ -444,7 +446,16 @@ define([
 
 			if (view.options.mode === 'create' && $select.length > 0) {
 				$select.each(function () {
-					$(this).val($('option[selected=""],option[selected="selected"]', this).val());
+					var $option = $('option[selected=""],option[selected="selected"]', this);
+					if ($option.length > 0 && $option.val() !== '') {
+						$(this).val($option.val());
+					} else {
+						if ( $(this).hasClass('us-state') ) {
+							$(this).val('NV');
+						} else if ( $(this).hasClass('us-country') ) {
+							$(this).val('US');
+						}
+					}
 				});
 			}
 

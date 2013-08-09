@@ -8,6 +8,20 @@ $text_area_min_height:  100px;
  **/
 .form-render {
 
+	/**
+	 * IE 8 Utilities Class
+	 **/
+	.hideInputFile {
+		display: block !important;
+		position: relative !important;
+		left: -999999px !important;
+		width: 1px !important;
+		height: 1px !important;
+		margin: 0px !important;
+		padding: 0px !important;
+	}
+
+
 	.placeholder {
 		color: #888;
 	}
