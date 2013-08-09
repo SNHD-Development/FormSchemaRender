@@ -42,7 +42,7 @@
   /**
    * For MultiFiles Field Type
    **/ }
-  .form-render input[class="placeholder"] {
+  .form-render .placeholder {
     color: #888; }
   .form-render label span.required {
     color: #B94A48;
