@@ -85,7 +85,7 @@ define([
 		view.collection.reset();
 		if (view._ie7) {
 		  $('#'+view.options.field.name+'_multifiles_wrapper :input.hidden-multi-files').remove();
-		  $('#'+view.options.field.name+'_file_upload_inputs button.cancel').remove();
+		  $('button.cancel, span', '#'+view.options.field.name+'_file_upload_inputs').remove();
 		} else {
 		  $('#'+view.options.field.name+'_multifiles_wrapper :input.hidden-multi-files').remove();
 		}
@@ -156,8 +156,8 @@ define([
 			, newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending'+_class+'">';
 
 			if (view._ie7) {
-			  $fileInput.off('change');
-			  newFileInput = ' <button class="btn btn-danger cancel" type="button" data-name="'+_fileName+'"><i class="icon-trash icon-white"></i><span>Remove</span></button>' + newFileInput;
+			  $fileInput.off('change').addClass('hideInputFile');
+			  newFileInput = ' <span>'+$fileInput.val()+'</span><button class="btn btn-danger cancel" type="button" data-name="'+_fileName+'"><i class="icon-trash icon-white"></i><span>Remove</span></button>' + newFileInput;
 			}
 
 			$fileInput.parent().append(newFileInput);
@@ -179,6 +179,7 @@ define([
 		var $currentTarget = $(this);
 		_model = view.collection.findWhere({name:$currentTarget.attr('data-name')});
 		view.collection.remove( _model );
+		$currentTarget.prev().remove();
 		$currentTarget.prev().remove();
 		$currentTarget.remove();
 	  } else {
