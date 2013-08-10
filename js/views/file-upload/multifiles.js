@@ -27,6 +27,7 @@ define([
 	  this.collection = new Backbone.Collection([]);
 	  this._validation = _.clone(this.options.validation[this.options.field.name+'[]']) || false;
 	  this._init = false;
+	  this._ie7 = false;
 
 	  if (this.options.field.options.visibleon) {
 		delete this.model.validation[this.options.field.name+'[]'];
@@ -82,11 +83,27 @@ define([
 	  $('.delete', el).on('click', { view : this }, function (e) {
 		var view = e.data.view || false;
 		view.collection.reset();
-		$('#'+view.options.field.name+'_multifiles_wrapper :input.hidden-multi-files').remove();
+		if (view._ie7) {
+		  $('#'+view.options.field.name+'_multifiles_wrapper :input.hidden-multi-files').remove();
+		  $('#'+view.options.field.name+'_file_upload_inputs button.cancel').remove();
+		} else {
+		  $('#'+view.options.field.name+'_multifiles_wrapper :input.hidden-multi-files').remove();
+		}
 		view.render();
 	  });
 	  $('#'+view.options.field.name+'_multifiles', el).on('change', { view : this }, view.changeFileInput);
-	  $('#'+view.options.field.name+'_multifiles_table', el).on('click', 'button.cancel', { view : this }, view.removeFile);
+
+	  // If this is IE 7 will have these events
+	  if ($('body').hasClass('ie7')) {
+		view._ie7 = true;
+
+		$('#'+view.options.field.name+'_file_upload_inputs', el).on('click', 'button.cancel', { view : this }, view.removeFile);
+
+	  } else {
+		// Normal Browsers
+
+		$('#'+view.options.field.name+'_multifiles_table', el).on('click', 'button.cancel', { view : this }, view.removeFile);
+	  }
 	},
 
 	/**
@@ -104,7 +121,7 @@ define([
 	clickFileUploadButton : function (e) {
 	  var $currentTarget = $(e.currentTarget)
 	  , view = e.data.view || false;
-	  $('#'+view.options.field.name+'_multifiles', $currentTarget.parent()).trigger('click');
+	  $('#'+view.options.field.name+'_multifiles', $currentTarget.parent()).focus().trigger('click');
 	},
 
 	/**
@@ -133,10 +150,15 @@ define([
 		// IE 9 and Below
 		if (typeof view.collection.findWhere( { name : _fileName } ) === 'undefined') {
 		  view.collection.add( { name : _fileName } );
-		  var _class = ($('body').hasClass('ie8')) ? ' hideInputFile': ''
+		  var _class = ($('body').hasClass('ie8')) ? ' hideInputFile': ( ($('body').hasClass('ie7')) ? ' showInputFile': '')
 		  , _model = view.collection.at(view.collection.length-1)
 		  , $fileInput = $('#'+view.options.field.name+'_multifiles').removeClass('not_sending hideInputFile').attr('id', view.options.field.name+'_'+_model.cid).addClass('hidden-multi-files')
 			, newFileInput = '<input type="file" name="'+view.options.field.name+'[]" id="'+view.options.field.name+'_multifiles" class="not_sending'+_class+'">';
+
+			if (view._ie7) {
+			  $fileInput.off('change');
+			  newFileInput = ' <button class="btn btn-danger cancel" type="button" data-name="'+_fileName+'"><i class="icon-trash icon-white"></i><span>Remove</span></button>' + newFileInput;
+			}
 
 			$fileInput.parent().append(newFileInput);
 
@@ -151,19 +173,28 @@ define([
 	 * Remove File
 	 **/
 	removeFile: function (e) {
-	  var view = e.data.view || false
-	  , $parent = $(this).parents('.template-upload')
-	  , $size = $parent.find('.size')
-	  , _model
-	  , _opts = { name: $parent.find('.name').text() };
+	  var view = e.data.view || false;
 
-	  if ($size.length > 0) {
-		_opts.size = parseInt($size.attr('data-size'));
+	  if (view._ie7) {
+		var $currentTarget = $(this);
+		_model = view.collection.findWhere({name:$currentTarget.attr('data-name')});
+		view.collection.remove( _model );
+		$currentTarget.prev().remove();
+		$currentTarget.remove();
+	  } else {
+		var $parent = $(this).parents('.template-upload')
+		, $size = $parent.find('.size')
+		, _model
+		, _opts = { name: $parent.find('.name').text() };
+
+		if ($size.length > 0) {
+		  _opts.size = parseInt($size.attr('data-size'));
+		}
+		_model = view.collection.findWhere(_opts);
+		view.collection.remove( _model );
+		$('#'+view.options.field.name+'_'+_model.cid).remove();
+		view.render();
 	  }
-	  _model = view.collection.findWhere(_opts);
-	  view.collection.remove( _model );
-	  $('#'+view.options.field.name+'_'+_model.cid).remove();
-	  view.render();
 	}
 
   });

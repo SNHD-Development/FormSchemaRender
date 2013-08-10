@@ -35,6 +35,9 @@ define([
 		checkBrowser: function () {
 			if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
 				var ieversion= parseInt(RegExp.$1);
+				if (ieversion < 7) {
+					ieversion = 7;
+				}
 				$('body').addClass('ie'+ieversion);
 			}
 		},

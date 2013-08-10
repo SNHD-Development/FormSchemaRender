@@ -6,6 +6,9 @@
  **/
 .form-render {
   /**
+   * Show File Input
+   **/
+  /**
    * IE 8 Utilities Class
    **/
   margin: 25px 20px;
@@ -45,6 +48,9 @@
   /**
    * For MultiFiles Field Type
    **/ }
+  .form-render .showInputFile {
+    display: inline !important;
+    margin-right: 20px !important; }
   .form-render .hideInputFile {
     display: block !important;
     position: relative !important;
@@ -163,6 +169,9 @@
     margin-right: 30px; }
   .form-render .fileupload-buttonbar .btn i {
     margin-right: 3px; }
+  .form-render .fileupload-buttonbar .btn.cancel {
+    margin-left: 10px;
+    display: inline; }
   .form-render .table-multi-files {
     margin-top: 20px; }
     .form-render .table-multi-files input[type="file"] {
