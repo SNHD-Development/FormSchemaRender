@@ -363,7 +363,7 @@ define([
 		  }
 		  // AppendId
 		  if (field.options.appendid) {
-			field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
+			field.url = ( (field.url) ? field.url : '' ) + ( (field.url.indexOf('?') > -1) ? '&id=': '/') + this.options.formData._id['$oid'];
 		  }
 		  $(this.el).attr('action', field.url);
 
@@ -378,7 +378,7 @@ define([
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
 		  // AppendId
 		  if (field.options.appendid) {
-			field.url = ( (field.url) ? field.url : '' ) + '/' + this.options.formData._id['$oid'];
+			field.url = ( (field.url) ? field.url : '' ) + ( (field.url.indexOf('?') > -1) ? '&id=': '/') + this.options.formData._id['$oid'];
 		  }
 		  break;
 
