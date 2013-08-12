@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.0.4`
+Version `version 0.0.5`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -278,6 +278,8 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ### Version
+
+* 0.0.5 - Adding MultiFiles Upload and Fix minor bug.
 
 * 0.0.4 - SubForm can render the data in all the mode now. Fixed minor bug for validation methods and schema.
 
