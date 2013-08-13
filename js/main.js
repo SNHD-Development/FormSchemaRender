@@ -174,6 +174,9 @@ require([
   Utils.checkBrowser();
 
   appView = Vm.create({}, 'AppView', AppView, _opts);
+
+  $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">Loading Form Information ...</span></p>');
+
   appView.render();
 
 });

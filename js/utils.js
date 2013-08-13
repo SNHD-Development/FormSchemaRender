@@ -86,6 +86,13 @@ define([
 		checkRequireFields: function(field, validation) {
 			var _name;
 			switch (field.type.toLowerCase()) {
+				case 'multifiles':
+					_name = field.name+'[]';
+					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+						return true;
+					}
+					return false;
+
 				case 'address':
 					_name = field.name+'_address_street';
 					if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
