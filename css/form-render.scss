@@ -319,3 +319,29 @@ $text_area_min_height:  100px;
 	}
 
 }
+
+/**
+ * IE7 Style Only
+ **/
+
+body.ie7 {
+
+	.form-render {
+
+		.controls-row {
+
+			margin-bottom: 10px;
+
+			input {
+				min-height: 20px;
+			}
+
+			.span6 {
+				width: 43%;
+			}
+
+		}
+
+	}
+
+}

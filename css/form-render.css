@@ -178,3 +178,13 @@
       display: none; }
     .form-render .table-multi-files td .btn i {
       margin-right: 3px; }
+
+/**
+ * IE7 Style Only
+ **/
+body.ie7 .form-render .controls-row {
+  margin-bottom: 10px; }
+  body.ie7 .form-render .controls-row input {
+    min-height: 20px; }
+  body.ie7 .form-render .controls-row .span6 {
+    width: 43%; }
