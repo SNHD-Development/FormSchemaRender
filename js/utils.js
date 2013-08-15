@@ -483,9 +483,11 @@ define([
 		 **/
 		isRenderReadMode: function (view, value) {
 
-			if (view.options.formData.fields[value.name] === '') {
+			var _type = value.type.toLowerCase();
+
+			if ( view.options.formData.fields[value.name] === '') {
 				return false;
-			} else if (value.type.toLowerCase() === 'fullname') {
+			} else if (_type === 'fullname') {
 				var _name = this.getSpecialFieldsName(value.name, value.type)
 				, _result = false;
 				_.each(_name, function (element) {
@@ -494,6 +496,21 @@ define([
 					}
 				});
 				return _result;
+			} else if ( typeof view.options.formData.fields[value.name] === 'undefined' ) {
+				switch (_type) {
+					case 'fieldsetstart':
+					case 'fieldsetend':
+					case 'html':
+					case 'action':
+					case 'button':
+					case 'submit':
+					case 'clear':
+					case 'address':
+						break;
+
+					default:
+						return false;
+				}
 			}
 
 			return true;
