@@ -262,12 +262,43 @@ define([
 		 **/
 		getBDateinput: function(el, model) {
 			$('fieldset.birthday-picker', el).each(function() {
-				$('.not_sending', this).trigger('change');
 				var _nan =/NaN/i
-				, $bdateInput = $(':input[type="hidden"]', this);
-				if ($bdateInput.val().match(_nan)) {
-					$bdateInput.val('');
+				, $bdateInput = $(':input[type="hidden"]', this)
+				, $day = $('.not_sending.birth-day', this)
+				, $month = $('.not_sending.birth-month', this)
+				, $year = $('.not_sending.birth-year', this)
+				, _day = parseInt($day.val())
+				, _month = parseInt($month.val())
+				, _year = parseInt($year.val())
+				, _error = false
+				, _val;
+
+				if (String(_day).match(_nan)) {
+					$day.val('');
+					_error = true;
 				}
+				if (String(_month).match(_nan)) {
+					$month.val('');
+					_error = true;
+				}
+				if (String(_year).match(_nan)) {
+					$year.val('');
+					_error = true;
+				}
+
+				if (_error) {
+					$bdateInput.val('');
+				} else {
+					if (_month < 10) {
+						_month += 0+_month;
+					}
+					if (_day < 10) {
+						_day += 0+_day;
+					}
+					_val = _month+'/'+_day+'/'+_year
+					$bdateInput.val();
+				}
+
 				model.set($bdateInput.attr('name'), $bdateInput.val());
 			});
 		},
