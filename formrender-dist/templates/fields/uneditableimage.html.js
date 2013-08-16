@@ -1,1 +1,1 @@
-define([],function(){var e='<a data-lightbox="<%= id %>" href="<%= href %>" title="<%= text %>"><img class="uneditable-input-image" alt="<%= text %>"<%= _attr %>/></a>';return e});
+define([],function(){var e='<!--<a data-lightbox="<%= id %>" href="<%= href %>" title="<%= text %>"><img class="uneditable-input-image" alt="<%= text %>"<%= _attr %>/></a>--><a href="<%= href %>" title="<%= text %>" target="_blank">View File</a>';return e});
