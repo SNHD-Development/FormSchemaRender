@@ -378,6 +378,10 @@ define([
 
 		  break;
 
+		case 'buttonclipboard':
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
+		  break;
+
 		case 'button':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
 		  // AppendId
@@ -441,7 +445,7 @@ define([
 
 	  // If this is read mode will need to render read template
 	  if ( typeof readMode !== 'undefined' && readMode && typeof _name[0] !== 'undefined'
-		  &&  _type !== 'button' ) {
+		  &&  ! ( _type === 'button' || _type === 'buttonclipboard' ) ) {
 		var _field_data = '', _href = '';
 		_.each(_name, function(element) {
 		  _field_data += ( (typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element]: '') + ' ';

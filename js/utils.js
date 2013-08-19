@@ -516,7 +516,9 @@ define([
 
 			var _type = value.type.toLowerCase();
 
-			if ( view.options.formData.fields[value.name] === '') {
+			if (_type === 'buttonclipboard') {
+				return true;
+			} else if ( view.options.formData.fields[value.name] === '') {
 				return false;
 			} else if (_type === 'fullname') {
 				var _name = this.getSpecialFieldsName(value.name, value.type)
