@@ -1,1 +1,1 @@
-define([],function(){var e='<span class="input-xlarge uneditable-input<%= css_class %>"><%= value %></span>';return e});
+define([],function(){var e='<span class="input-xlarge uneditable-input<%= css_class %>" id="<%= id %>"><%= value %></span>';return e});

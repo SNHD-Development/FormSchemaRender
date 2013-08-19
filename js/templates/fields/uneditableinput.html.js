@@ -1,1 +1,1 @@
-define(function() { var str ='<span class="input-xlarge uneditable-input<%= css_class %>"><%= value %></span>';return str;});
+define(function() { var str ='<span class="input-xlarge uneditable-input<%= css_class %>" id="<%= id %>"><%= value %></span>';return str;});
