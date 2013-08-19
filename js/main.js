@@ -32,6 +32,7 @@ require.config({
     "jquery.wizard": 'libs/fuelux/wizard',
     "jquery.spinner": 'libs/fuelux/spinner',
     "jquery.lightbox": 'libs/lightbox/lightbox-2.6',
+    "jquery.zclip": 'libs/copy/jquery.zclip.min',
 
     // FileUpload
     //'blueimp-helper': 'libs/file-upload/dependency/load-image.min',
@@ -102,6 +103,10 @@ require.config({
     "jquery.lightbox": {
       deps: ['jquery'],
       exports: 'jQuery.lightbox'
+    },
+    "jquery.zclip": {
+      deps: ['jquery'],
+      exports: 'jQuery.zclip'
     }
   }
 });

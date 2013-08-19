@@ -260,6 +260,19 @@ Validation FormSchema
 		}
 	}
 
+### ButtonClipboard
+
+Sometime in read mode, you want to provide the easy way for copy multiple text area to the user in just one click.
+This Field Type will only work in read mode and when user "click" the button. It will automatic copy into their clipboard.
+
+	{
+		Name : "CopyShippingInfo",
+		Type : "ButtonClipboard",
+		Description : "Copy Shipping Information",
+		Values : [ "ShippingName", "ShippingAddress" ]
+	}
+
+
 ## Internal Only Options
 
 These options will be used in internal only mode.

@@ -38,10 +38,12 @@ define([
   'text!templates/fields/uneditableinput.html',
   'text!templates/fields/uneditablefile.html',
   'text!templates/fields/uneditableimage.html',
+  'text!templates/fields/buttonclipboard.html',
   'text!templates/subform-layouts/table.html',
   'jquery.expose',
   'jquery.datepicker',
-  'jquery.birthdaypicker'
+  'jquery.birthdaypicker',
+  'jquery.zclip'
 ], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation
 	, listView
 	, emailData
@@ -71,6 +73,7 @@ define([
 	, uneditableinputTemplate
 	, uneditablefileTemplate
 	, uneditableimageTemplate
+	, buttonclipboardTemplate
 	, tableTemplate
 	){
   return Backbone.View.extend({
@@ -153,6 +156,7 @@ define([
 		"uneditableinput" : _.template(uneditableinputTemplate),
 		"uneditablefile" : _.template(uneditablefileTemplate),
 		"uneditableimage" : _.template(uneditableimageTemplate),
+		"buttonclipboard" : _.template(buttonclipboardTemplate),
 		'subform-table' : _.template(tableTemplate)
 	  };
 
@@ -597,7 +601,9 @@ define([
 	  readMode = readMode || false;
 	  status = status || false;
 
-	  if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
+	  if (readMode !== 'read' && value.type.toLowerCase() === 'buttonclipboard') {
+		return false;
+	  } else if ( readMode === 'read' && ! this.options.internal && value.options.hideonexternalread) {
 		return false;
 	  } else if (typeof value.options.showonmode !== 'undefined' && value.options.showonmode.indexOf(readMode) === -1) {
 		return false;
