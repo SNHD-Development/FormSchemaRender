@@ -43,6 +43,8 @@ define([
         require(['views/readonly/'+formLayout], function (ReadView) {
           var readView = Vm.create(that, 'ReadView', ReadView, _opts);
           readView.render();
+
+		  Utils.finalReadSetup(readView);
         });
       } else {
         // Will render Form

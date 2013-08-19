@@ -10,7 +10,8 @@ define([
   'jquery.spinner',
   'jquery.birthdaypicker',
   'jquery.placeholder',
-  'jquery.expose'
+  'jquery.expose',
+  'jquery.zclip'
 ], function($, _, Backbone, Vm){
 
 	/**
@@ -504,6 +505,26 @@ define([
 							validation: view.options.formSchema.validation
 						});
 						multifilesView.render();
+					});
+				});
+			}
+		},
+		/**
+		 * Final Setup for Read Mode
+		 **/
+		finalReadSetup: function (view) {
+			// Attach Click Event to Copy to the Clipboard
+			if (view._buttonClipboards.length > 0) {
+				_.each(view._buttonClipboards, function (element) {
+					$('button#'+element.name).zclip({
+						path:'http://public.southernnevadahealthdistrict.org/assets/js/apps/formrender/libs/copy/ZeroClipboard.swf',
+						copy: function() {
+							var _txt = '';
+							_.each(element.values, function (elementValue) {
+								_txt += $('#'+elementValue).text()+"\r\n";
+							});
+							return _txt;
+						}
 					});
 				});
 			}

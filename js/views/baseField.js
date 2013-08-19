@@ -42,8 +42,7 @@ define([
   'text!templates/subform-layouts/table.html',
   'jquery.expose',
   'jquery.datepicker',
-  'jquery.birthdaypicker',
-  'jquery.zclip'
+  'jquery.birthdaypicker'
 ], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation
 	, listView
 	, emailData
@@ -96,6 +95,7 @@ define([
 	  this._internalFields = []; // Internal Fields Array
 	  this._visibleOn = []; // Field that has visibleOn Options
 	  this._multiFiles = []; // MultiFiles Field
+	  this._buttonClipboards = []; //Clipboards Button
 	  this._ajaxSubmit = true;
 
 	  // Wizard View Counters
@@ -380,6 +380,7 @@ define([
 
 		case 'buttonclipboard':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
+		  this._buttonClipboards.push({name: field.name, values : field.values});
 		  break;
 
 		case 'button':
@@ -516,7 +517,7 @@ define([
 			  _textarea = ' uneditable-input-textarea';
 			  break;
 		  }
-		  _html += that.inputTemplate['uneditableinput']({value: _field_data, css_class: _textarea});
+		  _html += that.inputTemplate['uneditableinput']({value: _field_data, css_class: _textarea, id: field.name});
 		}
 	  } else {
 
