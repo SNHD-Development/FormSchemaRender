@@ -116,9 +116,9 @@
       if (settings["defaultdate"]) {
 		_tmp = settings['defaultdate'].split('/');
 		if ($.isArray(_tmp) && _tmp.length === 3) {
-		  defDate = new Date(_tmp[2], _tmp[0], _tmp[1]);
+		  defDate = new Date(_tmp[2], _tmp[0]-1, _tmp[1]);
 		  defYear = defDate.getFullYear();
-		  defMonth = defDate.getMonth();
+		  defMonth = defDate.getMonth()+1;
 		} else {
 		  defDate = new Date(settings["defaultdate"] + "T00:00:00");
 		  defYear = defDate.getFullYear();
@@ -160,7 +160,7 @@
       if (settings["defaultdate"]) {
 		var date;
 		if ($.isArray(_tmp) && _tmp.length === 3) {
-		  date = new Date(_tmp[2], _tmp[0], _tmp[1]);
+		  date = new Date(_tmp[2], _tmp[0]-1, _tmp[1]);
 		} else {
 		  date = new Date(settings["defaultdate"] + "T00:00:00");
 		}
