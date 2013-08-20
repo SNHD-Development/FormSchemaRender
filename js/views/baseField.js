@@ -96,6 +96,7 @@ define([
 	  this._visibleOn = []; // Field that has visibleOn Options
 	  this._multiFiles = []; // MultiFiles Field
 	  this._buttonClipboards = []; //Clipboards Button
+	  this._buttonDecision = []; //Decision Button
 	  this._ajaxSubmit = true;
 
 	  // Wizard View Counters
@@ -381,6 +382,12 @@ define([
 		case 'buttonclipboard':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
 		  this._buttonClipboards.push({name: field.name, values : field.values});
+		  break;
+
+		case 'buttondecision':
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
+		  _type = 'button';
+		  this._buttonDecision.push(field);
 		  break;
 
 		case 'button':

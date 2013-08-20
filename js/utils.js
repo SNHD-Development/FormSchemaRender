@@ -508,6 +508,52 @@ define([
 					});
 				});
 			}
+
+			// Setup ButtonCondition
+			// By Default, will require all data to be valid
+			// Default Success Call Back must return JSON with key = "value"
+			if (view._buttonDecision.length > 0) {
+				_.each(view._buttonDecision, function(element) {
+					if ( ! element.url || ! element.data ) {
+						throw 'ButtonDecision require Url and Data options!';
+					}
+					$('a#'+element.name, view.el).click(function (e) {
+						e.preventDefault();
+						var $currentTarget = $(e.currentTarget)
+						, _url = element.url+'?'
+						, _data = {}
+						, _error = false
+						, _success = element.options.events || function (e) {
+							var $form = $(view.el)
+							, $hiddenInput = $('#'+element.name+'_btn_condition', $form);
+							if ( ! e.value) {
+								throw 'Result JSON must have "value" key';
+							}
+							if ($hiddenInput.length === 0) {
+								$currentTarget.after('<input type="hidden" name="'+element.name+'" id="'+element.name+'_btn_condition" class="not_sending"/>');
+							}
+							view.model.set(element.name, e.value);
+						};
+						_.each(element.data, function (el, key) {
+							var _val = $('#'+el).val();
+							if (_val !== '') {
+								_data[key] = _val;
+							} else {
+								_error = true;
+								return false;
+							}
+						});
+
+						if (_error) {
+							return false;
+						}
+
+						// Get the query object, will send to the url
+						_url += $.param(_data);
+						$.getJSON(_url, _success);
+					});
+				});
+			}
 		},
 		/**
 		 * Final Setup for Read Mode

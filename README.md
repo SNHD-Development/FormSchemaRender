@@ -260,6 +260,10 @@ Validation FormSchema
 		}
 	}
 
+### ButtonDecision
+
+
+
 ### ButtonClipboard
 
 Sometime in read mode, you want to provide the easy way for copy multiple text area to the user in just one click.

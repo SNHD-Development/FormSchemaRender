@@ -146,6 +146,12 @@ define([
 		  }
 		  break;
 
+		// If this is ButtonDecision Type
+		// Will need to set the on change event
+		case 'buttondecision':
+		  model.on('change:'+value.name, function(model, val) {
+			$('#'+value.name+'_btn_condition').val(val).trigger('change');
+		  });
 		default:
 		  _attrs[value.name] = '';
 		  setValidationData(value.name, attrs, _validation, '');
