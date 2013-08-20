@@ -763,10 +763,12 @@ define([
 		  if ($('.options-visible-on-'+field.name, that.el).length < 1) {
 			$container.after(htmlTmpl);
 			$container.next('.options-visible-on-'+field.name).fadeIn('slow', function() {
-			  $(this).addClass('visible-parent-'+field.options.visibleon.name);
+			  $(this).addClass('visible-parent-'+field.options.visibleon.name).attr('data-parent', field.options.visibleon.name);
 
 			  // Remove the class that not belong to this visibleOn
-			  $('[class*="visible-parent"]', that.el).not('.visible-parent-'+field.options.visibleon.name+',.options-visible-on-'+field.options.visibleon.name).remove();
+			  var $parent = $('.options-visible-on-'+field.options.visibleon.name, that.el);
+
+			  $('[class*="visible-parent"]', that.el).not('.visible-parent-'+field.options.visibleon.name+',.options-visible-on-'+field.options.visibleon.name+',.visible-parent-'+$parent.attr('data-parent')).remove();
 
 			  if (field.type.toLowerCase() === 'multifiles') {
 				$('#'+field.name+'_multifiles_wrapper', this).trigger('visibleOnRenderComplete');

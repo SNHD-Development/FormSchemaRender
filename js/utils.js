@@ -523,6 +523,7 @@ define([
 						, _url = element.url+'?'
 						, _data = {}
 						, _error = false
+						, _opt
 						, _success = element.options.events || function (e) {
 							var $form = $(view.el)
 							, $hiddenInput = $('#'+element.name+'_btn_condition', $form);
