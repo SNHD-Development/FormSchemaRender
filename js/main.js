@@ -135,6 +135,9 @@ require([
   if (typeof formData !== 'undefined') {
     Vm.toLower(formData, ['fields', 'internalfields'] );
     _mode = (typeof mode !== 'undefined' && config.mode.indexOf(mode.toLowerCase()) > -1) ? mode.toLowerCase(): 'update';
+    if (_mode === 'update') {
+      Vm.decodeHtml(formData);
+    }
     if (typeof formData.internalfields !== 'undefined') {
       formData.fields = _.extend(formData.fields, formData.internalfields);
       delete formData.internalfields;

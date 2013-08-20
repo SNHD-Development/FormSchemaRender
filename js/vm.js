@@ -60,12 +60,23 @@ define([
         this.toLower(obj[keyLower]);
       }
     }
+  }
+
+  // Parse HTML Code to normal text
+  , decodeHtml = function (obj) {
+    if (obj.fields) {
+      _.each(obj.fields, function (value, key) {
+        var _value = _.unescape(value);
+        obj.fields[key] = _value.replace(/&#39;/g, "'");
+      });
+    }
   };
 
 
   return {
     create: create,
     remove: remove,
-    toLower: toLower
+    toLower: toLower,
+    decodeHtml: decodeHtml
   };
 });
