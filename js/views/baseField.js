@@ -561,7 +561,12 @@ define([
 	  required = required || false;
 	  field.attributes = field.attributes || {};
 	  field.options = field.options || {};
-	  var _cssClass = (typeof cssClass !== 'undefined' && cssClass) ? ' class="'+cssClass+'"': '';
+	  var _type = field.type.toLowerCase()
+	  , _cssClass = (typeof cssClass !== 'undefined' && cssClass) ? ' class="'+cssClass+'"': '';
+	  switch (_type) {
+		case "buttondecision":
+		  return '';
+	  }
 	  return this.inputTemplate['label'](_.extend({ _cssClass:_cssClass, _required: required }, field));
 	},
 	/**
