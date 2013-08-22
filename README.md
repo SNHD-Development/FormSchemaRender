@@ -134,6 +134,19 @@ Example: Setting Button type option to prevent Ajax form submit
 		}
 	}
 
+### Button
+
+In order to build form when user click a button can be done by adding class "btn-render-form" in any button type.
+
+	{
+		"Type" : "Button",
+		"Description" : "Build Hidden Form On Click",
+		"Url" : "/anyurl",
+		"Attributes" : {
+			"Class" : "btn btn-primary btn-render-form"
+		}
+	}
+
 ### VisibleOn Options
 
 There are sometime that the value from another field will effect the flow of the form. In this case, we will use `Options.VisibleOn = { Name: 'Name of other field', Values: 'Array of that field values that will trigger this field' };` to handle this situation.
