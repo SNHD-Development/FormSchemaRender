@@ -198,3 +198,9 @@ body.ie7 .form-render .controls-row {
     min-height: 20px; }
   body.ie7 .form-render .controls-row .span6 {
     width: 43%; }
+  body.ie7 .form-render .controls-row .span5 {
+    width: 36%; }
+  body.ie7 .form-render .controls-row .span4 {
+    width: 29%; }
+  body.ie7 .form-render .controls-row .span3 {
+    width: 21%; }
