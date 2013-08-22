@@ -544,12 +544,26 @@ define([
 							}, 1000 );
 						};
 						_.each(element.data, function (el, key) {
-							var _val = $('#'+el).val();
-							if (_val !== '') {
+							var $currentElement = $('#'+el)
+							, $bDate = $currentElement.parent('.birthday-picker')
+							, $bDateSelect;
+							if ($bDate.length > 0) {
+								$bDateSelect = $('.not_sending', $bDate).trigger('change');
+							}
+							var _val = $currentElement.val();
+							if (_val !== '' && _val.search(/NaN/) === -1 ) {
 								_data[key] = _val;
 							} else {
 								_error = true;
 								$(':input[name="'+el+'"]', view.el).addClass('invalid');
+								if ($bDate.length > 0) {
+									var _index = _val.split('/');
+									_.each(_index, function (date, index) {
+										if (date === 'NaN') {
+											$($bDateSelect[index]).addClass('invalid')
+										}
+									});
+								}
 								return false;
 							}
 						});
