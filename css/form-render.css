@@ -180,6 +180,16 @@
       margin-right: 3px; }
 
 /**
+ * IE8 Style Only
+ **/
+body.ie8 .form-render .controls-row {
+  margin-bottom: 10px; }
+  body.ie8 .form-render .controls-row input {
+    min-height: 20px; }
+  body.ie8 .form-render .controls-row .span6 {
+    width: 43%; }
+
+/**
  * IE7 Style Only
  **/
 body.ie7 .form-render .controls-row {
