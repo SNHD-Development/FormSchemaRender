@@ -549,6 +549,7 @@ define([
 								_data[key] = _val;
 							} else {
 								_error = true;
+								$(':input[name="'+el+'"]', view.el).addClass('invalid');
 								return false;
 							}
 						});
