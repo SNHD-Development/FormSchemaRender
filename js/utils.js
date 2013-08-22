@@ -519,8 +519,11 @@ define([
 					}
 					$('a#'+element.name, view.el).click(function (e) {
 						e.preventDefault();
-						var $currentTarget = $(e.currentTarget)
-						, _url = element.url+'?'
+						var $currentTarget = $(e.currentTarget);
+						if ($currentTarget.attr('disabled')) {
+							return false;
+						}
+						var _url = element.url+'?'
 						, _data = {}
 						, _error = false
 						, _opt
@@ -534,6 +537,11 @@ define([
 								$currentTarget.after('<input type="hidden" name="'+element.name+'" id="'+element.name+'_btn_condition" class="not_sending"/>');
 							}
 							view.model.set(element.name, e.value);
+							window.setTimeout(
+								function() {
+									$currentTarget.attr('disabled', false).popover('destroy');
+									$currentTarget.next('.popover').remove();
+							}, 1000 );
 						};
 						_.each(element.data, function (el, key) {
 							var _val = $('#'+el).val();
@@ -546,11 +554,36 @@ define([
 						});
 
 						if (_error) {
+							_opt = {
+								html : true,
+								placement: 'top',
+								trigger: 'manual',
+								title: '<i class="icon-edit"></i> Error',
+								content: 'Please correct the form'
+							};
+							$currentTarget.attr('disabled', true).popover(_opt).popover('show');
+
+							window.setTimeout(
+								function() {
+									$currentTarget.attr('disabled', false).popover('destroy');
+									$currentTarget.next('.popover').remove();
+							}, 2000 );
+
 							return false;
 						}
 
 						// Get the query object, will send to the url
 						_url += $.param(_data);
+
+						_opt = {
+							html : true,
+							placement: 'top',
+							trigger: 'manual',
+							title: '<i class="icon-time"></i> Please wait.',
+							content: '<i class="icon-spinner icon-spin icon-large"></i> Loading data...'
+						};
+						$currentTarget.attr('disabled', true).popover(_opt).popover('show');
+
 						$.getJSON(_url, _success);
 					});
 				});
