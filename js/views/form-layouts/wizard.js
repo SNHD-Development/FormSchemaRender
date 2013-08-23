@@ -56,7 +56,7 @@ define([
 		}
 
 		// If this has VisibleOn in options
-		if (value.options.visibleon && _typeLowerCase !== 'button') {
+		if (value.options.visibleon && ! ( _typeLowerCase === 'button' || _typeLowerCase === 'submit' ) ) {
 		  _temp = '<div class="options-visible-on-'+value.name+'" style="display:none">'+_temp+'</div>';
 		  BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp);
 		} else {

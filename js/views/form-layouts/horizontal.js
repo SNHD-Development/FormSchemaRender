@@ -78,7 +78,7 @@ define([
 		}
 
 		// If this has VisibleOn in options
-		if (value.options.visibleon && _typeLowerCase !== 'button') {
+		if (value.options.visibleon && ! ( _typeLowerCase === 'button' || _typeLowerCase === 'submit' ) ) {
 		  BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
 		} else {
 		  _html += _temp;
