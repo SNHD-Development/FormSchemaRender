@@ -281,15 +281,6 @@ define([
       });
 
 	  return false;
-	},
-	/**
-	 * Function to create hidden form
-	 **/
-	createHiddenForm :function (data) {
-	  require(['views/hiddenForm'], function (HiddenFormView) {
-		var hiddenFormView = Vm.create({}, 'FormView', HiddenFormView);
-		hiddenFormView.render(data);
-	  });
 	}
   });
   return AppView;
