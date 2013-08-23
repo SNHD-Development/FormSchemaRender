@@ -34,17 +34,18 @@ define([
 		, _parentRender = BaseFieldView.prototype.render
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
-		var _temp = '';
+		var _temp = ''
+		, _typeLowerCase = value.type.toLowerCase();
 		// Check for Show On Mode
 		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status) ) {
 		  return '';
 		}
 
 		if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && ! value.options.internalcanupdate) {
-		} else if ( typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1 ) {
+		} else if ( typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, _typeLowerCase) === -1 ) {
 		  _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
 		  _temp += that.renderLabel(value, _required);
-		} else if (value.type.toLowerCase() === 'step') {
+		} else if (_typeLowerCase === 'step') {
 		  that._steps.push(value);
 		}
 		_temp += _parentRender.call(that, value);
@@ -55,7 +56,7 @@ define([
 		}
 
 		// If this has VisibleOn in options
-		if (value.options.visibleon) {
+		if (value.options.visibleon && _typeLowerCase !== 'button') {
 		  _temp = '<div class="options-visible-on-'+value.name+'" style="display:none">'+_temp+'</div>';
 		  BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp);
 		} else {
