@@ -161,7 +161,7 @@ require([
   // Render Custom Script Here
   if (typeof formEvents !== 'undefined') {
     _.each(formEvents, function(value, key) {
-      $('div#app').on(formSchema.name+'.'+key, value);
+      $('div#app').on(formSchema.name+'.'+key, { Utils: Utils }, value);
     });
   }
 
