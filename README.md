@@ -147,6 +147,21 @@ In order to build form when user click a button can be done by adding class "btn
 		}
 	}
 
+### Address Field
+
+By default, Address Field will render "Street, City, State, ZipCode and Country"
+
+If you want to hide Country simply pass "HideCountry" to true in options.
+
+	{
+		"Name" : "ShippingAddress",
+		"Type" : "Address",
+		"Description" : "Shipping Address",
+		"Options" : {
+			"HideCountry" : true
+		}
+	}
+
 ### VisibleOn Options
 
 There are sometime that the value from another field will effect the flow of the form. In this case, we will use `Options.VisibleOn = { Name: 'Name of other field', Values: 'Array of that field values that will trigger this field' };` to handle this situation.
