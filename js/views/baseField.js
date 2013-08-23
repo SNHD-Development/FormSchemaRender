@@ -754,12 +754,21 @@ define([
 	 **/
 	setupVisibleOn: function (field, htmlTmpl, parentContainer) {
 	  parentContainer = parentContainer || false;
-	  var that = this;
+	  var that = this
+	  , _typeLowerCase = field.type.toLowerCase();
 	  if ( ! field.name) {
 		throw 'In order to use VisibleOn option, we need to pass in the Name';
 	  }
 
-	  switch (field.type.toLowerCase()) {
+	  switch (_typeLowerCase) {
+		case 'address':
+		  delete this.model.validation[field.name+'_address_street'];
+		  delete this.model.validation[field.name+'_address_city'];
+		  delete this.model.validation[field.name+'_address_state'];
+		  delete this.model.validation[field.name+'_address_zip'];
+		  delete this.model.validation[field.name+'_address_country'];
+		  break;
+
 		case 'multifiles':
 		  delete this.model.validation[field.name+'[]'];
 		  break;
@@ -783,14 +792,38 @@ define([
 
 			  $('[class*="visible-parent"]', that.el).not('.visible-parent-'+field.options.visibleon.name+',.options-visible-on-'+field.options.visibleon.name+',.visible-parent-'+$parent.attr('data-parent')).remove();
 
-			  if (field.type.toLowerCase() === 'multifiles') {
+			  if (_typeLowerCase === 'multifiles') {
 				$('#'+field.name+'_multifiles_wrapper', this).trigger('visibleOnRenderComplete');
 			  } else {
 				$(':input[name="'+field.name+'"]', this).trigger('visibleOnRenderComplete');
 			  }
 			});
 			// Adding Validation Scheme, if has one
-			if (that.options.formSchema.validation[field.name] && field.type.toLowerCase() !== 'html') {
+			if (_typeLowerCase === 'address') {
+			  var _address_name = field.name+'_address_street';
+			  if (that.options.formSchema.validation[_address_name]) {
+				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  }
+			  _address_name = field.name+'_address_city';
+			  if (that.options.formSchema.validation[_address_name]) {
+				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  }
+			  _address_name = field.name+'_address_state';
+			  if (that.options.formSchema.validation[_address_name]) {
+				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  }
+			  _address_name = field.name+'_address_zip';
+			  if (that.options.formSchema.validation[_address_name]) {
+				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  }
+			  _address_name = field.name+'_address_country';
+			  if (that.options.formSchema.validation[_address_name]) {
+				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  }
+			  if (field.options.hidecountry) {
+				that.model.set(_address_name, 'US');
+			  }
+			} else if (that.options.formSchema.validation[field.name] && _typeLowerCase !== 'html') {
 			  that.model.validation[field.name] = that.options.formSchema.validation[field.name];
 			} else if (that.options.formSchema.validation[field.name+'[]']) {
 			  that.model.validation[field.name+'[]'] = that.options.formSchema.validation[field.name+'[]'];
@@ -802,7 +835,38 @@ define([
 
 		  // Remove this out of the markup
 		  $('.options-visible-on-'+field.name, that.el).remove();
-		  if (field.type.toLowerCase() !== 'html') {
+		  if (_typeLowerCase === 'address') {
+			var _address_name = field.name+'_address_street';
+			that.model.set(_address_name, '');
+			if (that.options.formSchema.validation[_address_name]) {
+			  that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  delete that.model.validation[_address_name];
+			}
+			_address_name = field.name+'_address_city';
+			that.model.set(_address_name, '');
+			if (that.options.formSchema.validation[_address_name]) {
+			  that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  delete that.model.validation[_address_name];
+			}
+			_address_name = field.name+'_address_state';
+			that.model.set(_address_name, '');
+			if (that.options.formSchema.validation[_address_name]) {
+			  that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  delete that.model.validation[_address_name];
+			}
+			_address_name = field.name+'_address_zip';
+			that.model.set(_address_name, '');
+			if (that.options.formSchema.validation[_address_name]) {
+			  that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  delete that.model.validation[_address_name];
+			}
+			_address_name = field.name+'_address_country';
+			that.model.set(_address_name, '');
+			if (that.options.formSchema.validation[_address_name]) {
+			  that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+			  delete that.model.validation[_address_name];
+			}
+		  } else if (_typeLowerCase !== 'html') {
 			that.model.set(field.name, '');
 			if (that.model.validation[field.name]) {
 			  // Remove Validation Scheme, if has one
