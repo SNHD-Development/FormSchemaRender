@@ -544,27 +544,10 @@ define([
 							}, 1000 );
 						};
 						_.each(element.data, function (el, key) {
-							var $currentElement = $('#'+el)
-							, $bDate = $currentElement.parent('.birthday-picker')
-							, $bDateSelect;
-							if ($bDate.length > 0) {
-								$bDateSelect = $('.not_sending', $bDate).trigger('change');
-							}
-							var _val = $currentElement.val();
-							if (_val !== '' && _val.search(/NaN/) === -1 ) {
-								_data[key] = _val;
+							if ($.isArray(el)) {
+								//code
 							} else {
-								_error = true;
-								$(':input[name="'+el+'"]', view.el).addClass('invalid');
-								if ($bDate.length > 0) {
-									var _index = _val.split('/');
-									_.each(_index, function (date, index) {
-										if (date === 'NaN') {
-											$($bDateSelect[index]).addClass('invalid')
-										}
-									});
-								}
-								return false;
+								_error = that.setUpButtonDecision(el, key, _data, _error, view.el);
 							}
 						});
 
@@ -684,6 +667,33 @@ define([
 				var hiddenFormView = Vm.create({}, 'FormView', HiddenFormView);
 				hiddenFormView.render(data);
 			});
+		},
+		/**
+		 * Function to setup Button Decision
+		 **/
+		setUpButtonDecision: function (el, key, data, error, form) {
+			var $currentElement = $('#'+el)
+			, $bDate = $currentElement.parent('.birthday-picker')
+			, $bDateSelect;
+			if ($bDate.length > 0) {
+				$bDateSelect = $('.not_sending', $bDate).trigger('change');
+			}
+			var _val = $currentElement.val();
+			if (_val !== '' && _val.search(/NaN/) === -1 ) {
+				data[key] = _val;
+			} else {
+				error = true;
+				$(':input[name="'+el+'"]', form).addClass('invalid');
+				if ($bDate.length > 0) {
+					var _index = _val.split('/');
+					_.each(_index, function (date, index) {
+						if (date === 'NaN') {
+							$($bDateSelect[index]).addClass('invalid');
+						}
+					});
+				}
+			}
+			return error;
 		}
 	};
 });
