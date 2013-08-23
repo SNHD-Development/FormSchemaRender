@@ -32,15 +32,16 @@ define([
 		, _html = ''
 		, _required;
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
-		var _temp = '', _wrapper = false;
+		var _temp = '', _wrapper = false
+		, _typeLowerCase = value.type.toLowerCase();
 		// Check for Show On Mode
 		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status) ) {
 		  return '';
 		}
 
 		if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && ! value.options.internalcanupdate) {
-		} else if ( typeof value.description !== 'undefined' && ( _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1
-			|| value.type.toLowerCase() === 'html' && value.options.visibleon ) ) {
+		} else if ( typeof value.description !== 'undefined' && ( _.indexOf(that.notRenderLabel, _typeLowerCase) === -1
+			|| _typeLowerCase === 'html' && value.options.visibleon ) ) {
 		  _wrapper = true;
 		}
 
@@ -53,7 +54,7 @@ define([
 		  _temp += '<div class="control-group'+_visibleon+'"'+_style+'>';
 		  this._divcontrolgroup++;
 
-		  if (value.type.toLowerCase() !== 'html') {
+		  if (_typeLowerCase !== 'html') {
 			_required = Utils.checkRequireFields(value, that.options.formSchema.validation);
 			_temp += that.renderLabel(value, _required, 'control-label');
 			_temp += '<div class="controls">';
@@ -65,7 +66,7 @@ define([
 
 		if (_wrapper) {
 		  _temp += '</div>';
-		  if (value.type.toLowerCase() !== 'html') {
+		  if (_typeLowerCase !== 'html') {
 			_temp += '</div>';
 		  }
 		  this._divcontrolgroup--;
@@ -77,7 +78,7 @@ define([
 		}
 
 		// If this has VisibleOn in options
-		if (value.options.visibleon) {
+		if (value.options.visibleon && _typeLowerCase !== 'button') {
 		  BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
 		} else {
 		  _html += _temp;

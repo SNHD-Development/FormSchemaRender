@@ -442,6 +442,19 @@ define([
 		  break;
 	  }
 
+	  // Check to see if this is button or submit
+	  if (_type === 'button' && field.options.visibleon) {
+		var _btnVisibleOnChanged = function (e) {
+		  if (e.type === 'change' && field.options.visibleon.values.indexOf($(this).val()) > -1) {
+			$('#'+field.name, that.el).show('slow');
+		  } else {
+			$('#'+field.name, that.el).hide('slow');
+		  }
+		};
+		// Listen to changed event and update the display
+		$(this.el).on('change', ':input[name="'+field.options.visibleon.name+'"]', _btnVisibleOnChanged).on('removeVisibleOn', ':input[name="'+field.options.visibleon.name+'"]', _btnVisibleOnChanged);
+	  }
+
 	  // Check to see if step validation has been init (wizard view)
 	  if (typeof this._stepValidated[(this._currentStep)-2] !== 'undefined'
 		  && ! ( _type === 'step' || _type === 'list' )
@@ -784,6 +797,9 @@ define([
 			}
 		  }
 		} else {
+		  // Trigger Event to let other objects know that this fields will go out of markup
+		  $('#'+field.name, that.el).trigger('removeVisibleOn');
+
 		  // Remove this out of the markup
 		  $('.options-visible-on-'+field.name, that.el).remove();
 		  if (field.type.toLowerCase() !== 'html') {
