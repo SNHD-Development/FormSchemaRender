@@ -22,7 +22,7 @@
   $.fn.birthdaypicker = function( options ) {
 
 	if (options && typeof options === 'string') {
-		options = jQuery.parseJSON(options);
+		options = $.parseJSON(options);
 	}
     var settings = {
       "maxage"        : 120,
