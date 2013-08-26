@@ -631,7 +631,9 @@ define([
 
 			var _type = value.type.toLowerCase();
 
-			if (_type === 'buttonclipboard') {
+			if (value.options.internal && ( value.options.internal !== view.options.internal) ) {
+				return false;
+			} else if (_type === 'buttonclipboard') {
 				return true;
 			} else if ( view.options.formData.fields[value.name] === '') {
 				return false;
