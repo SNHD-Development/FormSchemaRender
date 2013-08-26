@@ -527,6 +527,7 @@ define([
 						, _data = {}
 						, _error = false
 						, _opt
+						, $invalidObj = []
 						, _success = element.options.events || function (e) {
 							var $form = $(view.el)
 							, $hiddenInput = $('#'+element.name+'_btn_condition', $form);
@@ -544,12 +545,23 @@ define([
 							}, 1000 );
 						};
 						_.each(element.data, function (el, key) {
-							if ($.isArray(el)) {
-								//code
+							if (typeof el !== 'string') {
+								if (typeof _error === 'boolean') {
+									_error = [];
+								}
+								var _elementError;
+								_.each(el, function (elArray, keyArray) {
+									_elementError = that.setUpButtonDecision(elArray, keyArray, _data, view.el, $invalidObj);
+								});
+								_error.push(_elementError);
 							} else {
-								_error = that.setUpButtonDecision(el, key, _data, _error, view.el);
+								_error = that.setUpButtonDecision(el, key, _data, view.el);
 							}
 						});
+
+						if (typeof _error !== 'boolean' && _error.indexOf(false) > -1) {
+							_error = false;
+						}
 
 						if (_error) {
 							_opt = {
@@ -569,6 +581,10 @@ define([
 
 							return false;
 						}
+
+						_.each($invalidObj, function ($el) {
+							$el.removeClass('invalid');
+						});
 
 						// Get the query object, will send to the url
 						_url += $.param(_data);
@@ -671,10 +687,13 @@ define([
 		/**
 		 * Function to setup Button Decision
 		 **/
-		setUpButtonDecision: function (el, key, data, error, form) {
+		setUpButtonDecision: function (el, key, data, form, invalidObj) {
+			invalidObj = invalidObj || false;
 			var $currentElement = $('#'+el)
 			, $bDate = $currentElement.parent('.birthday-picker')
-			, $bDateSelect;
+			, $bDateSelect
+			, error = false
+			, $input;
 			if ($bDate.length > 0) {
 				$bDateSelect = $('.not_sending', $bDate).trigger('change');
 			}
@@ -683,12 +702,18 @@ define([
 				data[key] = _val;
 			} else {
 				error = true;
-				$(':input[name="'+el+'"]', form).addClass('invalid');
+				$input = $(':input[name="'+el+'"]', form).addClass('invalid');
+				if (invalidObj) {
+					invalidObj.push($input);
+				}
 				if ($bDate.length > 0) {
 					var _index = _val.split('/');
 					_.each(_index, function (date, index) {
 						if (date === 'NaN') {
-							$($bDateSelect[index]).addClass('invalid');
+							$input = $($bDateSelect[index]).addClass('invalid');
+							if (invalidObj) {
+								invalidObj.push($input);
+							}
 						}
 					});
 				}
