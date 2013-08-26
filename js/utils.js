@@ -535,7 +535,7 @@ define([
 								throw 'Result JSON must have "value" key';
 							}
 							if ($hiddenInput.length === 0) {
-								$currentTarget.after('<input type="hidden" name="'+element.name+'" id="'+element.name+'_btn_condition" class="not_sending"/>');
+								$currentTarget.after('<input type="hidden" name="'+element.name+'" id="'+element.name+'_btn_condition"/>');
 							}
 							view.model.set(element.name, e.value);
 							window.setTimeout(
