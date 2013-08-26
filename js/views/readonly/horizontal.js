@@ -33,13 +33,15 @@ define([
 		, _html = '';
 	  _.each(this.options.formSchema.fields, function(value, key, list) {
 
+		var _typeLowerCase = value.type.toLowerCase();
+
 		// Check if the data is empty, will not render
 		if ( ! Utils.isRenderReadMode(that, value)) {
 		  return '';
 		}
 
 		// VisibleOn Options
-		if (value.options.visibleon && value.type.toLowerCase() !== 'html' &&
+		if (value.options.visibleon && _typeLowerCase !== 'html' &&
 			value.options.visibleon.values.indexOf(that.options.formData.fields[value.options.visibleon.name]) === -1) {
 		  return '';
 		}
@@ -47,16 +49,19 @@ define([
 		// Check for Show On Mode
 		if ( ! BaseFieldView.prototype.checkShowOnMode.call(that, value, 'read', that.options.formData.status) ) {
 		  return '';
+		} else if (_typeLowerCase === 'buttondecision') {
+		  _html += '<input type="hidden" name="'+value.name+'" id="'+value.name+'_btn_condition" value="'+that.options.formData.fields[value.name]+'"/>';
+		  return '';
 		}
 
-		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
+		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, _typeLowerCase) === -1) {
 			_html += '<div class="control-group">';
 			this._divcontrolgroup++;
 			_html += that.renderLabel(value, false, 'control-label');
 			_html += '<div class="controls">';
 		}
 		_html += _parentRender.call(that, value, true);
-		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, value.type.toLowerCase()) === -1) {
+		if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, _typeLowerCase) === -1) {
 			_html += '</div></div>';
 			this._divcontrolgroup--;
 		}

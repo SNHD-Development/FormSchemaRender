@@ -385,9 +385,11 @@ define([
 		  break;
 
 		case 'buttondecision':
-		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
-		  _type = 'button';
-		  this._buttonDecision.push(field);
+		  if ( ! readMode) {
+			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
+			_type = 'button';
+			this._buttonDecision.push(field);
+		  }
 		  break;
 
 		case 'button':
