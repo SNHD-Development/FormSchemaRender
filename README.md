@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.0.6`
+Version `version 0.0.7`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -323,6 +323,8 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ### Version
+
+* 0.0.7 - Fix Button Decision on Read Mode.
 
 * 0.0.6 - Add Copy to Clipboard button, Button Decision type and fix ie 7 Styles.
 

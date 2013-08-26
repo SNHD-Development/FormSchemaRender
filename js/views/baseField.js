@@ -626,7 +626,7 @@ define([
 
 	  // If this is type VisibleOn and in Read Mode will not render if does not have data
 	  if (this.options.mode === 'read' && ! $.isEmptyObject(value.options.visibleon)
-		&& ! this.options.formData.fields[value.name]) {
+		&& ! this.options.formData.fields[value.name] && _type !== 'address') {
 		return false;
 	  }
 
