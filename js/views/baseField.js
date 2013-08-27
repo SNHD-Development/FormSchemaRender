@@ -538,6 +538,9 @@ define([
 			case 'address':
 			  _textarea = ' uneditable-input-textarea';
 			  break;
+			case 'timestamp':
+			  _field_data = Utils.getHumanTime(_field_data)
+			  break;
 		  }
 		  _html += that.inputTemplate['uneditableinput']({value: _field_data, css_class: _textarea, id: field.name});
 		}
