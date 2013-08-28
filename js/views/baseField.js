@@ -16,6 +16,7 @@ define([
   'text!templates/fields/html.html',
   'text!templates/fields/label.html',
   'text!templates/fields/text.html',
+  'text!templates/fields/telephone.html',
   'text!templates/fields/hidden.html',
   'text!templates/fields/timestamp.html',
   'text!templates/fields/useraccount.html',
@@ -50,6 +51,7 @@ define([
 	, htmlTemplate
 	, labelTemplate
 	, textTemplate
+	, telephoneTemplate
 	, hiddenTemplate
 	, timestampTemplate
 	, useraccountTemplate
@@ -135,6 +137,7 @@ define([
 		"html" : _.template(htmlTemplate),
 		"label" : _.template(labelTemplate),
 		"text" : _.template(textTemplate),
+		"telephone" : _.template(telephoneTemplate),
 		"hidden" : _.template(hiddenTemplate),
 		"timestamp" : _.template(timestampTemplate),
 		"useraccount" : _.template(useraccountTemplate),
@@ -617,6 +620,11 @@ define([
 	 **/
 	checkShowOnMode: function(value, readMode, status) {
 	  var _type = value.type.toLowerCase();
+
+	  // First Check to see if rendering for internal or external
+	  if (value.options.internal && ( value.options.internal !== this.options.internal )) {
+		return false;
+	  }
 
 	  // If this is internal fields, we need to push to _internalFields array
 	  if (value.options.internal === true && value.name) {
