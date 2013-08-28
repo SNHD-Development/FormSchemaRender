@@ -118,10 +118,60 @@ define([
 	  Utils.allowNumber(e);
 	},
 	/**
-	 *
+	 * Valid Integer Number Only
 	 **/
 	allowZipCode: function(e) {
 	  Utils.allowZipCode(e);
+	},
+	/**
+	 * Format Telephone number in valid format (xxx) xxx-xxxx
+	 **/
+	formatTelephoneNumber: function(e) {
+	  var $currentTarget = $(e.currentTarget)
+		, _val = $currentTarget.val()
+		, _tmp = '';
+
+	  if ( e.type === 'keydown' && (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105) ) {
+
+		switch (_val.length) {
+		  case 0:
+			if (e.keyCode === 48 || e.keyCode === 105) {
+			  e.preventDefault();
+			  return;
+			}
+			$currentTarget.val('('+_val);
+			break;
+
+		  case 4:
+			$currentTarget.val(_val+') ');
+			break;
+
+		  case 9:
+			$currentTarget.val(_val+'-');
+		}
+	  } else {
+		for (var i=0,j=_val.length;i<j;i++) {
+		  if ( ! isNaN(parseInt(_val[i]))) {
+			_tmp += _val[i];
+		  }
+		}
+		_val = '';
+		for (var i=0,j=_tmp.length;i<j;i++) {
+		  switch (i) {
+			case 0:
+			  _val += '(';
+			  break;
+			case 3:
+			  _val += ') ';
+			  break;
+			case 6:
+			  _val += '-';
+			  break;
+		  }
+		  _val += _tmp[i];
+		}
+		$currentTarget.val(_val);
+	  }
 	},
     /**
 	 * View Events
@@ -134,7 +184,9 @@ define([
 	  'change :file' : 'preValidate',
 	  'keydown :input[type="email"]': 'preventSpace',
 	  'keydown :input[type="number"], :input.number': 'allowNumber',
-	  'keydown :input.allowzipcode': 'allowZipCode'
+	  'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
+	  'keydown :input.telephone': 'formatTelephoneNumber',
+	  'blur :input.telephone': 'formatTelephoneNumber'
 	},
 	/**
 	 * Submit Form

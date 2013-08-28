@@ -244,6 +244,10 @@ define([
 		  _type = 'text';
 		  break;
 
+		case 'telephone':
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer telephone');
+		  break;
+
 		case 'textarea':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span10');
 		  break;
