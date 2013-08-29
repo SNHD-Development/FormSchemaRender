@@ -537,7 +537,17 @@ define([
 							if ($hiddenInput.length === 0) {
 								$currentTarget.after('<input type="hidden" name="'+element.name+'" id="'+element.name+'_btn_condition"/>');
 							}
-							view.model.set(element.name, e.value);
+							// If the return JSON has "data" key, it will loop through data to build the select table for user.
+							if (element.options.renderresult && e.data) {
+								view.model.set(element.name, '');
+								// Render Data for User to Select.
+								require(['views/subform-layouts/buttondecision'], function (ButtonDecisionView) {
+									var buttonDecisionView = Vm.create(that, element.name+'View', ButtonDecisionView, { model : view.model, el : $currentTarget, name: element.name});
+									buttonDecisionView.render(e.data);
+								});
+							} else {
+								view.model.set(element.name, e.value);
+							}
 							window.setTimeout(
 								function() {
 									$currentTarget.attr('disabled', false).popover('destroy');
