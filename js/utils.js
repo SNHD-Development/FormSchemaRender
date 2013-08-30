@@ -514,10 +514,17 @@ define([
 			// Default Success Call Back must return JSON with key = "value"
 			if (view._buttonDecision.length > 0) {
 				_.each(view._buttonDecision, function(element) {
+					var $btn_decision = $('a#'+element.name, view.el)
+					, _html_tmp = '<input type="hidden" name="'+element.name+'" id="'+element.name+'_btn_condition"/>';
 					if ( ! element.url || ! element.data ) {
 						throw 'ButtonDecision require Url and Data options!';
+					} else if (view.options.mode === 'update') {
+						$btn_decision.after(_html_tmp);
+						if (view.options.formData.fields[element.name]) {
+							$btn_decision.next('input[type="hidden"]').val(view.options.formData.fields[element.name]).trigger('change');
+						}
 					}
-					$('a#'+element.name, view.el).click(function (e) {
+					$btn_decision.click(function (e) {
 						e.preventDefault();
 						var $currentTarget = $(e.currentTarget);
 						if ($currentTarget.attr('disabled')) {
@@ -535,7 +542,7 @@ define([
 								throw 'Result JSON must have "value" key';
 							}
 							if ($hiddenInput.length === 0) {
-								$currentTarget.after('<input type="hidden" name="'+element.name+'" id="'+element.name+'_btn_condition"/>');
+								$currentTarget.after(_html_tmp);
 							}
 							// If the return JSON has "data" key, it will loop through data to build the select table for user.
 							if (element.options.renderresult && e.data) {
