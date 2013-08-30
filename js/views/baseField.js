@@ -797,12 +797,13 @@ define([
 
 	  $(this.el).on('change', ':input[name="'+field.options.visibleon.name+'"]', function(e) {
 		var $currentTarget = $(e.currentTarget)
-		, $container = (parentContainer) ? $currentTarget.parents(parentContainer): $currentTarget;
+		, $container = (parentContainer) ? $currentTarget.parents(parentContainer): $currentTarget
+		, $containerOptions;
 		if (_.indexOf(field.options.visibleon.values, $currentTarget.val()) > -1 ) {
 		  // Insert this into markup
 		  if ($('.options-visible-on-'+field.name, that.el).length < 1) {
 			$container.after(htmlTmpl);
-			$container.next('.options-visible-on-'+field.name).fadeIn('slow', function() {
+			$containerOptions = $container.next('.options-visible-on-'+field.name).fadeIn('slow', function() {
 			  $(this).addClass('visible-parent-'+field.options.visibleon.name).attr('data-parent', field.options.visibleon.name);
 
 			  // Remove the class that not belong to this visibleOn
@@ -818,28 +819,47 @@ define([
 			});
 			// Adding Validation Scheme, if has one
 			if (_typeLowerCase === 'address') {
-			  var _address_name = field.name+'_address_street';
+			  var _address_name = field.name+'_address_street'
+			  , _addressArray = [];
 			  if (that.options.formSchema.validation[_address_name]) {
 				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
 			  }
+			  _addressArray.push(_address_name);
+
 			  _address_name = field.name+'_address_city';
 			  if (that.options.formSchema.validation[_address_name]) {
 				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
 			  }
+			  _addressArray.push(_address_name);
+
 			  _address_name = field.name+'_address_state';
 			  if (that.options.formSchema.validation[_address_name]) {
 				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
 			  }
+			  _addressArray.push(_address_name);
+
 			  _address_name = field.name+'_address_zip';
 			  if (that.options.formSchema.validation[_address_name]) {
 				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
 			  }
+			  _addressArray.push(_address_name);
+
 			  _address_name = field.name+'_address_country';
 			  if (that.options.formSchema.validation[_address_name]) {
 				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
 			  }
+			  _addressArray.push(_address_name);
+
 			  if (field.options.hidecountry) {
 				that.model.set(_address_name, 'US');
+			  }
+
+			  if (that.options.mode === 'update') {
+				_.each(_addressArray, function (element) {
+				  if (that.options.formData.fields[element]) {
+					$(':input[name="'+element+'"]', $containerOptions).val(that.options.formData.fields[element]);
+				  }
+				});
 			  }
 			} else if (that.options.formSchema.validation[field.name] && _typeLowerCase !== 'html') {
 			  that.model.validation[field.name] = that.options.formSchema.validation[field.name];
