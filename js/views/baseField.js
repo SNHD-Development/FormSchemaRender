@@ -631,7 +631,7 @@ define([
 	  }
 
 	  // If this is internal fields, we need to push to _internalFields array
-	  if (value.options.internal === true && value.name) {
+	  if (value.options.internal === true && value.name && _type !== 'buttonclipboard') {
 		this._internalFields.push(value.name);
 	  }
 
@@ -641,7 +641,8 @@ define([
 
 	  // If this is type VisibleOn and in Read Mode will not render if does not have data
 	  if (this.options.mode === 'read' && ! $.isEmptyObject(value.options.visibleon)
-		&& ! this.options.formData.fields[value.name] && _type !== 'address') {
+		&& ! this.options.formData.fields[value.name]
+		&& ! (_type === 'address' || _type === 'buttonclipboard') ) {
 		return false;
 	  }
 
