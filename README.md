@@ -290,6 +290,59 @@ Validation FormSchema
 
 ### ButtonDecision
 
+When we want to control the flow of the form, we can have the button to look up the result with Ajax and has the options to render the data and let the user select what information is corrected.
+
+Return JSON Format (Required)
+
+	{
+		value: "any value that will return, this will trigger the button decision"
+	}
+
+FormSchema:
+
+	{
+		"Name" : "ButtonDecisionLookUp",
+		"Type" : "ButtonDecision",
+		"Description" : "Look Up Information",
+		"Url" : "/route/url",
+		"Data" : [
+			{
+				"firstname" : "Your_fullname_first_name",
+				"lastname" : "Your_fullname_last_name",
+				"birthdate" : "YourDob"
+			}
+		],
+		"Options": {
+			"RenderResult" : true
+		}
+	}
+
+Data: This data will send as get data in the query string
+
+Options.RenderResult: If there might some chance that the data might return more than just 1 data. It will need to supply this options to enable dynamic data rendering with this JSON protocol
+
+Return JSON Format (Required)
+
+	{
+		value: "any value that will return, if data existed in the JSON result. This will be ignored.",
+		data: {
+			caption: "Table Caption",
+			thead: {
+				key: value
+			},
+			data: {
+				data1 : {
+					key: value
+				},
+				data2 : {
+					key: value
+				}
+			},
+			hiddenfields: [
+				'key1', 'key2'
+			]
+		}
+	}
 
 
 ### ButtonClipboard

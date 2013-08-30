@@ -178,6 +178,17 @@
       display: none; }
     .form-render .table-multi-files td .btn i {
       margin-right: 3px; }
+  .form-render .btn-decision-data-wrapper {
+    margin: 20px auto; }
+    .form-render .btn-decision-data-wrapper .btn-decision-data-render caption {
+      text-align: left;
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #DDD; }
+    .form-render .btn-decision-data-wrapper .btn-decision-data-render thead td {
+      font-weight: bold; }
 
 /**
  * IE8 Style Only

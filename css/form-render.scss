@@ -318,6 +318,28 @@ $text_area_min_height:  100px;
 		}
 	}
 
+	// Button Decision Style
+	.btn-decision-data-wrapper {
+		margin: 20px auto;
+
+		.btn-decision-data-render {
+			caption {
+				text-align: left;
+				font-weight: bold;
+				font-size: 16px;
+				margin-bottom: 20px;
+				padding-bottom: 10px;
+				border-bottom: 1px solid #DDD;
+			}
+
+			thead {
+				td {
+					font-weight: bold;
+				}
+			}
+
+		}
+	}
 }
 
 /**
