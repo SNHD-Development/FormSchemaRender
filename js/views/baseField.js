@@ -798,7 +798,8 @@ define([
 	  $(this.el).on('change', ':input[name="'+field.options.visibleon.name+'"]', function(e) {
 		var $currentTarget = $(e.currentTarget)
 		, $container = (parentContainer) ? $currentTarget.parents(parentContainer): $currentTarget
-		, $containerOptions;
+		, $containerOptions
+		, _addressArray = [];
 		if (_.indexOf(field.options.visibleon.values, $currentTarget.val()) > -1 ) {
 		  // Insert this into markup
 		  if ($('.options-visible-on-'+field.name, that.el).length < 1) {
@@ -819,8 +820,7 @@ define([
 			});
 			// Adding Validation Scheme, if has one
 			if (_typeLowerCase === 'address') {
-			  var _address_name = field.name+'_address_street'
-			  , _addressArray = [];
+			  var _address_name = field.name+'_address_street';
 			  if (that.options.formSchema.validation[_address_name]) {
 				that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
 			  }
@@ -854,17 +854,20 @@ define([
 				that.model.set(_address_name, 'US');
 			  }
 
-			  if (that.options.mode === 'update') {
-				_.each(_addressArray, function (element) {
-				  if (that.options.formData.fields[element]) {
-					$(':input[name="'+element+'"]', $containerOptions).val(that.options.formData.fields[element]);
-				  }
-				});
-			  }
 			} else if (that.options.formSchema.validation[field.name] && _typeLowerCase !== 'html') {
 			  that.model.validation[field.name] = that.options.formSchema.validation[field.name];
+			  _addressArray.push(field.name);
 			} else if (that.options.formSchema.validation[field.name+'[]']) {
 			  that.model.validation[field.name+'[]'] = that.options.formSchema.validation[field.name+'[]'];
+			  _addressArray.push(field.name+'[]');
+			}
+
+			if (that.options.mode === 'update' && _addressArray.length > 0) {
+			  _.each(_addressArray, function (element) {
+				if (that.options.formData.fields[element]) {
+				  $(':input[name="'+element+'"]', $containerOptions).val(that.options.formData.fields[element]);
+				}
+			  });
 			}
 		  }
 		} else {
