@@ -543,6 +543,7 @@ define([
 						, _error = false
 						, _opt
 						, $invalidObj = []
+						, _canEmpty = (element.options.datacanempty) ? element.options.datacanempty: []
 						, _success = element.options.events || function (e) {
 							var $form = $(view.el)
 							, $hiddenInput = $('#'+element.name+'_btn_condition', $form);
@@ -571,6 +572,7 @@ define([
 									$currentTarget.next('.popover').remove();
 							}, 1000 );
 						};
+
 						_.each(element.data, function (el, key) {
 							if (typeof el !== 'string') {
 								if (typeof _error === 'boolean') {
@@ -578,11 +580,11 @@ define([
 								}
 								var _elementError;
 								_.each(el, function (elArray, keyArray) {
-									_elementError = that.setUpButtonDecision(elArray, keyArray, _data, view.el, $invalidObj);
+									_elementError = that.setUpButtonDecision(elArray, keyArray, _data, view.el, _canEmpty, $invalidObj);
 								});
 								_error.push(_elementError);
 							} else {
-								_error = that.setUpButtonDecision(el, key, _data, view.el);
+								_error = that.setUpButtonDecision(el, key, _data, view.el, _canEmpty);
 							}
 						});
 
@@ -727,7 +729,8 @@ define([
 		/**
 		 * Function to setup Button Decision
 		 **/
-		setUpButtonDecision: function (el, key, data, form, invalidObj) {
+		setUpButtonDecision: function (el, key, data, form, canEmpty, invalidObj) {
+			canEmpty = canEmpty || [];
 			invalidObj = invalidObj || false;
 			var $currentElement = $('#'+el)
 			, $bDate = $currentElement.parent('.birthday-picker')
@@ -738,7 +741,8 @@ define([
 				$bDateSelect = $('.not_sending', $bDate).trigger('change');
 			}
 			var _val = $currentElement.val();
-			if (_val !== '' && _val.search(/NaN/) === -1 ) {
+			if ( (_val !== '' && _val.search(/NaN/) === -1)
+				|| canEmpty.indexOf(key) > -1) {
 				data[key] = _val;
 			} else {
 				error = true;

@@ -324,6 +324,28 @@ FormSchema:
 	}
 
 Data: This data will send as get data in the query string
+In some case, some data field can be empty. We need to set "Options.DataCanEmpty = ['fieldName']"
+
+FormSchema:
+
+	{
+		"Name" : "ButtonDecisionLookUp",
+		"Type" : "ButtonDecision",
+		"Description" : "Look Up Information",
+		"Url" : "/route/url",
+		"Data" : [
+			{
+				"firstname" : "Your_fullname_first_name",
+				"middlename" : "Your_fullname_middle_name",
+				"lastname" : "Your_fullname_last_name",
+				"birthdate" : "YourDob"
+			}
+		],
+		"Options": {
+			"RenderResult" : true,
+			"DataCanEmpty" : ["middlename"]
+		}
+	}
 
 Options.RenderResult: If there might some chance that the data might return more than just 1 data. It will need to supply this options to enable dynamic data rendering with this JSON protocol
 
