@@ -553,6 +553,8 @@ define([
 									buttonDecisionView.render(e.data);
 								});
 							} else {
+								// If this field has options renderresult we might need to remove that markup as well.
+								$currentTarget.parent().find('div.btn-decision-data-wrapper').remove();
 								view.model.set(element.name, e.value);
 							}
 							window.setTimeout(
