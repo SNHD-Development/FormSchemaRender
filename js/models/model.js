@@ -146,6 +146,16 @@ define([
 		  }
 		  break;
 
+		case 'telephone':
+		  _attrs[value.name] = '';
+		  if (typeof attrs.validation[value.name] !== 'undefined') {
+			_validation[value.name] = _.clone(attrs.validation[value.name]);
+			if (_validation[value.name].required) {
+			  _validation[value.name].pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
+			}
+		  }
+		  break;
+
 		// If this is ButtonDecision Type
 		// Will need to set the on change event
 		case 'buttondecision':
