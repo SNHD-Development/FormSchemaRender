@@ -524,6 +524,14 @@ define([
 							$btn_decision.next('input[type="hidden"]').val(view.options.formData.fields[element.name]).trigger('change');
 						}
 					}
+
+					// If this is internal, will not render the button. Will render only hidden input.
+					if ( typeof element.options.internal !== 'undefined' && view.options.internal !== element.options.internal) {
+						var $btnContainer = $btn_decision.parents('.control-group');
+						($btnContainer.length > 0) ? $btnContainer.hide(): $btn_decision.hide();
+						return true;
+					}
+
 					$btn_decision.click(function (e) {
 						e.preventDefault();
 						var $currentTarget = $(e.currentTarget);
