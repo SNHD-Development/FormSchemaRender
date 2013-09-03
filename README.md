@@ -147,6 +147,12 @@ In order to build form when user click a button can be done by adding class "btn
 		}
 	}
 
+### FullName Field
+
+By default, will render three textboxes as "First Name", "Middle Initial" and "Last Name"
+if we don't want to render "Middle Initial" simply set in "Options.MiddleName = false".
+If we want to accept Middle Name instead of Middle Initial simply set "Options.FullMiddleName = true". This option will change the placeholder text to "Middle Name".
+
 ### Address Field
 
 By default, Address Field will render "Street, City, State, ZipCode and Country"
