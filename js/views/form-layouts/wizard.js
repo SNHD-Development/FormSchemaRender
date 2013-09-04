@@ -87,7 +87,8 @@ define([
 	 * Render Wizard Navigation Bar
 	 **/
 	renderWizardNavBar: function() {
-	  var _html = '', _icon, $steps, _stepWidth, _offset;
+	  var _html = '', _icon, $steps, _stepWidth, _offset, $li
+	  _maxHeight = 0;
 	  _.each(this._steps, function(element, index) {
 		element['class'] = element['class'] || '';
 		if (index === 0) {
@@ -101,8 +102,12 @@ define([
 
 	  // Calculated the Step Width
 	  _stepWidth = Math.floor( ( $steps.width() - this._steps.length ) / this._steps.length );
-	  _offset = $steps.width() - ( _stepWidth * this._steps.length) - 3;
-	  $('li', $steps).css('width', _stepWidth).last().css('width', _stepWidth+_offset);
+	  _offset = $steps.width() - ( _stepWidth * this._steps.length) - 4;
+	  $li = $('li', $steps).css('width', _stepWidth);
+	  $li.last().css('width', _stepWidth+_offset);
+	  $li.each( function() {
+		_maxHeight = Math.max(_maxHeight, $(this).height());
+	  }).height(_maxHeight);
 	},
 	/**
 	 * Wizard Events
