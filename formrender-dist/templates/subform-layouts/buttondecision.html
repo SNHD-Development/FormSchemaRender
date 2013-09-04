@@ -11,18 +11,22 @@
 		</thead>
 		<tbody>
 			<%
-			var _i = -1;
+			var _i = -1
+			, _html = '';
 			_.each(data.data, function (valueData) {
 				++_i;
+				_html = '';
 			%>
 				<tr>
 					<% _.each(valueData, function (valueDatum, keyDatum) {
-						var _html;
 						if (data.hiddenfields && data.hiddenfields.indexOf(keyDatum) > -1) {
 							_html = '<input type="hidden" name="'+keyDatum+'_data_options_'+_i+'" value="'+valueDatum+'" class="not_sending"/>';
-						} else if (data.thead && data.thead[keyDatum]) {
-							_html = '<td>'+valueDatum+'</td>';
 						}
+					%>
+					<%= _html %>
+					<% }); %>
+					<% _.each(data.thead, function (value, key) {
+						_html = '<td>'+valueData[key]+'</td>';
 					%>
 					<%= _html %>
 					<% }); %>
