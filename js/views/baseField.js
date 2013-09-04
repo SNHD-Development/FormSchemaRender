@@ -344,6 +344,7 @@ define([
 		case 'number':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'number span12');
 		  if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
+			field.attributes['class'] = field.attributes['class'].replace(/ span12/,"", "gi");
 			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'spinner-input');
 			if (this.options.mode === 'update' && this.options.formData.fields[field.name]) {
 			  field.attributes['data-value'] = this.options.formData.fields[field.name];
