@@ -19,6 +19,7 @@
 			%>
 				<tr>
 					<% _.each(valueData, function (valueDatum, keyDatum) {
+						_html = '';
 						if (data.hiddenfields && data.hiddenfields.indexOf(keyDatum) > -1) {
 							_html = '<input type="hidden" name="'+keyDatum+'_data_options_'+_i+'" value="'+valueDatum+'" class="not_sending"/>';
 						}
