@@ -242,10 +242,11 @@ define([
 
 		case 'textbox':
 		  _type = 'text';
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
 		  break;
 
 		case 'telephone':
-		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer telephone');
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer telephone span12');
 		  break;
 
 		case 'textarea':
@@ -300,12 +301,13 @@ define([
 		  break;
 
 		case 'email':
-		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'tolowercase');
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'tolowercase span12');
 		  if (typeof field.options.autocomplete !== 'undefined' && field.options.autocomplete) {
 			this._hasEmailPicker = true;
 			field.attributes = {};
 			field.attributes['data-provide'] = 'typeahead';
 			field.attributes['autocomplete'] = 'off';
+			field.attributes['style'] = 'width:45%;';
 			field.attributes['class'] = 'not_sending emailpicker_server tolowercase';
 			field.attributes['data-source'] = emailData.replace(/\n/g, '').replace(/'/g, "&#39");
 			if (typeof field.options['default'] !== 'undefined') {
@@ -340,7 +342,7 @@ define([
 		  break;
 
 		case 'number':
-		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'number');
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'number span12');
 		  if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
 			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'spinner-input');
 			if (this.options.mode === 'update' && this.options.formData.fields[field.name]) {
