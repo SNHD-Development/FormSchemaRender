@@ -547,6 +547,28 @@ define([
 						, _success = element.options.events || function (e) {
 							var $form = $(view.el)
 							, $hiddenInput = $('#'+element.name+'_btn_condition', $form);
+							// If there is an error
+							if (e.status && e.status === 'error') {
+								$currentTarget.attr('disabled', false).popover('destroy');
+								$currentTarget.next('.popover').remove();
+
+								_opt = {
+									html : true,
+									placement: 'top',
+									trigger: 'manual',
+									title: '<i class="icon-edit"></i> Error',
+									content: e.error_message
+								};
+								$currentTarget.attr('disabled', true).popover(_opt).popover('show');
+
+								window.setTimeout(
+									function() {
+										$currentTarget.attr('disabled', false).popover('destroy');
+										$currentTarget.next('.popover').remove();
+								}, 3000 );
+
+								return false;
+							}
 							if ( ! e.value) {
 								throw 'Result JSON must have "value" key';
 							}
