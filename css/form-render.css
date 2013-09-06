@@ -196,7 +196,7 @@
 body.ie8 .form-render .controls-row {
   margin-bottom: 10px; }
   body.ie8 .form-render .controls-row input {
-    min-height: 20px; }
+    min-height: 20px !important; }
   body.ie8 .form-render .controls-row .span6 {
     width: 43%; }
 

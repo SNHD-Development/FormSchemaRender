@@ -384,7 +384,7 @@ define([
 		 * Convert Unix TimeStamp to Human Readable
 		 **/
 		getHumanTime: function(unixTime) {
-			var time = new Date(unixTime*1000)
+			var time = (typeof unixTime !== 'object') ? new Date(unixTime*1000) : new Date(unixTime.$date)
 			, months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 			, year = time.getFullYear()
 			, month = months[time.getMonth()]

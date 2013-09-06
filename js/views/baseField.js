@@ -481,9 +481,15 @@ define([
 		  &&  ! ( _type === 'button' || _type === 'buttonclipboard' ) ) {
 		var _field_data = '', _href = '';
 		_.each(_name, function(element) {
-		  _field_data += ( (typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element]: '') + ' ';
+		  if (typeof that.options.formData.fields[element] !== 'object' ) {
+			_field_data += ( (typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element]: '') + ' ';
+		  } else {
+			_field_data = that.options.formData.fields[element];
+		  }
 		});
-		_field_data = $.trim(_field_data);
+		if (typeof _field_data === 'string') {
+		  _field_data = $.trim(_field_data);
+		}
 		if (_type === 'file' || _type === 'image') {
 		  if (_type === 'image') {
 			field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src']: '/form/getFile/')+that.options.formData.fields[field.name];
