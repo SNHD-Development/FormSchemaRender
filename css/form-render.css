@@ -199,6 +199,8 @@ body.ie8 .form-render .controls-row {
     min-height: 20px !important; }
   body.ie8 .form-render .controls-row .span6 {
     width: 43%; }
+body.ie8 .form-render input[class*="span"], body.ie8 .form-render select[class*="span"] {
+  min-height: 20px; }
 
 /**
  * IE7 Style Only

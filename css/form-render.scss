@@ -362,6 +362,12 @@ body.ie8 {
 
 		}
 
+		input, select {
+			&[class*="span"] {
+				min-height: 20px;
+			}
+		}
+
 	}
 }
 
