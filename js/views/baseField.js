@@ -808,6 +808,7 @@ define([
 		var $currentTarget = $(e.currentTarget)
 		, $container = (parentContainer) ? $currentTarget.parents(parentContainer): $currentTarget
 		, $containerOptions
+		, $nextContainer
 		, _addressArray = [];
 		if (_.indexOf(field.options.visibleon.values, $currentTarget.val()) > -1 ) {
 		  // Insert this into markup
@@ -827,6 +828,14 @@ define([
 				$(':input[name="'+field.name+'"]', this).trigger('visibleOnRenderComplete');
 			  }
 			});
+
+			// Some browser that still not support the placeholder
+			$nextContainer = $container.next('div');
+			if ($nextContainer.length === 0) {
+			  $nextContainer = $container.parent();
+			}
+			$nextContainer.find(':input').not('input[type="hidden"]').placeholder();
+
 			// Adding Validation Scheme, if has one
 			if (_typeLowerCase === 'address') {
 			  var _address_name = field.name+'_address_street';
