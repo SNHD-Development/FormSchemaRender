@@ -114,77 +114,80 @@ require.config({
 // Let's kick off the application
 
 require([
+  'jquery',
   'views/app',
   'vm',
   'utils'
-], function(AppView, Vm, Utils){
+], function($, AppView, Vm, Utils){
 
-  Utils.setupOldBrowser();
+  $(function () {
+    Utils.setupOldBrowser();
 
-  var _mode, _view, _token, _opts, appView
-  , config = {
-    mode : ["read", "update", "create"],
-    view : ["default", "horizontal", "wizard"]
-  };
+    var _mode, _view, _token, _opts, appView
+    , config = {
+      mode : ["read", "update", "create"],
+      view : ["default", "horizontal", "wizard"]
+    };
 
-  if (typeof formSchema === 'undefined') {
-    throw 'formSchema is undefined';
-  }
-  // Cast to lowercase
-  Vm.toLower(formSchema);
-  if (typeof formData !== 'undefined') {
-    Vm.toLower(formData, ['fields', 'internalfields'] );
-    _mode = (typeof mode !== 'undefined' && config.mode.indexOf(mode.toLowerCase()) > -1) ? mode.toLowerCase(): 'update';
-    if (_mode === 'update') {
-      Vm.decodeHtml(formData);
+    if (typeof formSchema === 'undefined') {
+      throw 'formSchema is undefined';
     }
-    if (typeof formData.internalfields !== 'undefined') {
-      formData.fields = _.extend(formData.fields, formData.internalfields);
-      delete formData.internalfields;
+    // Cast to lowercase
+    Vm.toLower(formSchema);
+    if (typeof formData !== 'undefined') {
+      Vm.toLower(formData, ['fields', 'internalfields'] );
+      _mode = (typeof mode !== 'undefined' && config.mode.indexOf(mode.toLowerCase()) > -1) ? mode.toLowerCase(): 'update';
+      if (_mode === 'update') {
+        Vm.decodeHtml(formData);
+      }
+      if (typeof formData.internalfields !== 'undefined') {
+        formData.fields = _.extend(formData.fields, formData.internalfields);
+        delete formData.internalfields;
+      }
+    } else {
+      _mode = (typeof mode !== 'undefined' && config.view.indexOf(view.toLowerCase()) > -1) ? mode.toLowerCase(): 'create';
     }
-  } else {
-    _mode = (typeof mode !== 'undefined' && config.view.indexOf(view.toLowerCase()) > -1) ? mode.toLowerCase(): 'create';
-  }
 
-  _view = (typeof view !== 'undefined') ? view.toLowerCase(): 'horizontal';
-  _token = (typeof token !== 'undefined' && _mode !== 'read') ? token: '';
+    _view = (typeof view !== 'undefined') ? view.toLowerCase(): 'horizontal';
+    _token = (typeof token !== 'undefined' && _mode !== 'read') ? token: '';
 
-  _opts = {
-    formSchema : formSchema,
-    formData : ( (typeof formData === 'undefined') ? {}: formData ),
-    mode : _mode,
-    token : _token,
-    internal: ( (typeof internal === 'undefined') ? false: internal ),
-    hideButtons: ( (typeof hideButtons === 'undefined') ? false: hideButtons )
-  };
+    _opts = {
+      formSchema : formSchema,
+      formData : ( (typeof formData === 'undefined') ? {}: formData ),
+      mode : _mode,
+      token : _token,
+      internal: ( (typeof internal === 'undefined') ? false: internal ),
+      hideButtons: ( (typeof hideButtons === 'undefined') ? false: hideButtons )
+    };
 
-  // Render Custom Script Here
-  if (typeof formEvents !== 'undefined') {
-    _.each(formEvents, function(value, key) {
-      $('div#app').on(formSchema.name+'.'+key, { Utils: Utils }, value);
-    });
-  }
+    // Render Custom Script Here
+    if (typeof formEvents !== 'undefined') {
+      _.each(formEvents, function(value, key) {
+        $('div#app').on(formSchema.name+'.'+key, { Utils: Utils }, value);
+      });
+    }
 
-  // Clean Up Global Object
-  formSchema = null;
-  formData = null;
-  mode = null;
-  view = null;
-  token = null;
-  internal = null;
-  formEvents = null;
-  hideButtons = null;
+    // Clean Up Global Object
+    formSchema = null;
+    formData = null;
+    mode = null;
+    view = null;
+    token = null;
+    internal = null;
+    formEvents = null;
+    hideButtons = null;
 
-  // Setup View
-  _opts.formSchema.view = _view;
+    // Setup View
+    _opts.formSchema.view = _view;
 
-  // Check Browser
-  Utils.checkBrowser();
+    // Check Browser
+    Utils.checkBrowser();
 
-  appView = Vm.create({}, 'AppView', AppView, _opts);
+    appView = Vm.create({}, 'AppView', AppView, _opts);
 
-  $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">Loading Form Information ...</span></p>');
+    $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">Loading Form Information ...</span></p>');
 
-  appView.render();
+    appView.render();
 
+  });
 });
