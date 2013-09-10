@@ -890,6 +890,8 @@ define([
 			if (that.options.mode === 'update' && _addressArray.length > 0) {
 			  _.each(_addressArray, function (element) {
 				if (that.options.formData.fields[element]) {
+				  // Need to set default value to the model
+				  that.model.set(element, that.options.formData.fields[element]);
 				  $(':input[name="'+element+'"]', $containerOptions).val(that.options.formData.fields[element]);
 				}
 			  });
