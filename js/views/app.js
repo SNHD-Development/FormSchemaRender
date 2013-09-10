@@ -233,7 +233,7 @@ define([
 			html : true,
 			placement: 'top',
 			trigger: 'manual',
-			title: 'Submitting Form, Please wait',
+			title: 'Submitting form; please wait.',
 			content: '<i class="icon-spinner icon-spin icon-large"></i> Sending data...'
 		  };
 		  $submitBtn.attr('disabled', true).popover(_opt).popover('show')
