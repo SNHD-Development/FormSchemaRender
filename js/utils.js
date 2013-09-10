@@ -526,7 +526,7 @@ define([
 					}
 
 					// If this is internal, will not render the button. Will render only hidden input.
-					if ( typeof element.options.internal !== 'undefined' && view.options.internal !== element.options.internal) {
+					if (view.options.internal === true) {
 						var $btnContainer = $btn_decision.parents('.control-group');
 						($btnContainer.length > 0) ? $btnContainer.hide(): $btn_decision.hide();
 						return true;
