@@ -642,7 +642,7 @@ define([
 	  var _type = value.type.toLowerCase();
 
 	  // First Check to see if rendering for internal or external
-	  if (value.options.internal && ( value.options.internal !== this.options.internal )) {
+	  if (value.options.internal != undefined && ( value.options.internal !== this.options.internal )) {
 		return false;
 	  }
 
