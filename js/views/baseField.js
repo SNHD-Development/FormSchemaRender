@@ -343,6 +343,13 @@ define([
 
 		case 'number':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'number span12');
+		  // Check to see how to render this
+		  if (field.options.decimals && this.options.formData.fields[field.name]) {
+			var _float_pts = parseFloat(this.options.formData.fields[field.name] / Math.pow(10, parseInt(field.options.decimals)));
+			if ( ! isNaN(_float_pts) ) {
+			  this.options.formData.fields[field.name] = _float_pts.toFixed(2);
+			}
+		  }
 		  if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {
 			field.attributes['class'] = field.attributes['class'].replace(/ span12/,"", "gi");
 			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'spinner-input');

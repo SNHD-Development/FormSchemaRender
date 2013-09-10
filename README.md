@@ -168,6 +168,23 @@ If you want to hide Country simply pass "HideCountry" to true in options.
 		}
 	}
 
+### Number Field
+
+Number field will limit only the number input. We can use this field to store currency as well.
+We will store the currency as integer and then pass the `Options.Decimals: any_number`
+It will set the number of decimal points when render.
+
+	{
+		"Name" : "PaymentAmount",
+		"Type" : "Number",
+		"Description" : "Payment Amount",
+		"Options" : {
+			"Decimals" : 2
+		}
+	}
+
+If you want to display spinner, simply pass `Options.Spinner: true`. Please add css `<link rel="stylesheet" href="css/spinner.css">` as well.
+
 ### VisibleOn Options
 
 There are sometime that the value from another field will effect the flow of the form. In this case, we will use `Options.VisibleOn = { Name: 'Name of other field', Values: 'Array of that field values that will trigger this field' };` to handle this situation.
@@ -406,6 +423,9 @@ Sometime there are some fileds that internal should not be able to update these 
 ### Version
 
 * 0.0.7 - Fix Button Decision on Read Mode.
+		- Add Decimals Options for Number Type.
+		- Button Decision can render data if found more than one.
+		- Fix Image Type when render, if it can render using lighbox will do that else will link to the new page.
 
 * 0.0.6 - Add Copy to Clipboard button, Button Decision type and fix ie 7 Styles.
 
