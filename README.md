@@ -168,6 +168,24 @@ If you want to hide Country simply pass "HideCountry" to true in options.
 		}
 	}
 
+### Select Field
+
+To change the default select text, simply set `Options.DefaultText: any text`
+
+	{
+		"Name" : "TestSelect",
+		"Type" : "Select",
+		"Description" : "How do you like my website?",
+		"Values" : [
+			"Nice",
+			"Ok",
+			"N/A"
+		],
+		"Options" : {
+			"DefaultText" : "select one of these options"
+		}
+	}
+
 ### Number Field
 
 Number field will limit only the number input. We can use this field to store currency as well.
@@ -184,6 +202,14 @@ It will set the number of decimal points when render.
 	}
 
 If you want to display spinner, simply pass `Options.Spinner: true`. Please add css `<link rel="stylesheet" href="css/spinner.css">` as well.
+
+Sometime you want to be able to control what number types that user can put in. Passing `Options.NumberType: "type"`.
+"type" that we can use will be (By default it will be "natural")
+
+1. "natural": 1, 2, 3, 4, 5, ...
+2. "whole": 0, 1, 2, 3, 4, 5, ...
+3. "integers": ..., -3, -2, -1, 0, 1, 2, 3, ...
+4. "rational": ..., -1.00, 0, 1.00, ...
 
 ### VisibleOn Options
 

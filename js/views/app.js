@@ -118,6 +118,12 @@ define([
 	  Utils.allowNumber(e);
 	},
 	/**
+	 * Valid Natural Number
+	 **/
+	allowNaturalNumber: function(e) {
+	  Utils.allowNaturalNumber(e);
+	},
+	/**
 	 * Valid Integer Number Only
 	 **/
 	allowZipCode: function(e) {
@@ -184,6 +190,7 @@ define([
 	  'change :file' : 'preValidate',
 	  'keydown :input[type="email"]': 'preventSpace',
 	  'keydown :input[type="number"], :input.number': 'allowNumber',
+	  'keydown :input[type="number"], :input.natural': 'allowNaturalNumber',
 	  'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
 	  'keydown :input.telephone': 'formatTelephoneNumber',
 	  'blur :input.telephone': 'formatTelephoneNumber'

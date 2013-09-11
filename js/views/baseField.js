@@ -342,7 +342,7 @@ define([
 		  break;
 
 		case 'number':
-		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'number span12');
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'natural span12');
 		  // Check to see how to render this
 		  if (field.options.decimals && this.options.formData.fields[field.name]) {
 			var _float_pts = parseFloat(this.options.formData.fields[field.name] / Math.pow(10, parseInt(field.options.decimals)));
