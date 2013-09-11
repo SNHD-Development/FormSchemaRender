@@ -242,6 +242,7 @@ define([
 
 		case 'textbox':
 		  _type = 'text';
+		case 'select':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
 		  break;
 
