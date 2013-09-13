@@ -168,6 +168,18 @@ If you want to hide Country simply pass "HideCountry" to true in options.
 		}
 	}
 
+If we want to perform ajax call to auto populate data for the user. We can pass `Options.Url` to point to the endpoint
+that we want. Also, the JSON result must match this format.
+
+	{
+		"status": "ok",
+		"data": {
+			"field_name_1": "value_1",
+			"field_name_2": "value_2",
+			"field_name_3": "value_3"
+		}
+	}
+
 ### Select Field
 
 To change the default select text, simply set `Options.DefaultText: any text`
@@ -452,6 +464,7 @@ Sometime there are some fileds that internal should not be able to update these 
 		- Add Decimals Options for Number Type.
 		- Button Decision can render data if found more than one.
 		- Fix Image Type when render, if it can render using lighbox will do that else will link to the new page.
+		- Adding Ajax Call to auto populate data
 
 * 0.0.6 - Add Copy to Clipboard button, Button Decision type and fix ie 7 Styles.
 

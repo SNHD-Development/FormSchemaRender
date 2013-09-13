@@ -99,6 +99,7 @@ define([
 	  this._multiFiles = []; // MultiFiles Field
 	  this._buttonClipboards = []; //Clipboards Button
 	  this._buttonDecision = []; //Decision Button
+	  this._ajaxDataCall = [];  // Some Fields can call ajax call to auto populate data
 	  this._ajaxSubmit = true;
 
 	  // Wizard View Counters
@@ -251,7 +252,7 @@ define([
 		  break;
 
 		case 'textarea':
-		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span10');
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
 		  break;
 
 		case 'action':
@@ -369,6 +370,10 @@ define([
 			_name.push(field.name+'_fullname_middle_name');
 		  }
 		  _name.push(field.name+'_fullname_last_name');
+
+		  if (field.options.url) {
+			this._ajaxDataCall.push(field);
+		  }
 		  break;
 
 		case 'clear':
@@ -420,6 +425,7 @@ define([
 
 		case 'schooles':
 		  _type = 'text';
+		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
 		  field.attributes['data-provide'] = 'typeahead';
 		  field.attributes['autocomplete'] = 'off';
 		  field.attributes['data-source'] = schoolesData.replace(/\n/g, '').replace(/'/g, "&#39");

@@ -488,7 +488,8 @@ define([
 		 **/
 		finalSetup: function (view) {
 			var that = this
-			, $select = $('select.has-default-val', view.el);
+			, $select = $('select.has-default-val', view.el)
+			, $form = $(view.el);
 			if (view.options.mode === 'update' && view._visibleOn.length > 0 && view.options.formData) {
 				setValueDependOn(view.el, view._visibleOn, view.options.formData);
 			}
@@ -520,6 +521,11 @@ define([
 						multifilesView.render();
 					});
 				});
+			}
+
+			// Setup Ajax Call for fields
+			if (view._ajaxDataCall.length > 0) {
+				this.setupAjaxCall(view, $form);
 			}
 
 			// Setup ButtonCondition
@@ -558,8 +564,7 @@ define([
 						, $invalidObj = []
 						, _canEmpty = (element.options.datacanempty) ? element.options.datacanempty: []
 						, _success = element.options.events || function (e) {
-							var $form = $(view.el)
-							, $hiddenInput = $('#'+element.name+'_btn_condition', $form);
+							var $hiddenInput = $('#'+element.name+'_btn_condition', $form);
 							// If there is an error
 							if (e.status && e.status === 'error') {
 								$currentTarget.attr('disabled', false).popover('destroy');
@@ -759,6 +764,84 @@ define([
 			require(['views/hiddenForm'], function (HiddenFormView) {
 				var hiddenFormView = Vm.create({}, 'FormView', HiddenFormView);
 				hiddenFormView.render(data);
+			});
+		},
+		/**
+		 * Function to set up for Ajax Call
+		 **/
+		setupAjaxCall: function (view, $form) {
+			_.each(view._ajaxDataCall, function (element) {
+				var _type = element.type.toLowerCase()
+				, _input = []
+				, _request = {};
+
+				if (typeof element.options.data === 'undefined') {
+					throw 'In order to use ajax call, we need Options.Data.';
+				}
+
+				_.each(element.options.data, function(dataObj){
+					_.each(dataObj, function(dataVal){
+						_request[dataVal] = '';
+					});
+				});
+
+				switch (_type) {
+					case 'fullname':
+						_input.push(element.name+'_fullname_first_name');
+						_input.push(element.name+'_fullname_middle_name');
+						_input.push(element.name+'_fullname_last_name');
+						break;
+					default:
+						_input.push(element.name);
+				}
+
+				_.each(_input, function (elementName) {
+					$form.on('change', ':input[name="'+elementName+'"]', function(e) {
+						var $thisInput = $(this)
+						, _val = $thisInput.val()
+						, _error = false;
+
+						if (_val !== '') {
+							_request[elementName] = _val;
+						}
+
+						_.each(_request, function(dataVal, dataKey){
+							if (dataVal === '') {
+								_error = true;
+							}
+						});
+
+						if ( ! _error) {
+							var _param = {}
+							, _url = element.options.url+'?';
+							_.each(element.options.data, function(dataObj){
+								_.each(dataObj, function(dataVal, dataKey){
+									_param[dataKey] = _request[dataVal];
+								});
+							});
+							$.getJSON(_url+$.param(_param), function(respond) {
+								if (respond.data) {
+									_.each(respond.data, function (respVal, respKey) {
+										if (typeof _request[respKey] === 'undefined') {
+											var $_input = $(':input[name="'+respKey+'"]').val(respVal).trigger('change')
+											, $_parent;
+											if ($_input.attr('type') === 'hidden') {
+												$_parent = $_input.parent('.emailpicker');
+												if ($_parent.length > 0) {
+													var _email = respVal.split('@');
+													$(':input.not_sending', $_parent).each(function (index, ele) {
+														$(ele).val(_email[index]);
+													});
+												}
+											}
+										}
+									});
+								}
+							});
+						}
+					})
+				});
+
 			});
 		},
 		/**
