@@ -9,12 +9,21 @@ Please use font-awesome to add visual effect to the UI.
 
 `<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">`
 
+or 
+
+`<link href="css/font-awesome.css" rel="stylesheet">`
+
 If need IE7 supports for font-awesome,
 
 	<!--[if IE 7]>
 		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet">
 	<![endif]-->
 
+or
+
+	<!--[if IE 7]>
+		<link href="css/font-awesome-ie7.css" rel="stylesheet">
+	<![endif]-->
 
 Please include these styles
 
@@ -36,6 +45,7 @@ Load JS with RequireJS
 6. internal: When we want to add internal only fileds, if any fields that has `options.internal = true` will only get render if this flag set to true. (Optional, default value is false)
 7. formEvents: custom events JS code that will need to run in form render scope. (Optional)
 8. hideButtons: Force FormRender not to render any buttons. (Optional)
+9. formActionUrl: set url action for the form.
 
 Example:
 
