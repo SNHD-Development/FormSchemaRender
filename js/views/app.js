@@ -78,6 +78,12 @@ define([
           // Render Form Complete
           // Send view at second parameter
           $('#'+that.options.formSchema.name, that.el).trigger(that.options.formSchema.name+'.renderCompleted', that);
+
+          // Set the Action if has one          
+          if (that.options.formActionUrl) {
+          	$(that.el).find('form.form-render').attr('action', that.options.formActionUrl);
+          }
+
         });
       }
     },

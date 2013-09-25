@@ -146,7 +146,7 @@ require([
       }
     } else {
       _mode = (typeof mode !== 'undefined' && config.view.indexOf(view.toLowerCase()) > -1) ? mode.toLowerCase(): 'create';
-    }
+    }    
 
     _view = (typeof view !== 'undefined') ? view.toLowerCase(): 'horizontal';
     _token = (typeof token !== 'undefined' && _mode !== 'read') ? token: '';
@@ -159,6 +159,10 @@ require([
       internal: ( (typeof internal === 'undefined') ? false: internal ),
       hideButtons: ( (typeof hideButtons === 'undefined') ? false: hideButtons )
     };
+
+    if (typeof formActionUrl !== 'undefined') {
+      _opts.formActionUrl = formActionUrl;
+    }
 
     // Render Custom Script Here
     if (typeof formEvents !== 'undefined') {
@@ -176,6 +180,7 @@ require([
     internal = null;
     formEvents = null;
     hideButtons = null;
+    formActionUrl = null;
 
     // Setup View
     _opts.formSchema.view = _view;
@@ -188,6 +193,6 @@ require([
     $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">Loading Form Information ...</span></p>');
 
     appView.render();
-
+    
   });
 });

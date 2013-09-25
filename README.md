@@ -38,14 +38,14 @@ Load JS with RequireJS
 
 ### JS Object
 1. formSchema: formSchema JS Object (Require)
-2. formData: formData JS Object (Optional)
-3. mode: mode either "read", "update" or "create" (Optional, default is create mode)
-4. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
-5. token: if you want to add token in your form, you can add it here (Optional, but recommended)
-6. internal: When we want to add internal only fileds, if any fields that has `options.internal = true` will only get render if this flag set to true. (Optional, default value is false)
-7. formEvents: custom events JS code that will need to run in form render scope. (Optional)
-8. hideButtons: Force FormRender not to render any buttons. (Optional)
-9. formActionUrl: set url action for the form.
+2. formActionUrl: set url action for the form (Require for read and update modes).
+3. formData: formData JS Object (Optional)
+4. mode: mode either "read", "update" or "create" (Optional, default is create mode)
+5. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
+6. token: if you want to add token in your form, you can add it here (Optional, but recommended)
+7. internal: When we want to add internal only fileds, if any fields that has `options.internal = true` will only get render if this flag set to true. (Optional, default value is false)
+8. formEvents: custom events JS code that will need to run in form render scope. (Optional)
+9. hideButtons: Force FormRender not to render any buttons. (Optional)
 
 Example:
 
