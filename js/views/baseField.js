@@ -16,6 +16,7 @@ define([
   'text!templates/fields/html.html',
   'text!templates/fields/label.html',
   'text!templates/fields/text.html',
+  'text!templates/fields/password.html',
   'text!templates/fields/telephone.html',
   'text!templates/fields/hidden.html',
   'text!templates/fields/timestamp.html',
@@ -51,6 +52,7 @@ define([
 	, htmlTemplate
 	, labelTemplate
 	, textTemplate
+	, passwordTemplate
 	, telephoneTemplate
 	, hiddenTemplate
 	, timestampTemplate
@@ -138,6 +140,7 @@ define([
 		"html" : _.template(htmlTemplate),
 		"label" : _.template(labelTemplate),
 		"text" : _.template(textTemplate),
+		"password" : _.template(passwordTemplate),
 		"telephone" : _.template(telephoneTemplate),
 		"hidden" : _.template(hiddenTemplate),
 		"timestamp" : _.template(timestampTemplate),
@@ -246,6 +249,10 @@ define([
 		case 'select':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
 		  break;
+
+		case 'password':
+			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
+			break;
 
 		case 'telephone':
 		  field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer telephone span12');

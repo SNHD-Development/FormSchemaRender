@@ -1,0 +1,1497 @@
+/*!
+ *  Font Awesome 3.2.1
+ *  the iconic font designed for Bootstrap
+ *  ------------------------------------------------------------------------------
+ *  The full suite of pictographic icons, examples, and documentation can be
+ *  found at http://fontawesome.io.  Stay up to date on Twitter at
+ *  http://twitter.com/fontawesome.
+ *
+ *  License
+ *  ------------------------------------------------------------------------------
+ *  - The Font Awesome font is licensed under SIL OFL 1.1 -
+ *    http://scripts.sil.org/OFL
+ *  - Font Awesome CSS, LESS, and SASS files are licensed under MIT License -
+ *    http://opensource.org/licenses/mit-license.html
+ *  - Font Awesome documentation licensed under CC BY 3.0 -
+ *    http://creativecommons.org/licenses/by/3.0/
+ *  - Attribution is no longer required in Font Awesome 3.0, but much appreciated:
+ *    "Font Awesome by Dave Gandy - http://fontawesome.io"
+ *
+ *  Author - Dave Gandy
+ *  ------------------------------------------------------------------------------
+ *  Email: dave@fontawesome.io
+ *  Twitter: http://twitter.com/davegandy
+ *  Work: Lead Product Designer @ Kyruus - http://kyruus.com
+ */
+/* FONT PATH
+ * -------------------------- */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../font/fontawesome-webfont.eot?v=3.2.1');
+  src: url('../font/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../font/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../font/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../font/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* FONT AWESOME CORE
+ * -------------------------- */
+.form-render {
+  /* makes the font 33% larger relative to the icon container */
+
+  /* makes sure icons active on rollover in links */
+
+  /* increased font size for icon-large */
+
+}
+.form-render [class^="icon-"],
+.form-render [class*=" icon-"] {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+}
+.form-render [class^="icon-"]:before,
+.form-render [class*=" icon-"]:before {
+  text-decoration: inherit;
+  display: inline-block;
+  speak: none;
+}
+.form-render .icon-large:before {
+  vertical-align: -10%;
+  font-size: 1.3333333333333333em;
+}
+.form-render a [class^="icon-"],
+.form-render a [class*=" icon-"] {
+  display: inline;
+}
+.form-render [class^="icon-"].icon-fixed-width,
+.form-render [class*=" icon-"].icon-fixed-width {
+  display: inline-block;
+  width: 1.1428571428571428em;
+  text-align: right;
+  padding-right: 0.2857142857142857em;
+}
+.form-render [class^="icon-"].icon-fixed-width.icon-large,
+.form-render [class*=" icon-"].icon-fixed-width.icon-large {
+  width: 1.4285714285714286em;
+}
+.form-render .icons-ul {
+  margin-left: 2.142857142857143em;
+  list-style-type: none;
+}
+.form-render .icons-ul > li {
+  position: relative;
+}
+.form-render .icons-ul .icon-li {
+  position: absolute;
+  left: -2.142857142857143em;
+  width: 2.142857142857143em;
+  text-align: center;
+  line-height: inherit;
+}
+.form-render [class^="icon-"].hide,
+.form-render [class*=" icon-"].hide {
+  display: none;
+}
+.form-render .icon-muted {
+  color: #eeeeee;
+}
+.form-render .icon-light {
+  color: #ffffff;
+}
+.form-render .icon-dark {
+  color: #333333;
+}
+.form-render .icon-border {
+  border: solid 1px #eeeeee;
+  padding: .2em .25em .15em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.form-render .icon-2x {
+  font-size: 2em;
+}
+.form-render .icon-2x.icon-border {
+  border-width: 2px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.form-render .icon-3x {
+  font-size: 3em;
+}
+.form-render .icon-3x.icon-border {
+  border-width: 3px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.form-render .icon-4x {
+  font-size: 4em;
+}
+.form-render .icon-4x.icon-border {
+  border-width: 4px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+.form-render .icon-5x {
+  font-size: 5em;
+}
+.form-render .icon-5x.icon-border {
+  border-width: 5px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+.form-render .pull-right {
+  float: right;
+}
+.form-render .pull-left {
+  float: left;
+}
+.form-render [class^="icon-"].pull-left,
+.form-render [class*=" icon-"].pull-left {
+  margin-right: .3em;
+}
+.form-render [class^="icon-"].pull-right,
+.form-render [class*=" icon-"].pull-right {
+  margin-left: .3em;
+}
+/* BOOTSTRAP SPECIFIC CLASSES
+ * -------------------------- */
+.form-render {
+  /* Bootstrap 2.0 sprites.less reset */
+
+  /* more sprites.less reset */
+
+  /* keeps Bootstrap styles with and without icons the same */
+
+  /* Fixes alignment in nav lists */
+
+}
+.form-render [class^="icon-"],
+.form-render [class*=" icon-"] {
+  display: inline;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  vertical-align: baseline;
+  background-image: none;
+  background-position: 0% 0%;
+  background-repeat: repeat;
+  margin-top: 0;
+}
+.form-render .icon-white,
+.form-render .nav-pills > .active > a > [class^="icon-"],
+.form-render .nav-pills > .active > a > [class*=" icon-"],
+.form-render .nav-list > .active > a > [class^="icon-"],
+.form-render .nav-list > .active > a > [class*=" icon-"],
+.form-render .navbar-inverse .nav > .active > a > [class^="icon-"],
+.form-render .navbar-inverse .nav > .active > a > [class*=" icon-"],
+.form-render .dropdown-menu > li > a:hover > [class^="icon-"],
+.form-render .dropdown-menu > li > a:hover > [class*=" icon-"],
+.form-render .dropdown-menu > .active > a > [class^="icon-"],
+.form-render .dropdown-menu > .active > a > [class*=" icon-"],
+.form-render .dropdown-submenu:hover > a > [class^="icon-"],
+.form-render .dropdown-submenu:hover > a > [class*=" icon-"] {
+  background-image: none;
+}
+.form-render .btn [class^="icon-"].icon-large,
+.form-render .nav [class^="icon-"].icon-large,
+.form-render .btn [class*=" icon-"].icon-large,
+.form-render .nav [class*=" icon-"].icon-large {
+  line-height: .9em;
+}
+.form-render .btn [class^="icon-"].icon-spin,
+.form-render .nav [class^="icon-"].icon-spin,
+.form-render .btn [class*=" icon-"].icon-spin,
+.form-render .nav [class*=" icon-"].icon-spin {
+  display: inline-block;
+}
+.form-render .nav-tabs [class^="icon-"],
+.form-render .nav-pills [class^="icon-"],
+.form-render .nav-tabs [class*=" icon-"],
+.form-render .nav-pills [class*=" icon-"],
+.form-render .nav-tabs [class^="icon-"].icon-large,
+.form-render .nav-pills [class^="icon-"].icon-large,
+.form-render .nav-tabs [class*=" icon-"].icon-large,
+.form-render .nav-pills [class*=" icon-"].icon-large {
+  line-height: .9em;
+}
+.form-render .btn [class^="icon-"].pull-left.icon-2x,
+.form-render .btn [class*=" icon-"].pull-left.icon-2x,
+.form-render .btn [class^="icon-"].pull-right.icon-2x,
+.form-render .btn [class*=" icon-"].pull-right.icon-2x {
+  margin-top: .18em;
+}
+.form-render .btn [class^="icon-"].icon-spin.icon-large,
+.form-render .btn [class*=" icon-"].icon-spin.icon-large {
+  line-height: .8em;
+}
+.form-render .btn.btn-small [class^="icon-"].pull-left.icon-2x,
+.form-render .btn.btn-small [class*=" icon-"].pull-left.icon-2x,
+.form-render .btn.btn-small [class^="icon-"].pull-right.icon-2x,
+.form-render .btn.btn-small [class*=" icon-"].pull-right.icon-2x {
+  margin-top: .25em;
+}
+.form-render .btn.btn-large [class^="icon-"],
+.form-render .btn.btn-large [class*=" icon-"] {
+  margin-top: 0;
+}
+.form-render .btn.btn-large [class^="icon-"].pull-left.icon-2x,
+.form-render .btn.btn-large [class*=" icon-"].pull-left.icon-2x,
+.form-render .btn.btn-large [class^="icon-"].pull-right.icon-2x,
+.form-render .btn.btn-large [class*=" icon-"].pull-right.icon-2x {
+  margin-top: .05em;
+}
+.form-render .btn.btn-large [class^="icon-"].pull-left.icon-2x,
+.form-render .btn.btn-large [class*=" icon-"].pull-left.icon-2x {
+  margin-right: .2em;
+}
+.form-render .btn.btn-large [class^="icon-"].pull-right.icon-2x,
+.form-render .btn.btn-large [class*=" icon-"].pull-right.icon-2x {
+  margin-left: .2em;
+}
+.form-render .nav-list [class^="icon-"],
+.form-render .nav-list [class*=" icon-"] {
+  line-height: inherit;
+}
+/* EXTRAS
+ * -------------------------- */
+.form-render {
+  /* Stacked and layered icon */
+
+  /* Animated rotating icon */
+
+  /* Prevent stack and spinners from being taken inline when inside a link */
+
+  /* Icon rotations and mirroring */
+
+  /* ensure rotation occurs inside anchor tags */
+
+}
+.form-render .icon-stack {
+  position: relative;
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  vertical-align: -35%;
+}
+.form-render .icon-stack [class^="icon-"],
+.form-render .icon-stack [class*=" icon-"] {
+  display: block;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 1em;
+  line-height: inherit;
+  *line-height: 2em;
+}
+.form-render .icon-stack .icon-stack-base {
+  font-size: 2em;
+  *line-height: 1em;
+}
+.form-render .icon-spin {
+  display: inline-block;
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  -webkit-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+.form-render a .icon-stack,
+.form-render a .icon-spin {
+  display: inline-block;
+  text-decoration: none;
+}
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
+}
+@-ms-keyframes spin {
+  0% {
+    -ms-transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(359deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+.form-render .icon-rotate-90:before {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+}
+.form-render .icon-rotate-180:before {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+}
+.form-render .icon-rotate-270:before {
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+  transform: rotate(270deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+.form-render .icon-flip-horizontal:before {
+  -webkit-transform: scale(-1, 1);
+  -moz-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+.form-render .icon-flip-vertical:before {
+  -webkit-transform: scale(1, -1);
+  -moz-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
+.form-render a .icon-rotate-90:before,
+.form-render a .icon-rotate-180:before,
+.form-render a .icon-rotate-270:before,
+.form-render a .icon-flip-horizontal:before,
+.form-render a .icon-flip-vertical:before {
+  display: inline-block;
+}
+/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+   readers do not read off random characters that represent icons */
+.form-render .icon-glass:before {
+  content: "\f000";
+}
+.form-render .icon-music:before {
+  content: "\f001";
+}
+.form-render .icon-search:before {
+  content: "\f002";
+}
+.form-render .icon-envelope-alt:before {
+  content: "\f003";
+}
+.form-render .icon-heart:before {
+  content: "\f004";
+}
+.form-render .icon-star:before {
+  content: "\f005";
+}
+.form-render .icon-star-empty:before {
+  content: "\f006";
+}
+.form-render .icon-user:before {
+  content: "\f007";
+}
+.form-render .icon-film:before {
+  content: "\f008";
+}
+.form-render .icon-th-large:before {
+  content: "\f009";
+}
+.form-render .icon-th:before {
+  content: "\f00a";
+}
+.form-render .icon-th-list:before {
+  content: "\f00b";
+}
+.form-render .icon-ok:before {
+  content: "\f00c";
+}
+.form-render .icon-remove:before {
+  content: "\f00d";
+}
+.form-render .icon-zoom-in:before {
+  content: "\f00e";
+}
+.form-render .icon-zoom-out:before {
+  content: "\f010";
+}
+.form-render .icon-power-off:before,
+.form-render .icon-off:before {
+  content: "\f011";
+}
+.form-render .icon-signal:before {
+  content: "\f012";
+}
+.form-render .icon-gear:before,
+.form-render .icon-cog:before {
+  content: "\f013";
+}
+.form-render .icon-trash:before {
+  content: "\f014";
+}
+.form-render .icon-home:before {
+  content: "\f015";
+}
+.form-render .icon-file-alt:before {
+  content: "\f016";
+}
+.form-render .icon-time:before {
+  content: "\f017";
+}
+.form-render .icon-road:before {
+  content: "\f018";
+}
+.form-render .icon-download-alt:before {
+  content: "\f019";
+}
+.form-render .icon-download:before {
+  content: "\f01a";
+}
+.form-render .icon-upload:before {
+  content: "\f01b";
+}
+.form-render .icon-inbox:before {
+  content: "\f01c";
+}
+.form-render .icon-play-circle:before {
+  content: "\f01d";
+}
+.form-render .icon-rotate-right:before,
+.form-render .icon-repeat:before {
+  content: "\f01e";
+}
+.form-render .icon-refresh:before {
+  content: "\f021";
+}
+.form-render .icon-list-alt:before {
+  content: "\f022";
+}
+.form-render .icon-lock:before {
+  content: "\f023";
+}
+.form-render .icon-flag:before {
+  content: "\f024";
+}
+.form-render .icon-headphones:before {
+  content: "\f025";
+}
+.form-render .icon-volume-off:before {
+  content: "\f026";
+}
+.form-render .icon-volume-down:before {
+  content: "\f027";
+}
+.form-render .icon-volume-up:before {
+  content: "\f028";
+}
+.form-render .icon-qrcode:before {
+  content: "\f029";
+}
+.form-render .icon-barcode:before {
+  content: "\f02a";
+}
+.form-render .icon-tag:before {
+  content: "\f02b";
+}
+.form-render .icon-tags:before {
+  content: "\f02c";
+}
+.form-render .icon-book:before {
+  content: "\f02d";
+}
+.form-render .icon-bookmark:before {
+  content: "\f02e";
+}
+.form-render .icon-print:before {
+  content: "\f02f";
+}
+.form-render .icon-camera:before {
+  content: "\f030";
+}
+.form-render .icon-font:before {
+  content: "\f031";
+}
+.form-render .icon-bold:before {
+  content: "\f032";
+}
+.form-render .icon-italic:before {
+  content: "\f033";
+}
+.form-render .icon-text-height:before {
+  content: "\f034";
+}
+.form-render .icon-text-width:before {
+  content: "\f035";
+}
+.form-render .icon-align-left:before {
+  content: "\f036";
+}
+.form-render .icon-align-center:before {
+  content: "\f037";
+}
+.form-render .icon-align-right:before {
+  content: "\f038";
+}
+.form-render .icon-align-justify:before {
+  content: "\f039";
+}
+.form-render .icon-list:before {
+  content: "\f03a";
+}
+.form-render .icon-indent-left:before {
+  content: "\f03b";
+}
+.form-render .icon-indent-right:before {
+  content: "\f03c";
+}
+.form-render .icon-facetime-video:before {
+  content: "\f03d";
+}
+.form-render .icon-picture:before {
+  content: "\f03e";
+}
+.form-render .icon-pencil:before {
+  content: "\f040";
+}
+.form-render .icon-map-marker:before {
+  content: "\f041";
+}
+.form-render .icon-adjust:before {
+  content: "\f042";
+}
+.form-render .icon-tint:before {
+  content: "\f043";
+}
+.form-render .icon-edit:before {
+  content: "\f044";
+}
+.form-render .icon-share:before {
+  content: "\f045";
+}
+.form-render .icon-check:before {
+  content: "\f046";
+}
+.form-render .icon-move:before {
+  content: "\f047";
+}
+.form-render .icon-step-backward:before {
+  content: "\f048";
+}
+.form-render .icon-fast-backward:before {
+  content: "\f049";
+}
+.form-render .icon-backward:before {
+  content: "\f04a";
+}
+.form-render .icon-play:before {
+  content: "\f04b";
+}
+.form-render .icon-pause:before {
+  content: "\f04c";
+}
+.form-render .icon-stop:before {
+  content: "\f04d";
+}
+.form-render .icon-forward:before {
+  content: "\f04e";
+}
+.form-render .icon-fast-forward:before {
+  content: "\f050";
+}
+.form-render .icon-step-forward:before {
+  content: "\f051";
+}
+.form-render .icon-eject:before {
+  content: "\f052";
+}
+.form-render .icon-chevron-left:before {
+  content: "\f053";
+}
+.form-render .icon-chevron-right:before {
+  content: "\f054";
+}
+.form-render .icon-plus-sign:before {
+  content: "\f055";
+}
+.form-render .icon-minus-sign:before {
+  content: "\f056";
+}
+.form-render .icon-remove-sign:before {
+  content: "\f057";
+}
+.form-render .icon-ok-sign:before {
+  content: "\f058";
+}
+.form-render .icon-question-sign:before {
+  content: "\f059";
+}
+.form-render .icon-info-sign:before {
+  content: "\f05a";
+}
+.form-render .icon-screenshot:before {
+  content: "\f05b";
+}
+.form-render .icon-remove-circle:before {
+  content: "\f05c";
+}
+.form-render .icon-ok-circle:before {
+  content: "\f05d";
+}
+.form-render .icon-ban-circle:before {
+  content: "\f05e";
+}
+.form-render .icon-arrow-left:before {
+  content: "\f060";
+}
+.form-render .icon-arrow-right:before {
+  content: "\f061";
+}
+.form-render .icon-arrow-up:before {
+  content: "\f062";
+}
+.form-render .icon-arrow-down:before {
+  content: "\f063";
+}
+.form-render .icon-mail-forward:before,
+.form-render .icon-share-alt:before {
+  content: "\f064";
+}
+.form-render .icon-resize-full:before {
+  content: "\f065";
+}
+.form-render .icon-resize-small:before {
+  content: "\f066";
+}
+.form-render .icon-plus:before {
+  content: "\f067";
+}
+.form-render .icon-minus:before {
+  content: "\f068";
+}
+.form-render .icon-asterisk:before {
+  content: "\f069";
+}
+.form-render .icon-exclamation-sign:before {
+  content: "\f06a";
+}
+.form-render .icon-gift:before {
+  content: "\f06b";
+}
+.form-render .icon-leaf:before {
+  content: "\f06c";
+}
+.form-render .icon-fire:before {
+  content: "\f06d";
+}
+.form-render .icon-eye-open:before {
+  content: "\f06e";
+}
+.form-render .icon-eye-close:before {
+  content: "\f070";
+}
+.form-render .icon-warning-sign:before {
+  content: "\f071";
+}
+.form-render .icon-plane:before {
+  content: "\f072";
+}
+.form-render .icon-calendar:before {
+  content: "\f073";
+}
+.form-render .icon-random:before {
+  content: "\f074";
+}
+.form-render .icon-comment:before {
+  content: "\f075";
+}
+.form-render .icon-magnet:before {
+  content: "\f076";
+}
+.form-render .icon-chevron-up:before {
+  content: "\f077";
+}
+.form-render .icon-chevron-down:before {
+  content: "\f078";
+}
+.form-render .icon-retweet:before {
+  content: "\f079";
+}
+.form-render .icon-shopping-cart:before {
+  content: "\f07a";
+}
+.form-render .icon-folder-close:before {
+  content: "\f07b";
+}
+.form-render .icon-folder-open:before {
+  content: "\f07c";
+}
+.form-render .icon-resize-vertical:before {
+  content: "\f07d";
+}
+.form-render .icon-resize-horizontal:before {
+  content: "\f07e";
+}
+.form-render .icon-bar-chart:before {
+  content: "\f080";
+}
+.form-render .icon-twitter-sign:before {
+  content: "\f081";
+}
+.form-render .icon-facebook-sign:before {
+  content: "\f082";
+}
+.form-render .icon-camera-retro:before {
+  content: "\f083";
+}
+.form-render .icon-key:before {
+  content: "\f084";
+}
+.form-render .icon-gears:before,
+.form-render .icon-cogs:before {
+  content: "\f085";
+}
+.form-render .icon-comments:before {
+  content: "\f086";
+}
+.form-render .icon-thumbs-up-alt:before {
+  content: "\f087";
+}
+.form-render .icon-thumbs-down-alt:before {
+  content: "\f088";
+}
+.form-render .icon-star-half:before {
+  content: "\f089";
+}
+.form-render .icon-heart-empty:before {
+  content: "\f08a";
+}
+.form-render .icon-signout:before {
+  content: "\f08b";
+}
+.form-render .icon-linkedin-sign:before {
+  content: "\f08c";
+}
+.form-render .icon-pushpin:before {
+  content: "\f08d";
+}
+.form-render .icon-external-link:before {
+  content: "\f08e";
+}
+.form-render .icon-signin:before {
+  content: "\f090";
+}
+.form-render .icon-trophy:before {
+  content: "\f091";
+}
+.form-render .icon-github-sign:before {
+  content: "\f092";
+}
+.form-render .icon-upload-alt:before {
+  content: "\f093";
+}
+.form-render .icon-lemon:before {
+  content: "\f094";
+}
+.form-render .icon-phone:before {
+  content: "\f095";
+}
+.form-render .icon-unchecked:before,
+.form-render .icon-check-empty:before {
+  content: "\f096";
+}
+.form-render .icon-bookmark-empty:before {
+  content: "\f097";
+}
+.form-render .icon-phone-sign:before {
+  content: "\f098";
+}
+.form-render .icon-twitter:before {
+  content: "\f099";
+}
+.form-render .icon-facebook:before {
+  content: "\f09a";
+}
+.form-render .icon-github:before {
+  content: "\f09b";
+}
+.form-render .icon-unlock:before {
+  content: "\f09c";
+}
+.form-render .icon-credit-card:before {
+  content: "\f09d";
+}
+.form-render .icon-rss:before {
+  content: "\f09e";
+}
+.form-render .icon-hdd:before {
+  content: "\f0a0";
+}
+.form-render .icon-bullhorn:before {
+  content: "\f0a1";
+}
+.form-render .icon-bell:before {
+  content: "\f0a2";
+}
+.form-render .icon-certificate:before {
+  content: "\f0a3";
+}
+.form-render .icon-hand-right:before {
+  content: "\f0a4";
+}
+.form-render .icon-hand-left:before {
+  content: "\f0a5";
+}
+.form-render .icon-hand-up:before {
+  content: "\f0a6";
+}
+.form-render .icon-hand-down:before {
+  content: "\f0a7";
+}
+.form-render .icon-circle-arrow-left:before {
+  content: "\f0a8";
+}
+.form-render .icon-circle-arrow-right:before {
+  content: "\f0a9";
+}
+.form-render .icon-circle-arrow-up:before {
+  content: "\f0aa";
+}
+.form-render .icon-circle-arrow-down:before {
+  content: "\f0ab";
+}
+.form-render .icon-globe:before {
+  content: "\f0ac";
+}
+.form-render .icon-wrench:before {
+  content: "\f0ad";
+}
+.form-render .icon-tasks:before {
+  content: "\f0ae";
+}
+.form-render .icon-filter:before {
+  content: "\f0b0";
+}
+.form-render .icon-briefcase:before {
+  content: "\f0b1";
+}
+.form-render .icon-fullscreen:before {
+  content: "\f0b2";
+}
+.form-render .icon-group:before {
+  content: "\f0c0";
+}
+.form-render .icon-link:before {
+  content: "\f0c1";
+}
+.form-render .icon-cloud:before {
+  content: "\f0c2";
+}
+.form-render .icon-beaker:before {
+  content: "\f0c3";
+}
+.form-render .icon-cut:before {
+  content: "\f0c4";
+}
+.form-render .icon-copy:before {
+  content: "\f0c5";
+}
+.form-render .icon-paperclip:before,
+.form-render .icon-paper-clip:before {
+  content: "\f0c6";
+}
+.form-render .icon-save:before {
+  content: "\f0c7";
+}
+.form-render .icon-sign-blank:before {
+  content: "\f0c8";
+}
+.form-render .icon-reorder:before {
+  content: "\f0c9";
+}
+.form-render .icon-list-ul:before {
+  content: "\f0ca";
+}
+.form-render .icon-list-ol:before {
+  content: "\f0cb";
+}
+.form-render .icon-strikethrough:before {
+  content: "\f0cc";
+}
+.form-render .icon-underline:before {
+  content: "\f0cd";
+}
+.form-render .icon-table:before {
+  content: "\f0ce";
+}
+.form-render .icon-magic:before {
+  content: "\f0d0";
+}
+.form-render .icon-truck:before {
+  content: "\f0d1";
+}
+.form-render .icon-pinterest:before {
+  content: "\f0d2";
+}
+.form-render .icon-pinterest-sign:before {
+  content: "\f0d3";
+}
+.form-render .icon-google-plus-sign:before {
+  content: "\f0d4";
+}
+.form-render .icon-google-plus:before {
+  content: "\f0d5";
+}
+.form-render .icon-money:before {
+  content: "\f0d6";
+}
+.form-render .icon-caret-down:before {
+  content: "\f0d7";
+}
+.form-render .icon-caret-up:before {
+  content: "\f0d8";
+}
+.form-render .icon-caret-left:before {
+  content: "\f0d9";
+}
+.form-render .icon-caret-right:before {
+  content: "\f0da";
+}
+.form-render .icon-columns:before {
+  content: "\f0db";
+}
+.form-render .icon-sort:before {
+  content: "\f0dc";
+}
+.form-render .icon-sort-down:before {
+  content: "\f0dd";
+}
+.form-render .icon-sort-up:before {
+  content: "\f0de";
+}
+.form-render .icon-envelope:before {
+  content: "\f0e0";
+}
+.form-render .icon-linkedin:before {
+  content: "\f0e1";
+}
+.form-render .icon-rotate-left:before,
+.form-render .icon-undo:before {
+  content: "\f0e2";
+}
+.form-render .icon-legal:before {
+  content: "\f0e3";
+}
+.form-render .icon-dashboard:before {
+  content: "\f0e4";
+}
+.form-render .icon-comment-alt:before {
+  content: "\f0e5";
+}
+.form-render .icon-comments-alt:before {
+  content: "\f0e6";
+}
+.form-render .icon-bolt:before {
+  content: "\f0e7";
+}
+.form-render .icon-sitemap:before {
+  content: "\f0e8";
+}
+.form-render .icon-umbrella:before {
+  content: "\f0e9";
+}
+.form-render .icon-paste:before {
+  content: "\f0ea";
+}
+.form-render .icon-lightbulb:before {
+  content: "\f0eb";
+}
+.form-render .icon-exchange:before {
+  content: "\f0ec";
+}
+.form-render .icon-cloud-download:before {
+  content: "\f0ed";
+}
+.form-render .icon-cloud-upload:before {
+  content: "\f0ee";
+}
+.form-render .icon-user-md:before {
+  content: "\f0f0";
+}
+.form-render .icon-stethoscope:before {
+  content: "\f0f1";
+}
+.form-render .icon-suitcase:before {
+  content: "\f0f2";
+}
+.form-render .icon-bell-alt:before {
+  content: "\f0f3";
+}
+.form-render .icon-coffee:before {
+  content: "\f0f4";
+}
+.form-render .icon-food:before {
+  content: "\f0f5";
+}
+.form-render .icon-file-text-alt:before {
+  content: "\f0f6";
+}
+.form-render .icon-building:before {
+  content: "\f0f7";
+}
+.form-render .icon-hospital:before {
+  content: "\f0f8";
+}
+.form-render .icon-ambulance:before {
+  content: "\f0f9";
+}
+.form-render .icon-medkit:before {
+  content: "\f0fa";
+}
+.form-render .icon-fighter-jet:before {
+  content: "\f0fb";
+}
+.form-render .icon-beer:before {
+  content: "\f0fc";
+}
+.form-render .icon-h-sign:before {
+  content: "\f0fd";
+}
+.form-render .icon-plus-sign-alt:before {
+  content: "\f0fe";
+}
+.form-render .icon-double-angle-left:before {
+  content: "\f100";
+}
+.form-render .icon-double-angle-right:before {
+  content: "\f101";
+}
+.form-render .icon-double-angle-up:before {
+  content: "\f102";
+}
+.form-render .icon-double-angle-down:before {
+  content: "\f103";
+}
+.form-render .icon-angle-left:before {
+  content: "\f104";
+}
+.form-render .icon-angle-right:before {
+  content: "\f105";
+}
+.form-render .icon-angle-up:before {
+  content: "\f106";
+}
+.form-render .icon-angle-down:before {
+  content: "\f107";
+}
+.form-render .icon-desktop:before {
+  content: "\f108";
+}
+.form-render .icon-laptop:before {
+  content: "\f109";
+}
+.form-render .icon-tablet:before {
+  content: "\f10a";
+}
+.form-render .icon-mobile-phone:before {
+  content: "\f10b";
+}
+.form-render .icon-circle-blank:before {
+  content: "\f10c";
+}
+.form-render .icon-quote-left:before {
+  content: "\f10d";
+}
+.form-render .icon-quote-right:before {
+  content: "\f10e";
+}
+.form-render .icon-spinner:before {
+  content: "\f110";
+}
+.form-render .icon-circle:before {
+  content: "\f111";
+}
+.form-render .icon-mail-reply:before,
+.form-render .icon-reply:before {
+  content: "\f112";
+}
+.form-render .icon-github-alt:before {
+  content: "\f113";
+}
+.form-render .icon-folder-close-alt:before {
+  content: "\f114";
+}
+.form-render .icon-folder-open-alt:before {
+  content: "\f115";
+}
+.form-render .icon-expand-alt:before {
+  content: "\f116";
+}
+.form-render .icon-collapse-alt:before {
+  content: "\f117";
+}
+.form-render .icon-smile:before {
+  content: "\f118";
+}
+.form-render .icon-frown:before {
+  content: "\f119";
+}
+.form-render .icon-meh:before {
+  content: "\f11a";
+}
+.form-render .icon-gamepad:before {
+  content: "\f11b";
+}
+.form-render .icon-keyboard:before {
+  content: "\f11c";
+}
+.form-render .icon-flag-alt:before {
+  content: "\f11d";
+}
+.form-render .icon-flag-checkered:before {
+  content: "\f11e";
+}
+.form-render .icon-terminal:before {
+  content: "\f120";
+}
+.form-render .icon-code:before {
+  content: "\f121";
+}
+.form-render .icon-reply-all:before {
+  content: "\f122";
+}
+.form-render .icon-mail-reply-all:before {
+  content: "\f122";
+}
+.form-render .icon-star-half-full:before,
+.form-render .icon-star-half-empty:before {
+  content: "\f123";
+}
+.form-render .icon-location-arrow:before {
+  content: "\f124";
+}
+.form-render .icon-crop:before {
+  content: "\f125";
+}
+.form-render .icon-code-fork:before {
+  content: "\f126";
+}
+.form-render .icon-unlink:before {
+  content: "\f127";
+}
+.form-render .icon-question:before {
+  content: "\f128";
+}
+.form-render .icon-info:before {
+  content: "\f129";
+}
+.form-render .icon-exclamation:before {
+  content: "\f12a";
+}
+.form-render .icon-superscript:before {
+  content: "\f12b";
+}
+.form-render .icon-subscript:before {
+  content: "\f12c";
+}
+.form-render .icon-eraser:before {
+  content: "\f12d";
+}
+.form-render .icon-puzzle-piece:before {
+  content: "\f12e";
+}
+.form-render .icon-microphone:before {
+  content: "\f130";
+}
+.form-render .icon-microphone-off:before {
+  content: "\f131";
+}
+.form-render .icon-shield:before {
+  content: "\f132";
+}
+.form-render .icon-calendar-empty:before {
+  content: "\f133";
+}
+.form-render .icon-fire-extinguisher:before {
+  content: "\f134";
+}
+.form-render .icon-rocket:before {
+  content: "\f135";
+}
+.form-render .icon-maxcdn:before {
+  content: "\f136";
+}
+.form-render .icon-chevron-sign-left:before {
+  content: "\f137";
+}
+.form-render .icon-chevron-sign-right:before {
+  content: "\f138";
+}
+.form-render .icon-chevron-sign-up:before {
+  content: "\f139";
+}
+.form-render .icon-chevron-sign-down:before {
+  content: "\f13a";
+}
+.form-render .icon-html5:before {
+  content: "\f13b";
+}
+.form-render .icon-css3:before {
+  content: "\f13c";
+}
+.form-render .icon-anchor:before {
+  content: "\f13d";
+}
+.form-render .icon-unlock-alt:before {
+  content: "\f13e";
+}
+.form-render .icon-bullseye:before {
+  content: "\f140";
+}
+.form-render .icon-ellipsis-horizontal:before {
+  content: "\f141";
+}
+.form-render .icon-ellipsis-vertical:before {
+  content: "\f142";
+}
+.form-render .icon-rss-sign:before {
+  content: "\f143";
+}
+.form-render .icon-play-sign:before {
+  content: "\f144";
+}
+.form-render .icon-ticket:before {
+  content: "\f145";
+}
+.form-render .icon-minus-sign-alt:before {
+  content: "\f146";
+}
+.form-render .icon-check-minus:before {
+  content: "\f147";
+}
+.form-render .icon-level-up:before {
+  content: "\f148";
+}
+.form-render .icon-level-down:before {
+  content: "\f149";
+}
+.form-render .icon-check-sign:before {
+  content: "\f14a";
+}
+.form-render .icon-edit-sign:before {
+  content: "\f14b";
+}
+.form-render .icon-external-link-sign:before {
+  content: "\f14c";
+}
+.form-render .icon-share-sign:before {
+  content: "\f14d";
+}
+.form-render .icon-compass:before {
+  content: "\f14e";
+}
+.form-render .icon-collapse:before {
+  content: "\f150";
+}
+.form-render .icon-collapse-top:before {
+  content: "\f151";
+}
+.form-render .icon-expand:before {
+  content: "\f152";
+}
+.form-render .icon-euro:before,
+.form-render .icon-eur:before {
+  content: "\f153";
+}
+.form-render .icon-gbp:before {
+  content: "\f154";
+}
+.form-render .icon-dollar:before,
+.form-render .icon-usd:before {
+  content: "\f155";
+}
+.form-render .icon-rupee:before,
+.form-render .icon-inr:before {
+  content: "\f156";
+}
+.form-render .icon-yen:before,
+.form-render .icon-jpy:before {
+  content: "\f157";
+}
+.form-render .icon-renminbi:before,
+.form-render .icon-cny:before {
+  content: "\f158";
+}
+.form-render .icon-won:before,
+.form-render .icon-krw:before {
+  content: "\f159";
+}
+.form-render .icon-bitcoin:before,
+.form-render .icon-btc:before {
+  content: "\f15a";
+}
+.form-render .icon-file:before {
+  content: "\f15b";
+}
+.form-render .icon-file-text:before {
+  content: "\f15c";
+}
+.form-render .icon-sort-by-alphabet:before {
+  content: "\f15d";
+}
+.form-render .icon-sort-by-alphabet-alt:before {
+  content: "\f15e";
+}
+.form-render .icon-sort-by-attributes:before {
+  content: "\f160";
+}
+.form-render .icon-sort-by-attributes-alt:before {
+  content: "\f161";
+}
+.form-render .icon-sort-by-order:before {
+  content: "\f162";
+}
+.form-render .icon-sort-by-order-alt:before {
+  content: "\f163";
+}
+.form-render .icon-thumbs-up:before {
+  content: "\f164";
+}
+.form-render .icon-thumbs-down:before {
+  content: "\f165";
+}
+.form-render .icon-youtube-sign:before {
+  content: "\f166";
+}
+.form-render .icon-youtube:before {
+  content: "\f167";
+}
+.form-render .icon-xing:before {
+  content: "\f168";
+}
+.form-render .icon-xing-sign:before {
+  content: "\f169";
+}
+.form-render .icon-youtube-play:before {
+  content: "\f16a";
+}
+.form-render .icon-dropbox:before {
+  content: "\f16b";
+}
+.form-render .icon-stackexchange:before {
+  content: "\f16c";
+}
+.form-render .icon-instagram:before {
+  content: "\f16d";
+}
+.form-render .icon-flickr:before {
+  content: "\f16e";
+}
+.form-render .icon-adn:before {
+  content: "\f170";
+}
+.form-render .icon-bitbucket:before {
+  content: "\f171";
+}
+.form-render .icon-bitbucket-sign:before {
+  content: "\f172";
+}
+.form-render .icon-tumblr:before {
+  content: "\f173";
+}
+.form-render .icon-tumblr-sign:before {
+  content: "\f174";
+}
+.form-render .icon-long-arrow-down:before {
+  content: "\f175";
+}
+.form-render .icon-long-arrow-up:before {
+  content: "\f176";
+}
+.form-render .icon-long-arrow-left:before {
+  content: "\f177";
+}
+.form-render .icon-long-arrow-right:before {
+  content: "\f178";
+}
+.form-render .icon-apple:before {
+  content: "\f179";
+}
+.form-render .icon-windows:before {
+  content: "\f17a";
+}
+.form-render .icon-android:before {
+  content: "\f17b";
+}
+.form-render .icon-linux:before {
+  content: "\f17c";
+}
+.form-render .icon-dribbble:before {
+  content: "\f17d";
+}
+.form-render .icon-skype:before {
+  content: "\f17e";
+}
+.form-render .icon-foursquare:before {
+  content: "\f180";
+}
+.form-render .icon-trello:before {
+  content: "\f181";
+}
+.form-render .icon-female:before {
+  content: "\f182";
+}
+.form-render .icon-male:before {
+  content: "\f183";
+}
+.form-render .icon-gittip:before {
+  content: "\f184";
+}
+.form-render .icon-sun:before {
+  content: "\f185";
+}
+.form-render .icon-moon:before {
+  content: "\f186";
+}
+.form-render .icon-archive:before {
+  content: "\f187";
+}
+.form-render .icon-bug:before {
+  content: "\f188";
+}
+.form-render .icon-vk:before {
+  content: "\f189";
+}
+.form-render .icon-weibo:before {
+  content: "\f18a";
+}
+.form-render .icon-renren:before {
+  content: "\f18b";
+}
