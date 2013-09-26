@@ -244,6 +244,7 @@ define([
 		  }
 		  break;
 
+		case 'userid':
 		case 'textbox':
 		  _type = 'text';
 		case 'select':

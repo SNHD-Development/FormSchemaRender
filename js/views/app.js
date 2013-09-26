@@ -80,10 +80,15 @@ define([
           $('#'+that.options.formSchema.name, that.el).trigger(that.options.formSchema.name+'.renderCompleted', that);
 
           // Set the Action if has one          
+          var $form = $(that.el).find('form.form-render');
           if (that.options.formActionUrl) {
-          	$(that.el).find('form.form-render').attr('action', that.options.formActionUrl);
+			$form.attr('action', that.options.formActionUrl);
           }
 
+          // Render the buttons
+          // Check for the .form-actions class
+          var $formButtons = $('div.form-actions', $form);
+          
         });
       }
     },

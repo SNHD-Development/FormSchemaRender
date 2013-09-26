@@ -51,6 +51,7 @@ Example:
 
 	<script type="text/javascript">
 		var formSchema = {}
+		, formActionUrl = '/action'
 		, formData = {}
 		, mode = ""
 		, view = ""
@@ -156,6 +157,11 @@ In order to build form when user click a button can be done by adding class "btn
 			"Class" : "btn btn-primary btn-render-form"
 		}
 	}
+
+### UserId Field
+
+This is the user id from user collection. This will link to user collection to check the claim for each form.
+
 
 ### FullName Field
 
