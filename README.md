@@ -162,6 +162,15 @@ In order to build form when user click a button can be done by adding class "btn
 
 This is the user id from user collection. This will link to user collection to check the claim for each form.
 
+	{
+        "Name" : "UserName",
+        "Type" : "UserId",
+        "Description" : "Username",
+        "Options" : {
+        	"Url" : "/your_end_point"
+        }
+    }
+
 
 ### FullName Field
 

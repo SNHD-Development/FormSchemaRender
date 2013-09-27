@@ -93,6 +93,7 @@ define([
 	initialize: function() {
 	  var that = this;
 	  this._div = 0;	// Number of Open Div
+	  this._hasUserId = false;	// Tracking the UserId Field
 	  this._hasDate = false; // Tracking the dateinput element
 	  this._hasBDate = false; // Tracking the Birthdate element
 	  this._hasEmailPicker = false; // Tracking the EmailPicker element
@@ -245,6 +246,11 @@ define([
 		  break;
 
 		case 'userid':
+			this._hasUserId = true;
+			if (field.options && field.options.url) {
+				field.attributes['data-url'] = field.options.url;
+			}
+			field.attributes['class'] = (field.attributes['class'] || '') + ' userid-lookup';
 		case 'textbox':
 		  _type = 'text';
 		case 'select':

@@ -528,6 +528,11 @@ define([
 				this.setupAjaxCall(view, $form);
 			}
 
+			// Setup UserId Field
+			if (view._hasUserId) {
+				this.setupUserIdAjaxCall(view, $form);
+			}
+
 			// Setup ButtonCondition
 			// By Default, will require all data to be valid
 			// Default Success Call Back must return JSON with key = "value"
@@ -881,6 +886,27 @@ define([
 				}
 			}
 			return error;
+		},
+		/**
+		 * Function to setup UserId Look Up from Ajax
+		 */
+		setupUserIdAjaxCall: function (view, $form) {
+			var endpoint = '/user?$filter=Username eq ';
+			var $idInput = $(':input.userid-lookup', $form);
+			$idInput.each(function () {
+				$(this).change(function (e) {
+					var $this = $(this)
+					, _val = $this.val()
+					, tmp_endpoint = ($this.attr('data-url') || endpoint)+"'"+_val+"'";
+
+					if (_val === '') {
+						return;
+					}
+					$.getJSON(tmp_endpoint, function (data, textStatus, jqXHR) {
+						
+					});					
+				});
+			});
 		}
 	};
 });
