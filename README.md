@@ -258,7 +258,10 @@ To change languages for Select field add "Values-language" like,
 			"N/A": "N/A"
 		},
 		"Options" : {
-			"DefaultText" : "select one of these options"
+			"DefaultText" : {
+				"en": "select one of these options",
+				"sp": "seleccione una de estas opciones"
+			}
 		}
 	}
 

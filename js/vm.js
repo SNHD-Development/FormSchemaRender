@@ -81,6 +81,10 @@ define([
                   if (element['values-'+language]) {
                     element.values = element['values-'+language];
                   }
+
+                  if (element.options && typeof element.options.defaulttext === 'object') {                    
+                    element.options.defaulttext = element.options.defaulttext[language];
+                  }
                   break;
               }
             });

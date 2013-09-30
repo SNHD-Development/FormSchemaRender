@@ -126,7 +126,7 @@ require([
         var _mode, _view, _token, _opts, appView, config = {
                 mode: ["read", "update", "create"],
                 view: ["default", "horizontal", "wizard"]
-            }, lang = language || 'en';
+            }, lang = (typeof language === 'undefined')? 'en': language;
 
         if (typeof formSchema === 'undefined') {
             throw 'formSchema is undefined';
