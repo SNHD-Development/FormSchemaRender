@@ -33,7 +33,8 @@ define([
           formData: that.options.formData,
           mode : that.options.mode,
 		  internal : that.options.internal,
-		  hideButtons : that.options.hideButtons
+		  hideButtons : that.options.hideButtons,
+		  lang : that.options.lang
         };
 
       this.$el.html(this.template(this.options.formSchema));

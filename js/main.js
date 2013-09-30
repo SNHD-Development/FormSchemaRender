@@ -126,7 +126,7 @@ require([
         var _mode, _view, _token, _opts, appView, config = {
                 mode: ["read", "update", "create"],
                 view: ["default", "horizontal", "wizard"]
-            }, lang = (typeof language === 'undefined')? 'en': language;
+            }, lang = (typeof language === 'undefined') ? 'en' : language;
 
         if (typeof formSchema === 'undefined') {
             throw 'formSchema is undefined';
@@ -135,7 +135,7 @@ require([
         Vm.toLower(formSchema);
         // Change the Languages        
         if (lang && lang !== 'en') {
-          Vm.changeLanguage(formSchema.fields, lang);
+            Vm.changeLanguage(formSchema.fields, lang);
         }
         if (typeof formData !== 'undefined') {
             Vm.toLower(formData, ['fields', 'internalfields']);
@@ -160,7 +160,8 @@ require([
             mode: _mode,
             token: _token,
             internal: ((typeof internal === 'undefined') ? false : internal),
-            hideButtons: ((typeof hideButtons === 'undefined') ? false : hideButtons)
+            hideButtons: ((typeof hideButtons === 'undefined') ? false : hideButtons),
+            lang: lang
         };
 
         if (typeof formActionUrl !== 'undefined') {
@@ -195,8 +196,15 @@ require([
 
         appView = Vm.create({}, 'AppView', AppView, _opts);
 
-        $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">Loading Form Information ...</span></p>');
-
+        var _loadingText;
+        switch (lang) {
+            case 'sp':
+                _loadingText = 'Bajando Información';
+                break;
+            default:
+                _loadingText = 'Loading Form Information';
+        }
+        $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
         appView.render();
 
     });

@@ -206,6 +206,7 @@ define([
 	  , _name = [field.name]
 	  , _type = field.type.toLowerCase()
 	  , _attr = '';
+	  field.lang = this.options.lang;	// Set up default lang for each field for simple work in template
 	  field.attributes = field.attributes || {};
 	  field.options = field.options || {};
 	  this.options.formSchema.validation = this.options.formSchema.validation || {};
