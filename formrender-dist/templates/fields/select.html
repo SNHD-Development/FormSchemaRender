@@ -1,7 +1,7 @@
 <%
 var _description ;
-if ( typeof description === 'object') {
-	_description = options.defaulttext.en;
+if (options.defaulttext) {
+	_description = description;
 } else {
 	_description = 'Select ' + description.toLowerCase();
 }

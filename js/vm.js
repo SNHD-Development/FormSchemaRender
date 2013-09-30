@@ -83,7 +83,9 @@ define([
                   }
 
                   if (element.options && typeof element.options.defaulttext === 'object') {                    
-                    element.options.defaulttext = element.options.defaulttext[language];
+                    element.description = element.options.defaulttext[language];
+                  } else if (element.options && element.options.defaulttext) {
+                    element.description = element.options.defaulttext;
                   }
                   break;
               }
