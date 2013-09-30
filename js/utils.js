@@ -897,7 +897,7 @@ define([
 				$(this).change(function (e) {
 					var $this = $(this)
 					, _val = $this.val()
-					, tmp_endpoint = ($this.attr('data-url') || endpoint)+"'"+_val+"'";
+					, tmp_endpoint = ($this.attr('data-url') || endpoint)+_val;
 
 					if (_val === '') {
 						return;

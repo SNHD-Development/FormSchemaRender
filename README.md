@@ -37,20 +37,22 @@ Load JS with RequireJS
 `<script data-main="js/main" src="js/libs/require/require.js"></script>`
 
 ### JS Object
-1. formSchema: formSchema JS Object (Require)
-2. formActionUrl: set url action for the form (Require for read and update modes).
-3. formData: formData JS Object (Optional)
-4. mode: mode either "read", "update" or "create" (Optional, default is create mode)
-5. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
-6. token: if you want to add token in your form, you can add it here (Optional, but recommended)
-7. internal: When we want to add internal only fileds, if any fields that has `options.internal = true` will only get render if this flag set to true. (Optional, default value is false)
-8. formEvents: custom events JS code that will need to run in form render scope. (Optional)
-9. hideButtons: Force FormRender not to render any buttons. (Optional)
+1. language: form language default value is "en", support language code [ISO 639-1](http://loc.gov/standards/iso639-2/php/code_list.php)
+2. formSchema: formSchema JS Object (Require)
+3. formActionUrl: set url action for the form (Require for read and update modes).
+4. formData: formData JS Object (Optional)
+5. mode: mode either "read", "update" or "create" (Optional, default is create mode)
+6. view: view to render "default", "horizontal" or "wizard" (Optional, default view is horizontal view)
+7. token: if you want to add token in your form, you can add it here (Optional, but recommended)
+8. internal: When we want to add internal only fileds, if any fields that has `options.internal = true` will only get render if this flag set to true. (Optional, default value is false)
+9. formEvents: custom events JS code that will need to run in form render scope. (Optional)
+10. hideButtons: Force FormRender not to render any buttons. (Optional)
 
 Example:
 
 	<script type="text/javascript">
-		var formSchema = {}
+		var language = "en"
+		, formSchema = {}
 		, formActionUrl = '/action'
 		, formData = {}
 		, mode = ""
@@ -124,6 +126,22 @@ Then you need to pass your custom event into
 			console.log('Let\'s check the respond.');
 		}
 	};
+
+### Multi-Languages Support
+
+If we define Languages key with [ISO 639-1](http://loc.gov/standards/iso639-2/php/code_list.php), it will render language when you pass in the language parameter. Now we can render different text for each languages.
+
+By default will render with Description in en mode.
+
+	{
+		"Name" : "Lang",
+		"Type" : "TextBox",
+		"Description" : "What Language is this?",
+		"Languages": {
+			"sp": "¿Qué idioma habla?"
+		}
+	}
+
 
 ### Submit Form
 
