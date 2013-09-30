@@ -50,7 +50,7 @@ define([
                 }
                 if (typeof obj[keyLower] === 'object') {
                     // Validation need to match exactly with the name of the input
-                    if (keyLower === 'validation') {
+                    if (keyLower === 'validation' || keyLower.search(/^values-*/) !== -1) {
                         continue;
                     } else if (typeof skipKey !== 'undefined' && ((!_.isArray(skipKey) && keyLower === skipKey) || (_.isArray(skipKey) && _.indexOf(skipKey, keyLower) > -1))) {
                         continue;
@@ -75,6 +75,13 @@ define([
             _.each(obj, function (element) {
               if (element.description && element.languages && element.languages[language]) {
                 element.description = element.languages[language];
+              }
+              switch (element.type.toLowerCase()) {
+                case 'select':
+                  if (element['values-'+language]) {
+                    element.values = element['values-'+language];
+                  }
+                  break;
               }
             });
         };

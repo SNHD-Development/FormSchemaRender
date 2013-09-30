@@ -241,6 +241,27 @@ To change the default select text, simply set `Options.DefaultText: any text`
 		}
 	}
 
+To change languages for Select field add "Values-language" like,
+
+	{
+		"Name" : "TestSelect",
+		"Type" : "Select",
+		"Description" : "How do you like my website?",
+		"Values" : [
+			"Nice",
+			"Ok",
+			"N/A"
+		],
+		"Values-sp" : {
+			"Nice": "Bueno"
+			"Ok": "Satisfactorio"
+			"N/A": "N/A"
+		},
+		"Options" : {
+			"DefaultText" : "select one of these options"
+		}
+	}
+
 ### Number Field
 
 Number field will limit only the number input. We can use this field to store currency as well.

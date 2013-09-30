@@ -126,7 +126,7 @@ require([
         var _mode, _view, _token, _opts, appView, config = {
                 mode: ["read", "update", "create"],
                 view: ["default", "horizontal", "wizard"]
-            }, languages = languages || 'en';
+            }, lang = language || 'en';
 
         if (typeof formSchema === 'undefined') {
             throw 'formSchema is undefined';
@@ -134,8 +134,8 @@ require([
         // Cast to lowercase
         Vm.toLower(formSchema);
         // Change the Languages        
-        if (language && language !== 'en') {
-            Vm.changeLanguage(formSchema.fields, language);
+        if (lang && lang !== 'en') {
+          Vm.changeLanguage(formSchema.fields, lang);
         }
         if (typeof formData !== 'undefined') {
             Vm.toLower(formData, ['fields', 'internalfields']);
