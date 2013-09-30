@@ -295,6 +295,9 @@ define([
 			, _options = {
 			  id: field.name
 			};
+			if (field.lang !== 'en') {
+				_options.lang = field.lang;
+			}
 			if (typeof this.options.formData.fields !== 'undefined') {
 			  _options['defaultdate'] = this.options.formData.fields[field.name];
 			}
