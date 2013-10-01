@@ -64,6 +64,9 @@ define([
             that.setupEmailInput();
           }
 
+          // Attached Address Event
+          Utils.setupAddressEvent(that.el);
+
 		  // Setup Spinner
 		  Utils.setupSpinner(that.el);
 

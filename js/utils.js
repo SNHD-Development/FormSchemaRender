@@ -919,6 +919,39 @@ define([
 					});					
 				});
 			});
+		},
+		/**
+		 * Setup Address Event
+		 */
+		setupAddressEvent: function (el) {
+			var $form = $('form', el);
+			$form.on('change', '.country', function(e) {
+				e.preventDefault();
+				var $this = $(this),
+				$parent = $this.parentsUntil('form', 'div.address-fieldset'),
+				$select = $parent.find('select.us-state'),
+				$input = $parent.find('input.us-state'),
+				$zip = $parent.find('input.postal-code').val('');
+				_val = $this.val();
+				switch(_val) {
+					case '':
+					case 'US':						
+						if ($select.is(':hidden')) {
+							$input.attr('disabled', true).hide('slow', function() {
+								$select.attr('disabled', false).show('slow');
+							});
+						}
+						$zip.addClass('allowzipcode').attr('maxlength', 5);
+						break;
+					default:
+						if ($input.is(':hidden')) {
+							$select.attr('disabled', true).hide('slow', function() {
+								$input.attr('disabled', false).val('').show('slow');
+							});
+						}
+						$zip.removeClass('allowzipcode').removeAttr('maxlength');
+				}
+			});
 		}
 	};
 });
