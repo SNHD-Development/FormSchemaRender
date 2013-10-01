@@ -252,7 +252,7 @@ define([
 			switch(this.formView.options.lang) {
 				case 'sp':
 					_t_1 = 'Enviando la forma; por favor espere';
-					_t_2 = 'Cargando Información';
+					_t_2 = 'Cargando Informaci&oacute;n';
 					break;
 				default:
 					_t_1 = 'Submitting form; please wait.';

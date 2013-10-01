@@ -115,9 +115,21 @@
 
             // Add the option placeholders if specified
             if (settings["placeholder"]) {
-                $("<option value=''>Year:</option>").appendTo($year);
-                $("<option value=''>Month:</option>").appendTo($month);
-                $("<option value=''>Day:</option>").appendTo($day);
+                var _p_month, _p_year, _p_day;
+                switch (settings['lang']) {
+                    case 'sp':
+                        _p_year = 'Mes';
+                        _p_month = 'A&ntilde;o';
+                        _p_day = 'D&iacute;a';
+                        break;
+                    default:
+                        _p_year = 'Year';
+                        _p_month = 'Month';
+                        _p_day = 'Day';
+                }
+                $("<option value=''>"+_p_year+":</option>").appendTo($year);
+                $("<option value=''>"+_p_month+":</option>").appendTo($month);
+                $("<option value=''>"+_p_day+":</option>").appendTo($day);
             }
 
             var hiddendate, _tmp, defDate, defYear, defMonth, defDay;

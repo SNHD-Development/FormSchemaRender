@@ -199,7 +199,7 @@ require([
         var _loadingText;
         switch (lang) {
             case 'sp':
-                _loadingText = 'Bajando Información';
+                _loadingText = 'Bajando Informaci&oacute;n';
                 break;
             default:
                 _loadingText = 'Loading Form Information';

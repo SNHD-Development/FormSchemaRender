@@ -668,7 +668,7 @@ define([
 						switch(view.options.lang) {
 							case 'sp':
 								_t_1 = 'Por Favor Espere';
-								_t_2 = 'Bajando Información';
+								_t_2 = 'Bajando Informaci&oacute;n';
 								break;
 							default:
 								_t_1 = 'Please wait';
