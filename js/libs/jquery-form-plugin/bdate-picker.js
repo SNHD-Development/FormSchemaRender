@@ -118,8 +118,8 @@
                 var _p_month, _p_year, _p_day;
                 switch (settings['lang']) {
                     case 'sp':
-                        _p_year = 'Mes';
-                        _p_month = 'A&ntilde;o';
+                        _p_year = 'A&ntilde;o';
+                        _p_month = 'Mes';
                         _p_day = 'D&iacute;a';
                         break;
                     default:
