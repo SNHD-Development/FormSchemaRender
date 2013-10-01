@@ -307,7 +307,17 @@ define([
 		 * Some select, check might have default value need to send change event
 		 **/
 		getDefaultValues: function(el) {
-			$('.has-default-val', el).trigger('change');
+			$('.has-default-val', el).each(function () {
+				var $this = $(this);
+				if ($this.is(':disabled')) {
+					return;
+				}
+				if ($this.val() === '') {
+					$this.trigger('change');
+				} else if ($this.hasClass('data-clean')) {
+					$this.trigger('change').removeClass('data-clean');
+				}
+			});
 		},
 		/**
 		 * Setup Date Input
@@ -931,8 +941,12 @@ define([
 				$parent = $this.parentsUntil('form', 'div.address-fieldset'),
 				$select = $parent.find('select.us-state'),
 				$input = $parent.find('input.us-state'),
-				$zip = $parent.find('input.postal-code').val('');
+				$zip = $parent.find('input.postal-code');
 				_val = $this.val();
+				if (_val === $this.attr('data-value')) {
+					return;
+				}
+				$this.attr('data-value', _val);
 				switch(_val) {
 					case '':
 					case 'US':						
