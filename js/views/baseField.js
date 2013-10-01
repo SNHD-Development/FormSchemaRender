@@ -352,11 +352,15 @@ define([
 
 		  // Format Data
 		  if (typeof readMode !== 'undefined' && typeof this.options.formData !== 'undefined') {
+		  	this.options.formData.fields[field.name+'_address_country'] = Vm.getCountry(this.options.formData.fields[field.name+'_address_country']);
+
 			if (this.options.formData.fields[field.name+'_address_street'] && this.options.formData.fields[field.name+'_address_street'].charAt(this.options.formData.fields[field.name+'_address_street'].length-1) !== '.') {
 			  this.options.formData.fields[field.name+'_address_street'] += '.';
 			}
 			this.options.formData.fields[field.name+'_address_street'] += '<br>';
 			this.options.formData.fields[field.name+'_address_city'] += ',';
+			this.options.formData.fields[field.name+'_address_state'] += '<br>';
+			this.options.formData.fields[field.name+'_address_zip'] += '<br>';
 		  }
 
 		  break;
