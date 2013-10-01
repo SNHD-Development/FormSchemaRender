@@ -223,8 +223,18 @@ define([
 		trigger: 'manual'
 	  };
 	  if ($form.hasClass('validation_pass')) {
-		_opt.title = 'Submitting Form, Please wait';
-		_opt.content = '<i class="icon-spinner icon-spin icon-large"></i> Sending data...';
+	  	var _t_1, _t_2;
+		switch($form.options.lang) {
+			case 'sp':
+				_t_1 = 'Enviando la forma; por favor espere';
+				_t_2 = 'Cargando Información';
+				break;
+			default:
+				_t_1 = 'Submitting form; please wait.';
+				_t_2 = 'Sending data';
+		}
+		_opt.title = _t_1;
+		_opt.content = '<i class="icon-spinner icon-spin icon-large"></i> '+_t_2+' ...';
 		e.data.$nextBtn.attr('disabled', true).popover(_opt).popover('show')
 			.next('.popover').addClass('success');
 	  } else {

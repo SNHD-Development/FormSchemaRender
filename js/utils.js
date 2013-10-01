@@ -663,12 +663,24 @@ define([
 						// Get the query object, will send to the url
 						_url += $.param(_data);
 
+						// Languages
+						var _t_1, _t_2;
+						switch(view.options.lang) {
+							case 'sp':
+								_t_1 = 'Por Favor Espere';
+								_t_2 = 'Bajando Información';
+								break;
+							default:
+								_t_1 = 'Please wait';
+								_t_2 = 'Loading data';
+						}
+
 						_opt = {
 							html : true,
 							placement: 'top',
 							trigger: 'manual',
-							title: '<i class="icon-time"></i> Please wait.',
-							content: '<i class="icon-spinner icon-spin icon-large"></i> Loading data...'
+							title: '<i class="icon-time"></i> '+_t_1+'.',
+							content: '<i class="icon-spinner icon-spin icon-large"></i> '+_t_2+' ...'
 						};
 						$currentTarget.attr('disabled', true).popover(_opt).popover('show');
 

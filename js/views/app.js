@@ -248,12 +248,22 @@ define([
 
 
 		if (this.formView.options.formSchema.view !== 'wizard') {
+			var _t_1, _t_2;
+			switch(this.formView.options.lang) {
+				case 'sp':
+					_t_1 = 'Enviando la forma; por favor espere';
+					_t_2 = 'Cargando Información';
+					break;
+				default:
+					_t_1 = 'Submitting form; please wait.';
+					_t_2 = 'Sending data';
+			}
 		  _opt = {
 			html : true,
 			placement: 'top',
 			trigger: 'manual',
-			title: 'Submitting form; please wait.',
-			content: '<i class="icon-spinner icon-spin icon-large"></i> Sending data...'
+			title: _t_1,
+			content: '<i class="icon-spinner icon-spin icon-large"></i> '+_t_2+' ...'
 		  };
 		  $submitBtn.attr('disabled', true).popover(_opt).popover('show')
 			.next('.popover').addClass('success');
