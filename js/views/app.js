@@ -65,7 +65,7 @@ define([
           }
 
           // Attached Address Event
-          Utils.setupAddressEvent(that.el);
+          Utils.setupAddressEvent(that.el, that);
 
 		  // Setup Spinner
 		  Utils.setupSpinner(that.el);

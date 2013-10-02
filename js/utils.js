@@ -933,7 +933,7 @@ define([
 		/**
 		 * Setup Address Event
 		 */
-		setupAddressEvent: function (el) {
+		setupAddressEvent: function (el, view) {
 			var $form = $('form', el);
 			$form.on('change', '.country', function(e) {
 				e.preventDefault();
@@ -961,11 +961,21 @@ define([
 						if ($input.is(':hidden')) {
 							$select.attr('disabled', true).hide('slow', function() {
 								$input.attr('disabled', false).val('').show('slow');
+								if ($input.is("[data-default-value]")) {
+									$input.val($input.attr('data-default-value')).removeAttr('data-default-value');
+								}
 							});
 						}
 						$zip.removeClass('allowzipcode').removeAttr('maxlength');
 				}
 			});
+			if (view.options.mode === 'update') {
+				var $addresses = $('div.address-fieldset', $form);
+				$addresses.each(function () {
+					var $this = $(this);
+					$('.country', this).trigger('change');
+				});
+			}
 		}
 	};
 });

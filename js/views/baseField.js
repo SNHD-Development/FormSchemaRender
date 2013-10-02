@@ -361,6 +361,9 @@ define([
 			this.options.formData.fields[field.name+'_address_city'] += ',';
 			this.options.formData.fields[field.name+'_address_state'] += '<br>';
 			this.options.formData.fields[field.name+'_address_zip'] += '<br>';
+		  } else if (this.options.mode === 'update' && this.options.formData.fields[field.name+'_address_country'] !== 'US') {
+		  	// Will Render Input
+		  	field['default_value_state'] = this.options.formData.fields[field.name+'_address_state'];
 		  }
 
 		  break;
