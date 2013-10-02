@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.0.7`
+Version `version 0.0.8`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -526,6 +526,8 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ### Version
+
+* 0.0.8 - Support International Address.
 
 * 0.0.7 - Fix Button Decision on Read Mode.
 		- Add Decimals Options for Number Type.
