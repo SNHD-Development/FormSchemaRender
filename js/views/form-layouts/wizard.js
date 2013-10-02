@@ -206,11 +206,22 @@ define([
 	},
 	submittingForm: function(e) {
 	  // Check to see if this form has submit button
-	  var $submitBtn = $(':submit[type="submit"]', e.data.el);
+	  var $submitBtn = $(':submit[type="submit"]', e.data.el),
+	  	_opt = {
+			html : true,
+			placement: 'top',
+			trigger: 'manual',
+			title: 'Submitting form; please wait.',
+			content: '<i class="icon-spinner icon-spin icon-large"></i> Sending data ...'
+		},
+		$submitDisplay = $(this).nextUntil('','.wizard-actions').find('.btn_next');
 
 	  if ($submitBtn.length > 0) {
 		$submitBtn.trigger('click');
 	  }
+	  if (!$('form.form-render').hasClass('validation_error')) {
+	  	$submitDisplay.attr('disabled', true).popover(_opt).popover('show').next('.popover').addClass('success');
+	  }	  
 	},
 	/**
 	 * Submitting Event
