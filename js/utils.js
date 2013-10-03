@@ -911,8 +911,9 @@ define([
          * Function to setup UserId Look Up from Ajax
          */
         setupUserIdAjaxCall: function(view, $form) {
-            var endpoint = '/user?$filter=Username eq ';
-            var $idInput = $(':input.userid-lookup', $form);
+            var endpoint = '/user?$filter=Username eq ',
+            $idInput = $(':input.userid-lookup', $form),
+            that = this;
             $idInput.each(function() {
                 $(this).change(function(e) {
                     var $this = $(this),
@@ -922,39 +923,50 @@ define([
                             dataType: "json",
                             complete: function(jqXHR, textStatus) {
                                 $this.removeAttr('data-send');
-                                console.log(textStatus);
+                                if ($this.hasClass('invalid')) {
+                                    return;
+                                }
+                                if (textStatus === 'success') {
+                                    var result = $.parseJSON(jqXHR.responseText)
+                                    if (result) {
+                                        $this.addClass('invalid').val('');
+                                        that.setUpErrorNotice($this, 'Username "'+$this.val()+'" is already existed!');
+                                    }
+                                } else {                                    
+                                    that.setUpErrorNotice($this, 'Could not get information!');
+                                }
                             }
                         };
 
-                    if(tmp_endpoint.search(/\?/) === -1) {
+                    if (_val === '') {
+                        return;
+                    }
+
+                    if (tmp_endpoint.search(/\?/) === -1) {
                         tmp_endpoint += '?';
                     }
 
                     if (typeof username !== 'undefined') {
                         _opt.username = username;
                         _opt.password = password;
-                    }                    
+                    }
 
                     if ($this.is('[data-url-data]')) {
                         var _data = '',
-                        _lookup = $.parseJSON($this.attr('data-url-data'));
-                        _.each(_lookup, function (value, key) {
-                            _data += key+'='+$(':input[name="'+value+'"]').val()+'&';
+                            _lookup = $.parseJSON($this.attr('data-url-data'));
+                        _.each(_lookup, function(value, key) {
+                            _data += key + '=' + $(':input[name="' + value + '"]').val() + '&';
                         });
-                        _data = encodeURI(_data.substr(0,_data.length-1));
+                        _data = encodeURI(_data.substr(0, _data.length - 1));
                         tmp_endpoint += _data;
                     }
 
-                    _opt.url = tmp_endpoint;
-
-                    if (_val === '') {
-                        return;
-                    }
+                    _opt.url = tmp_endpoint;                    
 
                     if (!$this.is('[data-send]')) {
                         $this.attr('data-send', true);
                         $.ajax(_opt);
-                    }                    
+                    }
                 });
             });
         },
@@ -1004,6 +1016,41 @@ define([
                     $('.country', this).trigger('change');
                 });
             }
+        },
+        /**
+         * Popover is error
+         */
+        setUpErrorNotice: function($currentTarget, text, duration, lang) {
+            // Languages
+            lang = lang || 'en';
+            duration = duration || 3000;
+            text = text || '';
+            var _t_1, _t_2;
+            switch (lang) {
+                case 'sp':
+                    _t_1 = 'Error';
+                    _t_2 = 'Por favor, vuelve a intentarlo';
+                    break;
+                default:
+                    _t_1 = 'Error';
+                    _t_2 = 'Please try again.';
+            }
+
+            _opt = {
+                html: true,
+                placement: 'top',
+                trigger: 'manual',
+                title: '<i class="icon-edit"></i> ' + _t_1 + '.',
+                content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...' + ((text!== '')?'<br>'+text:'')
+            };
+            
+            $currentTarget.attr('disabled', true).popover(_opt).popover('show');
+
+            window.setTimeout(
+                function() {
+                    $currentTarget.attr('disabled', false).popover('destroy');
+                    $currentTarget.next('.popover').remove();
+                }, duration);
         }
     };
 });
