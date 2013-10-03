@@ -254,6 +254,7 @@ define([
 			if (field.options.data) {
 				field.attributes['data-url-data'] = JSON.stringify(field.options.data);
 			}
+			field.attributes['placeholder'] = field.attributes['placeholder'] || 'Valid E-mail as Username';
 			field.attributes['class'] = (field.attributes['class'] || '') + ' userid-lookup';
 		case 'textbox':
 		  _type = 'text';
