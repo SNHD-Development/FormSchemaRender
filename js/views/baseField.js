@@ -943,7 +943,7 @@ define([
 			// Check to see if this has UserId Field Type
 			if (_typeLowerCase === 'userid') {
 				Utils.setupUserIdAjaxCall($('form.form-render'));
-				if (!that.model.validation[field.name].pattern && field.options.render && field.options.render.toLowerCase() !== 'select') {
+				if (!that.model.validation[field.name].pattern && !(field.options.render && field.options.render.toLowerCase() === 'select')) {
 					that.model.validation[field.name].pattern = 'email';
 				}
 			}

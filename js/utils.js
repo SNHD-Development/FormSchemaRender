@@ -312,9 +312,9 @@ define([
         /**
          * If this is Select2 need to work on the model.
          */
-        getUserId: function (el, model) {
+        getUserId: function(el, model) {
             var $select2 = $('.select2-offscreen', el);
-            $select2.each(function () {
+            $select2.each(function() {
                 var $this = $(this);
                 model.set($this.attr('name'), $this.val()).trigger('change');
             });
@@ -940,10 +940,10 @@ define([
                                 $input.append(_opts);
                                 $input.select2({
                                     containerCssClass: 'span12'
-                                }).on('change', function (e) {
+                                }).on('change', function(e) {
                                     if (e.val && e.val !== '') {
                                         $input.removeClass('invalid');
-                                    }                                    
+                                    }
                                 });
                             } else {
                                 that.setUpErrorNotice($input, 'Please refresh this page!', 10000);
@@ -971,11 +971,10 @@ define([
                                         var result = $.parseJSON(jqXHR.responseText);
                                         switch (typeof result) {
                                             case 'boolean':
-                                                $this.addClass('invalid').val('');
-                                                that.setUpErrorNotice($this, 'Username "' + $this.val() + '" is already existed!');
-                                                break;
-                                            case 'object':
-                                                console.log(result);
+                                                if (result) {
+                                                    $this.addClass('invalid').val('');
+                                                    that.setUpErrorNotice($this, 'Username "' + $this.val() + '" is already existed!');
+                                                }                                                
                                                 break;
                                         }
                                     } else {
