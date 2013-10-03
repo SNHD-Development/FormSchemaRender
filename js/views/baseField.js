@@ -248,8 +248,11 @@ define([
 
 		case 'userid':
 			this._hasUserId = true;
-			if (field.options && field.options.url) {
+			if (field.options.url) {
 				field.attributes['data-url'] = field.options.url;
+			}
+			if (field.options.data) {
+				field.attributes['data-url-data'] = JSON.stringify(field.options.data);
 			}
 			field.attributes['class'] = (field.attributes['class'] || '') + ' userid-lookup';
 		case 'textbox':
