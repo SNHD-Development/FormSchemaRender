@@ -222,6 +222,7 @@ define([
       }
       $form.addClass('form_submitted').removeClass('validation_pass validation_error');
       this.getBDateinput(this.el, this.formView.model);
+      Utils.getUserId(this.el, this.formView.model);
       // Remove Not needed input from submitting data
       $('.not_sending', $form).attr('disabled', true);
 

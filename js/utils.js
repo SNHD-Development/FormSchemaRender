@@ -310,6 +310,16 @@ define([
             });
         },
         /**
+         * If this is Select2 need to work on the model.
+         */
+        getUserId: function (el, model) {
+            var $select2 = $('.select2-offscreen', el);
+            $select2.each(function () {
+                var $this = $(this);
+                model.set($this.attr('name'), $this.val()).trigger('change');
+            });
+        },
+        /**
          * Some select, check might have default value need to send change event
          **/
         getDefaultValues: function(el) {
@@ -930,6 +940,10 @@ define([
                                 $input.append(_opts);
                                 $input.select2({
                                     containerCssClass: 'span12'
+                                }).on('change', function (e) {
+                                    if (e.val && e.val !== '') {
+                                        $input.removeClass('invalid');
+                                    }                                    
                                 });
                             } else {
                                 that.setUpErrorNotice($input, 'Please refresh this page!', 10000);

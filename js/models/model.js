@@ -158,11 +158,11 @@ define([
 
 		case 'userid':
 			_attrs[value.name] = '';
-		  	if (typeof attrs.validation[value.name] !== 'undefined') {
+		  	if (typeof attrs.validation[value.name] !== 'undefined' ) {
 		  		_validation[value.name] = _.clone(attrs.validation[value.name]);
-		  		if (!_validation[value.name].pattern) {
+		  		if (!_validation[value.name].pattern && value.options.render && value.options.render.toLowerCase() !== 'select' ) {
 		  			_validation[value.name].pattern = 'email';
-		  		}		  		
+		  		}		  	
 		  	}
 			break;
 

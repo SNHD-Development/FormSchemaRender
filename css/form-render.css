@@ -132,6 +132,11 @@
     .form-render .form-actions .popover-title {
       text-align: left;
       font-weight: bold; }
+  .form-render div.invalid a.select2-choice {
+    border-color: #b94a48;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
   .form-render input, .form-render select, .form-render textarea {
     margin-bottom: 10px; }
     .form-render input[type="file"].invalid, .form-render select[type="file"].invalid, .form-render textarea[type="file"].invalid {

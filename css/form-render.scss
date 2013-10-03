@@ -199,6 +199,19 @@ $text_area_min_height:  100px;
 	/**
 	 * Error Styles
 	 **/
+	div {
+		&.invalid {
+			a {
+				&.select2-choice {
+					border-color: #b94a48;
+					-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+					-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+					box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+				}
+			}
+		}
+	}
+
 	input, select, textarea {
 
 		margin-bottom: 10px;
