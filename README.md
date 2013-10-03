@@ -32,6 +32,7 @@ Please include these styles
 * spinner.css (Required: if setting type 'Number' with options 'Spinner = true' ) `<link rel="stylesheet" href="css/spinner.css">`
 * lightbox.css (Required: if setting type 'Image' ) `<link rel="stylesheet" href="css/lightbox.css" />`
 * datepicker.css (If you use type = "date") `<link rel="stylesheet" href="css/datepicker.css" />`
+* select2.css (If you use type = "UserId" with options.render = "Select") `<link rel="stylesheet" href="css/select2.css" />`
 
 Load JS with RequireJS
 `<script data-main="js/main" src="js/libs/require/require.js"></script>`

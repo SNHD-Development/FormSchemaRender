@@ -11,7 +11,8 @@ define([
     'jquery.birthdaypicker',
     'jquery.placeholder',
     'jquery.expose',
-    'jquery.zclip'
+    'jquery.zclip',
+    'jquery.select2'
 ], function($, _, Backbone, Vm) {
 
     /**
@@ -539,7 +540,7 @@ define([
 
             // Setup UserId Field
             if (view._hasUserId) {
-                this.setupUserIdAjaxCall(view, $form);
+                this.setupUserIdAjaxCall($form);
             }
 
             // Setup ButtonCondition
@@ -910,64 +911,96 @@ define([
         /**
          * Function to setup UserId Look Up from Ajax
          */
-        setupUserIdAjaxCall: function(view, $form) {
+        setupUserIdAjaxCall: function($form) {
             var endpoint = '/user?$filter=Username eq ',
-            $idInput = $(':input.userid-lookup', $form),
-            that = this;
+                $idInput = $(':input.userid-lookup', $form),
+                that = this;
             $idInput.each(function() {
-                $(this).change(function(e) {
-                    var $this = $(this),
-                        _val = $this.val(),
-                        tmp_endpoint = $this.attr('data-url') || endpoint,
-                        _opt = {
-                            dataType: "json",
-                            complete: function(jqXHR, textStatus) {
-                                $this.removeAttr('data-send');
-                                if ($this.hasClass('invalid')) {
-                                    return;
-                                }
-                                if (textStatus === 'success') {
-                                    var result = $.parseJSON(jqXHR.responseText)
-                                    if (result) {
-                                        $this.addClass('invalid').val('');
-                                        that.setUpErrorNotice($this, 'Username "'+$this.val()+'" is already existed!');
-                                    }
-                                } else {                                    
-                                    that.setUpErrorNotice($this, 'Could not get information!');
-                                }
+                var $input = $(this);
+                // If this is render as select (will use select2)                
+                if ($input.is('select')) {
+                    if ($input.is('[data-url]')) {
+                        // Ajax-Call
+                        $.getJSON($input.attr('data-url'), function(data, textStatus) {
+                            if (textStatus === 'success') {
+                                var _opts = '';
+                                _.each(data, function(element) {
+                                    _opts += '<option value="' + element.Id + '">' + element.Username + '</option>'
+                                });
+                                $input.append(_opts);
+                                $input.select2({
+                                    containerCssClass: 'span12'
+                                });
+                            } else {
+                                that.setUpErrorNotice($input, 'Please refresh this page!', 10000);
                             }
-                        };
-
-                    if (_val === '') {
-                        return;
-                    }
-
-                    if (tmp_endpoint.search(/\?/) === -1) {
-                        tmp_endpoint += '?';
-                    }
-
-                    if (typeof username !== 'undefined') {
-                        _opt.username = username;
-                        _opt.password = password;
-                    }
-
-                    if ($this.is('[data-url-data]')) {
-                        var _data = '',
-                            _lookup = $.parseJSON($this.attr('data-url-data'));
-                        _.each(_lookup, function(value, key) {
-                            _data += key + '=' + $(':input[name="' + value + '"]').val() + '&';
                         });
-                        _data = encodeURI(_data.substr(0, _data.length - 1));
-                        tmp_endpoint += _data;
+                    } else {
+                        // Default Select
+                        $input.select2({
+                            containerCssClass: 'span12'
+                        });
                     }
+                } else {
+                    $(this).change(function(e) {
+                        var $this = $(this),
+                            _val = $this.val(),
+                            tmp_endpoint = $this.attr('data-url') || endpoint,
+                            _opt = {
+                                dataType: "json",
+                                complete: function(jqXHR, textStatus) {
+                                    $this.removeAttr('data-send');
+                                    if ($this.hasClass('invalid')) {
+                                        return;
+                                    }
+                                    if (textStatus === 'success') {
+                                        var result = $.parseJSON(jqXHR.responseText);
+                                        switch (typeof result) {
+                                            case 'boolean':
+                                                $this.addClass('invalid').val('');
+                                                that.setUpErrorNotice($this, 'Username "' + $this.val() + '" is already existed!');
+                                                break;
+                                            case 'object':
+                                                console.log(result);
+                                                break;
+                                        }
+                                    } else {
+                                        that.setUpErrorNotice($this, 'Could not get information!');
+                                    }
+                                }
+                            };
 
-                    _opt.url = tmp_endpoint;                    
+                        if (_val === '') {
+                            return;
+                        }
 
-                    if (!$this.is('[data-send]')) {
-                        $this.attr('data-send', true);
-                        $.ajax(_opt);
-                    }
-                });
+                        if (tmp_endpoint.search(/\?/) === -1) {
+                            tmp_endpoint += '?';
+                        }
+
+                        if (typeof username !== 'undefined') {
+                            _opt.username = username;
+                            _opt.password = password;
+                        }
+
+                        if ($this.is('[data-url-data]')) {
+                            var _data = '',
+                                _lookup = $.parseJSON($this.attr('data-url-data'));
+                            _.each(_lookup, function(value, key) {
+                                _data += key + '=' + $(':input[name="' + value + '"]').val() + '&';
+                            });
+                            _data = encodeURI(_data.substr(0, _data.length - 1));
+                            tmp_endpoint += _data;
+                        }
+
+                        _opt.url = tmp_endpoint;
+
+                        if (!$this.is('[data-send]')) {
+                            $this.attr('data-send', true);
+                            $.ajax(_opt);
+                        }
+                    });
+                }
             });
         },
         /**
@@ -1041,9 +1074,9 @@ define([
                 placement: 'top',
                 trigger: 'manual',
                 title: '<i class="icon-edit"></i> ' + _t_1 + '.',
-                content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...' + ((text!== '')?'<br>'+text:'')
+                content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...' + ((text !== '') ? '<br>' + text : '')
             };
-            
+
             $currentTarget.attr('disabled', true).popover(_opt).popover('show');
 
             window.setTimeout(

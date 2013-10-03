@@ -256,6 +256,13 @@ define([
 			}
 			field.attributes['placeholder'] = field.attributes['placeholder'] || 'Valid E-mail as Username';
 			field.attributes['class'] = (field.attributes['class'] || '') + ' userid-lookup';
+			_type = (field.options.render) ? field.options.render.toLowerCase() : 'text';
+			if (_type === 'select') {
+				field.values = [];
+			}
+			field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
+			break;
+
 		case 'textbox':
 		  _type = 'text';
 		case 'select':
@@ -931,6 +938,14 @@ define([
 				  $(':input[name="'+element+'"]', $containerOptions).val(that.options.formData.fields[element]);
 				}
 			  });
+			}
+
+			// Check to see if this has UserId Field Type
+			if (_typeLowerCase === 'userid') {
+				Utils.setupUserIdAjaxCall($('form.form-render'));
+				if (!that.model.validation[field.name].pattern) {
+					that.model.validation[field.name].pattern = 'email';
+				}
 			}
 		  }
 		} else {
