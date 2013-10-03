@@ -66,15 +66,15 @@ require.config({
             exports: 'jQuery'
         },
         "jquery.expose": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.expose'
         },
         "jquery.overlay": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.overlay'
         },
         "jquery.dateinput": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.dateinput'
         },
         "jquery.datepicker": {
@@ -90,27 +90,27 @@ require.config({
             exports: 'jQuery.spinner'
         },
         "jquery.ajaxsubmit": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.ajaxSubmit'
         },
         "jquery.placeholder": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.placeholder'
         },
         "jquery.birthdaypicker": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.birthdaypicker'
         },
         "jquery.lightbox": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.lightbox'
         },
         "jquery.zclip": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.zclip'
         },
         "jquery.select2": {
-            deps: ['jquery'],
+            deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.select2'
         }
     }

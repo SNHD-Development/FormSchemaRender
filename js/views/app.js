@@ -15,7 +15,8 @@ define([
   'jquery.placeholder',
   'jquery.lightbox',
   'jquery.expose',
-  'bootstrap'
+  'bootstrap',
+  'jquery.select2'
 ], function($, _, Backbone, Vm, Utils, Events, layoutTemplate){
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),

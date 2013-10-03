@@ -44,7 +44,8 @@ define([
   'text!templates/subform-layouts/table.html',
   'jquery.expose',
   'jquery.datepicker',
-  'jquery.birthdaypicker'
+  'jquery.birthdaypicker',
+  'jquery.select2'
 ], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation
 	, listView
 	, emailData
