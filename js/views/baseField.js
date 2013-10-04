@@ -45,6 +45,7 @@ define([
   'jquery.expose',
   'jquery.datepicker',
   'jquery.birthdaypicker',
+  'bootstrap',
   'jquery.select2'
 ], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation
 	, listView

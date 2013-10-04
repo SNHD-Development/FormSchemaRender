@@ -7,12 +7,13 @@ define([
     'underscore',
     'backbone',
     'vm',
+    'bootstrap',
+    'jquery.select2',
     'jquery.spinner',
     'jquery.birthdaypicker',
     'jquery.placeholder',
     'jquery.expose',
-    'jquery.zclip',
-    'jquery.select2'
+    'jquery.zclip'    
 ], function($, _, Backbone, Vm) {
 
     /**

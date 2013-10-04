@@ -62,8 +62,7 @@ require.config({
     },
     shim: {
         "bootstrap": {
-            deps: ['jquery'],
-            exports: 'jQuery'
+            deps: ['jquery']
         },
         "jquery.expose": {
             deps: ['jquery', 'bootstrap'],
@@ -110,8 +109,7 @@ require.config({
             exports: 'jQuery.zclip'
         },
         "jquery.select2": {
-            deps: ['jquery', 'bootstrap'],
-            exports: 'jQuery.select2'
+            deps: ['jquery', 'bootstrap']
         }
     }
 });
