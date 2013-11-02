@@ -108,9 +108,7 @@ require.config({
             deps: ['jquery', 'bootstrap'],
             exports: 'jQuery.zclip'
         },
-        "jquery.select2": {
-            deps: ['jquery', 'bootstrap']
-        }
+        "jquery.select2": ['jquery']
     }
 });
 
@@ -136,7 +134,7 @@ require([
         }
         // Cast to lowercase
         Vm.toLower(formSchema);
-        // Change the Languages        
+        // Change the Languages
         if (lang && lang !== 'en') {
             Vm.changeLanguage(formSchema.fields, lang);
         }

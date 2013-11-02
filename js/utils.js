@@ -13,7 +13,7 @@ define([
     'jquery.birthdaypicker',
     'jquery.placeholder',
     'jquery.expose',
-    'jquery.zclip'    
+    'jquery.zclip'
 ], function($, _, Backbone, Vm) {
 
     /**
@@ -919,6 +919,37 @@ define([
             }
             return error;
         },
+
+        /**
+         * Setup Ajax Call if the form has URL in options
+         * @param  {[type]} $form [description]
+         * @return {[type]}       [description]
+         */
+        setupUrlAjaxCall: function ($form) {
+            var $urlEndPoint = $(':input[data-url]');
+            if ($urlEndPoint.length === 0) {
+                return;
+            }
+            $urlEndPoint.each(function () {
+                var $this = $(this),
+                    _url = $this.attr('data-url');
+                    $.getJSON(_url, function(data, textStatus) {
+                        if (textStatus === 'success') {
+                            var _opts = '';
+                            _.each(data, function(element) {
+                                _opts += '<option value="' + element + '">' + element + '</option>';
+                            });
+                            $this.find('option').remove();
+                            $this.append(_opts);
+                            $this.select2({
+                                    containerCssClass: 'span12'
+                                });
+                            $('#s2id_'+$this.attr('id')+' .select2-drop', $form).hide();
+                        }
+                    });
+            });
+        },
+
         /**
          * Function to setup UserId Look Up from Ajax
          */
@@ -928,7 +959,7 @@ define([
                 that = this;
             $idInput.each(function() {
                 var $input = $(this);
-                // If this is render as select (will use select2)                
+                // If this is render as select (will use select2)
                 if ($input.is('select')) {
                     if ($input.is('[data-url]')) {
                         // Ajax-Call
@@ -936,7 +967,7 @@ define([
                             if (textStatus === 'success') {
                                 var _opts = '';
                                 _.each(data, function(element) {
-                                    _opts += '<option value="' + element.Id + '">' + element.Username + '</option>'
+                                    _opts += '<option value="' + element.Id + '">' + element.Username + '</option>';
                                 });
                                 $input.append(_opts);
                                 $input.select2({
@@ -975,7 +1006,7 @@ define([
                                                 if (result) {
                                                     $this.addClass('invalid').val('');
                                                     that.setUpErrorNotice($this, 'Username "' + $this.val() + '" is already existed!');
-                                                }                                                
+                                                }
                                                 break;
                                         }
                                     } else {

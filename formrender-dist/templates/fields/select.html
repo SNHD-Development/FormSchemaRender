@@ -8,8 +8,10 @@ if (options.defaulttext) {
 %>
 <select id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>" name="<%= name %>"<%= _attr %>>
 	<option value="">-- <%= _description %> --</option>
+	<% if (typeof values !== 'undefined') { %>
 	<% _value = $.isArray(values) %>
 	<% _.each(values, function(value, key) { %>
 	<option <%= (_value) ? '': ' value="'+key+'"' %>><%= value %></option>
 	<% }); %>
+	<% } %>
 </select>
