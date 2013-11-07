@@ -42,7 +42,7 @@ the specific language governing permissions and limitations under the Apache Lic
     "use strict";
     /*global document, window, jQuery, console */
 
-    if (window.Select2 !== undefined && $().select2) {
+    if (window.Select2 !== undefined && $().select2 ) {
         return;
     }
 

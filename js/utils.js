@@ -955,11 +955,7 @@ define([
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        debugger;
-                        console.log('jqXHR');
-                        console.log(jqXHR);
-                        console.log('errorThrown');
-                        console.log(errorThrown);
+                        window.location.reload();
                     }
                 });
                 // $.getJSON(_url, function(data, textStatus) {
