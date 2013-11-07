@@ -1,0 +1,1 @@
+"XDomainRequest"in window&&window.XDomainRequest!==null&&(jQuery.ajaxSettings.xhr=function(){try{return new XDomainRequest}catch(e){}},jQuery.support.cors=!0);

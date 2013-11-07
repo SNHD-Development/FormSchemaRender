@@ -70,6 +70,9 @@
         modelbinder: 'libs/backbone-binder/Backbone.ModelBinder.min',
         validation: 'libs/backbone-validation/backbone-validation-amd',
 
+        // xhr
+        xdr: 'libs/xhr/jquery.xdomainrequest.min',
+
         // jQuery Plugin
         "jquery.expose": 'libs/jquery-tools/toolbox.expose',
         "jquery.overlay": 'libs/jquery-tools/jquery.tools.overlay.min',

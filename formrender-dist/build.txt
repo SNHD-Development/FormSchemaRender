@@ -14,6 +14,7 @@ libs/jquery-form-plugin/bdate-picker.js
 libs/jquery-form-plugin/jquery.placeholder.js
 libs/jquery-tools/toolbox.expose.js
 libs/copy/jquery.zclip.min.js
+libs/xhr/jquery.xdomainrequest.min.js
 utils.js
 libs/require/text.js
 text!templates/layout.html

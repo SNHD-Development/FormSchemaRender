@@ -13,7 +13,8 @@ define([
     'jquery.birthdaypicker',
     'jquery.placeholder',
     'jquery.expose',
-    'jquery.zclip'
+    'jquery.zclip',
+    'xdr'
 ], function($, _, Backbone, Vm) {
 
     /**
@@ -925,15 +926,21 @@ define([
          * @param  {[type]} $form [description]
          * @return {[type]}       [description]
          */
-        setupUrlAjaxCall: function ($form) {
+        setupUrlAjaxCall: function($form) {
             var $urlEndPoint = $(':input[data-url]');
             if ($urlEndPoint.length === 0) {
                 return;
             }
-            $urlEndPoint.each(function () {
+            $urlEndPoint.each(function() {
                 var $this = $(this),
                     _url = $this.attr('data-url');
-                    $.getJSON(_url, function(data, textStatus) {
+                // console.log(_url);
+                // $.support.cors = true;
+                $.ajax({
+                    // crossDomain: true,
+                    url: _url,
+                    dataType: "json",
+                    success: function(data, textStatus) {
                         if (textStatus === 'success') {
                             var _opts = '';
                             _.each(data, function(element) {
@@ -942,11 +949,39 @@ define([
                             $this.find('option').remove();
                             $this.append(_opts);
                             $this.select2({
-                                    containerCssClass: 'span12'
-                                });
-                            $('#s2id_'+$this.attr('id')+' .select2-drop', $form).hide();
+                                containerCssClass: 'span12'
+                            });
+                            $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
                         }
-                    });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        debugger;
+                        console.log('jqXHR');
+                        console.log(jqXHR);
+                        console.log('errorThrown');
+                        console.log(errorThrown);
+                    }
+                });
+                // $.getJSON(_url, function(data, textStatus) {
+                //     if (textStatus === 'success') {
+                //         var _opts = '';
+                //         _.each(data, function(element) {
+                //             _opts += '<option value="' + element + '">' + element + '</option>';
+                //         });
+                //         $this.find('option').remove();
+                //         $this.append(_opts);
+                //         $this.select2({
+                //             containerCssClass: 'span12'
+                //         });
+                //         $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
+                //     }
+                // }).fail(function(jqXHR, textStatus, errorThrown) {
+                //     debugger;
+                //     console.log('jqXHR');
+                //     console.log(jqXHR);
+                //     console.log('errorThrown');
+                //     console.log(errorThrown);
+                // });
             });
         },
 
