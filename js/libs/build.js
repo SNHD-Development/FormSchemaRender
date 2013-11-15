@@ -73,6 +73,9 @@
         // xhr
         xdr: 'libs/xhr/jquery.xdomainrequest.min',
 
+        // Java Loader
+        jloader : 'libs/javaloader/deployJava',
+
         // jQuery Plugin
         "jquery.expose": 'libs/jquery-tools/toolbox.expose',
         "jquery.overlay": 'libs/jquery-tools/jquery.tools.overlay.min',

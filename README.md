@@ -9,7 +9,7 @@ Please use font-awesome to add visual effect to the UI.
 
 `<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">`
 
-or 
+or
 
 `<link href="css/font-awesome.css" rel="stylesheet">`
 
@@ -378,6 +378,19 @@ Note: in order to make this work, it must be the same field type.
 		}
 	}
 
+### File Field
+
+If we want to include the Java File Upload we can simple add "Options.JavaUpload" to "true". This will give the user ability to user either normal
+input file or Java Upload (File will be send as ZIP by default)
+
+	{
+        "Description" : "File to Upload",
+        "Name" : "FileUpload",
+        "Type" : "File",
+        "Options" : {
+            "JavaUpload" : true
+        }
+    }
 
 ### Date Field
 
@@ -527,6 +540,8 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ### Version
+
+* 0.0.9 - Adding JavaPowUpload from http://www.element-it.com/multiple-file-upload-applet/java-uploader.aspx (require serial number)
 
 * 0.0.8 - Support International Address.
 

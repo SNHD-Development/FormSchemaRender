@@ -71,6 +71,7 @@ define([
             this._buttonClipboards = []; //Clipboards Button
             this._buttonDecision = []; //Decision Button
             this._ajaxDataCall = []; // Some Fields can call ajax call to auto populate data
+            this._javaUpload = []; // Java Upload Object
             this._ajaxSubmit = true;
 
             // Wizard View Counters
@@ -165,7 +166,7 @@ define([
                 _html += '</div>';
             }
             this._div = 0;
-            return _html
+            return _html;
         },
         /**
          * Render HTML
@@ -214,6 +215,19 @@ define([
                     var _validation_tmp = this.getFormValidationData(field.name);
                     if (_validation_tmp.accept) {
                         field.attributes.accept = _validation_tmp.accept;
+                    }
+                    if (field.options.javaupload) {
+                        var _jObject = {
+                            name: field.name,
+                            id: field.name,
+                            code: 'com.elementit.JavaPowUpload.Manager',
+                            archive: '//public.southernnevadahealthdistrict.org/assets/jar/jupload/JavaPowUpload.jar, //public.southernnevadahealthdistrict.org/assets/jar/jupload/skinlf.jar, //public.southernnevadahealthdistrict.org/assets/jar/jupload/commons-httpclient.jar, //public.southernnevadahealthdistrict.org/assets/jar/jupload/commons-compress.jar',
+                            width: 500,
+                            height: 350,
+                            mayscript: "true",
+                            alt: "JavaPowUpload by www.element-it.com"
+                        };
+                        this._javaUpload.push(_jObject);
                     }
                     break;
 

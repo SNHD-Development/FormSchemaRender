@@ -25,6 +25,9 @@ require.config({
         // xhr
         xdr: 'libs/xhr/jquery.xdomainrequest.min',
 
+        // Java Loader
+        jloader : 'libs/javaloader/deployJava',
+
         // jQuery Plugin
         "jquery.expose": 'libs/jquery-tools/toolbox.expose',
         "jquery.overlay": 'libs/jquery-tools/jquery.tools.overlay.min',
@@ -210,6 +213,5 @@ require([
         }
         $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
         appView.render();
-
     });
 });

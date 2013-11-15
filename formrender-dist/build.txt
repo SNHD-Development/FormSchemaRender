@@ -21,5 +21,6 @@ text!templates/layout.html
 libs/jquery-form-plugin/jquery.form.min.js
 libs/bootstrap-datepicker/bootstrap-datepicker.js
 libs/lightbox/lightbox-2.6.js
+libs/javaloader/deployJava.js
 views/app.js
 main.js

@@ -3,371 +3,416 @@
  **/
 
 define([
-  'jquery',
-  'lodash',
-  'backbone',
-  'vm',
-  'utils',
-  'events',
-  'text!templates/layout.html',
-  'jquery.ajaxsubmit',
-  'jquery.datepicker',
-  'jquery.placeholder',
-  'jquery.lightbox',
-  'jquery.expose',
-  'bootstrap',
-  'jquery.select2'
-], function($, _, Backbone, Vm, Utils, Events, layoutTemplate){
-  var AppView = Backbone.View.extend({
-    template: _.template(layoutTemplate),
-    el: '#app',
-    initialize: function () {
-      if (typeof this.options.formSchema === 'undefined') {
-        throw 'formSchema is not in the options parameters';
-      }
-    },
-    render: function () {
-      var that = this
-      , formLayout = ('view' in this.options.formSchema) ? this.options.formSchema.view: 'default'
-      , _opts = {
-          formSchema: that.options.formSchema,
-          formData: that.options.formData,
-          mode : that.options.mode,
-		  internal : that.options.internal,
-		  hideButtons : that.options.hideButtons,
-		  lang : that.options.lang
-        };
+    'jquery',
+    'lodash',
+    'backbone',
+    'vm',
+    'utils',
+    'events',
+    'text!templates/layout.html',
+    'jquery.ajaxsubmit',
+    'jquery.datepicker',
+    'jquery.placeholder',
+    'jquery.lightbox',
+    'jquery.expose',
+    'bootstrap',
+    'jquery.select2',
+    'jloader'
+], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
+    var AppView = Backbone.View.extend({
+        template: _.template(layoutTemplate),
+        el: '#app',
+        initialize: function() {
+            if (typeof this.options.formSchema === 'undefined') {
+                throw 'formSchema is not in the options parameters';
+            }
+        },
+        render: function() {
+            var that = this,
+                formLayout = ('view' in this.options.formSchema) ? this.options.formSchema.view : 'default',
+                _opts = {
+                    formSchema: that.options.formSchema,
+                    formData: that.options.formData,
+                    mode: that.options.mode,
+                    internal: that.options.internal,
+                    hideButtons: that.options.hideButtons,
+                    lang: that.options.lang
+                };
 
-      this.$el.html(this.template(this.options.formSchema));
+            this.$el.html(this.template(this.options.formSchema));
 
-      if (typeof this.options.mode !== 'undefined' && this.options.mode === 'read') {
-		$('#'+that.options.formSchema.name, that.el).addClass('read-mode');
-        require(['views/readonly/'+formLayout], function (ReadView) {
-          var readView = Vm.create(that, 'ReadView', ReadView, _opts);
-          readView.render();
+            if (typeof this.options.mode !== 'undefined' && this.options.mode === 'read') {
+                $('#' + that.options.formSchema.name, that.el).addClass('read-mode');
+                require(['views/readonly/' + formLayout], function(ReadView) {
+                    var readView = Vm.create(that, 'ReadView', ReadView, _opts);
+                    readView.render();
 
-		  Utils.finalReadSetup(readView);
-        });
-      } else {
-        // Will render Form
-        // Render Form Layout
-        require(['views/form-layouts/'+formLayout], function (FormView) {
-          that.formView = Vm.create(that, 'FormView', FormView, _opts);
-          that.formView.render();
+                    Utils.finalReadSetup(readView);
+                });
+            } else {
+                // Will render Form
+                // Render Form Layout
+                require(['views/form-layouts/' + formLayout], function(FormView) {
+                    that.formView = Vm.create(that, 'FormView', FormView, _opts);
+                    that.formView.render();
 
-          if (that.formView._hasDate) {
-            that.setupDateInput();
-          }
-          if (that.formView._hasBDate) {
-            that.setupBDateInput();
-          }
-		  if (that.formView._hasEmailPicker) {
-            that.setupEmailInput();
-          }
+                    if (that.formView._hasDate) {
+                        that.setupDateInput();
+                    }
+                    if (that.formView._hasBDate) {
+                        that.setupBDateInput();
+                    }
+                    if (that.formView._hasEmailPicker) {
+                        that.setupEmailInput();
+                    }
 
-          // Attached Address Event
-          Utils.setupAddressEvent(that.el, that);
+                    // Attached Address Event
+                    Utils.setupAddressEvent(that.el, that);
 
-		  // Setup Spinner
-		  Utils.setupSpinner(that.el);
+                    // Setup Spinner
+                    Utils.setupSpinner(that.el);
 
-		  // Placeholder Setup for Older Browser
-		  Utils.setupPlaceHolder(that.el);
+                    // Placeholder Setup for Older Browser
+                    Utils.setupPlaceHolder(that.el);
 
-		  // Setup Files Input
-		  Utils.setupFileInput(that.el);
+                    // Setup Files Input
+                    Utils.setupFileInput(that.el);
 
-		  // Final Setup
-		  Utils.finalSetup(that.formView);
+                    // Final Setup
+                    Utils.finalSetup(that.formView);
 
-          // Render Form Complete
-          // Send view at second parameter
-          $('#'+that.options.formSchema.name, that.el).trigger(that.options.formSchema.name+'.renderCompleted', that);
+                    // Render Form Complete
+                    // Send view at second parameter
+                    $('#' + that.options.formSchema.name, that.el).trigger(that.options.formSchema.name + '.renderCompleted', that);
 
-          // Set the Action if has one          
-          var $form = $(that.el).find('form.form-render');
-          if (that.options.formActionUrl) {
-			$form.attr('action', that.options.formActionUrl);
-          }
+                    // Set the Action if has one
+                    var $form = $(that.el).find('form.form-render');
+                    if (that.options.formActionUrl) {
+                        $form.attr('action', that.options.formActionUrl);
+                    }
 
-          // Render the buttons
-          // Check for the .form-actions class
-          var $formButtons = $('div.form-actions', $form);
-          
-        });
-      }
-    },
-    /**
-     * Init BDateinput
-     **/
-    setupBDateInput: function() {
-      Utils.setupBDateInput(this.el, this.formView.model);
-    },
-    /**
-     * Get BDate Input
-     **/
-    getBDateinput: function(el, model) {
-      Utils.getBDateinput(el, model);
-    },
-	/**
-     * Init Emailinput
-     **/
-	setupEmailInput: function() {
-	  Utils.setupEmailInput(this.el);
-	},
-    /**
-     * Init Dateinput
-     **/
-    setupDateInput: function() {
-      Utils.setupDateInput(this.el);
-    },
-	/**
-	 * Prevent Space Bar
-	 **/
-	preventSpace: function(e) {
-	  Utils.preventSpace(e);
-	},
-	/**
-	 * Valid Number and Decimal
-	 **/
-	allowNumber: function(e) {
-	  Utils.allowNumber(e);
-	},
-	/**
-	 * Valid Natural Number
-	 **/
-	allowNaturalNumber: function(e) {
-	  Utils.allowNaturalNumber(e);
-	},
-	/**
-	 * Valid Integer Number Only
-	 **/
-	allowZipCode: function(e) {
-	  Utils.allowZipCode(e);
-	},
-	/**
-	 * Format Telephone number in valid format (xxx) xxx-xxxx
-	 **/
-	formatTelephoneNumber: function(e) {
-	  var $currentTarget = $(e.currentTarget)
-		, _val = $currentTarget.val()
-		, _tmp = '';
+                    // Render the buttons
+                    // Check for the .form-actions class
+                    var $formButtons = $('div.form-actions', $form);
 
-	  if ( e.type === 'keydown' && (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105) ) {
+                    // If we have JavaUpload Need to Start it here
+                    if (that.formView._javaUpload.length > 0) {
+                        that.setupJavaUpload(that.formView._javaUpload);
+                    }
 
-		switch (_val.length) {
-		  case 0:
-			if (e.keyCode === 48 || e.keyCode === 105) {
-			  e.preventDefault();
-			  return;
-			}
-			$currentTarget.val('('+_val);
-			break;
+                });
+            }
+        },
+        /**
+         * Init BDateinput
+         **/
+        setupBDateInput: function() {
+            Utils.setupBDateInput(this.el, this.formView.model);
+        },
+        /**
+         * Get BDate Input
+         **/
+        getBDateinput: function(el, model) {
+            Utils.getBDateinput(el, model);
+        },
+        /**
+         * Init Emailinput
+         **/
+        setupEmailInput: function() {
+            Utils.setupEmailInput(this.el);
+        },
+        /**
+         * Init Dateinput
+         **/
+        setupDateInput: function() {
+            Utils.setupDateInput(this.el);
+        },
+        /**
+         * Prevent Space Bar
+         **/
+        preventSpace: function(e) {
+            Utils.preventSpace(e);
+        },
+        /**
+         * Valid Number and Decimal
+         **/
+        allowNumber: function(e) {
+            Utils.allowNumber(e);
+        },
+        /**
+         * Valid Natural Number
+         **/
+        allowNaturalNumber: function(e) {
+            Utils.allowNaturalNumber(e);
+        },
+        /**
+         * Valid Integer Number Only
+         **/
+        allowZipCode: function(e) {
+            Utils.allowZipCode(e);
+        },
+        /**
+         * Format Telephone number in valid format (xxx) xxx-xxxx
+         **/
+        formatTelephoneNumber: function(e) {
+            var $currentTarget = $(e.currentTarget),
+                _val = $currentTarget.val(),
+                _tmp = '';
 
-		  case 4:
-			$currentTarget.val(_val+') ');
-			break;
+            if (e.type === 'keydown' && (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
 
-		  case 9:
-			$currentTarget.val(_val+'-');
-		}
-	  } else {
-		for (var i=0,j=_val.length;i<j;i++) {
-		  if ( ! isNaN(parseInt(_val[i]))) {
-			_tmp += _val[i];
-		  }
-		}
-		_val = '';
-		for (var i=0,j=_tmp.length;i<j;i++) {
-		  switch (i) {
-			case 0:
-			  _val += '(';
-			  break;
-			case 3:
-			  _val += ') ';
-			  break;
-			case 6:
-			  _val += '-';
-			  break;
-		  }
-		  _val += _tmp[i];
-		}
-		$currentTarget.val(_val);
-	  }
-	},
-    /**
-	 * View Events
-	 **/
-	events: {
-	  'submit form.form-render': 'submitForm',
-	  'click .form-actions .btn-clear-form': 'clearForm',
-	  'click .form-actions .btn-render-form': 'setupForm',
-	  'blur :input:not(:button)' : 'preValidate',
-	  'change :file' : 'preValidate',
-	  'keydown :input[type="email"]': 'preventSpace',
-	  'keydown :input[type="number"], :input.number': 'allowNumber',
-	  'keydown :input[type="number"], :input.natural': 'allowNaturalNumber',
-	  'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
-	  'keydown :input.telephone': 'formatTelephoneNumber',
-	  'blur :input.telephone': 'formatTelephoneNumber'
-	},
-	/**
-	 * Submit Form
-	 **/
-	submitForm: function(e) {
-      var $form = $('#'+this.options.formSchema.name, this.el)
-      , $submitBtn = $('.form-actions button[type="submit"]', this.el)
-      , _opt, _options;
-      if ($form.hasClass('form_submitted')) {
-        return;
-      }
-      $form.addClass('form_submitted').removeClass('validation_pass validation_error');
-      this.getBDateinput(this.el, this.formView.model);
-      Utils.getUserId(this.el, this.formView.model);
-      // Remove Not needed input from submitting data
-      $('.not_sending', $form).attr('disabled', true);
+                switch (_val.length) {
+                    case 0:
+                        if (e.keyCode === 48 || e.keyCode === 105) {
+                            e.preventDefault();
+                            return;
+                        }
+                        $currentTarget.val('(' + _val);
+                        break;
 
-      // Check Data
-      if (this.formView.model.isValid(true)) {
-		$form.addClass('validation_pass');
-		if (this.options.token !== '') {
-		  $form.prepend('<input type="hidden" name="token" value="'+this.options.token+'"/>');
-		}
-		if (this.options.mode === 'create') {
-		  $form.prepend('<input type="hidden" name="form_name" value="'+this.options.formSchema.name+'"/>');
-		}
-        $('input.subform_before_submit', this.el).remove();
-        this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
-        _options = {
-          beforeSubmit: this.showRequest,
-          success: this.showResponse
-        };
+                    case 4:
+                        $currentTarget.val(_val + ') ');
+                        break;
 
-		// Some Browser Does not support placeholder, will need to check for it.
-		Utils.resetPlaceHolderValue(this.el);
+                    case 9:
+                        $currentTarget.val(_val + '-');
+                }
+            } else {
+                for (var i = 0, j = _val.length; i < j; i++) {
+                    if (!isNaN(parseInt(_val[i]))) {
+                        _tmp += _val[i];
+                    }
+                }
+                _val = '';
+                for (var i = 0, j = _tmp.length; i < j; i++) {
+                    switch (i) {
+                        case 0:
+                            _val += '(';
+                            break;
+                        case 3:
+                            _val += ') ';
+                            break;
+                        case 6:
+                            _val += '-';
+                            break;
+                    }
+                    _val += _tmp[i];
+                }
+                $currentTarget.val(_val);
+            }
+        },
+        /**
+         * View Events
+         **/
+        events: {
+            'submit form.form-render': 'submitForm',
+            'click .form-actions .btn-clear-form': 'clearForm',
+            'click .form-actions .btn-render-form': 'setupForm',
+            'blur :input:not(:button)': 'preValidate',
+            'change :file': 'preValidate',
+            'keydown :input[type="email"]': 'preventSpace',
+            'keydown :input[type="number"], :input.number': 'allowNumber',
+            'keydown :input[type="number"], :input.natural': 'allowNaturalNumber',
+            'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
+            'keydown :input.telephone': 'formatTelephoneNumber',
+            'blur :input.telephone': 'formatTelephoneNumber'
+        },
+        /**
+         * Submit Form
+         **/
+        submitForm: function(e) {
+            var $form = $('#' + this.options.formSchema.name, this.el),
+                $submitBtn = $('.form-actions button[type="submit"]', this.el),
+                _opt, _options;
+            if ($form.hasClass('form_submitted')) {
+                return;
+            }
+            $form.addClass('form_submitted').removeClass('validation_pass validation_error');
+            this.getBDateinput(this.el, this.formView.model);
+            Utils.getUserId(this.el, this.formView.model);
+            // Remove Not needed input from submitting data
+            $('.not_sending', $form).attr('disabled', true);
 
-		if (this.formView._ajaxSubmit) {
-		  e.preventDefault();
-		  $form.ajaxSubmit(_options);
-		}
+            // Check Data
+            if (this.formView.model.isValid(true)) {
+                $form.addClass('validation_pass');
+                if (this.options.token !== '') {
+                    $form.prepend('<input type="hidden" name="token" value="' + this.options.token + '"/>');
+                }
+                if (this.options.mode === 'create') {
+                    $form.prepend('<input type="hidden" name="form_name" value="' + this.options.formSchema.name + '"/>');
+                }
+                $('input.subform_before_submit', this.el).remove();
+                this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
+                _options = {
+                    beforeSubmit: this.showRequest,
+                    success: this.showResponse
+                };
+
+                // Some Browser Does not support placeholder, will need to check for it.
+                Utils.resetPlaceHolderValue(this.el);
+
+                if (this.formView._ajaxSubmit) {
+                    e.preventDefault();
+                    $form.ajaxSubmit(_options);
+                }
 
 
-		if (this.formView.options.formSchema.view !== 'wizard') {
-			var _t_1, _t_2;
-			switch(this.formView.options.lang) {
-				case 'sp':
-					_t_1 = 'Enviando la forma; por favor espere';
-					_t_2 = 'Cargando Informaci&oacute;n';
-					break;
-				default:
-					_t_1 = 'Submitting form; please wait.';
-					_t_2 = 'Sending data';
-			}
-		  _opt = {
-			html : true,
-			placement: 'top',
-			trigger: 'manual',
-			title: _t_1,
-			content: '<i class="icon-spinner icon-spin icon-large"></i> '+_t_2+' ...'
-		  };
-		  $submitBtn.attr('disabled', true).popover(_opt).popover('show')
-			.next('.popover').addClass('success');
-		}
-      } else {
-		e.preventDefault();
-		$form.addClass('validation_error');
-        $form.removeClass('form_submitted');
-        // Error Message
-        $('.not_sending', $form).attr('disabled', false);
+                if (this.formView.options.formSchema.view !== 'wizard') {
+                    var _t_1, _t_2;
+                    switch (this.formView.options.lang) {
+                        case 'sp':
+                            _t_1 = 'Enviando la forma; por favor espere';
+                            _t_2 = 'Cargando Informaci&oacute;n';
+                            break;
+                        default:
+                            _t_1 = 'Submitting form; please wait.';
+                            _t_2 = 'Sending data';
+                    }
+                    _opt = {
+                        html: true,
+                        placement: 'top',
+                        trigger: 'manual',
+                        title: _t_1,
+                        content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...'
+                    };
+                    $submitBtn.attr('disabled', true).popover(_opt).popover('show')
+                        .next('.popover').addClass('success');
+                }
+            } else {
+                e.preventDefault();
+                $form.addClass('validation_error');
+                $form.removeClass('form_submitted');
+                // Error Message
+                $('.not_sending', $form).attr('disabled', false);
 
-		if (this.formView.options.formSchema.view !== 'wizard') {
-		  _opt = {
-			html : true,
-			placement: 'top',
-			trigger: 'manual',
-			title: '<i class="icon-edit"></i> Validation Error',
-			content: 'Please correct the form'
-		  };
-		  $submitBtn.attr('disabled', true).popover(_opt).popover('show');
+                if (this.formView.options.formSchema.view !== 'wizard') {
+                    _opt = {
+                        html: true,
+                        placement: 'top',
+                        trigger: 'manual',
+                        title: '<i class="icon-edit"></i> Validation Error',
+                        content: 'Please correct the form'
+                    };
+                    $submitBtn.attr('disabled', true).popover(_opt).popover('show');
 
-		  window.setTimeout(
-			function() {
-			  $('.invalid:first', $form).focus();
-			  $submitBtn.attr('disabled', false).popover('destroy');
-			  $submitBtn.next('.popover').remove();
-			}, 2000 );
-		}
-	  }
-	  $form.trigger(this.options.formSchema.name+'.validated');
-	},
-    showRequest: function(formData, jqForm, options) {
-      //console.log($.param(formData));
-      // If form has data-stopSubmit = true, the form will not continue to send data
-      jqForm.trigger(jqForm.attr('id')+'.preSubmit', [formData, jqForm, options]);
-      if (jqForm.attr('data-stopSubmit')) {
-        jqForm.removeAttr('data-stopSubmit');
-        return false;
-      }
-    },
-    showResponse: function(responseText, statusText, xhr, $form) {
-	  var _jsonText = $.parseJSON(responseText);
-	  _.each(_jsonText, function (value, key) {
-		if (typeof value === 'string') {
-		  _jsonText[key] = _.unescape(value);
-		}
-	  });
-	  $(':hidden[name="token"], :hidden[name="form_name"]', $form).remove();
-      $form.removeClass('form_submitted');
-      $('.not_sending', $form).attr('disabled', false);
-      $form.trigger($form.attr('id')+'.postSubmit', [responseText, _jsonText, statusText, xhr, $form]);
-      window.setTimeout(
-          function() {
-              $('.form-actions button[type="submit"]', $form).attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
-          },
-          3000
-      );
-    },
-    /**
-     * Update the View Model
-     **/
-    preValidate: function(e) {
-      Utils.preValidate(e, this.formView.model);
-    },
-    /**
-     * Clear Form Data
-     **/
-    clearForm: function() {
-      var that = this;
-      _.each(this.formView.model.attributes, function(value, key) {
-        if (typeof value.reset === 'function') {
-          that.formView.model.get(key).reset();
-        } else {
-          $(':input[name="'+key+'"]', that.el).val('').trigger('change');
-		  that.formView.model.set(key, '');
+                    window.setTimeout(
+                        function() {
+                            $('.invalid:first', $form).focus();
+                            $submitBtn.attr('disabled', false).popover('destroy');
+                            $submitBtn.next('.popover').remove();
+                        }, 2000);
+                }
+            }
+            $form.trigger(this.options.formSchema.name + '.validated');
+        },
+        showRequest: function(formData, jqForm, options) {
+            //console.log($.param(formData));
+            // If form has data-stopSubmit = true, the form will not continue to send data
+            jqForm.trigger(jqForm.attr('id') + '.preSubmit', [formData, jqForm, options]);
+            if (jqForm.attr('data-stopSubmit')) {
+                jqForm.removeAttr('data-stopSubmit');
+                return false;
+            }
+        },
+        showResponse: function(responseText, statusText, xhr, $form) {
+            var _jsonText = $.parseJSON(responseText);
+            _.each(_jsonText, function(value, key) {
+                if (typeof value === 'string') {
+                    _jsonText[key] = _.unescape(value);
+                }
+            });
+            $(':hidden[name="token"], :hidden[name="form_name"]', $form).remove();
+            $form.removeClass('form_submitted');
+            $('.not_sending', $form).attr('disabled', false);
+            $form.trigger($form.attr('id') + '.postSubmit', [responseText, _jsonText, statusText, xhr, $form]);
+            window.setTimeout(
+                function() {
+                    $('.form-actions button[type="submit"]', $form).attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+                },
+                3000
+            );
+        },
+        /**
+         * Update the View Model
+         **/
+        preValidate: function(e) {
+            Utils.preValidate(e, this.formView.model);
+        },
+        /**
+         * Clear Form Data
+         **/
+        clearForm: function() {
+            var that = this;
+            _.each(this.formView.model.attributes, function(value, key) {
+                if (typeof value.reset === 'function') {
+                    that.formView.model.get(key).reset();
+                } else {
+                    $(':input[name="' + key + '"]', that.el).val('').trigger('change');
+                    that.formView.model.set(key, '');
+                }
+            });
+        },
+        /**
+         * Setup hidden form and send this data
+         **/
+        setupForm: function(e) {
+            var that = this,
+                $target = $(e.currentTarget);
+            e.preventDefault();
+
+            $.getJSON($target.attr('href'), {}, function(data, status) {
+                if (status === 'success') {
+                    require(['views/hiddenForm'], function(HiddenFormView) {
+                        var hiddenFormView = Vm.create(that, 'FormView', HiddenFormView);
+                        hiddenFormView.render(data);
+                    });
+                } else {
+                    location.refresh();
+                }
+            });
+
+            return false;
+        },
+
+        /**
+         * Setup Java Upload
+         * @return
+         */
+        setupJavaUpload: function(jArray) {
+            if (window.jSerialNumber == undefined) {
+                throw 'Please set jSerialNumber to match with your purchase number.';
+            }
+            var parameters = {
+                "Common.SerialNumber": window.jSerialNumber,
+                "Common.UploadMode": "true",
+                "Common.UseLiveConnect": "true",
+                "Upload.UploadUrl": $(this.formView.el).attr('action'),
+                "Upload.Compress.Enabled": "true",
+                "Upload.Compress.ArchiveFileName": "#UNIQUEID#",
+                "Upload.Compress.Format": "ZIP",
+                "Upload.Compress.Level": "DEFAULT",
+                "Upload.HttpUpload.FieldName.FilePath": "SelectedPath_#COUNTER#",
+                "Common.ProgressArea.DownloadButton.Visible": "false",
+                "Common.SkinLF.ThemepackURL": "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip"
+            }, version = '1.5.1';
+
+            // Since deplyJava will override your body
+
+            var oldwrite = document.write,
+                content = '';
+            document.write = function(text) {
+                content += text;
+            };
+
+            _.each(jArray, function(value) {
+                content = '';
+                deployJava.runApplet(value, parameters, version);
+                $('#' + value.id + '_java-upload-applet').html(content);
+            });
+
+            document.write = oldwrite;
         }
-      });
-    },
-	/**
-	 * Setup hidden form and send this data
-	 **/
-	setupForm : function(e) {
-	  var that = this
-	  , $target = $(e.currentTarget);
-	  e.preventDefault();
-
-	  $.getJSON($target.attr('href'), {}, function(data, status) {
-        if (status === 'success') {
-		  require(['views/hiddenForm'], function (HiddenFormView) {
-			var hiddenFormView = Vm.create(that, 'FormView', HiddenFormView);
-			hiddenFormView.render(data);
-		  });
-        } else {
-		  location.refresh();
-        }
-      });
-
-	  return false;
-	}
-  });
-  return AppView;
+    });
+    return AppView;
 });
