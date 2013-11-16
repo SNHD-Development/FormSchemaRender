@@ -380,7 +380,8 @@ define([
          * @return
          */
         setupJavaUpload: function(jArray) {
-            if (window.jSerialNumber == undefined) {
+            var jSerialNumber = (this.formView.options.formSchema.jserialnumber) ? this.formView.options.formSchema.jserialnumber : window.jSerialNumber;
+            if (jSerialNumber == undefined) {
                 throw 'Please set jSerialNumber to match with your purchase number.';
             }
             var parameters = {
