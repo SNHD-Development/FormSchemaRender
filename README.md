@@ -392,6 +392,16 @@ input file or Java Upload (File will be send as ZIP by default)
         }
     }
 
+In order to validate file type, we can add "filetype" in the "Validation" field.
+
+	"Validation" : {
+		"FileUpload" : {
+        	"required" : true,
+        	"filetype" : ["zip", "jpg"]
+		}
+	}
+
+
 ### Date Field
 
 By default `Type = "Date"` will render as DatePicker, However sometime it is very difficult to select birthday with Datepicker, so if you set `Options.Render = "Select"`. This will render the date field as select box.
