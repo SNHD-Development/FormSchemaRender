@@ -211,7 +211,11 @@ require([
             default:
                 _loadingText = 'Loading Form Information';
         }
-        $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
-        appView.render();
+        try {
+            $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
+            appView.render();
+        } catch (e) {
+            console.log(e);
+        }
     });
 });

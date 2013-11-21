@@ -401,6 +401,8 @@ In order to validate file type, we can add "filetype" in the "Validation" field.
 		}
 	}
 
+Note: Since JavaPowUpload will send all the post data as AJAX, we then need to pass in jRedirect global variable in order to redirect after upload completed.
+
 
 ### Date Field
 

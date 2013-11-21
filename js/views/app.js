@@ -234,6 +234,7 @@ define([
             $('.not_sending', $form).attr('disabled', true);
 
             // Check Data
+
             if (this.formView.model.isValid(true)) {
                 $form.addClass('validation_pass');
                 if (this.options.token !== '') {
@@ -251,6 +252,41 @@ define([
 
                 // Some Browser Does not support placeholder, will need to check for it.
                 Utils.resetPlaceHolderValue(this.el);
+
+
+                // If this form has Java Pow Upload need to send those in as well
+                if (this.formView._javaUpload.length) {
+                    var _javaPowSubmit = false, _error = false;
+
+                    _.each(this.formView._javaUpload, function(element) {
+                        var $container = $('#'+element.id+'_java-upload');
+                        if ($container.hasClass('in')) {
+                            _javaPowSubmit = true;
+                            var JavaPowUpload = document.getElementById(element.id);
+
+                            if ($('#'+element.id+'_java-upload-applet', $container).hasClass('required')) {
+                                if (!JavaPowUpload.getFiles().size()) {
+                                    _error = true;
+                                    return;
+                                }
+                            }
+                            $(':input[name="'+element.id+'"]').remove();
+                            JavaPowUpload.startUpload();
+                        }
+                    });
+
+                    if (_javaPowSubmit) {
+                        if (_error) {
+                            $form.addClass('validation_error').removeClass('validation_pass');
+                            $form.removeClass('form_submitted');
+                            $('.not_sending', $form).attr('disabled', false);
+                            $(':input[name="form_name"]', $form).remove();
+                            $(':input[name="token"]', $form).remove();
+                        }
+                        e.preventDefault();
+                        return;
+                    }
+                }
 
                 if (this.formView._ajaxSubmit) {
                     e.preventDefault();
@@ -380,23 +416,35 @@ define([
          * @return
          */
         setupJavaUpload: function(jArray) {
-            var jSerialNumber = (this.formView.options.formSchema.jserialnumber) ? this.formView.options.formSchema.jserialnumber : window.jSerialNumber;
+            var $view = $(this).get(0),
+                jSerialNumber = (this.formView.options.formSchema.jserialnumber) ? this.formView.options.formSchema.jserialnumber : window.jSerialNumber;
             if (jSerialNumber == undefined) {
                 throw 'Please set jSerialNumber to match with your purchase number.';
             }
             var parameters = {
+                "progressbar": "true",
+                "boxmessage": "Loading File Uploader Applet ...",
                 "Common.SerialNumber": window.jSerialNumber,
                 "Common.UploadMode": "true",
                 "Common.UseLiveConnect": "true",
+                "Common.ProgressArea.DownloadButton.Visible": "false",
+                "Common.SkinLF.ThemepackURL": "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip",
+                "Common.Language.AutoDetect": "true",
                 "Upload.UploadUrl": $(this.formView.el).attr('action'),
                 "Upload.Compress.Enabled": "true",
                 "Upload.Compress.ArchiveFileName": "#UNIQUEID#",
                 "Upload.Compress.Format": "ZIP",
                 "Upload.Compress.Level": "DEFAULT",
                 "Upload.HttpUpload.FieldName.FilePath": "SelectedPath_#COUNTER#",
-                "Common.ProgressArea.DownloadButton.Visible": "false",
-                "Common.SkinLF.ThemepackURL": "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip"
+                "Upload.HttpUpload.FormName": this.formView.el.replace('#', ''),
+                "Upload.HttpUpload.AddFormValuesToPostFields": "true",
+                "Upload.HttpUpload.AddFormValuesToHeaders": "false",
+                "Upload.HttpUpload.AddFormValuesToQueryString": "false",
+                "Upload.HttpUpload.FieldName.FileBody": "FileBody_#COUNTER#",
+                "Upload.HttpUpload.SendBrowserCookie": "true"
             }, version = '1.5.1';
+
+            // console.log(parameters["Upload.UploadUrl"]);
 
             // Since deplyJava will override your body
 
@@ -408,11 +456,44 @@ define([
 
             _.each(jArray, function(value) {
                 content = '';
+
+                parameters["Upload.HttpUpload.FieldName.FileBody"] = value.id;
+
                 deployJava.runApplet(value, parameters, version);
-                $('#' + value.id + '_java-upload-applet').html(content);
+                var $appletParent = $('#' + value.id + '_java-upload-applet').html(content);
+
+                if ($view.options.formSchema && $view.options.formSchema.validation && $view.options.formSchema.validation[value.id]) {
+                    if ($view.formView.model.validation[value.id].required) {
+                        $appletParent.addClass('required');
+                    }
+                    $view.formView.model.validation[value.id] = {};
+                }
+
+                $('#' + value.id + '_accordion').on('click', '.accordion-heading', function() {
+                    var $this = $(this),
+                        $container = $this.next(),
+                        $parent = $this.closest('.accordion-group');
+
+                    // console.log($view.formView);
+                    if ($container.find('applet').length) {
+                        $view.formView.model.validation[value.id] = {};
+                        $parent.next().find('input').attr('disabled', true);
+                    } else {
+                        $container.find('input').attr('disabled', false);
+                        if ($view.options.formSchema && $view.options.formSchema.validation && $view.options.formSchema.validation[value.id]) {
+                            $view.formView.model.validation[value.id] = $view.options.formSchema.validation[value.id];
+                        }
+                    }
+                });
             });
 
             document.write = oldwrite;
+
+            // Attached the OnCompleted Event
+            window.JavaPowUpload_onUploadFinish = function() {
+                // Will Refresh the page
+                (window.jRedirect) ? location.replace(window.jRedirect) : location.reload(true);
+            };
         }
     });
     return AppView;
