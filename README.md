@@ -190,6 +190,11 @@ This is the user id from user collection. This will link to user collection to c
         }
     }
 
+### BooleanInput
+
+This will be used as Yes and No input group. You can override this by changing the text. The value will be either "true" and "false".
+
+
 
 ### FullName Field
 

@@ -1,4 +1,4 @@
-<%if (options.javaupload == undefined) {%>
+<%if (options.javaupload == undefined || ! options.javaupload) {%>
 <input id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>" name="<%= name %>" type="file"<%= _attr %>/>
 <%} else {
 var _id = (typeof attributes.id !== 'undefined') ? attributes.id: name;

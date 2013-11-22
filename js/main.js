@@ -26,7 +26,7 @@ require.config({
         xdr: 'libs/xhr/jquery.xdomainrequest.min',
 
         // Java Loader
-        jloader : 'libs/javaloader/deployJava',
+        jloader: 'libs/javaloader/deployJava',
 
         // jQuery Plugin
         "jquery.expose": 'libs/jquery-tools/toolbox.expose',
