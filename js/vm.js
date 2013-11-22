@@ -246,7 +246,7 @@ define([
             "EH":"Western Sahara",
             "YE":"Yemen",
             "ZM":"Zambia",
-            "ZW":"Zimbabwe"            
+            "ZW":"Zimbabwe"
         }
         , remove = function(name, clean) {
             clean = clean || false;
@@ -324,7 +324,7 @@ define([
                     element.values = element['values-'+language];
                   }
 
-                  if (element.options && typeof element.options.defaulttext === 'object') {                    
+                  if (element.options && typeof element.options.defaulttext === 'object') {
                     element.description = element.options.defaulttext[language];
                   } else if (element.options && element.options.defaulttext) {
                     element.description = element.options.defaulttext;
