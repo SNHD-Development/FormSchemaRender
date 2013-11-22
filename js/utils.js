@@ -555,6 +555,11 @@ define([
                 this.setupUserIdAjaxCall($form);
             }
 
+            // Setup BooleanInput Type
+            if (view._hasBooleanInput) {
+                this.setupBooleanInput($form, view);
+            }
+
             // Setup ButtonCondition
             // By Default, will require all data to be valid
             // Default Success Call Back must return JSON with key = "value"
@@ -978,6 +983,16 @@ define([
                 //     console.log('errorThrown');
                 //     console.log(errorThrown);
                 // });
+            });
+        },
+
+        /**
+         * Function to Setup BooleanInput
+         */
+        setupBooleanInput: function ($form, view) {
+            $form.on('click', '.form-render_booleaninut button', function (e) {
+                var $this = $(this), _val = $this.attr('data-value'), _id = $this.attr('data-id');
+                $('#'+_id, $this.parent()).removeClass('invalid').val(_val).trigger('change');
             });
         },
 

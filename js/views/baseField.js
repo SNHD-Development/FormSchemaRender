@@ -21,6 +21,7 @@ define([
     'text!templates/fields/hidden.html',
     'text!templates/fields/timestamp.html',
     'text!templates/fields/useraccount.html',
+    'text!templates/fields/booleaninput.html',
     'text!templates/fields/file.html',
     'text!templates/fields/multifiles.html',
     'text!templates/fields/state.html',
@@ -46,7 +47,7 @@ define([
     'jquery.datepicker',
     'jquery.birthdaypicker',
     'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
     return Backbone.View.extend({
         _modelBinder: undefined,
         // Clean Data Binding
@@ -65,6 +66,7 @@ define([
             this._hasDate = false; // Tracking the dateinput element
             this._hasBDate = false; // Tracking the Birthdate element
             this._hasEmailPicker = false; // Tracking the EmailPicker element
+            this._hasBooleanInput = false;
             this._internalFields = []; // Internal Fields Array
             this._visibleOn = []; // Field that has visibleOn Options
             this._multiFiles = []; // MultiFiles Field
@@ -117,6 +119,7 @@ define([
                 "hidden": _.template(hiddenTemplate),
                 "timestamp": _.template(timestampTemplate),
                 "useraccount": _.template(useraccountTemplate),
+                "booleaninput": _.template(booleanInputTemplate),
                 "file": _.template(fileTemplate),
                 "multifiles": _.template(multifilesTemplate),
                 "state": _.template(stateTemplate),
@@ -193,6 +196,10 @@ define([
             }
 
             switch (_type) {
+
+                case 'booleaninput':
+                    this._hasBooleanInput = true;
+                    break;
 
                 case 'multifiles':
                     this._multiFiles.push(field);
