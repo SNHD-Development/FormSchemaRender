@@ -100,6 +100,8 @@ define([
                         that.setupJavaUpload(that.formView._javaUpload);
                     }
 
+                    // Set Up Ajax Call
+                    Utils.setupUrlAjaxCall($('form.form-render'));
                 });
             }
         },

@@ -931,8 +931,9 @@ define([
          * @param  {[type]} $form [description]
          * @return {[type]}       [description]
          */
-        setupUrlAjaxCall: function($form) {
-            var $urlEndPoint = $(':input[data-url]');
+        setupUrlAjaxCall: function($form, $scope) {
+            $scope = $scope || null;
+            var $urlEndPoint = ($scope) ? $scope : $(':input[data-url]');
             if ($urlEndPoint.length === 0) {
                 return;
             }
