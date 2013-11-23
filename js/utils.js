@@ -948,16 +948,21 @@ define([
                     dataType: "json",
                     success: function(data, textStatus) {
                         if (textStatus === 'success') {
-                            var _opts = '';
+                            var _opts = '', _type = $urlEndPoint.attr('type');
                             _.each(data, function(element) {
-                                _opts += '<option value="' + element + '">' + element + '</option>';
+                                switch (_type) {
+                                    case 'select':
+                                        _opts += '<option value="' + element + '">' + element + '</option>';
+                                        $this.find('option').remove();
+                                        $this.append(_opts);
+                                        $this.select2({
+                                            containerCssClass: 'span12'
+                                        });
+                                        $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
+                                        break;
+                                    default:
+                                }
                             });
-                            $this.find('option').remove();
-                            $this.append(_opts);
-                            $this.select2({
-                                containerCssClass: 'span12'
-                            });
-                            $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
