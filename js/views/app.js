@@ -179,6 +179,9 @@ define([
                     case 9:
                         $currentTarget.val(_val + '-');
                 }
+                if (e.update) {
+                    $currentTarget.val($currentTarget.val()+String.fromCharCode(e.keyCode));
+                }
             } else {
                 for (var i = 0, j = _val.length; i < j; i++) {
                     if (!isNaN(parseInt(_val[i]))) {
@@ -258,21 +261,22 @@ define([
 
                 // If this form has Java Pow Upload need to send those in as well
                 if (this.formView._javaUpload.length) {
-                    var _javaPowSubmit = false, _error = false;
+                    var _javaPowSubmit = false,
+                        _error = false;
 
                     _.each(this.formView._javaUpload, function(element) {
-                        var $container = $('#'+element.id+'_java-upload');
+                        var $container = $('#' + element.id + '_java-upload');
                         if ($container.hasClass('in')) {
                             _javaPowSubmit = true;
                             var JavaPowUpload = document.getElementById(element.id);
 
-                            if ($('#'+element.id+'_java-upload-applet', $container).hasClass('required')) {
+                            if ($('#' + element.id + '_java-upload-applet', $container).hasClass('required')) {
                                 if (!JavaPowUpload.getFiles().size()) {
                                     _error = true;
                                     return;
                                 }
                             }
-                            $(':input[name="'+element.id+'"]').remove();
+                            $(':input[name="' + element.id + '"]').remove();
                             JavaPowUpload.startUpload();
                         }
                     });

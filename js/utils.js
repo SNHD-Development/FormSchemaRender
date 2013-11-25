@@ -948,7 +948,9 @@ define([
                     dataType: "json",
                     success: function(data, textStatus) {
                         if (textStatus === 'success') {
-                            var _opts = '', _type = $urlEndPoint.attr('type');
+                            var _opts = '',
+                                _type = $urlEndPoint.attr('type'),
+                                _dataArray = [];
                             _.each(data, function(element) {
                                 switch (_type) {
                                     case 'select':
@@ -961,8 +963,43 @@ define([
                                         $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
                                         break;
                                     default:
+                                        _dataArray.push(element[$this.attr('id')]);
                                 }
                             });
+                            if (_dataArray.length) {
+                                $this.attr({
+                                    "autocomplete": "off"
+                                });
+                                $this.typeahead({
+                                    minLength: 3,
+                                    source: _dataArray
+                                });
+                                // If this value has change, we need to auto populate the data
+                                var _dataCallback = function(e) {
+                                    var _val = $this.val(),
+                                        _matchData = _.find(data, function(element) {
+                                            if (_val === element[$this.attr('id')]) {
+                                                return true;
+                                            }
+                                        });
+                                    if (_matchData) {
+                                        _.each(_matchData, function(value, key) {
+                                            if (value === '') {
+                                                return;
+                                            } else if (typeof value === 'object') {
+                                                // this will auto adding to subform
+                                            } else {
+                                                var $targetInput = $(':input[name="' + key + '"]', $form);
+                                                if ($targetInput) {
+                                                    $targetInput.val(value).trigger('change');
+                                                }
+                                            }
+                                        });
+                                    }
+                                    $this.one('change', _dataCallback);
+                                };
+                                $this.one('change', _dataCallback);
+                            }
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -995,10 +1032,12 @@ define([
         /**
          * Function to Setup BooleanInput
          */
-        setupBooleanInput: function ($form, view) {
-            $form.on('click', '.form-render_booleaninut button', function (e) {
-                var $this = $(this), _val = $this.attr('data-value'), _id = $this.attr('data-id');
-                $('#'+_id, $this.parent()).removeClass('invalid').val(_val).trigger('change');
+        setupBooleanInput: function($form, view) {
+            $form.on('click', '.form-render_booleaninut button', function(e) {
+                var $this = $(this),
+                    _val = $this.attr('data-value'),
+                    _id = $this.attr('data-id');
+                $('#' + _id, $this.parent()).removeClass('invalid').val(_val).trigger('change');
             });
         },
 
