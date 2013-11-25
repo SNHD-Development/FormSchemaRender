@@ -770,10 +770,22 @@ define([
                     $(that.el).trigger(id + '.add', [list, that.options.formData.fields[field.name]]);
                     _listView.off();
                 });
-                this.displaySubForm({
-                    data: _options
-                }, {}, true, _listView);
+
+            } else {
+                _listView.on(_options.formId + '.listViewCreated', function(list) {
+                    var $subFormList = $('#' + _options.formId, that.el),
+                        _callback = function(e, data) {
+                            $(that.el).trigger(id + '.add', [list, data, true]);
+                            $subFormList.one(_options.formId + '.ajaxUpdate', _callback);
+                        };
+                    $subFormList.one(_options.formId + '.ajaxUpdate', _callback);
+                    _listView.off();
+                });
             }
+
+            this.displaySubForm({
+                data: _options
+            }, {}, true, _listView);
         },
         displaySubForm: function(e, model, hidden, listView) {
             model = model || {};
@@ -826,11 +838,15 @@ define([
         /**
          * Add model to List
          **/
-        addSubformData: function(e, list, models) {
+        addSubformData: function(e, list, models, reset) {
+            reset = reset || false;
             models = models || false;
             var _view = (list.options.formSchema.view === '') ? 'table' : list.options.formSchema.view,
                 _key = list.options.formSchema.name;
 
+            if (reset) {
+                e.data.model.get(_key).reset();
+            }
             if (models) {
                 var _model = Backbone.Model.extend({});
                 _.each(models, function(element) {
@@ -973,7 +989,7 @@ define([
                                 that.model.validation[field.name].pattern = 'email';
                             }
                         }
-                        Utils.setupUrlAjaxCall($('form.form-render'), $('#'+field.name));
+                        Utils.setupUrlAjaxCall($('form.form-render'), $('#' + field.name));
                     }
                 } else {
                     // Trigger Event to let other objects know that this fields will go out of markup

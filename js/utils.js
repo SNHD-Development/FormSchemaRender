@@ -988,6 +988,14 @@ define([
                                                 return;
                                             } else if (typeof value === 'object') {
                                                 // this will auto adding to subform
+                                                if (value.length) {
+                                                    var _listName;
+                                                    _.some(value[0], function (listValue, listKey) {
+                                                        _listName = listKey.split('_').shift();
+                                                        return true;
+                                                    });
+                                                    $('#subform_'+_listName, $form).trigger('subform_'+_listName + '.ajaxUpdate', [value]);
+                                                }
                                             } else {
                                                 var $targetInput = $(':input[name="' + key + '"]', $form);
                                                 if ($targetInput) {
