@@ -360,6 +360,17 @@ define([
                             break;
                     }
                 }
+                if ($(this).attr('data-mindate')) {
+                    switch ($(this).attr('data-mindate').toLowerCase()) {
+                        case 'today':
+                            nowTemp = new Date();
+                            maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                            _options.onRender = function(date) {
+                                return date.valueOf() < maxDate.valueOf() ? 'disabled' : '';
+                            };
+                            break;
+                    }
+                }
                 $(this).datepicker(_options)
                     .on('changeDate', function(e) {
                         var _dateInput = $(e.currentTarget).removeClass('invalid').trigger('change');

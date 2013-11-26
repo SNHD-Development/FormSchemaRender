@@ -323,8 +323,15 @@ define([
                         field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'datepicker');
                         var _validation_tmp = this.getFormValidationData(field.name);
                         // Setup Max Date
+                        _.each(_validation_tmp, function (valValue, valKey) {
+                            delete _validation_tmp[valKey];
+                            _validation_tmp[valKey.toLowerCase()] = valValue;
+                        });
                         if (_validation_tmp.maxdate) {
                             field.attributes['data-maxdate'] = _validation_tmp.maxdate;
+                        }
+                        if (_validation_tmp.mindate) {
+                            field.attributes['data-mindate'] = _validation_tmp.mindate;
                         }
                     }
                     break;
