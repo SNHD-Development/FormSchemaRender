@@ -164,6 +164,12 @@ define([
                 // Convert to lowercase
                 if ($e.hasClass('tolowercase')) {
                     _val = _val.toLowerCase();
+                    _val = _val.replace(/^([0-9]\w+)|\s+([0-9]\w+)/g, function($1) {
+                        return $1.toUpperCase();
+                    });
+                    _val = _val.replace(/^(us\s)|\s+(us)\s/gi, function($1) {
+                        return $1.toUpperCase();
+                    });
                 }
                 // Convert to ucwords
                 if ($e.hasClass('toucwords')) {
@@ -990,11 +996,11 @@ define([
                                                 // this will auto adding to subform
                                                 if (value.length) {
                                                     var _listName;
-                                                    _.some(value[0], function (listValue, listKey) {
+                                                    _.some(value[0], function(listValue, listKey) {
                                                         _listName = listKey.split('_').shift();
                                                         return true;
                                                     });
-                                                    $('#subform_'+_listName, $form).trigger('subform_'+_listName + '.ajaxUpdate', [value]);
+                                                    $('#subform_' + _listName, $form).trigger('subform_' + _listName + '.ajaxUpdate', [value]);
                                                 }
                                             } else {
                                                 var $targetInput = $(':input[name="' + key + '"]', $form);
