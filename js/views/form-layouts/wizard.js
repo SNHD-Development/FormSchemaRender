@@ -153,7 +153,9 @@ define([
 		  switch (data.step) {
 			case 1:
 			  e.data.$prevBtn.removeAttr('disabled').fadeIn('slow');
-			  break;
+			  if (_numSteps !== 2) {
+			  	break;
+			  }
 
 			case ( _numSteps - 1 ):
 			  e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> Submit');
@@ -168,7 +170,9 @@ define([
 		  switch (data.step) {
 			case 2:
 			  e.data.$prevBtn.attr('disabled', true).fadeOut('slow');
-			  break;
+			  if (_numSteps !== 2) {
+			  	break;
+			  }
 
 			case _numSteps:
 			  e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
@@ -221,7 +225,7 @@ define([
 	  }
 	  if (!$('form.form-render').hasClass('validation_error')) {
 	  	$submitDisplay.attr('disabled', true).popover(_opt).popover('show').next('.popover').addClass('success');
-	  }	  
+	  }
 	},
 	/**
 	 * Submitting Event
