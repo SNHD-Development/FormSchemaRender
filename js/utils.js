@@ -966,11 +966,11 @@ define([
                     success: function(data, textStatus) {
                         if (textStatus === 'success') {
                             var _opts = '',
-                                _type = $urlEndPoint.attr('type'),
+                                _type = $urlEndPoint.prop('type'),
                                 _dataArray = [];
                             _.each(data, function(element) {
                                 switch (_type) {
-                                    case 'select':
+                                    case 'select-one':
                                         _opts += '<option value="' + element + '">' + element + '</option>';
                                         $this.find('option').remove();
                                         $this.append(_opts);
