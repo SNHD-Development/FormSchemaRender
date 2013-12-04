@@ -950,10 +950,12 @@ define([
          */
         setupUrlAjaxCall: function($form, $scope) {
             $scope = $scope || null;
-            var $urlEndPoint = ($scope) ? $scope : $(':input[data-url]');
+            var $urlEndPoint = ($scope) ? $scope : $(':input[data-url]'),
+                that = this;
             if ($urlEndPoint.length === 0) {
                 return;
             }
+
             $urlEndPoint.each(function() {
                 var $this = $(this),
                     _url = $this.attr('data-url');
@@ -998,21 +1000,47 @@ define([
                                             if (_val === element[$this.attr('id')]) {
                                                 return true;
                                             }
-                                        });
+                                        }),
+                                        _attachEvent = true;
                                     if (_matchData) {
                                         _.each(_matchData, function(value, key) {
                                             if (value === '') {
                                                 return;
                                             } else if (typeof value === 'object') {
-                                                // this will auto adding to subform
+                                                // If there is the View and Data in them means we need to render the view for user to select
+
                                                 if (value.length) {
+
                                                     var _listName;
                                                     _.some(value[0], function(listValue, listKey) {
                                                         _listName = listKey.split('_').shift();
                                                         return true;
                                                     });
                                                     $('#subform_' + _listName, $form).trigger('subform_' + _listName + '.ajaxUpdate', [value]);
+
+                                                } else if (value.data && value.view && value.title) {
+                                                    var _listName;
+                                                    _.some(value.data[0], function(listValue, listKey) {
+                                                        _listName = listKey.split('_').shift();
+                                                        return true;
+                                                    });
+                                                    _attachEvent = false;
+                                                    // This is special case and need to render View and Data
+                                                    require(['views/' + value.view + 'AjaxView'], function(AjaxView) {
+                                                        var _opts = {
+                                                            $form: $form,
+                                                            collection: new Backbone.Collection(value.data),
+                                                            id: key + '_AjaxView',
+                                                            $input: $this,
+                                                            input_callback: _dataCallback,
+                                                            title: value.title,
+                                                            listName: _listName
+                                                        },
+                                                            ajaxView = Vm.create(that, 'AjaxView', AjaxView, _opts);
+                                                        ajaxView.render();
+                                                    });
                                                 }
+
                                             } else {
                                                 var $targetInput = $(':input[name="' + key + '"]', $form);
                                                 if ($targetInput) {
@@ -1021,7 +1049,9 @@ define([
                                             }
                                         });
                                     }
-                                    $this.one('change', _dataCallback);
+                                    if (_attachEvent) {
+                                        $this.one('change', _dataCallback);
+                                    }
                                 };
                                 $this.one('change', _dataCallback);
                             }
