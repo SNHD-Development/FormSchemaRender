@@ -202,6 +202,9 @@ define([
                     break;
 
                 case 'multifiles':
+                    if (!(this.options.internal && typeof field.options.internalcanupdate !== 'undefined' && !field.options.internalcanupdate)) {
+                        $('form' + this.el).attr('enctype', 'multipart/form-data');
+                    }
                     this._multiFiles.push(field);
                     var _validation_tmp = this.getFormValidationData(field.name + '[]');
                     if (typeof this._stepValidated[(this._currentStep) - 2] !== 'undefined' && !$.isEmptyObject(_validation_tmp)) {
