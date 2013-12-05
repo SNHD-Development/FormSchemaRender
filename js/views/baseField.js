@@ -557,6 +557,10 @@ define([
                         field.attributes['target'] = '_blank';
                         field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
                         field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href'] : '/form/getFile/') + that.options.formData.fields[field.name];
+                        // Check for other options
+                        if (field.options.markdownloaddatetime && this.options.formData._id['$oid']) {
+                            field.attributes['href'] += '?formid='+this.options.formData._id['$oid'];
+                        }
                     }
                     delete field.attributes['accept'];
                     _.each(field.attributes, function(value, key) {
