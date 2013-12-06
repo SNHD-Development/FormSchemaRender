@@ -635,18 +635,22 @@
                     if (!_.include(values, _ext)) {
                         if (_ext !== '') {
                             if ($().popover) {
+
                                 var $this = $('[name="' + attr + '"][type="file"]');
 
-                                $this.attr('disabled', true).before('<div class="alert alert-error" style="display:none;"><i class="icon-edit"></i> Invalid File Type<br>File type must be "' + values.join(', ') + '"</div>')
-                                    .prev().delay(500).show('slow', function() {
-                                        window.setTimeout(
-                                            function() {
-                                                $this.attr('disabled', false).prev().hide('slow', function () {
-                                                  $(this).remove();
-                                                });
-                                                $this.val('');
-                                            }, 3500);
-                                    });
+                                if (!$this.prev('.alert.alert-error').length) {
+                                    $this.attr('disabled', true).before('<div class="alert alert-error" style="display:none;"><i class="icon-edit"></i> Invalid File Type<br>File type must be "' + values.join(', ') + '"</div>')
+                                        .prev().delay(500).show('slow', function() {
+                                            window.setTimeout(
+                                                function() {
+                                                    $this.attr('disabled', false).prev().hide('slow', function() {
+                                                        $(this).remove();
+                                                    });
+                                                    $this.val('');
+                                                }, 3500);
+                                        });
+                                }
+
                             }
                         }
                         return this.format(defaultMessages.oneOf, this.formatLabel(attr, model), values.join(', '));
