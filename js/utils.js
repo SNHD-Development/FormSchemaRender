@@ -952,7 +952,7 @@ define([
             $scope = $scope || null;
             var $urlEndPoint = ($scope) ? $scope : $(':input[data-url]'),
                 that = this;
-            if ($urlEndPoint.length === 0) {
+            if ($urlEndPoint.length === 0 || !$urlEndPoint.attr('data-url')) {
                 return;
             }
 
@@ -1058,7 +1058,12 @@ define([
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        window.location.reload();
+                        if (console && console.log) {
+                            console.log('Error: when trying to request AJAX data in setupUrlAjaxCall');
+                        }
+                        window.setTimeout(function() {
+                            window.location.reload();
+                        }, 3000);
                     }
                 });
                 // $.getJSON(_url, function(data, textStatus) {
