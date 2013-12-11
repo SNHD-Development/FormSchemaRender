@@ -387,10 +387,16 @@ define([
          **/
         setupSpinner: function(el) {
             $('.spinner', el).each(function() {
-                var _opt = {
-                    value: parseInt($(':input.spinner-input', this).val()) || 1
-                };
-                $(this).spinner(_opt)
+                // Be Default, will render as 1
+                // Unless has data-default-value set up
+                var $spinnerInput = $(':input.spinner-input', this),
+                    _number = ($spinnerInput.val() !== '') ?
+                        $spinnerInput.val() :
+                        (($spinnerInput.attr('data-default-value') !== undefined) ? $spinnerInput.attr('data-default-value') : 1),
+                    _opt = {
+                        value: parseInt(_number)
+                    };
+                $(this).spinner(_opt);
             });
         },
         /**
@@ -1280,6 +1286,25 @@ define([
                     $currentTarget.attr('disabled', false).popover('destroy');
                     $currentTarget.next('.popover').remove();
                 }, duration);
+        },
+        /**
+         * Check Internal Fields and append _internal to field name
+         * @param  object $form
+         * @param  array internalFields
+         * @return
+         */
+        parseInternalFieldsBeforeSubmit: function($form, internalFields) {
+            // console.log('===== parseInternalFieldsBeforeSubmit ======');
+            if (!internalFields.length) {
+                return;
+            }
+            _.each(internalFields, function(element) {
+                var $input = $(':input[name="' + element + '"]', $form);
+                if (!$input.length) {
+                    return;
+                }
+                $input.attr('name', element + '_internal');
+            });
         }
     };
 });

@@ -180,7 +180,7 @@ define([
                         $currentTarget.val(_val + '-');
                 }
                 if (e.update) {
-                    $currentTarget.val($currentTarget.val()+String.fromCharCode(e.keyCode));
+                    $currentTarget.val($currentTarget.val() + String.fromCharCode(e.keyCode));
                 }
             } else {
                 for (var i = 0, j = _val.length; i < j; i++) {
@@ -294,6 +294,9 @@ define([
                     }
                 }
 
+                // Check for Internal Fields and make sure to append _internal at the end
+                Utils.parseInternalFieldsBeforeSubmit($form, this.formView._internalFields);
+
                 if (this.formView._ajaxSubmit) {
                     e.preventDefault();
                     $form.ajaxSubmit(_options);
@@ -321,6 +324,14 @@ define([
                     $submitBtn.attr('disabled', true).popover(_opt).popover('show')
                         .next('.popover').addClass('success');
                 }
+
+                // Debugger Point if not using AJAX Post
+                // console.log(this);
+                // console.log('===== Debug Post Data =====');
+                // console.log(JSON.stringify($form.serializeArray()));
+                // e.preventDefault();
+                // return false;
+
             } else {
                 e.preventDefault();
                 $form.addClass('validation_error');
@@ -348,8 +359,16 @@ define([
             }
             $form.trigger(this.options.formSchema.name + '.validated');
         },
+        /**
+         * Debug point to check for Data, Called before the form get send
+         * @param  object formData
+         * @param  object jqForm
+         * @param  object options
+         * @return boolean
+         */
         showRequest: function(formData, jqForm, options) {
-            //console.log($.param(formData));
+            // console.log('===== POST Data =====');
+            // console.log($.param(formData));
             // If form has data-stopSubmit = true, the form will not continue to send data
             jqForm.trigger(jqForm.attr('id') + '.preSubmit', [formData, jqForm, options]);
             if (jqForm.attr('data-stopSubmit')) {
