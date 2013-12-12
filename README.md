@@ -177,6 +177,8 @@ In order to build form when user click a button can be done by adding class "btn
 		}
 	}
 
+To add confirmation before click simply add the Options.Confirmed = true.
+
 ### UserId Field
 
 This is the user id from user collection. This will link to user collection to check the claim for each form.
@@ -560,6 +562,7 @@ Sometime there are some fileds that internal should not be able to update these 
 ### Version
 
 * 0.1.0 - Adding Spinner Options to be able to set min and default values.
+		- Adding Options in Button to be able to ask for confirmation before redirect the form.
 
 * 0.0.9 - Adding JavaPowUpload from http://www.element-it.com/multiple-file-upload-applet/java-uploader.aspx (require serial number)
 

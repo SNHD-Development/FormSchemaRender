@@ -330,7 +330,7 @@ define([
                         field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'datepicker');
                         var _validation_tmp = this.getFormValidationData(field.name);
                         // Setup Max Date
-                        _.each(_validation_tmp, function (valValue, valKey) {
+                        _.each(_validation_tmp, function(valValue, valKey) {
                             delete _validation_tmp[valKey];
                             _validation_tmp[valKey.toLowerCase()] = valValue;
                         });
@@ -468,6 +468,17 @@ define([
 
                 case 'button':
                     field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
+                    // Adding the Confirmation Popover
+                    if (field.options.confirmed) {
+                        var _url = field.url || '';
+                        var _popoverOptions = {
+                            html: true,
+                            placement: "top",
+                            title: '<span class="text-info">Please confirm your selection.</span>',
+                            content: '<a class="btn btn-success btn-confirmed" data-href="' + _url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
+                        };
+                        field.attributes['data-popover-confirm'] = JSON.stringify(_popoverOptions);
+                    }
                     // AppendId
                     if (field.options.appendid) {
                         field.url = ((field.url) ? field.url : '') + ((field.url.indexOf('?') > -1) ? '&id=' : '/') + this.options.formData._id['$oid'];
@@ -563,7 +574,7 @@ define([
                         field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href'] : '/form/getFile/') + that.options.formData.fields[field.name];
                         // Check for other options
                         if (field.options.markdownloaddatetime && this.options.formData._id['$oid']) {
-                            field.attributes['href'] += '?formid='+this.options.formData._id['$oid'];
+                            field.attributes['href'] += '?formid=' + this.options.formData._id['$oid'];
                         }
                     }
                     delete field.attributes['accept'];

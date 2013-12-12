@@ -747,6 +747,7 @@ define([
          * Final Setup for Read Mode
          **/
         finalReadSetup: function(view) {
+            var $form = $(view.el);
             // Attach Click Event to Copy to the Clipboard
             if (view._buttonClipboards.length > 0) {
                 _.each(view._buttonClipboards, function(element) {
@@ -773,6 +774,37 @@ define([
                     }
                 });
             });
+
+            // Setup Confirm Button
+            var $btnConfirmed = $('[data-popover-confirm^="{"]', view.el);
+            if ($btnConfirmed.length) {
+                $form.on('click', '.btn-confirmed', function(e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    _yes = $this.attr('data-href') || false;
+                    if (!_yes) {
+                        $btnConfirmed.each(function(_index) {
+                            $(this).popover('hide');
+                        });
+                        return;
+                    }
+                    window.location = _yes;
+                });
+                $btnConfirmed.each(function(index) {
+                    var $this = $(this),
+                        _opts = $.parseJSON($this.attr('data-popover-confirm'));
+                    $this.popover(_opts).click(function(e) {
+                        e.preventDefault();
+                        $btnConfirmed.each(function(_index) {
+                            if (_index === index) {
+                                return;
+                            }
+                            $(this).popover('hide');
+                        });
+                        $this.popover('toggle');
+                    });
+                });
+            }
         },
         /**
          * Setup Read Mode
