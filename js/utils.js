@@ -788,6 +788,9 @@ define([
                         });
                         return;
                     }
+                    $btnConfirmed.each(function(_index) {
+                        $(this).popover('destroy');
+                    });
                     window.location = _yes;
                 });
                 $btnConfirmed.each(function(index) {

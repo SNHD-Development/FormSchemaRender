@@ -470,13 +470,14 @@ define([
                     field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
                     // Adding the Confirmation Popover
                     if (field.options.confirmed) {
-                        var _url = field.url || '';
-                        var _popoverOptions = {
-                            html: true,
-                            placement: "top",
-                            title: '<span class="text-info">Please confirm your selection.</span>',
-                            content: '<a class="btn btn-success btn-confirmed" data-href="' + _url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
-                        };
+                        var _id = '/' + ((this.options.mode === 'read' && field.options.appendid) ? this.options.formData._id.$oid : ''),
+                            _url = (field.url || '') + _id,
+                            _popoverOptions = {
+                                html: true,
+                                placement: "top",
+                                title: '<span class="text-info">Please confirm your selection.</span>',
+                                content: '<a class="btn btn-success btn-confirmed" data-href="' + _url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
+                            };
                         field.attributes['data-popover-confirm'] = JSON.stringify(_popoverOptions);
                     }
                     // AppendId
