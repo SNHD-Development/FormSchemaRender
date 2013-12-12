@@ -260,6 +260,10 @@ define([
 
                 case 'textbox':
                     _type = 'text';
+                case 'selectsingle':
+                    if (_type === 'selectsingle') {
+                        _type = 'select';
+                    }
                 case 'select':
                     if (field.options.url) {
                         field.attributes['data-url'] = field.options.url;

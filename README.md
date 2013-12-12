@@ -559,7 +559,7 @@ Sometime there are some fileds that internal should not be able to update these 
 
 ### Version
 
-* 0.1.0 -
+* 0.1.0 - Adding Spinner Options to be able to set min and default values.
 
 * 0.0.9 - Adding JavaPowUpload from http://www.element-it.com/multiple-file-upload-applet/java-uploader.aspx (require serial number)
 

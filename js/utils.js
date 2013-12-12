@@ -390,11 +390,13 @@ define([
                 // Be Default, will render as 1
                 // Unless has data-default-value set up
                 var $spinnerInput = $(':input.spinner-input', this),
+                    _dataDefaultValue = ($spinnerInput.attr('data-default-value') !== undefined) ? $spinnerInput.attr('data-default-value') : 1,
                     _number = ($spinnerInput.val() !== '') ?
                         $spinnerInput.val() :
-                        (($spinnerInput.attr('data-default-value') !== undefined) ? $spinnerInput.attr('data-default-value') : 1),
+                        _dataDefaultValue,
                     _opt = {
-                        value: parseInt(_number)
+                        value: parseInt(_number, 10),
+                        min: _dataDefaultValue
                     };
                 $(this).spinner(_opt);
             });
@@ -1099,7 +1101,7 @@ define([
          * Function to Setup BooleanInput
          */
         setupBooleanInput: function($form, view) {
-            $form.on('click', '.form-render_booleaninut button', function(e) {
+            $form.on('click', '.form-render_booleaninput button', function(e) {
                 var $this = $(this),
                     _val = $this.attr('data-value'),
                     _id = $this.attr('data-id');
