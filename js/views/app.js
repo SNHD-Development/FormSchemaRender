@@ -300,8 +300,10 @@ define([
                 if (this.formView._ajaxSubmit) {
                     e.preventDefault();
                     $form.ajaxSubmit(_options);
+                } else {
+                    // This is not using AJAX to send POST
+                    $form.trigger($form.attr('id') + '.preSubmit');
                 }
-
 
                 if (this.formView.options.formSchema.view !== 'wizard') {
                     var _t_1, _t_2;

@@ -77,7 +77,6 @@ define([
                             break;
 
                         case 'booleaninput':
-                            console.log(model);
                             var _booleanVal = (model[element.name] === true) ? 'Yes' : ((model[element.name] === false) ? 'No' : '');
                             _values[index].push(_booleanVal);
                             break;

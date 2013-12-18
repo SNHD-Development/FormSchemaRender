@@ -546,6 +546,15 @@ This Field Type will only work in read mode and when user "click" the button. It
 		Values : [ "ShippingName", "ShippingAddress" ]
 	}
 
+### List Type (Sub Form)
+
+This is the sub form fields type. You can nested form with in the form.
+
+To render existing data, will use description to render as the heading in the result table.
+
+To Render Custom Table Header simply pass in Options.TableTitle in Fields.
+This will get generate the table header with that text and simply hover over to see the full detail of description.
+
 
 ## Internal Only Options
 
@@ -564,17 +573,7 @@ Sometime there are some fileds that internal should not be able to update these 
 		}
 	}
 
-### List Type (Sub Form)
-
-This is the sub form fields type. You can nested form with in the form.
-
-To render existing data, will use description to render as the heading in the result table.
-
-To Render Custom Table Header simply pass in Options.TableTitle in Fields.
-This will get generate the table header with that text and simply hover over to see the full detail of description.
-
-
-### Version
+## Version
 
 * 0.1.0
 
