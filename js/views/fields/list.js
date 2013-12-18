@@ -175,6 +175,10 @@ define([
                 _submitBtn.removeClass('submitted');
                 this.$el.trigger(this.options.formId + '.add', this);
             } else {
+
+                // If this is the Boolean Input need to inform user
+                this.model.triggerError(this);
+
                 // Error Message
                 var _opt = {
                     html: true,

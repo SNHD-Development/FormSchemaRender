@@ -1139,9 +1139,12 @@ define([
             $form.on('click', '.form-render_booleaninput button', function(e) {
                 var $this = $(this),
                     _val = $this.attr('data-value'),
-                    _id = $this.attr('data-id');
+                    _id = $this.attr('data-id'),
+                    _txt;
+
                 $('#' + _id, $this.parent()).removeClass('invalid').val(_val).trigger('change');
-                $this.parent().next().text($this.html()).show('slow');
+                _txt = '<span class="text-' + ((_val === 'true') ? 'success' : 'error') + '">' + $this.html() + '<span>';
+                $this.parent().next().html(_txt).show('slow');
             });
 
             // If there is a default value in the input

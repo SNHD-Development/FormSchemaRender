@@ -44,11 +44,12 @@ define([
                     model.bindings[value.name] = '[name="' + value.name + '"]';
                     model.on('change:' + value.name, function(modelObj, changedVal) {
                         var _data = {};
-                        _data[value.name] = (changedVal === 'true') ? true : ( (changedVal === 'false') ? false: "" );
+                        _data[value.name] = (changedVal === 'true') ? true : ((changedVal === 'false') ? false : "");
                         modelObj.set(_data, {
                             silent: true
                         });
                     });
+                    model.hasBooleanInput = true;
                     break;
 
                 case 'multifiles':
@@ -114,6 +115,7 @@ define([
                 case 'list':
                     _attrs[value.name] = new Collections();
                     setValidationData(value.name, attrs, _validation, '');
+                    model.subFormLists.push(value.name);
                     break;
 
 
@@ -234,6 +236,8 @@ define([
     return Backbone.Model.extend({
         initialize: function() {
 
+            this.subFormLists = [];
+
             this.bindings = {}; // To be used in ModelBinder
 
             var _attrs = parseFields(this, this.attributes);
@@ -282,13 +286,59 @@ define([
          **/
         appendSubFormInput: function(formId, internalField) {
             var _data = _.clone(this.toJSON()),
-                _postfix;
+                _postfix,
+                $form = $('#' + formId);
+            $('input.subform_before_submit', $form).remove();
             _.each(_data, function(value, key) {
                 _postfix = (internalField.indexOf(key) > -1) ? '_internal' : '';
                 if (typeof value !== 'undefined' && typeof value.toJSON === 'function') {
-                    $('#' + formId).prepend('<input type="hidden" name="' + key + _postfix + '" value=\'' + JSON.stringify(value.toJSON()) + '\' class="subform_before_submit">');
+                    $form.prepend('<input type="hidden" name="' + key + _postfix + '" value=\'' + JSON.stringify(value.toJSON()) + '\' class="subform_before_submit">');
                 } else {}
             });
+        },
+
+        /**
+         * Trigger Error for UI for special field types
+         * @return
+         */
+        triggerError: function(view) {
+            if (this.hasBooleanInput) {
+                var $booleanInput = $('.form-render_booleaninput input[type="hidden"].invalid', view.el);
+                $booleanInput.each(function() {
+                    var $this = $(this),
+                        _errorTxt = '<span class="text-error">Please answer this question.</span>';
+                    $this.closest('.form-render_booleaninput').next().html(_errorTxt).show('slow');
+                });
+            }
+        },
+
+        /**
+         * [isSubformValid description]
+         * @return {Boolean}
+         */
+        isSubformValid: function() {
+            var that = this,
+                _result = true;
+            _.each(this.subFormLists, function(element) {
+                if (!that.validation[element]) {
+                    return;
+                }
+                _.each(that.validation[element], function(validation, key) {
+                    if (_.isObject(validation) || !_result) {
+                        return;
+                    }
+                    var _subFormData = $('input.subform_before_submit[name="' + element + '"]').val();
+                    // console.log(_subFormData);
+                    switch (key) {
+                        case 'required':
+                            if (_subFormData === '[]') {
+                                _result = false;
+                            }
+                            break;
+                    }
+                });
+            });
+            return _result;
         }
     });
 });

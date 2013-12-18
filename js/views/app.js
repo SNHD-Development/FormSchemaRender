@@ -238,9 +238,13 @@ define([
             // Remove Not needed input from submitting data
             $('.not_sending', $form).attr('disabled', true);
 
+            // Attached the subform input
+            this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
+
             // Check Data
 
-            if (this.formView.model.isValid(true)) {
+            if (this.formView.model.isValid(true) && this.formView.model.isSubformValid()) {
+
                 $form.addClass('validation_pass');
                 if (this.options.token !== '') {
                     $form.prepend('<input type="hidden" name="token" value="' + this.options.token + '"/>');
@@ -248,8 +252,7 @@ define([
                 if (this.options.mode === 'create') {
                     $form.prepend('<input type="hidden" name="form_name" value="' + this.options.formSchema.name + '"/>');
                 }
-                $('input.subform_before_submit', this.el).remove();
-                this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
+
                 _options = {
                     beforeSubmit: this.showRequest,
                     success: this.showResponse
