@@ -5,6 +5,13 @@ define([
     'backbone',
     'collections/collections'
 ], function($, _, Backbone, Collections) {
+
+    /**
+     * Function to parse formSchema to be used in this model
+     * @param  objct model
+     * @param  object attrs
+     * @return
+     */
     var parseFields = function(model, attrs) {
         var _attrs = {}, _validation = {}, _name, _internal = (attrs.is_internal) ? true : false,
             _render_mode = attrs.render_mode || false;
@@ -31,6 +38,19 @@ define([
             }
             switch (value.type.toLowerCase()) {
 
+                case 'booleaninput':
+                    _attrs[value.name] = '';
+                    setValidationData(value.name, attrs, _validation, '');
+                    model.bindings[value.name] = '[name="' + value.name + '"]';
+                    model.on('change:' + value.name, function(modelObj, changedVal) {
+                        var _data = {};
+                        _data[value.name] = (changedVal === 'true') ? true : ( (changedVal === 'false') ? false: "" );
+                        modelObj.set(_data, {
+                            silent: true
+                        });
+                    });
+                    break;
+
                 case 'multifiles':
                     _name = value.name + '[]';
                     _attrs[_name] = '';
@@ -45,22 +65,27 @@ define([
                     _name = value.name + '_address_street';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (Street)');
+                    model.bindings[_name] = '[name="' + _name + '"]';
 
                     _name = value.name + '_address_city';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (City)');
+                    model.bindings[_name] = '[name="' + _name + '"]';
 
                     _name = value.name + '_address_state';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (State)');
+                    model.bindings[_name] = '[name="' + _name + '"]';
 
                     _name = value.name + '_address_zip';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (ZIP)');
+                    model.bindings[_name] = '[name="' + _name + '"]';
 
                     _name = value.name + '_address_country';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (Country)');
+                    model.bindings[_name] = '[name="' + _name + '"]';
 
                     break;
 
@@ -69,16 +94,19 @@ define([
                         _name = value.name + '_fullname_middle_name';
                         _attrs[_name] = '';
                         setValidationData(_name, attrs, _validation, ' (Middle Name)');
+                        model.bindings[_name] = '[name="' + _name + '"]';
                     }
 
                     _name = value.name + '_fullname_first_name';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (First Name)');
+                    model.bindings[_name] = '[name="' + _name + '"]';
 
 
                     _name = value.name + '_fullname_last_name';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (Last Name)');
+                    model.bindings[_name] = '[name="' + _name + '"]';
 
                     break;
 
@@ -86,6 +114,14 @@ define([
                 case 'list':
                     _attrs[value.name] = new Collections();
                     setValidationData(value.name, attrs, _validation, '');
+                    break;
+
+
+                case 'check':
+                case 'checkbox':
+                    _name = value.name + '[]';
+                    _attrs[_name] = '';
+                    setValidationData(_name, attrs, _validation, '');
                     break;
 
                     // Will ignore these types
@@ -176,9 +212,11 @@ define([
                 default:
                     _attrs[value.name] = '';
                     setValidationData(value.name, attrs, _validation, '');
+                    model.bindings[value.name] = '[name="' + value.name + '"]';
             }
         });
         model.validation = _validation;
+
         return _attrs;
     },
         /**
@@ -195,6 +233,9 @@ define([
 
     return Backbone.Model.extend({
         initialize: function() {
+
+            this.bindings = {}; // To be used in ModelBinder
+
             var _attrs = parseFields(this, this.attributes);
             this.clear();
             this.set(_attrs);
@@ -207,6 +248,12 @@ define([
                     $(':input[name="' + key + '"]').addClass('invalid');
                 });
             });
+
+            // Debug
+            // this.on('change', function() {
+            //     console.log('=== Check Model Change ===');
+            //     console.log(this.toJSON());
+            // });
         },
         /**
          * Trim the value before setting the value

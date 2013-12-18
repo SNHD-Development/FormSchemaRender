@@ -15,6 +15,12 @@ define([
     var AppView = Backbone.View.extend({
         template: _.template(tableTemplate),
         popTemplate: _.template(popoverTemplate),
+
+        clean: function () {
+            // Destroy Popover
+            Utils.destroyPopover(this.$el);
+        },
+
         initialize: function() {
             //console.log('=== Display List View ===');
             //console.log(this);
@@ -26,9 +32,22 @@ define([
             var that = this,
                 _labels = [],
                 _values = new Array(this.collection.length),
-                _models = new Array(this.collection.length);
+                _models = new Array(this.collection.length),
+                _tableHeader;
             _.each(this.options.formSchema.fields, function(element) {
-                _labels.push(element.description);
+                switch (element.type.toLowerCase()) {
+                    case 'fieldsetstart':
+                    case 'fieldsetend':
+                        return;
+                }
+                if (element.options && element.options.tabletitle) {
+                    _tableHeader = element.options.tabletitle;
+                    // Need to Added Popover to this as well
+                    _tableHeader = '<a data-content="' + $('<p>' + element.description + '</p>').text() + '" data-original-title="' + element.options.tabletitle + '" data-placement="top" data-toggle="popover" data-trigger="hover" data-html="true">' + _tableHeader + '</a>';
+                } else {
+                    _tableHeader = element.description;
+                }
+                _labels.push(_tableHeader);
                 _.each(that.collection.models, function(modelObj, index) {
                     var model = modelObj.toJSON(),
                         _fullName;
@@ -57,6 +76,12 @@ define([
                             _values[index].push(_fullName);
                             break;
 
+                        case 'booleaninput':
+                            console.log(model);
+                            var _booleanVal = (model[element.name] === true) ? 'Yes' : ((model[element.name] === false) ? 'No' : '');
+                            _values[index].push(_booleanVal);
+                            break;
+
                         default:
                             _values[index].push(model[element.name]);
                     }
@@ -68,6 +93,9 @@ define([
                 modelId: _models,
                 heading: ((typeof this.options.formSchema.options.readmodedescription !== 'undefined') ? this.options.formSchema.options.readmodedescription : this.options.formSchema.name)
             }));
+
+            // Set Up Popover
+            Utils.setupPopover(this.$el);
         },
         events: {
             'click .subform-edit-model': 'editModel',

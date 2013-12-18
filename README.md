@@ -274,6 +274,11 @@ To change languages for Select field add "Values-language" like,
 		}
 	}
 
+### CheckBox Field
+
+will be the same set up as Select Field
+
+
 ### Number Field
 
 Number field will limit only the number input. We can use this field to store currency as well.
@@ -559,29 +564,60 @@ Sometime there are some fileds that internal should not be able to update these 
 		}
 	}
 
+### List Type (Sub Form)
+
+This is the sub form fields type. You can nested form with in the form.
+
+To render existing data, will use description to render as the heading in the result table.
+
+To Render Custom Table Header simply pass in Options.TableTitle in Fields.
+This will get generate the table header with that text and simply hover over to see the full detail of description.
+
+
 ### Version
 
-* 0.1.0 - Adding Spinner Options to be able to set min and default values.
-		- Adding Options in Button to be able to ask for confirmation before redirect the form.
+* 0.1.0
 
-* 0.0.9 - Adding JavaPowUpload from http://www.element-it.com/multiple-file-upload-applet/java-uploader.aspx (require serial number)
+	- Adding Spinner Options to be able to set min and default values.
+	- Adding Options in Button to be able to ask for confirmation before redirect the form.
+	- Adding Sub Form (List Type) Options to be able to perform more function.
 
-* 0.0.8 - Support International Address.
+* 0.0.9
 
-* 0.0.7 - Fix Button Decision on Read Mode.
-		- Add Decimals Options for Number Type.
-		- Button Decision can render data if found more than one.
-		- Fix Image Type when render, if it can render using lighbox will do that else will link to the new page.
-		- Adding Ajax Call to auto populate data
+	- Adding JavaPowUpload from http://www.element-it.com/multiple-file-upload-applet/java-uploader.aspx (require serial number)
 
-* 0.0.6 - Add Copy to Clipboard button, Button Decision type and fix ie 7 Styles.
+* 0.0.8
 
-* 0.0.5 - Adding MultiFiles Upload and Fix minor bug.
+	- Support International Address.
 
-* 0.0.4 - SubForm can render the data in all the mode now. Fixed minor bug for validation methods and schema.
+* 0.0.7
 
-* 0.0.3 - Fix IE when render List Type. Fix validation in special field type.
+	- Fix Button Decision on Read Mode.
+	- Add Decimals Options for Number Type.
+	- Button Decision can render data if found more than one.
+	- Fix Image Type when render, if it can render using lighbox will do that else will link to the new page.
+	- Adding Ajax Call to auto populate data
 
-* 0.0.2 - Add Wizard View.
+* 0.0.6
 
-* 0.0.1 - Init Project.
+	- Add Copy to Clipboard button, Button Decision type and fix ie 7 Styles.
+
+* 0.0.5
+
+	- Adding MultiFiles Upload and Fix minor bug.
+
+* 0.0.4
+
+	- SubForm can render the data in all the mode now. Fixed minor bug for validation methods and schema.
+
+* 0.0.3
+
+	- Fix IE when render List Type. Fix validation in special field type.
+
+* 0.0.2
+
+	- Add Wizard View.
+
+* 0.0.1
+
+	- Init Project.

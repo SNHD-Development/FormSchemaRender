@@ -16,6 +16,12 @@
    * Select
    **/
   /**
+   * CheckBox
+   */
+  /**
+   * Yes Or No (BooleanInput Field Type)
+   */
+  /**
    * Override Text Area
    **/
   /**
@@ -75,6 +81,18 @@
     width: auto; }
     .form-render select[class^="birth-"] {
       min-width: 0; }
+  .form-render .checkbox-container label.checkbox {
+    margin-left: 30px; }
+    .form-render .checkbox-container label.checkbox input[type="checkbox"] {
+      margin-left: -25px; }
+  .form-render .form-render_booleaninput {
+    margin-left: 30px;
+    margin-bottom: 20px; }
+  .form-render .booleaninput-value-render {
+    display: inline;
+    position: relative;
+    top: -5px;
+    left: 20px; }
   .form-render textarea {
     min-height: 100px; }
   .form-render .row-fluid [class*="span"] textarea {
@@ -99,14 +117,14 @@
     margin-bottom: 30px; }
     .form-render .subform-container input, .form-render .subform-container select, .form-render .subform-container textarea {
       margin-bottom: 15px; }
-    .form-render .subform-container .active {
+    .form-render .subform-container div.active {
       padding: 30px 20px 0;
       border: 1px solid #D5D5D5;
       border-radius: 8px;
       background: #FFF; }
-      .form-render .subform-container .active form {
+      .form-render .subform-container div.active form {
         margin-bottom: 0; }
-        .form-render .subform-container .active form .form-actions {
+        .form-render .subform-container div.active form .form-actions {
           margin-bottom: 5px; }
     .form-render .subform-container .actions {
       padding: 15px 25px 0; }

@@ -1141,6 +1141,26 @@ define([
                     _val = $this.attr('data-value'),
                     _id = $this.attr('data-id');
                 $('#' + _id, $this.parent()).removeClass('invalid').val(_val).trigger('change');
+                $this.parent().next().text($this.html()).show('slow');
+            });
+
+            // If there is a default value in the input
+            var $booleanInput = $('.form-render_booleaninput input[type="hidden"]', $form);
+            $booleanInput.each(function() {
+                var $this = $(this),
+                    _val = $this.val();
+                if (_val === '') {
+                    return;
+                }
+                switch (_val) {
+                    case 'true':
+                        $this.parent().find('button.btn-yes').click();
+                        break;
+
+                    case 'false':
+                        $this.parent().find('button.btn-no').click();
+                        break;
+                }
             });
         },
 
@@ -1342,6 +1362,18 @@ define([
                 }
                 $input.attr('name', element + '_internal');
             });
+        },
+
+
+        setupPopover: function($context) {
+            var $popover = $('[data-toggle="popover"]', $context);
+            $popover.popover();
+        },
+
+
+        destroyPopover: function($context) {
+            var $popover = $('[data-toggle="popover"]', $context);
+            $popover.popover('destroy');
         }
     };
 });

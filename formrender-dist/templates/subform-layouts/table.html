@@ -1,7 +1,7 @@
 <%
 var _model = (typeof modelId !== 'undefined') ? true : false;
 
-if (typeof heading !== 'undefined') {
+if (heading) {
 %>
 <fieldset class="table-view">
 	<legend><%= heading %></legend>
@@ -34,6 +34,6 @@ if (typeof heading !== 'undefined') {
 	</tbody>
 </table>
 
-<% if (typeof heading !== 'undefined') { %>
+<% if (heading) { %>
 </fieldset>
 <% } %>

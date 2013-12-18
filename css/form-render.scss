@@ -67,6 +67,38 @@ $text_area_min_height:  100px;
 	}
 
 	/**
+	 * CheckBox
+	 */
+	.checkbox-container {
+		label {
+			&.checkbox {
+				margin-left: 30px;
+
+				input {
+					&[type="checkbox"] {
+						margin-left: -25px;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Yes Or No (BooleanInput Field Type)
+	 */
+	.form-render_booleaninput {
+		margin-left: 30px;
+		margin-bottom: 20px;
+	}
+
+	.booleaninput-value-render {
+		display: inline;
+		position: relative;
+		top: -5px;
+		left: 20px;
+	}
+
+	/**
 	 * Override Text Area
 	 **/
 	textarea {
@@ -127,7 +159,7 @@ $text_area_min_height:  100px;
 			margin-bottom: 15px;
 		}
 
-		.active {
+		div.active {
 			padding: 30px 20px 0;
 			border: 1px solid #D5D5D5;
 			border-radius: 8px;

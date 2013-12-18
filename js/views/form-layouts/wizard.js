@@ -71,7 +71,7 @@ define([
 
 	  this.renderWizardNavBar();
 	  // Bind Model
-	  that._modelBinder.bind(that.model, that.el);
+	  that._modelBinder.bind(that.model, that.el, that.model.bindings);
 	  Backbone.Validation.bind(that, {forceUpdate: true});
 	  // Add FormWizard Reference
 	  this.$formWizard = $('.wizard-view .wizard', this.el);

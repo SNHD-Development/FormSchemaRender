@@ -34,6 +34,7 @@ define([
     'text!templates/fields/email.html',
     'text!templates/fields/date.html',
     'text!templates/fields/select.html',
+    'text!templates/fields/check.html',
     'text!templates/fields/birthdate.html',
     'text!templates/fields/button.html',
     'text!templates/fields/buttongroup.html',
@@ -47,7 +48,7 @@ define([
     'jquery.datepicker',
     'jquery.birthdaypicker',
     'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
     return Backbone.View.extend({
         _modelBinder: undefined,
         // Clean Data Binding
@@ -85,6 +86,7 @@ define([
 
             // Setup Keys
             this.options.formSchema.validation = this.options.formSchema.validation || {};
+            // Setup Model
             this.model = new Model(_.extend(this.options.formSchema, {
                 is_internal: this.options.internal,
                 render_mode: this.options.mode
@@ -107,7 +109,7 @@ define([
             };
             // Not render label
             this.notRenderLabel = [
-                'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step'
+                'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox'
             ];
             // Set up the input template
             this.inputTemplate = {
@@ -132,6 +134,7 @@ define([
                 "email": _.template(emailTemplate),
                 "date": _.template(dateTemplate),
                 "select": _.template(selectTemplate),
+                "check": _.template(checkTemplate),
                 "birthdate": _.template(bdateTemplate),
                 "button": _.template(buttonTemplate),
                 "buttongroup": _.template(buttongroupTemplate),
@@ -272,6 +275,14 @@ define([
                         field.attributes['data-url-data'] = JSON.stringify(field.options.data);
                     }
                     field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
+                    break;
+
+                case 'checkbox':
+                case 'check':
+                    _type = 'check';
+                    if (!field.values) {
+                        throw 'In order to use CheckBox, please set Values.';
+                    }
                     break;
 
                 case 'password':
@@ -837,7 +848,7 @@ define([
                 if (hidden) {
                     $subFormView.hide();
                 }
-                subFormView.render();
+                subFormView.render(hidden);
                 if (!hidden) {
                     $subFormView.show();
                     $subFormView.addClass('active');

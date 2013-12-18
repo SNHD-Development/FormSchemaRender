@@ -1,0 +1,18 @@
+<%
+var _id = (typeof attributes.id !== 'undefined') ? attributes.id: name,
+	index = -1;
+%>
+<div id="<%= _id %>_checkbox"<%= _attr %> class="checkbox-container">
+
+	<label><%= description %></label>
+
+	<% _.each(values, function(value, key) {
+		index++;
+	%>
+	<label class="checkbox">
+		<input type="checkbox" name="<%= name %>[]" value="<%= value %>" id="<%= _id %>_<%= index %>">
+		<%= value %>
+	</label>
+	<% }); %>
+
+</div>
