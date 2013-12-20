@@ -1,0 +1,13 @@
+{
+    "Name": "",
+    "Title": "",
+    "Category": "",
+    "Description": "",
+    "DefaultStatus": "Enabled",
+    "InternalCanCreate": true,
+    "DeleteEnabled": true,
+    "Validation": {
+    },
+    "Fields": [
+    ]
+}
