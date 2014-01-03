@@ -40,6 +40,7 @@ define([
     'text!templates/fields/buttongroup.html',
     'text!templates/fields/list.html',
     'text!templates/fields/uneditableinput.html',
+    'text!templates/fields/uneditablecheck.html',
     'text!templates/fields/uneditablefile.html',
     'text!templates/fields/uneditableimage.html',
     'text!templates/fields/buttonclipboard.html',
@@ -48,7 +49,7 @@ define([
     'jquery.datepicker',
     'jquery.birthdaypicker',
     'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
     return Backbone.View.extend({
         _modelBinder: undefined,
         // Clean Data Binding
@@ -140,6 +141,7 @@ define([
                 "buttongroup": _.template(buttongroupTemplate),
                 "list": _.template(listTemplate),
                 "uneditableinput": _.template(uneditableinputTemplate),
+                "uneditablecheck": _.template(uneditablecheckTemplate),
                 "uneditablefile": _.template(uneditablefileTemplate),
                 "uneditableimage": _.template(uneditableimageTemplate),
                 "buttonclipboard": _.template(buttonclipboardTemplate),
@@ -585,8 +587,8 @@ define([
                         field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
                         field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href'] : '/form/getFile/') + that.options.formData.fields[field.name];
                         // Check for other options
-                        if (field.options.markdownloaddatetime && this.options.formData._id['$oid']) {
-                            var _markDownloadDateTime = field.options.markdownloaddatetime.toLowerCase();
+                        if (field.options.markdownloaddatetimeof && this.options.formData._id['$oid']) {
+                            var _markDownloadDateTime = field.options.markdownloaddatetimeof.toLowerCase();
                             if (_markDownloadDateTime === '*' || this.options.internal && _markDownloadDateTime === 'internal' || !this.options.internal && _markDownloadDateTime === 'external') {
                                 field.attributes['href'] += '?formid=' + this.options.formData._id['$oid'];
                             }
@@ -646,7 +648,7 @@ define([
                                         break;
 
                                     case 'booleaninput':
-                                        _values[index].push((modelData[element.name]? 'Yes': 'No'));
+                                        _values[index].push((modelData[element.name] ? 'Yes' : 'No'));
                                         break;
 
                                     default:
@@ -666,6 +668,13 @@ define([
                     } else {
                         _html += '';
                     }
+                } else if (_type === 'check') {
+                    // This is check box and need to render to make it look easy to read
+                    _html += that.inputTemplate['uneditablecheck']({
+                        value: _field_data,
+                        label: field.description,
+                        id: field.name
+                    });
                 } else {
                     var _textarea = '';
                     switch (_type) {
@@ -674,7 +683,7 @@ define([
                             _textarea = ' uneditable-input-textarea';
                             break;
                         case 'timestamp':
-                            _field_data = Utils.getHumanTime(_field_data)
+                            _field_data = Utils.getHumanTime(_field_data);
                             break;
                     }
                     _html += that.inputTemplate['uneditableinput']({

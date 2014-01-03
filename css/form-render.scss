@@ -268,6 +268,18 @@ $text_area_min_height:  100px;
 				margin-bottom: 30px;
 			}
 		}
+
+		.read-checkbox {
+			margin: 10px auto;
+			width: 95%;
+			span {
+				&.uneditable-input {
+					width: auto;
+					margin-right: 20px;
+					padding: 4px 8px;
+				}
+			}
+		}
 	}
 
 	.uneditable-input {
