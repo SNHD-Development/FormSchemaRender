@@ -104,7 +104,13 @@ define([
                 }, that.options.formSchema)));
 
                 // Bind Model
-                that._modelBinder.bind(that.model, that.el);
+                try {
+                    that._modelBinder.bind(that.model, that.el);
+                } catch (err) {
+                    if (window.console && window.console.log) {
+                        window.console.log('Warning in list.js: "' + err + '" continue running.');
+                    }
+                }
                 Backbone.Validation.bind(that, {
                     forceUpdate: true
                 });

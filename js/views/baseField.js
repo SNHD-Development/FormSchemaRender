@@ -605,42 +605,59 @@ define([
                     });
                 } else if (_type === 'list') {
                     // If this is 'list' type
-                    if (typeof this.options.formData.fields[field.name] !== 'undefined' && this.options.formData.fields[field.name].length > 0) {
+                    if (typeof this.options.formData.fields[field.name] !== 'undefined' && (this.options.formData.fields[field.name].length > 0 || _.size(this.options.formData.fields[field.name]) > 0)) {
                         var _labels = [],
-                            _values = new Array(this.options.formData.fields[field.name].length)
-                            _.each(field.fields, function(element, index) {
-                                _labels.push(element.description);
-                                _.each(that.options.formData.fields[field.name], function(modelData, index) {
-                                    var _fullName;
-                                    if (typeof _values[index] === 'undefined') {
-                                        _values[index] = [];
-                                    }
-                                    switch (element.type.toLowerCase()) {
-                                        case 'timestamp':
-                                            _labels[_labels.length - 1] = 'Time';
-                                            // Convert to Human Readable Time
-                                            _values[index].push(Utils.getHumanTime(modelData[element.name]));
-                                            break;
+                            _cnt = 0,
+                            _values = new Array(this.options.formData.fields[field.name].length || _.size(this.options.formData.fields[field.name]));
+                        _.each(field.fields, function(element, index) {
+                            var _fieldIndex = -1;
+                            _labels.push(element.description);
+                            if (element.description && !_.isNumber(index)) {
+                                index = _cnt++;
+                            }
+                            _.each(that.options.formData.fields[field.name], function(modelData, index) {
+                                var _fullName,
+                                    currentIndex = index;
+                                if (!_.isNumber(index)) {
+                                    index = _cnt;
+                                }
+                                if (typeof _values[index] === 'undefined') {
+                                    _values[index] = [];
+                                }
+                                switch (element.type.toLowerCase()) {
+                                    case 'timestamp':
+                                        _labels[_labels.length - 1] = 'Time';
+                                        // Convert to Human Readable Time
+                                        _values[index].push(Utils.getHumanTime(modelData[element.name]));
+                                        break;
 
-                                        case 'useraccount':
-                                            _labels[_labels.length - 1] = 'User';
-                                            _values[index].push(modelData[element.name]);
-                                            break;
+                                    case 'useraccount':
+                                        _labels[_labels.length - 1] = 'User';
+                                        _values[index].push(modelData[element.name]);
+                                        break;
 
-                                        case 'fullname':
-                                            _fullName = modelData[element.name + '_fullname_first_name'];
-                                            if (typeof modelData[element.name + '_fullname_middle_name'] !== 'undefined') {
-                                                _fullName += ' ' + modelData[element.name + '_fullname_middle_name'];
-                                            }
-                                            _fullName += ' ' + modelData[element.name + '_fullname_last_name'];
-                                            _values[index].push(_fullName);
-                                            break;
+                                    case 'fullname':
+                                        _fullName = modelData[element.name + '_fullname_first_name'];
+                                        if (typeof modelData[element.name + '_fullname_middle_name'] !== 'undefined') {
+                                            _fullName += ' ' + modelData[element.name + '_fullname_middle_name'];
+                                        }
+                                        _fullName += ' ' + modelData[element.name + '_fullname_last_name'];
+                                        _values[index].push(_fullName);
+                                        break;
 
-                                        default:
-                                            _values[index].push(modelData[element.name]);
-                                    }
-                                });
+                                    case 'booleaninput':
+                                        _values[index].push((modelData[element.name]? 'Yes': 'No'));
+                                        break;
+
+                                    default:
+                                        if (typeof modelData[element.name] === 'undefined') {
+                                            delete(_labels[_labels.length - 1]);
+                                            return;
+                                        }
+                                        _values[index].push(modelData[element.name]);
+                                }
                             });
+                        });
                         _html += that.inputTemplate['subform-table']({
                             labels: _labels,
                             values: _values,
