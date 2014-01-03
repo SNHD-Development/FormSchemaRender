@@ -586,7 +586,10 @@ define([
                         field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href'] : '/form/getFile/') + that.options.formData.fields[field.name];
                         // Check for other options
                         if (field.options.markdownloaddatetime && this.options.formData._id['$oid']) {
-                            field.attributes['href'] += '?formid=' + this.options.formData._id['$oid'];
+                            var _markDownloadDateTime = field.options.markdownloaddatetime.toLowerCase();
+                            if (_markDownloadDateTime === '*' || this.options.internal && _markDownloadDateTime === 'internal' || !this.options.internal && _markDownloadDateTime === 'external') {
+                                field.attributes['href'] += '?formid=' + this.options.formData._id['$oid'];
+                            }
                         }
                     }
                     delete field.attributes['accept'];
