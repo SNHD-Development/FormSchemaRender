@@ -609,19 +609,22 @@ define([
                     // If this is 'list' type
                     if (typeof this.options.formData.fields[field.name] !== 'undefined' && (this.options.formData.fields[field.name].length > 0 || _.size(this.options.formData.fields[field.name]) > 0)) {
                         var _labels = [],
+                            _keys = {},
                             _cnt = 0,
                             _values = new Array(this.options.formData.fields[field.name].length || _.size(this.options.formData.fields[field.name]));
                         _.each(field.fields, function(element, index) {
-                            var _fieldIndex = -1;
                             _labels.push(element.description);
-                            if (element.description && !_.isNumber(index)) {
-                                index = _cnt++;
-                            }
                             _.each(that.options.formData.fields[field.name], function(modelData, index) {
-                                var _fullName,
-                                    currentIndex = index;
+                                var _fullName;
                                 if (!_.isNumber(index)) {
-                                    index = _cnt;
+                                    if (_keys[element.name]) {
+                                        _cnt++;
+                                        index = _cnt;
+                                    } else {
+                                        _cnt = 0;
+                                        _keys[element.name] = true;
+                                        index = _cnt;
+                                    }
                                 }
                                 if (typeof _values[index] === 'undefined') {
                                     _values[index] = [];
