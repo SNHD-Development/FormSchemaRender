@@ -580,6 +580,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Adding Spinner Options to be able to set min and default values.
 	- Adding Options in Button to be able to ask for confirmation before redirect the form.
 	- Adding Sub Form (List Type) Options to be able to perform more function.
+	- Remove Bug in Model when binding the Model with ModelBinder.
 
 * 0.0.9
 

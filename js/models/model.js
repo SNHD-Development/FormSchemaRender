@@ -216,6 +216,11 @@ define([
                     setValidationData(value.name, attrs, _validation, '');
                     model.bindings[value.name] = '[name="' + value.name + '"]';
             }
+
+            // If there is an option for VisibleOn, need to remove the binding
+            if (value.options && value.options.visibleon && model.bindings[value.name]) {
+                delete model.bindings[value.name];
+            }
         });
         model.validation = _validation;
 
