@@ -124,6 +124,7 @@ define([
                     _name = value.name + '[]';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, '');
+                    model.bindings[_name] = '[name="' + _name + '"]';
                     break;
 
                     // Will ignore these types
@@ -171,6 +172,7 @@ define([
                     _attrs[value.name] = '';
                     if (typeof attrs.validation[value.name] !== 'undefined') {
                         _validation[value.name] = _.clone(attrs.validation[value.name]);
+                        model.bindings[value.name] = '[name="' + value.name + '"]';
                         if (value.options.autocomplete) {
                             var _emailValidation = _.clone(attrs.validation[value.name]),
                                 _emailServerValidation = _.clone(attrs.validation[value.name]);
