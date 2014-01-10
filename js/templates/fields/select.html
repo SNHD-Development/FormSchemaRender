@@ -11,7 +11,7 @@ if (options.defaulttext) {
 	<% if (typeof values !== 'undefined') { %>
 	<% _value = $.isArray(values) %>
 	<% _.each(values, function(value, key) { %>
-	<option <%= (_value) ? '': ' value="'+key+'"' %>><%= value %></option>
+	<option value="<%= (_value) ? value: key %>"><%= value %></option>
 	<% }); %>
 	<% } %>
 </select>

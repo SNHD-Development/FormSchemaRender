@@ -127,6 +127,10 @@ require([
     'utils'
 ], function($, AppView, Vm, Utils) {
 
+    // Prevent IE 9 and Below for console object
+    if (!window.console) window.console = {};
+    if (!window.console.log) window.console.log = function() {};
+
     $(function() {
         Utils.setupOldBrowser();
 
