@@ -23,6 +23,7 @@ define([
     'text!templates/fields/useraccount.html',
     'text!templates/fields/fraction.html',
     'text!templates/fields/booleaninput.html',
+    'text!templates/fields/radio.html',
     'text!templates/fields/file.html',
     'text!templates/fields/multifiles.html',
     'text!templates/fields/state.html',
@@ -50,7 +51,7 @@ define([
     'jquery.datepicker',
     'jquery.birthdaypicker',
     'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
     return Backbone.View.extend({
         _modelBinder: undefined,
         // Clean Data Binding
@@ -70,6 +71,7 @@ define([
             this._hasBDate = false; // Tracking the Birthdate element
             this._hasEmailPicker = false; // Tracking the EmailPicker element
             this._hasBooleanInput = false;
+            this._hasRadioBtnGroup = false; // For Radio Button Group
             this._hasSelectAllCheckBox = false;
             this._hasClearAllCheckBox = false;
             this._internalFields = []; // Internal Fields Array
@@ -127,6 +129,7 @@ define([
                 "useraccount": _.template(useraccountTemplate),
                 "fraction": _.template(fractionTemplate),
                 "booleaninput": _.template(booleanInputTemplate),
+                "radio": _.template(radioTemplate),
                 "file": _.template(fileTemplate),
                 "multifiles": _.template(multifilesTemplate),
                 "state": _.template(stateTemplate),
@@ -208,6 +211,16 @@ define([
 
                 case 'booleaninput':
                     this._hasBooleanInput = true;
+                    break;
+
+                case 'radio':
+                    if (!this._hasRadioBtnGroup && field.options.render) {
+                        this._hasRadioBtnGroup = true;
+                    }
+                    if (this.options.formData.fields && this.options.formData.fields[field.name]) {
+                        // Copy by reference
+                        field._data = this.options.formData['fields'][field.name];
+                    }
                     break;
 
                 case 'multifiles':
@@ -306,7 +319,7 @@ define([
                         }
                         // Parse Form Data to render in the update mode.
                         if (this.options.mode === 'update') {
-                            if (this.options.formData && this.options.formData['fields'][field.name]) {
+                            if (this.options.formData.fields && this.options.formData['fields'][field.name]) {
                                 // Copy by reference
                                 field._data = this.options.formData['fields'][field.name];
                             }

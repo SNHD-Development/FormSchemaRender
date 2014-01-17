@@ -94,6 +94,28 @@ $text_area_min_height:  100px;
 		}
 	}
 
+
+	/**
+	 * Radio
+	 */
+
+	.radio-container {
+		overflow: hidden;
+		margin-bottom: 10px;
+
+		label {
+			&.radio {
+				margin-left: 30px;
+
+				input {
+					&[type="radio"] {
+						margin-left: -25px;
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * CheckBox
 	 */

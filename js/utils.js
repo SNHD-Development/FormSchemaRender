@@ -585,6 +585,12 @@ define([
                 this.setupBooleanInput($form, view);
             }
 
+            // Setup Radio Button Group
+            if (view._hasRadioBtnGroup) {
+                this.setupRadioBtnGroup($form);
+                this.setupRadioBtnGroupValue($form);
+            }
+
             // Setup SelectAll and ClearAll for CheckBox
             if (view._hasSelectAllCheckBox || view._hasClearAllCheckBox) {
                 this.setupCheckBoxSelectAndClear($form);
@@ -1188,6 +1194,41 @@ define([
                         $this.parent().find('button.btn-no').click();
                         break;
                 }
+            });
+        },
+
+
+        /**
+         * Function to set up Radio Button Group
+         * @param  object $form
+         * @return
+         */
+        setupRadioBtnGroup: function($form) {
+            $form.on('click', '.radio-container button', function(e) {
+                e.preventDefault();
+                var $this = $(e.target),
+                    $input = $this.closest('.radio-container').find('input[type="hidden"]');
+                $input.val($this.attr('value'));
+            });
+        },
+
+
+        /**
+         * Function to set up Radio Button Group default values
+         * @param  object $form
+         * @return
+         */
+        setupRadioBtnGroupValue: function($form) {
+            var $hidden = $('.radio-container input.has-default-val', $form);
+            $hidden.each(function() {
+                var $this = $(this),
+                    $target = $this.closest('.radio-container').find('button[value="' + $this.val() + '"]');
+                if ($target) {
+                    $target.addClass('active');
+                } else {
+                    $this.val('');
+                }
+                $this.removeClass('has-default-val');
             });
         },
 
