@@ -585,6 +585,11 @@ define([
                 this.setupBooleanInput($form, view);
             }
 
+            // Setup SelectAll and ClearAll for CheckBox
+            if (view._hasSelectAllCheckBox || view._hasClearAllCheckBox) {
+                this.setupCheckBoxSelectAndClear($form);
+            }
+
             // Setup ButtonCondition
             // By Default, will require all data to be valid
             // Default Success Call Back must return JSON with key = "value"
@@ -1129,6 +1134,25 @@ define([
                 //     console.log('errorThrown');
                 //     console.log(errorThrown);
                 // });
+            });
+        },
+
+        /**
+         * Setup Select and Clear Button for Check Box
+         * @param  object $form
+         * @return
+         */
+        setupCheckBoxSelectAndClear: function($form) {
+            $form.on('click', '.checkbox-container button', function(e) {
+                e.preventDefault();
+                var $this = $(e.target),
+                    $parent = $this.closest('.checkbox-container'),
+                    $checkboxs = $parent.find('input:checkbox');
+                if ($this.hasClass('btn-primary')) {
+                    $checkboxs.prop('checked', true);
+                } else {
+                    $checkboxs.prop('checked', false);
+                }
             });
         },
 

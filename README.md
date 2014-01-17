@@ -278,6 +278,9 @@ To change languages for Select field add "Values-language" like,
 
 will be the same set up as Select Field
 
+To render multiple columns, simply set 'Options.NumColumns' = 4 (Any number max at 4, default is 1)
+
+To add "Select All" and "Clear All" for checkbox simply add Options.AddSelectAll = true or Options.AddClearAll = true
 
 ### Number Field
 
@@ -455,6 +458,11 @@ Validation FormSchema
 		}
 	}
 
+### Fraction
+
+When we want to render Fraction we can use this field type, example can be used as Blood Pressure Fields
+To set placeholder for numerator uses Options.Numerator and denominator uses Options.Denominator.
+
 ### ButtonDecision
 
 When we want to control the flow of the form, we can have the button to look up the result with Ajax and has the options to render the data and let the user select what information is corrected.
@@ -581,6 +589,10 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Adding Options in Button to be able to ask for confirmation before redirect the form.
 	- Adding Sub Form (List Type) Options to be able to perform more function.
 	- Remove Bug in Model when binding the Model with ModelBinder.
+	- Date Picker not render with visible on.
+	- Adding Options.NumColumns to render how many columns for checkbox.
+	- Adding Select All and Clear All for checkbox simply add Options.AddSelectAll = true and Options.AddClearAll = true
+	- Adding New Type "Fraction" will render as textbox / textbox
 
 * 0.0.9
 

@@ -21,6 +21,7 @@ define([
     'text!templates/fields/hidden.html',
     'text!templates/fields/timestamp.html',
     'text!templates/fields/useraccount.html',
+    'text!templates/fields/fraction.html',
     'text!templates/fields/booleaninput.html',
     'text!templates/fields/file.html',
     'text!templates/fields/multifiles.html',
@@ -49,7 +50,7 @@ define([
     'jquery.datepicker',
     'jquery.birthdaypicker',
     'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
     return Backbone.View.extend({
         _modelBinder: undefined,
         // Clean Data Binding
@@ -69,6 +70,8 @@ define([
             this._hasBDate = false; // Tracking the Birthdate element
             this._hasEmailPicker = false; // Tracking the EmailPicker element
             this._hasBooleanInput = false;
+            this._hasSelectAllCheckBox = false;
+            this._hasClearAllCheckBox = false;
             this._internalFields = []; // Internal Fields Array
             this._visibleOn = []; // Field that has visibleOn Options
             this._multiFiles = []; // MultiFiles Field
@@ -122,6 +125,7 @@ define([
                 "hidden": _.template(hiddenTemplate),
                 "timestamp": _.template(timestampTemplate),
                 "useraccount": _.template(useraccountTemplate),
+                "fraction": _.template(fractionTemplate),
                 "booleaninput": _.template(booleanInputTemplate),
                 "file": _.template(fileTemplate),
                 "multifiles": _.template(multifilesTemplate),
@@ -263,6 +267,10 @@ define([
                     field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
                     break;
 
+                case 'fraction':
+
+                    break;
+
                 case 'textbox':
                     _type = 'text';
                 case 'selectsingle':
@@ -281,6 +289,24 @@ define([
 
                 case 'checkbox':
                 case 'check':
+                    if (field.options.numcolumns) {
+                        if (!_.isNumber(field.options.numcolumns)) {
+                            throw 'NumColumns must be a valid number for ' + field.name;
+                        }
+                        if (field.options.numcolumns > 4) {
+                            field.options.numcolumns = 4;
+                        } else if (field.options.numcolumns < 1) {
+                            field.options.numcolumns = 1;
+                        }
+                        if (!this._hasSelectAllCheckBox && field.options.addselectall) {
+                            this._hasSelectAllCheckBox = true;
+                        }
+                        if (!this._hasClearAllCheckBox && field.options.addclearall) {
+                            this._hasClearAllCheckBox = true;
+                        }
+                    } else {
+                        field.options.numcolumns = 1;
+                    }
                     _type = 'check';
                     if (!field.values) {
                         throw 'In order to use CheckBox, please set Values.';
@@ -315,6 +341,9 @@ define([
                 case 'dateinput':
                     _type = 'date';
                 case 'date':
+                    if (field.attributes && !field.attributes.placeholder) {
+                        field.attributes.placeholder = 'mm/dd/yyyy';
+                    }
                     // If pass in options.render, by default will render as 'DatePicker'
                     if (field.options.render && field.options.render.toLowerCase() === 'select') {
                         _type = 'birthdate'
@@ -735,6 +764,11 @@ define([
             var _type = field.type.toLowerCase(),
                 _cssClass = (typeof cssClass !== 'undefined' && cssClass) ? ' class="' + cssClass + '"' : '';
             switch (_type) {
+                case 'hidden':
+                    if (this.options.mode === 'create') {
+                        return '';
+                    }
+                    break;
                 case "buttondecision":
                     return '';
             }
@@ -985,7 +1019,9 @@ define([
                             // Remove the class that not belong to this visibleOn
                             var $parent = $('.options-visible-on-' + field.options.visibleon.name, that.el);
 
-                            $('[class*="visible-parent"]', that.el).not('.visible-parent-' + field.options.visibleon.name + ',.options-visible-on-' + field.options.visibleon.name + ',.visible-parent-' + $parent.attr('data-parent')).remove();
+                            // Caution: this can cause the previous markup to disappear.
+                            // Fix in Release 0.1.0
+                            $('[class*="visible-parent-'+field.options.visibleon.name+'"]', that.el).not('.visible-parent-' + field.options.visibleon.name + ',.options-visible-on-' + field.options.visibleon.name + ',.visible-parent-' + $parent.attr('data-parent')).remove();
 
                             if (_typeLowerCase === 'multifiles') {
                                 $('#' + field.name + '_multifiles_wrapper', this).trigger('visibleOnRenderComplete');
@@ -1063,6 +1099,11 @@ define([
                             }
                         }
                         Utils.setupUrlAjaxCall($('form.form-render'), $('#' + field.name));
+
+                        // If there are DatePicker
+                        if (that._hasDate) {
+                            Utils.setupDateInput(that.el);
+                        }
                     }
                 } else {
                     // Trigger Event to let other objects know that this fields will go out of markup

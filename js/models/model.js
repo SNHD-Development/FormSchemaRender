@@ -62,6 +62,18 @@ define([
                     setValidationData(_name, attrs, _validation, '');
                     break;
 
+                case 'fraction':
+                    _name = value.name + '_numerator';
+                    _attrs[_name] = '';
+                    setValidationData(_name, attrs, _validation, '');
+                    model.bindings[_name] = '[name="' + _name + '"]';
+
+                    _name = value.name + '_denominator';
+                    _attrs[_name] = '';
+                    setValidationData(_name, attrs, _validation, '');
+                    model.bindings[_name] = '[name="' + _name + '"]';
+                    break;
+
                 case 'address':
                     _name = value.name + '_address_street';
                     _attrs[_name] = '';
@@ -124,7 +136,8 @@ define([
                     _name = value.name + '[]';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, '');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    // CheckBox should not do ModelBinder
+                    // model.bindings[_name] = '[name="' + _name + '"]';
                     break;
 
                     // Will ignore these types

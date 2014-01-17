@@ -13,6 +13,9 @@
    **/
   margin: 25px 20px;
   /**
+   * Fraction
+   */
+  /**
    * Select
    **/
   /**
@@ -54,6 +57,16 @@
   /**
    * For MultiFiles Field Type
    **/ }
+  .form-render input::-webkit-calendar-picker-indicator {
+    display: none; }
+  .form-render input[type="date"]::-webkit-input-placeholder {
+    visibility: hidden !important; }
+  .form-render input::-webkit-outer-spin-button,
+  .form-render input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */ }
   .form-render .showInputFile {
     display: inline !important;
     margin-right: 20px !important; }
@@ -76,15 +89,24 @@
     clear: both; }
     .form-render fieldset.birthday-picker {
       clear: none; }
+  .form-render .form-fraction span {
+    margin: auto 5px; }
+  .form-render .form-fraction input {
+    width: 40%; }
   .form-render select {
     min-width: 220px;
     width: auto; }
     .form-render select[class^="birth-"] {
       min-width: 0; }
-  .form-render .checkbox-container label.checkbox {
-    margin-left: 30px; }
-    .form-render .checkbox-container label.checkbox input[type="checkbox"] {
-      margin-left: -25px; }
+  .form-render .checkbox-container {
+    margin-bottom: 10px;
+    overflow: hidden; }
+    .form-render .checkbox-container .text-right button {
+      margin-right: 20px; }
+    .form-render .checkbox-container label.checkbox {
+      margin-left: 30px; }
+      .form-render .checkbox-container label.checkbox input[type="checkbox"] {
+        margin-left: -25px; }
   .form-render .form-render_booleaninput {
     margin-left: 30px;
     margin-bottom: 20px; }

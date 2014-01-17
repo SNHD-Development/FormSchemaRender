@@ -8,6 +8,22 @@ $text_area_min_height:  100px;
  **/
 .form-render {
 
+	// Disable Browser Default
+	input::-webkit-calendar-picker-indicator {
+    	display: none;
+	}
+
+	input[type="date"]::-webkit-input-placeholder {
+    	visibility: hidden !important;
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+	    /* display: none; <- Crashes Chrome on hover */
+	    -webkit-appearance: none;
+	    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+	}
+
 	/**
 	 * Show File Input
 	 **/
@@ -56,6 +72,18 @@ $text_area_min_height:  100px;
 	}
 
 	/**
+	 * Fraction
+	 */
+	.form-fraction {
+		span {
+			margin: auto 5px;
+		}
+		input {
+			width: 40%;
+		}
+	}
+
+	/**
 	 * Select
 	 **/
 	select {
@@ -70,6 +98,16 @@ $text_area_min_height:  100px;
 	 * CheckBox
 	 */
 	.checkbox-container {
+
+		margin-bottom: 10px;
+		overflow: hidden;
+
+		.text-right {
+			button {
+				margin-right: 20px;
+			}
+		}
+
 		label {
 			&.checkbox {
 				margin-left: 30px;
