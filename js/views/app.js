@@ -216,8 +216,8 @@ define([
             'blur :input:not(:button)': 'preValidate',
             'change :file': 'preValidate',
             'keydown :input[type="email"]': 'preventSpace',
-            'keydown :input[type="number"], :input.number': 'allowNumber',
-            'keydown :input[type="number"], :input.natural': 'allowNaturalNumber',
+            'keydown :input.number': 'allowNumber',
+            'keydown :input.natural': 'allowNaturalNumber',
             'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
             'keydown :input.telephone': 'formatTelephoneNumber',
             'blur :input.telephone': 'formatTelephoneNumber'

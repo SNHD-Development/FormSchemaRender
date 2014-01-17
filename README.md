@@ -302,10 +302,13 @@ If you want to display spinner, simply pass `Options.Spinner: true`. Please add 
 Sometime you want to be able to control what number types that user can put in. Passing `Options.NumberType: "type"`.
 "type" that we can use will be (By default it will be "natural")
 
-1. "natural": 1, 2, 3, 4, 5, ...
+1. "natural": 1, 2, 3, 4, 5, ... (default behavior)
 2. "whole": 0, 1, 2, 3, 4, 5, ...
 3. "integers": ..., -3, -2, -1, 0, 1, 2, 3, ...
 4. "rational": ..., -1.00, 0, 1.00, ...
+5. "number": Any floating point number
+
+Note: we can use this class to limited input from client
 
 ### VisibleOn Options
 
@@ -562,6 +565,24 @@ To render existing data, will use description to render as the heading in the re
 
 To Render Custom Table Header simply pass in Options.TableTitle in Fields.
 This will get generate the table header with that text and simply hover over to see the full detail of description.
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do"
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?"
+        }]
+    }
 
 
 ## Internal Only Options

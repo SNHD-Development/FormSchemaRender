@@ -441,9 +441,10 @@ define([
                     break;
 
                 case 'number':
-                    field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'natural span12');
+                    var _num_class = (field.options.decimals) ? 'number' : 'natural';
+                    field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], _num_class + ' span12');
                     // Check to see how to render this
-                    if (field.options.decimals && this.options.formData.fields[field.name]) {
+                    if (field.options.decimals && this.options.formData.fields && this.options.formData.fields[field.name]) {
                         var _float_pts = parseFloat(this.options.formData.fields[field.name] / Math.pow(10, parseInt(field.options.decimals)));
                         if (!isNaN(_float_pts)) {
                             this.options.formData.fields[field.name] = _float_pts.toFixed(2);
