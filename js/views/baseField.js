@@ -304,6 +304,13 @@ define([
                         if (!this._hasClearAllCheckBox && field.options.addclearall) {
                             this._hasClearAllCheckBox = true;
                         }
+                        // Parse Form Data to render in the update mode.
+                        if (this.options.mode === 'update') {
+                            if (this.options.formData && this.options.formData['fields'][field.name]) {
+                                // Copy by reference
+                                field._data = this.options.formData['fields'][field.name];
+                            }
+                        }
                     } else {
                         field.options.numcolumns = 1;
                     }
@@ -1021,7 +1028,7 @@ define([
 
                             // Caution: this can cause the previous markup to disappear.
                             // Fix in Release 0.1.0
-                            $('[class*="visible-parent-'+field.options.visibleon.name+'"]', that.el).not('.visible-parent-' + field.options.visibleon.name + ',.options-visible-on-' + field.options.visibleon.name + ',.visible-parent-' + $parent.attr('data-parent')).remove();
+                            $('[class*="visible-parent-' + field.options.visibleon.name + '"]', that.el).not('.visible-parent-' + field.options.visibleon.name + ',.options-visible-on-' + field.options.visibleon.name + ',.visible-parent-' + $parent.attr('data-parent')).remove();
 
                             if (_typeLowerCase === 'multifiles') {
                                 $('#' + field.name + '_multifiles_wrapper', this).trigger('visibleOnRenderComplete');

@@ -92,7 +92,7 @@ define([
             }, this.options.formSchema)));
 
             // Bind Model
-            that._modelBinder.bind(that.model, that.el);
+            that._modelBinder.bind(that.model, that.el, that.model.bindings);
             Backbone.Validation.bind(that, {
                 forceUpdate: true
             });
