@@ -14,7 +14,8 @@ define([
      */
     var parseFields = function(model, attrs) {
         var _attrs = {}, _validation = {}, _name, _internal = (attrs.is_internal) ? true : false,
-            _render_mode = attrs.render_mode || false;
+            _render_mode = attrs.render_mode || false,
+            _typeLowerCase;
 
         _.each(attrs.fields, function(value) {
             value.options = value.options || {};
@@ -36,7 +37,9 @@ define([
                     attrs.validation[value.name][key.toLowerCase()] = validationValue;
                 });
             }
-            switch (value.type.toLowerCase()) {
+
+            _typeLowerCase = value.type.toLowerCase();
+            switch (_typeLowerCase) {
 
                 case 'booleaninput':
                     _attrs[value.name] = '';
@@ -238,7 +241,9 @@ define([
                 default:
                     _attrs[value.name] = '';
                     setValidationData(value.name, attrs, _validation, '');
-                    model.bindings[value.name] = '[name="' + value.name + '"]';
+                    if (_typeLowerCase !== 'buttondecision') {
+                        model.bindings[value.name] = '[name="' + value.name + '"]';
+                    }
             }
 
             // If there is an option for VisibleOn, need to remove the binding
