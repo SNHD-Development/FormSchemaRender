@@ -144,6 +144,7 @@ define([
                     break;
 
                     // Will ignore these types
+                case 'buttonclipboard':
                 case 'fieldsetstart':
                 case 'fieldsetend':
                 case 'fieldset':

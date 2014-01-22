@@ -693,7 +693,7 @@ Sometime there are some fileds that internal should not be able to update these 
 
 * 0.1.1
 
-	-
+	- Bug for buttonclipboard in model binder.
 
 
 * 0.1.0
