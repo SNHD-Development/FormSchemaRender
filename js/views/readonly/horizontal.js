@@ -54,14 +54,14 @@ define([
                     return '';
                 }
 
-                if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, _typeLowerCase) === -1) {
+                if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabelRead, _typeLowerCase) === -1) {
                     _html += '<div class="control-group">';
                     this._divcontrolgroup++;
                     _html += that.renderLabel(value, false, 'control-label');
                     _html += '<div class="controls">';
                 }
                 _html += _parentRender.call(that, value, true);
-                if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, _typeLowerCase) === -1) {
+                if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabelRead, _typeLowerCase) === -1) {
                     _html += '</div></div>';
                     this._divcontrolgroup--;
                 }

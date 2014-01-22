@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.0.9`
+Version `version 0.1.0`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -690,6 +690,11 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ## Version
+
+* 0.1.1
+
+	-
+
 
 * 0.1.0
 

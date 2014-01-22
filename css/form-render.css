@@ -111,8 +111,10 @@
   .form-render .checkbox-container {
     margin-bottom: 10px;
     overflow: hidden; }
-    .form-render .checkbox-container .text-right button {
-      margin-right: 20px; }
+    .form-render .checkbox-container .text-right {
+      margin-top: 10px; }
+      .form-render .checkbox-container .text-right button {
+        margin-right: 20px; }
     .form-render .checkbox-container label.checkbox {
       margin-left: 30px; }
       .form-render .checkbox-container label.checkbox input[type="checkbox"] {

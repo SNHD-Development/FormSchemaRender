@@ -245,6 +245,14 @@ define([
 
             if (this.formView.model.isValid(true) && this.formView.model.isSubformValid()) {
 
+                // If there is an hidden type that has data-value, then will need to send this as well
+                $form.find(':input:hidden[data-value]').each(function() {
+                    var $this = $(this);
+                    if ($this.val() === '') {
+                        $this.val($this.attr('data-value'));
+                    }
+                });
+
                 $form.addClass('validation_pass');
                 if (this.options.token !== '') {
                     $form.prepend('<input type="hidden" name="token" value="' + this.options.token + '"/>');

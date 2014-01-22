@@ -115,6 +115,10 @@ define([
             };
             // Not render label
             this.notRenderLabel = [
+                'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox', 'timestamp'
+            ];
+            // Not render label for read
+            this.notRenderLabelRead = [
                 'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox'
             ];
             // Set up the input template
