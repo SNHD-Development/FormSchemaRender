@@ -695,6 +695,7 @@ Sometime there are some fileds that internal should not be able to update these 
 
 	- Bug for buttonclipboard in model binder.
 	- Bug for telephone in model binder.
+	- Bug in Address Field Template (missing div)
 
 
 * 0.1.0
