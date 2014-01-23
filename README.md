@@ -326,6 +326,9 @@ To change languages for Select field add "Values-language" like,
 		}
 	}
 
+To order the select value, you can simply set Options.OrderBy = "alphabetical"
+
+
 ### CheckBox Field
 
 will be the same set up as Select Field
@@ -333,6 +336,8 @@ will be the same set up as Select Field
 To render multiple columns, simply set 'Options.NumColumns' = 4 (Any number max at 4, default is 1)
 
 To add "Select All" and "Clear All" for checkbox simply add Options.AddSelectAll = true or Options.AddClearAll = true
+
+To order the checkbox values, you can simply set Options.OrderBy = "alphabetical"
 
 Example,
 
@@ -349,7 +354,8 @@ Example,
         "Options": {
             "NumColumns": 3,
             "AddSelectAll": true,
-            "AddClearAll": true
+            "AddClearAll": true,
+            "OrderBy": ""
         }
     }
 
@@ -696,6 +702,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Bug for buttonclipboard in model binder.
 	- Bug for telephone in model binder.
 	- Bug in Address Field Template (missing div)
+	- Adding ability to render the Select and Radio by Name (Alphabetical)
 
 
 * 0.1.0

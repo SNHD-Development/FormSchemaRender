@@ -225,6 +225,10 @@ define([
                         // Copy by reference
                         field._data = this.options.formData['fields'][field.name];
                     }
+                    // If there is an Options.OrderBy will need to sort Values
+                    if (field.options.orderby) {
+                        this.sortOrderBy(field);
+                    }
                     break;
 
                 case 'multifiles':
@@ -327,6 +331,10 @@ define([
                                 // Copy by reference
                                 field._data = this.options.formData['fields'][field.name];
                             }
+                        }
+                        // If there is an Options.OrderBy will need to sort Values
+                        if (field.options.orderby) {
+                            this.sortOrderBy(field);
                         }
                     } else {
                         field.options.numcolumns = 1;
@@ -1210,6 +1218,27 @@ define([
             });
 
             return _html;
+        },
+
+        /**
+         * Function to take care Select and Checkbox order by
+         * @param  object field
+         * @return
+         */
+        sortOrderBy: function(field) {
+            var _orderBy = field.options.orderby,
+                _func;
+            if (!_orderBy && !field.values) {
+                return;
+            }
+            switch (_orderBy) {
+
+                // Always alphabetical
+                default: _func = function(a, b) {
+                    return a.localeCompare(b);
+                };
+            }
+            field.values.sort(_func);
         }
     });
 });
