@@ -221,6 +221,7 @@ define([
                             _validation[value.name].pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
                         }
                     }
+                    model.bindings[value.name] = '[name="' + value.name + '"]';
                     break;
 
                 case 'userid':
