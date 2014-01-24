@@ -596,6 +596,11 @@ define([
                 this.setupCheckBoxSelectAndClear($form);
             }
 
+            // Setup Other Textbox for Checkbox
+            if (view._hasOtherTextBox) {
+                this.setupCheckBoxOtherTextBox($form);
+            }
+
             // Setup ButtonCondition
             // By Default, will require all data to be valid
             // Default Success Call Back must return JSON with key = "value"
@@ -1158,6 +1163,23 @@ define([
                     $checkboxs.prop('checked', true);
                 } else {
                     $checkboxs.prop('checked', false);
+                }
+            });
+        },
+
+        /**
+         * Setup Checkbox Other Options
+         * @param  object $form
+         * @return
+         */
+        setupCheckBoxOtherTextBox: function($form) {
+            $form.on('click', '.checkbox-container input[type="checkbox"].checkbox-other', function(e) {
+                var $this = $(e.target),
+                    $textarea = $this.parent().next('.other-textbox');
+                if ($textarea.is(':hidden')) {
+                    $textarea.removeClass('not_sending').show('slow');
+                } else {
+                    $textarea.addClass('not_sending').hide('slow');
                 }
             });
         },

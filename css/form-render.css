@@ -119,6 +119,9 @@
       margin-left: 30px; }
       .form-render .checkbox-container label.checkbox input[type="checkbox"] {
         margin-left: -25px; }
+    .form-render .checkbox-container textarea.other-textbox {
+      display: none;
+      margin-top: 10px; }
   .form-render .form-render_booleaninput {
     margin-left: 30px;
     margin-bottom: 20px; }

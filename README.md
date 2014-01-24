@@ -703,6 +703,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Bug for telephone in model binder.
 	- Bug in Address Field Template (missing div)
 	- Adding ability to render the Select and Radio by Name (Alphabetical)
+	- In edit mode, checkbox value is not showing need to fixed.
 
 
 * 0.1.0

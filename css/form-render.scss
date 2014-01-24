@@ -142,6 +142,15 @@ $text_area_min_height:  100px;
 				}
 			}
 		}
+
+		textarea {
+
+			&.other-textbox {
+				display: none;
+				margin-top: 10px;
+			}
+
+		}
 	}
 
 	/**

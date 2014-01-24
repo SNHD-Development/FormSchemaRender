@@ -74,6 +74,7 @@ define([
             this._hasRadioBtnGroup = false; // For Radio Button Group
             this._hasSelectAllCheckBox = false;
             this._hasClearAllCheckBox = false;
+            this._hasOtherTextBox = false;
             this._internalFields = []; // Internal Fields Array
             this._visibleOn = []; // Field that has visibleOn Options
             this._multiFiles = []; // MultiFiles Field
@@ -319,25 +320,31 @@ define([
                         } else if (field.options.numcolumns < 1) {
                             field.options.numcolumns = 1;
                         }
-                        if (!this._hasSelectAllCheckBox && field.options.addselectall) {
-                            this._hasSelectAllCheckBox = true;
-                        }
-                        if (!this._hasClearAllCheckBox && field.options.addclearall) {
-                            this._hasClearAllCheckBox = true;
-                        }
-                        // Parse Form Data to render in the update mode.
-                        if (this.options.mode === 'update') {
-                            if (this.options.formData.fields && this.options.formData['fields'][field.name]) {
-                                // Copy by reference
-                                field._data = this.options.formData['fields'][field.name];
-                            }
-                        }
-                        // If there is an Options.OrderBy will need to sort Values
-                        if (field.options.orderby) {
-                            this.sortOrderBy(field);
-                        }
                     } else {
                         field.options.numcolumns = 1;
+                    }
+                    // Add Select All
+                    if (!this._hasSelectAllCheckBox && field.options.addselectall) {
+                        this._hasSelectAllCheckBox = true;
+                    }
+                    // Add Clear All
+                    if (!this._hasClearAllCheckBox && field.options.addclearall) {
+                        this._hasClearAllCheckBox = true;
+                    }
+                    // If there is an Options.OrderBy will need to sort Values
+                    if (field.options.orderby) {
+                        this.sortOrderBy(field);
+                    }
+                    // If there is an OtherTextBox then we will need to added this in as well.
+                    if (field.options.othertextbox) {
+                        this._hasOtherTextBox = true;
+                    }
+                    // Parse Form Data to render in the update mode.
+                    if (this.options.mode === 'update') {
+                        if (this.options.formData.fields && this.options.formData['fields'][field.name]) {
+                            // Copy by reference
+                            field._data = this.options.formData['fields'][field.name];
+                        }
                     }
                     _type = 'check';
                     if (!field.values) {

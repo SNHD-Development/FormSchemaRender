@@ -40,6 +40,16 @@ var _id = (typeof attributes.id !== 'undefined') ? attributes.id: name,
 	</div>
 	<% } %>
 
+	<% if(options.othertextbox) { %>
+	<div>
+		<label class="checkbox">
+			<input type="checkbox" id="<%= _id %>_other" name="<%= name %>[]" class="not_sending checkbox-other">
+			Other (please specify)
+		</label>
+		<textarea name="<%= name %>[]_other" class="span12 other-textbox not_sending" placeholder="Other (please specify)"></textarea>
+	</div>
+	<% } %>
+
 	<% if(options.addselectall || options.addclearall) { %>
 	<div class="text-right">
 		<% if(options.addselectall) { %>
