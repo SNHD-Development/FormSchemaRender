@@ -1,1 +1,1 @@
-define(function() { var str ='<label><%= label %></label><div class="read-checkbox"><% _.each(value, function(element){ %><span class="uneditable-input"><%= element %></span><% }) %></div>';return str;});
+define(function() { var str ='<label><%= label %></label><div class="read-checkbox"><% _.each(value, function(element){if (element === \'_other\') {element = otherValue;}%><span class="uneditable-input"><%= element %></span><% }) %></div>';return str;});

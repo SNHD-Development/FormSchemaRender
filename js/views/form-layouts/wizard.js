@@ -224,12 +224,15 @@ define([
                     title: 'Submitting form; please wait.',
                     content: '<i class="icon-spinner icon-spin icon-large"></i> Sending data ...'
                 },
-                $submitDisplay = $(this).nextUntil('', '.wizard-actions').find('.btn_next');
+                $submitDisplay = $(this).nextUntil('', '.wizard-actions').find('.btn_next'),
+                $form = $('form.form-render');
 
             if ($submitBtn.length > 0) {
                 $submitBtn.trigger('click');
+            } else {
+                $form.submit();
             }
-            if (!$('form.form-render').hasClass('validation_error')) {
+            if (!$form.hasClass('validation_error')) {
                 $submitDisplay.attr('disabled', true).popover(_opt).popover('show').next('.popover').addClass('success');
             }
         },
@@ -242,10 +245,11 @@ define([
                     html: true,
                     placement: 'top',
                     trigger: 'manual'
-                };
+                },
+                _lang = 'en';
             if ($form.hasClass('validation_pass')) {
                 var _t_1, _t_2;
-                switch ($form.options.lang) {
+                switch (_lang) {
                     case 'sp':
                         _t_1 = 'Enviando la forma; por favor espere';
                         _t_2 = 'Cargando Informaci&oacute;n';

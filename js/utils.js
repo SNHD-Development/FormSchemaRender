@@ -1176,7 +1176,7 @@ define([
             $form.on('click', '.checkbox-container input[type="checkbox"].checkbox-other', function(e) {
                 var $this = $(e.target),
                     $textarea = $this.parent().next('.other-textbox');
-                if ($textarea.is(':hidden')) {
+                if ($this.is(':checked')) {
                     $textarea.removeClass('not_sending').show('slow');
                 } else {
                     $textarea.addClass('not_sending').hide('slow');

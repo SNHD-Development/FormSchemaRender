@@ -126,6 +126,7 @@ $text_area_min_height:  100px;
 
 		.text-right {
 			margin-top: 10px;
+			margin-bottom: 20px;
 			button {
 				margin-right: 20px;
 			}
@@ -340,7 +341,7 @@ $text_area_min_height:  100px;
 		}
 
 		.read-checkbox {
-			margin: 10px auto;
+			margin: 10px auto 20px;
 			width: 95%;
 			span {
 				&.uneditable-input {

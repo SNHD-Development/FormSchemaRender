@@ -112,7 +112,8 @@
     margin-bottom: 10px;
     overflow: hidden; }
     .form-render .checkbox-container .text-right {
-      margin-top: 10px; }
+      margin-top: 10px;
+      margin-bottom: 20px; }
       .form-render .checkbox-container .text-right button {
         margin-right: 20px; }
     .form-render .checkbox-container label.checkbox {
@@ -204,7 +205,7 @@
   .form-render.read-mode fieldset.table-view {
     margin-bottom: 30px; }
   .form-render.read-mode .read-checkbox {
-    margin: 10px auto;
+    margin: 10px auto 20px;
     width: 95%; }
     .form-render.read-mode .read-checkbox span.uneditable-input {
       width: auto;

@@ -144,6 +144,39 @@ By default will render with Description in en mode.
 	}
 
 
+### Fields
+
+These are the list of fields that currently support.
+
++ Html: any custom html
++ Hidden:
++ TextBox:
++ Password:
++ Telephone:
++ Textarea:
++ Number:
++ Email:
++ Date:
++ BirthDate:
++ Select:
++ CheckBox:
++ Radio:
++ Timestamp:
++ UserAccount:
++ Fraction:
++ File:
++ MultiFiles:
++ FullName:
++ Address:
++ State:
++ Zipcode:
++ Country:
++ BooleanInput:
++ Button:
++ ButtonGroup:
++ ButtonClipboard:
++ List:
+
 ### Submit Form
 
 By default, the submit event will use Ajax call to submit data. When passing `Options.AjaxSubmit = false` in Submit field type, it will use normal post form without Ajax.
@@ -704,6 +737,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Bug in Address Field Template (missing div)
 	- Adding ability to render the Select and Radio by Name (Alphabetical)
 	- In edit mode, checkbox value is not showing need to fixed.
+	- Adding the CheckBox option to be able to handle other.
 
 
 * 0.1.0

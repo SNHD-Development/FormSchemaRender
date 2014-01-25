@@ -346,6 +346,10 @@ define([
                             field._data = this.options.formData['fields'][field.name];
                         }
                     }
+                    // In general case if there is formData (setup other to render)
+                    if (this.options.formData.fields && this.options.formData['fields'][field.name + '_other']) {
+                        field._otherValue = this.options.formData['fields'][field.name + '_other'];
+                    }
                     _type = 'check';
                     if (!field.values) {
                         throw 'In order to use CheckBox, please set Values.';
@@ -745,7 +749,8 @@ define([
                     _html += that.inputTemplate['uneditablecheck']({
                         value: _field_data,
                         label: field.description,
-                        id: field.name
+                        id: field.name,
+                        otherValue: (field._otherValue) ? field._otherValue: ''
                     });
                 } else {
                     var _textarea = '';
