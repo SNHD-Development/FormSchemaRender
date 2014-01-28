@@ -1161,8 +1161,10 @@ define([
                     $checkboxs = $parent.find('input:checkbox');
                 if ($this.hasClass('btn-primary')) {
                     $checkboxs.prop('checked', true);
+                    $checkboxs.filter('.checkbox-other').click().prop('checked', true);
                 } else {
                     $checkboxs.prop('checked', false);
+                    $checkboxs.filter('.checkbox-other').click().prop('checked', false);
                 }
             });
         },
