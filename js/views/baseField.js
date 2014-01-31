@@ -1087,7 +1087,8 @@ define([
                     $container = (parentContainer) ? $currentTarget.parents(parentContainer) : $currentTarget,
                     $containerOptions, $nextContainer, _addressArray = [],
                     _visibleOnName = field.options.visibleon.name,
-                    _visibleVal = $currentTarget.val();
+                    _visibleVal = $currentTarget.val(),
+                    _checkBindingArray = ['', '[]'];
                 if (_visibleOnName.match(/\[\]$/ig)) {
                     if (!$container.length) {
                         $container = $currentTarget.closest('.checkbox-container');
@@ -1125,10 +1126,22 @@ define([
                             }
 
                             // Need to rebind the ModelBinder
-                            if (!that.model.bindings[field.name]) {
-                                that.model.bindModelBinder(field.name, field.type);
-                                that._modelBinder.bind(that.model, that.el, that.model.bindings);
-                                console.log(that.model.bindings);
+                            if (!that.model.bindings[field.name] && _.indexOf(that.model.notBinding, field.name) < 0) {
+                                var _bindingName = field.name;
+
+                                _.each(_checkBindingArray, function(_suffix) {
+                                    if (_bindingName !== field.name) {
+                                        return;
+                                    }
+                                    if ($(':input[name="' + _bindingName + _suffix + '"]').length) {
+                                        _bindingName = field.name + _suffix;
+                                    }
+                                });
+
+                                if ($(':input[name="' + _bindingName + '"]').length) {
+                                    that.model.bindModelBinder(_bindingName, field.type);
+                                    that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                                }
                             }
                         });
 
@@ -1253,11 +1266,16 @@ define([
                             delete that.model.validation[field.name + '[]'];
                         }
                         // Need to unbind the ModelBinder
-                        if (that.model.bindings[field.name]) {
-                            that.model.unbindModelBinder(field.name, field.type);
-                            that._modelBinder.bind(that.model, that.el, that.model.bindings);
-                            $currentTarget.val(_visibleVal);
-                        }
+
+                        var _bindingName = field.name;
+
+                        _.each(_checkBindingArray, function(_suffix) {
+                            if (that.model.bindings[_bindingName + _suffix]) {
+                                that.model.unbindModelBinder(_bindingName + _suffix, field.type);
+                                that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                                $currentTarget.val(_visibleVal);
+                            }
+                        });
                     }
                 }
             });

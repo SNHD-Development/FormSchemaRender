@@ -185,6 +185,7 @@ define([
                 case 'hr':
                 case 'html':
                 case 'step': // Special Field Type for Wizard View
+                    model.notBinding.push(value.name);
                     break;
 
                 case 'date':
@@ -292,7 +293,6 @@ define([
             }
         });
         model.validation = _validation;
-
         return _attrs;
     },
         /**
@@ -313,6 +313,8 @@ define([
             this.subFormLists = [];
 
             this.bindings = {}; // To be used in ModelBinder
+
+            this.notBinding = []; // will be used to check what field will not need to render.
 
             var _attrs = parseFields(this, this.attributes, this.is_internal);
             this.clear();
