@@ -36,6 +36,6 @@ switch (lang) {
 		<input id="<%= _id %>_address_state_input" name="<%= name %>_address_state" type="text" class="span6 has-default-val us-state"<%= _attr %> placeholder="<%= p_province %>" style="display:none" disabled=""<%= (typeof default_value_state !== 'undefined')? ' data-default-value="'+default_value_state+'"': ''%>/>
 	</div>
 	<div class="controls-row">
-		<input id="<%= _id %>_address_zip" maxlength="5" name="<%= name %>_address_zip" type="text" class="span6 allowzipcode postal-code" placeholder="<%= p_zip %>"<%= _attr %>/>
+		<input id="<%= _id %>_address_zip" maxlength="<%= (typeof _zipmax !== 'undefined') ? _zipmax: 5 %>" name="<%= name %>_address_zip" type="text" class="span6 postal-code <%= (typeof _zipmax !== 'undefined') ? 'integer allowzipcodeplusfour': 'allowzipcode' %>" placeholder="<%= p_zip %>"<%= _attr %>/>
 	</div>
 </div>

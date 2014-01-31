@@ -20,7 +20,7 @@ var _id = (typeof attributes.id !== 'undefined') ? attributes.id: name,
 		<% _.each(values, function(value, key) {
 			index++;
 			if (typeof _data !== 'undefined') {
-				_checked = (_.indexOf(_data, value) < 0) ? '': 'checked';
+				_checked = (_.indexOf(_data, (_.isNumber(key)) ? value: key) < 0) ? '': 'checked';
 			}
 			if (options.numcolumns > 1) {
 				_modulo = index % numRow;
@@ -30,7 +30,7 @@ var _id = (typeof attributes.id !== 'undefined') ? attributes.id: name,
 			<div class="span<%= spanNum %>">
 		<% } %>
 				<label class="checkbox">
-					<input type="checkbox" name="<%= name %>[]" value="<%= value %>" id="<%= _id %>_<%= index %>" <%= _checked %>>
+					<input type="checkbox" name="<%= name %>[]" value="<%= (_.isNumber(key)) ? value: key %>" id="<%= _id %>_<%= index %>" <%= _checked %>>
 					<%= value %>
 				</label>
 		<% if (_modulo === lastRow || (index === lastValue && _modulo) ) { %>

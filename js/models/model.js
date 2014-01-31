@@ -10,14 +10,17 @@ define([
      * Function to parse formSchema to be used in this model
      * @param  objct model
      * @param  object attrs
+     * @param  boolean mode either this will be internal or not
      * @return
      */
-    var parseFields = function(model, attrs) {
+    var parseFields = function(model, attrs, mode) {
         var _attrs = {}, _validation = {}, _name, _internal = (attrs.is_internal) ? true : false,
             _render_mode = attrs.render_mode || false,
-            _typeLowerCase;
+            _typeLowerCase,
+            _addToModelBinder;
 
         _.each(attrs.fields, function(value) {
+            _addToModelBinder = true;
             value.options = value.options || {};
 
             if (!_internal && value.options.internal) {
@@ -38,13 +41,20 @@ define([
                 });
             }
 
+            // If there is an internal flag will need to check for it as well
+            if (typeof value.options.internal !== 'undefined' && value.options.internal !== mode) {
+                _addToModelBinder = false;
+            }
+
             _typeLowerCase = value.type.toLowerCase();
             switch (_typeLowerCase) {
 
                 case 'booleaninput':
                     _attrs[value.name] = '';
                     setValidationData(value.name, attrs, _validation, '');
-                    model.bindings[value.name] = '[name="' + value.name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[value.name] = '[name="' + value.name + '"]';
+                    }
                     model.on('change:' + value.name, function(modelObj, changedVal) {
                         var _data = {};
                         _data[value.name] = (changedVal === 'true') ? true : ((changedVal === 'false') ? false : "");
@@ -69,39 +79,53 @@ define([
                     _name = value.name + '_numerator';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, '');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
                     _name = value.name + '_denominator';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, '');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
                     break;
 
                 case 'address':
                     _name = value.name + '_address_street';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (Street)');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
                     _name = value.name + '_address_city';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (City)');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
                     _name = value.name + '_address_state';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (State)');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
                     _name = value.name + '_address_zip';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (ZIP)');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
                     _name = value.name + '_address_country';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (Country)');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
                     break;
 
@@ -110,19 +134,25 @@ define([
                         _name = value.name + '_fullname_middle_name';
                         _attrs[_name] = '';
                         setValidationData(_name, attrs, _validation, ' (Middle Name)');
-                        model.bindings[_name] = '[name="' + _name + '"]';
+                        if (_addToModelBinder) {
+                            model.bindings[_name] = '[name="' + _name + '"]';
+                        }
                     }
 
                     _name = value.name + '_fullname_first_name';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (First Name)');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
 
                     _name = value.name + '_fullname_last_name';
                     _attrs[_name] = '';
                     setValidationData(_name, attrs, _validation, ' (Last Name)');
-                    model.bindings[_name] = '[name="' + _name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[_name] = '[name="' + _name + '"]';
+                    }
 
                     break;
 
@@ -189,7 +219,9 @@ define([
                     _attrs[value.name] = '';
                     if (typeof attrs.validation[value.name] !== 'undefined') {
                         _validation[value.name] = _.clone(attrs.validation[value.name]);
-                        model.bindings[value.name] = '[name="' + value.name + '"]';
+                        if (_addToModelBinder) {
+                            model.bindings[value.name] = '[name="' + value.name + '"]';
+                        }
                         if (value.options.autocomplete) {
                             var _emailValidation = _.clone(attrs.validation[value.name]),
                                 _emailServerValidation = _.clone(attrs.validation[value.name]);
@@ -202,12 +234,16 @@ define([
                             _name = value.name + '_username';
                             _validation[_name] = _emailValidation;
                             // Binding the Server
-                            model.bindings[_name] = '[name="' + _name + '"]';
+                            if (_addToModelBinder) {
+                                model.bindings[_name] = '[name="' + _name + '"]';
+                            }
 
                             _name = value.name + '_server';
                             _validation[_name] = _emailServerValidation;
                             // Binding the Server
-                            model.bindings[_name] = '[name="' + _name + '"]';
+                            if (_addToModelBinder) {
+                                model.bindings[_name] = '[name="' + _name + '"]';
+                            }
 
                         }
                     }
@@ -221,7 +257,9 @@ define([
                             _validation[value.name].pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
                         }
                     }
-                    model.bindings[value.name] = '[name="' + value.name + '"]';
+                    if (_addToModelBinder) {
+                        model.bindings[value.name] = '[name="' + value.name + '"]';
+                    }
                     break;
 
                 case 'userid':
@@ -243,7 +281,7 @@ define([
                 default:
                     _attrs[value.name] = '';
                     setValidationData(value.name, attrs, _validation, '');
-                    if (_typeLowerCase !== 'buttondecision') {
+                    if (_typeLowerCase !== 'buttondecision' && _addToModelBinder) {
                         model.bindings[value.name] = '[name="' + value.name + '"]';
                     }
             }
@@ -276,7 +314,7 @@ define([
 
             this.bindings = {}; // To be used in ModelBinder
 
-            var _attrs = parseFields(this, this.attributes);
+            var _attrs = parseFields(this, this.attributes, this.is_internal);
             this.clear();
             this.set(_attrs);
 
@@ -375,6 +413,31 @@ define([
                 });
             });
             return _result;
+        },
+
+
+        /**
+         * Add Input into model binder form
+         * @param  string name
+         * @param  string type
+         * @return
+         */
+        bindModelBinder: function(name, type) {
+            // console.log('=== bindModelBinder ===');
+            // console.log(name);
+            switch (type.toLowerCase()) {
+
+                default: this.bindings[name] = '[name="' + name + '"]';
+            }
+        },
+
+        unbindModelBinder: function(name, type) {
+            // console.log('=== unbindModelBinder ===');
+            // console.log(name);
+            switch (type.toLowerCase()) {
+
+                default: delete this.bindings[name];
+            }
         }
     });
 });

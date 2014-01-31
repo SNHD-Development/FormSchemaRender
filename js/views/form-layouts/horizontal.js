@@ -93,6 +93,10 @@ define([
 
             // Bind Model
             that._modelBinder.bind(that.model, that.el, that.model.bindings);
+
+            //Debug:: Model Binder for Horizontal View
+            // console.log(that.model.bindings);
+
             Backbone.Validation.bind(that, {
                 forceUpdate: true
             });

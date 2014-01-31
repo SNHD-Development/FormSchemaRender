@@ -5,7 +5,7 @@
  * Copyright (c) 2013 SNHD
  * Licensed under the MIT license.
  *
- * Version 0.1.0
+ * Version 0.1.1
  **/
 
 require.config({
@@ -205,21 +205,25 @@ require([
         // Check Browser
         Utils.checkBrowser();
 
-        appView = Vm.create({}, 'AppView', AppView, _opts);
-
-        var _loadingText;
-        switch (lang) {
-            case 'sp':
-                _loadingText = 'Bajando Informaci&oacute;n';
-                break;
-            default:
-                _loadingText = 'Loading Form Information';
-        }
         try {
+
+            appView = Vm.create({}, 'AppView', AppView, _opts);
+
+            var _loadingText;
+            switch (lang) {
+                case 'sp':
+                    _loadingText = 'Bajando Informaci&oacute;n';
+                    break;
+                default:
+                    _loadingText = 'Loading Form Information';
+            }
+
             $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
+
             appView.render();
-        } catch (e) {
-            console.log(e);
+
+        } catch (err) {
+            Utils.renderError(appView.$el, err);
         }
     });
 });

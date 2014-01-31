@@ -43,6 +43,7 @@ define([
     'text!templates/fields/list.html',
     'text!templates/fields/uneditableinput.html',
     'text!templates/fields/uneditablecheck.html',
+    'text!templates/fields/uneditabletel.html',
     'text!templates/fields/uneditablefile.html',
     'text!templates/fields/uneditableimage.html',
     'text!templates/fields/buttonclipboard.html',
@@ -51,7 +52,7 @@ define([
     'jquery.datepicker',
     'jquery.birthdaypicker',
     'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
     return Backbone.View.extend({
         _modelBinder: undefined,
         // Clean Data Binding
@@ -154,6 +155,7 @@ define([
                 "list": _.template(listTemplate),
                 "uneditableinput": _.template(uneditableinputTemplate),
                 "uneditablecheck": _.template(uneditablecheckTemplate),
+                "uneditabletel": _.template(uneditabletelTemplate),
                 "uneditablefile": _.template(uneditablefileTemplate),
                 "uneditableimage": _.template(uneditableimageTemplate),
                 "buttonclipboard": _.template(buttonclipboardTemplate),
@@ -362,6 +364,9 @@ define([
 
                 case 'telephone':
                     field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer telephone span12');
+                    if (this.options.formData.fields && this.options.formData.fields[field.name + '_provider']) {
+                        field['_providerValue'] = this.options.formData.fields[field.name + '_provider'];
+                    }
                     break;
 
                 case 'textarea':
@@ -474,6 +479,16 @@ define([
                         field['default_value_state'] = this.options.formData.fields[field.name + '_address_state'];
                     }
 
+                    // If there is "Options.ZipCodeFormat" option
+                    if (field.options.zipcodeformat) {
+                        var _zipcodeformat = field.options.zipcodeformat.toLowerCase();
+                        switch (_zipcodeformat) {
+                            case 'zip+4':
+                                field['_zipmax'] = 10;
+                                break;
+                        }
+                    }
+
                     break;
 
                 case 'number':
@@ -554,21 +569,19 @@ define([
 
                 case 'button':
                     field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
-                    // Adding the Confirmation Popover
-                    if (field.options.confirmed) {
-                        var _id = '/' + ((this.options.mode === 'read' && field.options.appendid) ? this.options.formData._id.$oid : ''),
-                            _url = (field.url || '') + _id,
-                            _popoverOptions = {
-                                html: true,
-                                placement: "top",
-                                title: '<span class="text-info">Please confirm your selection.</span>',
-                                content: '<a class="btn btn-success btn-confirmed" data-href="' + _url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
-                            };
-                        field.attributes['data-popover-confirm'] = JSON.stringify(_popoverOptions);
-                    }
                     // AppendId
                     if (field.options.appendid) {
                         field.url = ((field.url) ? field.url : '') + ((field.url.indexOf('?') > -1) ? '&id=' : '/') + this.options.formData._id['$oid'];
+                    }
+                    // Adding the Confirmation Popover
+                    if (field.options.confirmed) {
+                        var _popoverOptions = {
+                            html: true,
+                            placement: "top",
+                            title: '<span class="text-info">Please confirm your selection.</span>',
+                            content: '<a class="btn btn-success btn-confirmed" data-href="' + field.url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
+                        };
+                        field.attributes['data-popover-confirm'] = JSON.stringify(_popoverOptions);
                     }
                     break;
 
@@ -637,6 +650,7 @@ define([
                 });
             }
 
+            //=============== READ MODE ===============//
             // If this is read mode will need to render read template
             if (typeof readMode !== 'undefined' && readMode && typeof _name[0] !== 'undefined' && !(_type === 'button' || _type === 'buttonclipboard')) {
                 var _field_data = '',
@@ -744,13 +758,21 @@ define([
                     } else {
                         _html += '';
                     }
+                } else if (_type === 'telephone' && field._providerValue) {
+                    // This is telephone with provider
+                    _html += that.inputTemplate['uneditabletel']({
+                        value: _field_data,
+                        label: field.description,
+                        id: field.name,
+                        providerValue: field._providerValue
+                    });
                 } else if (_type === 'check') {
                     // This is check box and need to render to make it look easy to read
                     _html += that.inputTemplate['uneditablecheck']({
                         value: _field_data,
                         label: field.description,
                         id: field.name,
-                        otherValue: (field._otherValue) ? field._otherValue: ''
+                        otherValue: (field._otherValue) ? field._otherValue : ''
                     });
                 } else {
                     var _textarea = '';
@@ -860,7 +882,17 @@ define([
 
             // If this is internal fields, we need to push to _internalFields array
             if (value.options.internal === true && value.name && _type !== 'buttonclipboard') {
-                this._internalFields.push(value.name);
+                var _internalName;
+                switch (_type) {
+                    case 'check':
+                    case 'checkbox':
+                        _internalName = value.name + '[]';
+                        break;
+
+                    default:
+                        _internalName = value.name;
+                }
+                this._internalFields.push(_internalName);
             }
 
             if (this.options.hideButtons && (_type === 'button' || _type === 'submit' || _type === 'reset' || _type === 'action')) {
@@ -1053,25 +1085,50 @@ define([
             $(this.el).on('change', ':input[name="' + field.options.visibleon.name + '"]', function(e) {
                 var $currentTarget = $(e.currentTarget),
                     $container = (parentContainer) ? $currentTarget.parents(parentContainer) : $currentTarget,
-                    $containerOptions, $nextContainer, _addressArray = [];
-                if (_.indexOf(field.options.visibleon.values, $currentTarget.val()) > -1) {
+                    $containerOptions, $nextContainer, _addressArray = [],
+                    _visibleOnName = field.options.visibleon.name,
+                    _visibleVal = $currentTarget.val();
+                if (_visibleOnName.match(/\[\]$/ig)) {
+                    if (!$container.length) {
+                        $container = $currentTarget.closest('.checkbox-container');
+                    }
+                    _visibleOnName = _visibleOnName.substr(0, _visibleOnName.length - 2);
+                    $container = $container.closest('.checkbox-container');
+                    if ($currentTarget.is(':checkbox')) {
+                        _visibleVal = '';
+                        $container.find(':checkbox:checked').each(function() {
+                            var _checkedVal = $(this).val();
+                            if (_.indexOf(field.options.visibleon.values, _checkedVal) > -1) {
+                                _visibleVal = _checkedVal;
+                            }
+                        });
+                    }
+                }
+                if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1) {
                     // Insert this into markup
                     if ($('.options-visible-on-' + field.name, that.el).length < 1) {
                         $container.after(htmlTmpl);
                         $containerOptions = $container.next('.options-visible-on-' + field.name).fadeIn('slow', function() {
-                            $(this).addClass('visible-parent-' + field.options.visibleon.name).attr('data-parent', field.options.visibleon.name);
+                            $(this).addClass('visible-parent-' + _visibleOnName).attr('data-parent', _visibleOnName);
 
                             // Remove the class that not belong to this visibleOn
-                            var $parent = $('.options-visible-on-' + field.options.visibleon.name, that.el);
+                            var $parent = $('.options-visible-on-' + _visibleOnName, that.el);
 
                             // Caution: this can cause the previous markup to disappear.
                             // Fix in Release 0.1.0
-                            $('[class*="visible-parent-' + field.options.visibleon.name + '"]', that.el).not('.visible-parent-' + field.options.visibleon.name + ',.options-visible-on-' + field.options.visibleon.name + ',.visible-parent-' + $parent.attr('data-parent')).remove();
+                            $('[class*="visible-parent-' + _visibleOnName + '"]', that.el).not('.visible-parent-' + _visibleOnName + ',.options-visible-on-' + _visibleOnName + ',.visible-parent-' + $parent.attr('data-parent')).remove();
 
                             if (_typeLowerCase === 'multifiles') {
                                 $('#' + field.name + '_multifiles_wrapper', this).trigger('visibleOnRenderComplete');
                             } else {
                                 $(':input[name="' + field.name + '"]', this).trigger('visibleOnRenderComplete');
+                            }
+
+                            // Need to rebind the ModelBinder
+                            if (!that.model.bindings[field.name]) {
+                                that.model.bindModelBinder(field.name, field.type);
+                                that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                                console.log(that.model.bindings);
                             }
                         });
 
@@ -1194,6 +1251,12 @@ define([
                             delete that.model.validation[field.name];
                         } else if (that.model.validation[field.name + '[]']) {
                             delete that.model.validation[field.name + '[]'];
+                        }
+                        // Need to unbind the ModelBinder
+                        if (that.model.bindings[field.name]) {
+                            that.model.unbindModelBinder(field.name, field.type);
+                            that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                            $currentTarget.val(_visibleVal);
                         }
                     }
                 }

@@ -41,8 +41,7 @@ define([
                 }
 
                 // VisibleOn Options
-                if (value.options.visibleon && _typeLowerCase !== 'html' &&
-                    value.options.visibleon.values.indexOf(that.options.formData.fields[value.options.visibleon.name]) === -1) {
+                if ( ! Utils.isRenderVisibleOn(that, value, _typeLowerCase) ) {
                     return '';
                 }
 

@@ -34,6 +34,9 @@ define([
     }
 
     return {
+        renderError: function($container, err) {
+            $container.html('<div class="alert alert-danger"><i class="icon-wrench"></i> <strong>Error: Please refresh this page and try again.</strong> <br> ' + err + '</div>');
+        },
         /**
          * Check Browser Agent
          **/
@@ -441,6 +444,50 @@ define([
             }
         },
         /**
+         * Allow Only Integer Number in Keypress Event but will render as XXXXX-XXXX
+         **/
+        allowZipCodePlusFour: function(e) {
+            var $currentTarget = $(e.target),
+                _val = $currentTarget.val(),
+                _tmp = '';
+
+            if (e.type === 'keydown' && (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+
+                switch (_val.length) {
+                    case 0:
+                        if (e.keyCode === 48 || e.keyCode === 105) {
+                            e.preventDefault();
+                            return;
+                        }
+                        break;
+
+                    case 5:
+                        $currentTarget.val(_val + '-');
+                }
+                if (e.update) {
+                    $currentTarget.val($currentTarget.val() + String.fromCharCode(e.keyCode));
+                }
+            } else {
+                for (var i = 0, j = _val.length; i < j; i++) {
+                    if (!isNaN(parseInt(_val[i]))) {
+                        _tmp += _val[i];
+                    }
+                }
+                _val = '';
+                for (var i = 0, j = _tmp.length; i < j; i++) {
+                    switch (i) {
+                        case 5:
+                            if (j > 6) {
+                                _val += '-';
+                            }
+                            break;
+                    }
+                    _val += _tmp[i];
+                }
+                $currentTarget.val(_val);
+            }
+        },
+        /**
          * Convert Unix TimeStamp to Human Readable
          **/
         getHumanTime: function(unixTime) {
@@ -759,6 +806,32 @@ define([
                 });
             }
         },
+
+        isRenderVisibleOn: function(view, value, typeLowerCase) {
+            if (value.options.visibleon && typeLowerCase !== 'html') {
+                var _visibleOnName = value.options.visibleon.name;
+                if (_visibleOnName.match(/\[\]$/gi)) {
+                    _visibleOnName = _visibleOnName.substr(0, _visibleOnName.length - 2);
+                }
+                if (_.isArray(view.options.formData.fields[_visibleOnName])) {
+                    var _found = false;
+                    _.each(view.options.formData.fields[_visibleOnName], function(element) {
+                        if (_found) {
+                            return;
+                        }
+                        _found = value.options.visibleon.values.indexOf(element) !== -1;
+                    });
+                    if (!_found) {
+                        return false;
+                    }
+                } else {
+                    if (value.options.visibleon.values.indexOf(view.options.formData.fields[_visibleOnName]) === -1) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        },
         /**
          * Final Setup for Read Mode
          **/
@@ -820,7 +893,6 @@ define([
                             }
                             $(this).popover('hide');
                         });
-                        $this.popover('toggle');
                     });
                 });
             }
@@ -1379,7 +1451,10 @@ define([
                                 $select.attr('disabled', false).show('slow');
                             });
                         }
-                        $zip.addClass('allowzipcode').attr('maxlength', 5);
+                        // If this Zip Code doesnot have class allowzipcodeplusfour
+                        if (!$zip.hasClass('allowzipcodeplusfour')) {
+                            $zip.addClass('allowzipcode').attr('maxlength', 5);
+                        }
                         break;
                     default:
                         if ($input.is(':hidden')) {
@@ -1444,6 +1519,7 @@ define([
          */
         parseInternalFieldsBeforeSubmit: function($form, internalFields) {
             // console.log('===== parseInternalFieldsBeforeSubmit ======');
+            var _nameTxt;
             if (!internalFields.length) {
                 return;
             }
@@ -1452,7 +1528,13 @@ define([
                 if (!$input.length) {
                     return;
                 }
-                $input.attr('name', element + '_internal');
+                _nameTxt = element.match(/\[\]$/gi);
+                if (_nameTxt) {
+                    _nameTxt = element.substr(0, element.length - 2) + '_internal[]';
+                } else {
+                    _nameTxt = element + '_internal';
+                }
+                $input.attr('name', _nameTxt);
             });
         },
 

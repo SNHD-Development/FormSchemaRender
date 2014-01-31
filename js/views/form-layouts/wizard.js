@@ -73,6 +73,10 @@ define([
             this.renderWizardNavBar();
             // Bind Model
             that._modelBinder.bind(that.model, that.el, that.model.bindings);
+
+            //Debug:: Model Binder for Wizard View
+            // console.log(that.model.bindings);
+
             Backbone.Validation.bind(that, {
                 forceUpdate: true
             });
@@ -226,7 +230,6 @@ define([
                 },
                 $submitDisplay = $(this).nextUntil('', '.wizard-actions').find('.btn_next'),
                 $form = $('form.form-render');
-
             if ($submitBtn.length > 0) {
                 $submitBtn.trigger('click');
             } else {

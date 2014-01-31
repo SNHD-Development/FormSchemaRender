@@ -153,6 +153,14 @@ $text_area_min_height:  100px;
 
 		}
 	}
+	/**
+	 * Telephone
+	 */
+	.tel-wrapper {
+		.tel-provider {
+			margin-left: 20px;
+		}
+	}
 
 	/**
 	 * Yes Or No (BooleanInput Field Type)
@@ -351,10 +359,29 @@ $text_area_min_height:  100px;
 				}
 			}
 		}
+
+		.add-on {
+			margin: auto 10px;
+		}
+
+		.row-fluid {
+
+			div[class^="span"] {
+				> label {
+					margin-top: 15px;
+				}
+			}
+
+		}
 	}
 
 	.uneditable-input {
 		width: 80%;
+
+		&.input-col2 {
+			width: 40%;
+		}
+
 	}
 
 	.uneditable-input-textarea {
@@ -364,6 +391,18 @@ $text_area_min_height:  100px;
 	.uneditable-input-image {
 		max-height: 250px;
 		max-width: 500px;
+	}
+
+	.control-group {
+
+		.uneditable-input {
+
+			&.input-col2 {
+				width: 34%;
+			}
+
+		}
+
 	}
 
 	/**

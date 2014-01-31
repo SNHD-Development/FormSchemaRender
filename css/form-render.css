@@ -25,6 +25,9 @@
    * CheckBox
    */
   /**
+   * Telephone
+   */
+  /**
    * Yes Or No (BooleanInput Field Type)
    */
   /**
@@ -123,6 +126,8 @@
     .form-render .checkbox-container textarea.other-textbox {
       display: none;
       margin-top: 10px; }
+  .form-render .tel-wrapper .tel-provider {
+    margin-left: 20px; }
   .form-render .form-render_booleaninput {
     margin-left: 30px;
     margin-bottom: 20px; }
@@ -211,13 +216,21 @@
       width: auto;
       margin-right: 20px;
       padding: 4px 8px; }
+  .form-render.read-mode .add-on {
+    margin: auto 10px; }
+  .form-render.read-mode .row-fluid div[class^="span"] > label {
+    margin-top: 15px; }
   .form-render .uneditable-input {
     width: 80%; }
+    .form-render .uneditable-input.input-col2 {
+      width: 40%; }
   .form-render .uneditable-input-textarea {
     height: auto; }
   .form-render .uneditable-input-image {
     max-height: 250px;
     max-width: 500px; }
+  .form-render .control-group .uneditable-input.input-col2 {
+    width: 34%; }
   .form-render .emailpicker .add-on {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     position: relative;

@@ -53,8 +53,12 @@ define([
                 // Will render Form
                 // Render Form Layout
                 require(['views/form-layouts/' + formLayout], function(FormView) {
-                    that.formView = Vm.create(that, 'FormView', FormView, _opts);
-                    that.formView.render();
+                    try {
+                        that.formView = Vm.create(that, 'FormView', FormView, _opts);
+                        that.formView.render();
+                    } catch (err) {
+                        Utils.renderError(that.$el, err);
+                    }
 
                     if (that.formView._hasDate) {
                         that.setupDateInput();
@@ -207,6 +211,13 @@ define([
             }
         },
         /**
+         * Zipcode Plus Four Format (Optional)
+         * @return
+         */
+        formatZipCodePlusFour: function(e) {
+            Utils.allowZipCodePlusFour(e);
+        },
+        /**
          * View Events
          **/
         events: {
@@ -220,7 +231,9 @@ define([
             'keydown :input.natural': 'allowNaturalNumber',
             'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
             'keydown :input.telephone': 'formatTelephoneNumber',
-            'blur :input.telephone': 'formatTelephoneNumber'
+            'blur :input.telephone': 'formatTelephoneNumber',
+            'keydown :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
+            'blur :input.allowzipcodeplusfour': 'formatZipCodePlusFour'
         },
         /**
          * Submit Form
@@ -343,14 +356,23 @@ define([
                 // console.log('===== Debug Post Data =====');
                 // console.log(JSON.stringify($form.serializeArray()));
                 // e.preventDefault();
+                // if (console && console.log) {
+                //     console.log(this.model.toJSON());
+                // }
                 // return false;
-
             } else {
                 e.preventDefault();
                 $form.addClass('validation_error');
                 $form.removeClass('form_submitted');
                 // Error Message
                 $('.not_sending', $form).attr('disabled', false);
+
+
+                // Debug: Validation
+                // if (console && console.log) {
+                //     console.log(this.formView.model.toJSON());
+                //     console.log($('.not_sending', $form));
+                // }
 
                 if (this.formView.options.formSchema.view !== 'wizard') {
                     _opt = {
@@ -390,7 +412,7 @@ define([
             }
         },
         showResponse: function(responseText, statusText, xhr, $form) {
-            var _jsonText = $.parseJSON(responseText);
+            var _jsonText = (_.isString(responseText)) ? $.parseJSON(responseText) : responseText;
             _.each(_jsonText, function(value, key) {
                 if (typeof value === 'string') {
                     _jsonText[key] = _.unescape(value);

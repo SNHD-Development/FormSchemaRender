@@ -99,13 +99,18 @@ define([
                 _btn_opts.submitbutton = that._btn_title;
                 _btn_opts.subForm = true;
                 _html += formView.renderButton(_btn_opts);
-                $(that.el).html(that.template(_.extend({
-                    html: _html
-                }, that.options.formSchema)));
+
+                if (that.el) {
+                    $(that.el).html(that.template(_.extend({
+                        html: _html
+                    }, that.options.formSchema)));
+                }
 
                 // Bind Model
                 try {
-                    that._modelBinder.bind(that.model, that.el);
+                    if (that.el) {
+                        that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                    }
                 } catch (err) {
                     if (window.console && window.console.log) {
                         window.console.log('Warning in list.js: "' + err + '" continue running.');

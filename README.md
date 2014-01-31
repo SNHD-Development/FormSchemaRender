@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.1.0`
+Version `version 0.1.1`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -317,6 +317,20 @@ that we want. Also, the JSON result must match this format.
 		}
 	}
 
+
+If we want to use ZIP+4 from [USPS](https://tools.usps.com/go/ZipLookupAction_input "Look Up a ZIP Code")
+This will enable ZIP+4 (By default, it will only allowed to have 5 digits)
+
+	{
+        "Name" : "BusinessAddress",
+        "Type" : "Address",
+        "Description" : "Business Address",
+        "Options": {
+            "ZipCodeFormat": "ZIP+4"
+        }
+    },
+
+
 ### Select Field
 
 To change the default select text, simply set `Options.DefaultText: any text`
@@ -420,6 +434,22 @@ Sometime you want to be able to control what number types that user can put in. 
 5. "number": Any floating point number
 
 Note: we can use this class to limited input from client
+
+
+### Telephone
+
+If user wants to capture US telephone simply, this will render telephone type with (XXX) XXX-XXXX
+To turn on Provider, simply pass in "Options.ShowProvider" = true;
+
+	{
+        "Name" : "MobileNumber",
+        "Type" : "Telephone",
+        "Description" : "Business Mobile Number",
+        "Options" : {
+            "ShowProvider" : true
+        }
+    }
+
 
 ### VisibleOn Options
 
@@ -730,6 +760,11 @@ Sometime there are some fileds that internal should not be able to update these 
 
 ## Version
 
+* 0.1.2
+
+	-
+
+
 * 0.1.1
 
 	- Bug for buttonclipboard in model binder.
@@ -738,6 +773,16 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Adding ability to render the Select and Radio by Name (Alphabetical)
 	- In edit mode, checkbox value is not showing need to fixed.
 	- Adding the CheckBox option to be able to handle other.
+	- Adding ZIP+4 option in address field.
+	- Adding Telephone to be able to show Provider. (Options.ShowProvider = true)
+	- Upgrade jQuery to v1.10.2
+	- Adding Error Exception to render if run into error.
+	- Fixed bug on Confirmed Button when having the AppendId = true
+	- Fixed bug on VisibleOn Validation
+	- Fixed Validation Render Error in IE
+	- Fixed ModelBinder throw exception in SubForm Type
+	- Fixed Validation issued in MultiFiles Type
+
 
 
 * 0.1.0

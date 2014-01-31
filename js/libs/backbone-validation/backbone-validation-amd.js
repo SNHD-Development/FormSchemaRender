@@ -636,9 +636,10 @@
                         if (_ext !== '') {
                             if ($().popover) {
 
-                                var $this = $('[name="' + attr + '"][type="file"]');
+                                var $this = $('[name="' + attr + '"][type="file"]'),
+                                    $alert = $this.parent().find('.alert.alert-error');
 
-                                if (!$this.prev('.alert.alert-error').length) {
+                                if (!$alert.length && !$this.attr('disabled')) {
                                     $this.attr('disabled', true).before('<div class="alert alert-error" style="display:none;"><i class="icon-edit"></i> Invalid File Type<br>File type must be "' + values.join(', ') + '"</div>')
                                         .prev().delay(500).show('slow', function() {
                                             window.setTimeout(
@@ -647,7 +648,7 @@
                                                         $(this).remove();
                                                     });
                                                     $this.val('');
-                                                }, 3500);
+                                                }, 2500);
                                         });
                                 }
 
