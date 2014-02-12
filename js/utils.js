@@ -926,10 +926,41 @@ define([
                     case 'fieldsetend':
                     case 'html':
                     case 'action':
-                    case 'button':
                     case 'submit':
                     case 'clear':
                     case 'address':
+                        break;
+
+                    case 'button':
+                        var _btnName = value.description.toLowerCase();
+                        if (view.options.internal && view.options.mode === 'read' && _btnName === 'delete' && view.options.formSchema.deleteenabled) {
+
+                            if (!view.options.formData.createddate.$date) {
+                                throw 'In order to used "DeleteEnabled", form data must have "CreatedDate".';
+                            }
+
+                            // If this has FieldExists
+                            if (view.options.formSchema.deleteenabled.fieldexists) {
+                                var _fieldToCheck = view.options.formSchema.deleteenabled.fieldexists;
+                                // This guard will prevent internal user to delete before file get downloaded.
+                                if (!view.options.formData.fields[_fieldToCheck]) {
+                                    return false;
+                                }
+                            }
+
+                            // If this has AfterXDays
+                            if (view.options.formSchema.deleteenabled.afterxdays) {
+                                var _currentDate = new Date(),
+                                    _createdDate = new Date(view.options.formData.createddate.$date),
+                                    _dateDiff = this.calculateDateDiffByDays(_currentDate, _createdDate);
+
+                                // If current date is less than the required date, will not render.
+                                if (_dateDiff < view.options.formSchema.deleteenabled.afterxdays) {
+                                    return false;
+                                }
+                            }
+
+                        }
                         break;
 
                     default:
@@ -1548,6 +1579,27 @@ define([
         destroyPopover: function($context) {
             var $popover = $('[data-toggle="popover"]', $context);
             $popover.popover('destroy');
+        },
+
+
+        /**
+         * Calculate Date Diff
+         * http://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates-using-javascript
+         * @return
+         */
+        calculateDateDiffByDays: function(date1, date2) {
+            // The number of milliseconds in one day
+            var ONE_DAY = 1000 * 60 * 60 * 24;
+
+            // Convert both dates to milliseconds
+            var date1_ms = date1.getTime(),
+                date2_ms = date2.getTime();
+
+            // Calculate the difference in milliseconds
+            var difference_ms = Math.abs(date1_ms - date2_ms);
+
+            // Convert back to days and return
+            return Math.round(difference_ms / ONE_DAY);
         }
     };
 });

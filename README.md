@@ -762,7 +762,7 @@ Sometime there are some fileds that internal should not be able to update these 
 
 * 0.1.2
 
-	-
+	- Add "DeleteEnabled" featured. This will check against "FieldExists" and "AfterXDays" properties.
 
 
 * 0.1.1
