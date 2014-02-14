@@ -159,7 +159,7 @@ define([
                 "uneditablefile": _.template(uneditablefileTemplate),
                 "uneditableimage": _.template(uneditableimageTemplate),
                 "buttonclipboard": _.template(buttonclipboardTemplate),
-                'subform-table': _.template(tableTemplate)
+                "subform-table": _.template(tableTemplate)
             };
 
             // Init Form Options
