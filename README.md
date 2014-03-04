@@ -765,6 +765,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Add "DeleteEnabled" featured. This will check against "FieldExists" and "AfterXDays" properties.
 	- IE 8 issued when using .class in template. (fraction.html)
 	- Add ability to create custom text by setting ConfirmedText (button)
+	- Fixed Date format turn into 00:xx:xx PM when at noon
 
 
 * 0.1.1
