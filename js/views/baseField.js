@@ -575,12 +575,14 @@ define([
                     }
                     // Adding the Confirmation Popover
                     if (field.options.confirmed) {
-                        var _popoverOptions = {
-                            html: true,
-                            placement: "top",
-                            title: '<span class="text-info">Please confirm your selection.</span>',
-                            content: '<a class="btn btn-success btn-confirmed" data-href="' + field.url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
-                        };
+                        // If there is ConfirmedText then will override the standard text.
+                        var _std_text = (field.options.confirmedtext) ? field.options.confirmedtext : 'Please confirm your selection.',
+                            _popoverOptions = {
+                                html: true,
+                                placement: "top",
+                                title: '<span class="text-info">' + _std_text + '</span>',
+                                content: '<a class="btn btn-success btn-confirmed" data-href="' + field.url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
+                            };
                         field.attributes['data-popover-confirm'] = JSON.stringify(_popoverOptions);
                     }
                     break;
