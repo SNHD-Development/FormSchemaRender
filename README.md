@@ -766,6 +766,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- IE 8 issued when using .class in template. (fraction.html)
 	- Add ability to create custom text by setting ConfirmedText (button)
 	- Fixed Date format turn into 00:xx:xx PM when at noon
+	- Fix the attributes to be able to parse the JavaScript code
 
 
 * 0.1.1
