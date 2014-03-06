@@ -899,6 +899,15 @@ define([
 					});
 				});
 			}
+
+			// Look for .btn-auto-refresh
+			$form.on('click', '.btn-auto-refresh', function(e) {
+				var _delay = $(e.target).attr('data-refresh-delay');
+				e.stopPropagation();
+				setTimeout(function() {
+					location.reload();
+				}, _delay);
+			});
 		},
 		/**
 		 * Setup Read Mode

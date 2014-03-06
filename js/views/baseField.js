@@ -272,6 +272,17 @@ define([
 						};
 						this._javaUpload.push(_jObject);
 					}
+					// Check to see if this contain markDownloadDateTimeOf
+					if (field.options.markdownloaddatetimeof && this.options.mode && this.options.mode === 'read') {
+						var _txt = (this.options.internal) ? 'internal' : 'external',
+							_markdownload = field.options.markdownloaddatetimeof.toLowerCase();
+						if (_markdownload === '*' || _markdownload === _txt) {
+							field.attributes['class'] = ((field.attributes['class']) ? field.attributes['class'] : '') + ' btn-auto-refresh ';
+							if (!field.attributes['data-refresh-delay']) {
+								field.attributes['data-refresh-delay'] = '2000';
+							}
+						}
+					}
 					break;
 
 				case 'userid':
