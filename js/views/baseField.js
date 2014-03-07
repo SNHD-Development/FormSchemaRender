@@ -547,7 +547,8 @@ define([
 					field['_submit'] = true;
 					// If this is submit button will override the action of this form
 					if (typeof field.url === 'undefined') {
-						throw 'In order to use submit button, must pass the Url value in the formSchema';
+						field.url = '';
+						// throw 'In order to use submit button, must pass the Url value in the formSchema';
 					}
 					// AppendId
 					if (field.options.appendid) {

@@ -767,6 +767,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Add ability to create custom text by setting ConfirmedText (button)
 	- Fixed Date format turn into 00:xx:xx PM when at noon
 	- Fix the attributes to be able to parse the JavaScript code
+	- Submit Button not require to have url attr
 
 
 * 0.1.1
