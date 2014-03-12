@@ -279,7 +279,10 @@ define([
 
 			window.setTimeout(
 				function() {
-					$('.invalid:first', $form).focus();
+					var $firstError = $('.invalid:first', $form);
+					if (!$firstError.is(':checkbox')) {
+						$firstError.focus();
+					}
 					$btn.attr('disabled', false).popover('destroy');
 					$btn.next('.popover').remove();
 				}, 2000);

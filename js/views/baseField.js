@@ -1300,7 +1300,10 @@ define([
 							if (that.model.bindings[_bindingName + _suffix]) {
 								that.model.unbindModelBinder(_bindingName + _suffix, field.type);
 								that._modelBinder.bind(that.model, that.el, that.model.bindings);
-								$currentTarget.val(_visibleVal);
+								// For Checkbox, this caused the value to be set to empty string.
+								if ($currentTarget.attr('name') === (_bindingName + _suffix)) {
+									$currentTarget.val(_visibleVal);
+								}
 							}
 						});
 					}
