@@ -11,7 +11,7 @@ var _id = (typeof attributes.id !== 'undefined') ? attributes.id: name,
 <div id="<%= _id %>_checkbox"<%= _attr %> class="checkbox-container">
 
 	<% if(description) { %>
-	<label><%= description %></label>
+	<label><%= description %> <%= (_required) ? ' <span class="required">*</span>':'' %></label>
 	<% } %>
 
 	<% if(options.numcolumns > 1) { %>

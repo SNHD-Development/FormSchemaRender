@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.1.1`
+Version `version 0.1.2`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -760,6 +760,9 @@ Sometime there are some fileds that internal should not be able to update these 
 
 ## Version
 
+* 0.1.3
+
+
 * 0.1.2
 
 	- Add "DeleteEnabled" featured. This will check against "FieldExists" and "AfterXDays" properties.
@@ -768,6 +771,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Fixed Date format turn into 00:xx:xx PM when at noon
 	- Fix the attributes to be able to parse the JavaScript code
 	- Submit Button not require to have url attr
+	- Fix validation for require on checkbox field type
 
 
 * 0.1.1

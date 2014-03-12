@@ -363,6 +363,16 @@ define([
 					if (this.options.formData.fields && this.options.formData['fields'][field.name + '_other']) {
 						field._otherValue = this.options.formData['fields'][field.name + '_other'];
 					}
+					// Check Validation
+					if (typeof this.options.formSchema.validation[field.name + '[]'] !== 'undefined') {
+						field._required = true;
+						var _validation_tmp = this.getFormValidationData(field.name + '[]');
+						if (typeof this._stepValidated[(this._currentStep) - 2] !== 'undefined' && !$.isEmptyObject(_validation_tmp)) {
+							this._stepValidated[(this._currentStep) - 2].push(field.name + '[]');
+						}
+					} else {
+						field._required = false;
+					}
 					_type = 'check';
 					if (!field.values) {
 						throw 'In order to use CheckBox, please set Values.';
