@@ -44,7 +44,7 @@
 	function viewport() {
 
 		// the horror case
-		if ($.browser.msie) {
+		if ($.browser && $.browser.msie) {
 
 			// if there are no scrollbars then use window.height
 			var d = $(document).height(), w = $(window).height();

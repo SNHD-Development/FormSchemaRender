@@ -138,10 +138,16 @@
 			]
 		},
 		{
-				"Name" : "ChildDob",
-				"Type" : "Birthdate",
-				"Description" : "Birthday Input"
-		},
+            "Name" : "ChildDob",
+            "Type" : "Date",
+            "Description" : "Child's Date of Birth",
+            "Languages" : {
+                "sp" : "Fecha del ni&ntilde;o de nacimiento"
+            },
+            "Options" : {
+                "Render" : "Select"
+            }
+        },
 		{
 				"Name" : "date",
 				"Type" : "Date",

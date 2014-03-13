@@ -136,6 +136,12 @@ define([
                     Utils.setupBooleanInput(that.$el, formView);
                 }
 
+                // Setup Radio Button Group
+                if (formView._hasRadioBtnGroup) {
+                    Utils.setupRadioBtnGroup(that.$el);
+                    Utils.setupRadioBtnGroupValue(that.$el);
+                }
+
                 // If this is the first time need to click cancel button
                 if (firstTime) {
                     that.$('.form-actions button.btn-cancel').click();
@@ -166,6 +172,11 @@ define([
             e.stopPropagation();
             Utils.preValidate(e, this.model);
         },
+        /**
+         * This function will call when using click on "Add"
+         * @param  object e
+         * @return
+         */
         sendForm: function(e) {
             e.preventDefault();
             var that = this,

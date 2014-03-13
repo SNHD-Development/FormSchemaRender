@@ -1346,7 +1346,7 @@ define([
 				e.preventDefault();
 				var $this = $(e.target),
 					$input = $this.closest('.radio-container').find('input[type="hidden"]');
-				$input.val($this.attr('value'));
+				$input.val($this.attr('value')).trigger('change');
 			});
 		},
 
