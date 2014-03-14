@@ -23,9 +23,9 @@
 					_cnt++;
 					_val = (_.isNumber(index)) ? element: index;
 				%>
-				<button type="button" class="btn <%= _btnClass %>" value="<%= _val %>"><%= element %></button>
+				<button type="button" class="btn <%= _btnClass %>" value="<%= _val %>" data-value="<%= _val %>"><%= element %></button>
 				<% }); %>
-    			<input type="hidden" name="<%= name%>" <%= _defaultVal %>>
+    			<input type="hidden" name="<%= name%>" <%= _defaultVal %> id="<%= _id %>">
   			</div>
 		<% } %>
 	<% } %>
