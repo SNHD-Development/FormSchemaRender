@@ -510,6 +510,15 @@ $text_area_min_height:  100px;
 }
 
 /**
+ * Override DatePicker
+ */
+.datepicker {
+	&.dropdown-menu {
+		z-index: 2000;
+	}
+}
+
+/**
  * IE8 Style Only
  **/
 body.ie8 {

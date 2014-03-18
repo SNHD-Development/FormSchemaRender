@@ -272,6 +272,12 @@
       font-weight: bold; }
 
 /**
+ * Override DatePicker
+ */
+.datepicker.dropdown-menu {
+  z-index: 2000; }
+
+/**
  * IE8 Style Only
  **/
 body.ie8 .form-render .controls-row {
