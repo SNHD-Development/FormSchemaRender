@@ -522,8 +522,10 @@ define([
           } else if (field.options.numbertype) {
             switch (field.options.numbertype.toLowerCase()) {
               case 'currency':
-              case 'double':
                 _num_class = 'number';
+                break;
+              case 'double':
+                _num_class = 'rational';
                 break;
               default:
                 _num_class = 'natural';

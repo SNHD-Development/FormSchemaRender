@@ -149,6 +149,12 @@ define([
       Utils.allowNumber(e);
     },
     /**
+     * Valid +/- Floating Point
+     */
+    allowRational: function(e) {
+      Utils.allowRational(e);
+    },
+    /**
      * Valid Natural Number
      **/
     allowNaturalNumber: function(e) {
@@ -231,6 +237,7 @@ define([
       'change :file': 'preValidate',
       'keydown :input[type="email"]': 'preventSpace',
       'keydown :input.number': 'allowNumber',
+      'keydown :input.rational': 'allowRational',
       'keydown :input.natural': 'allowNaturalNumber',
       'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
       'keydown :input.telephone': 'formatTelephoneNumber',
