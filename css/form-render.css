@@ -220,6 +220,8 @@
     margin: auto 10px; }
   .form-render.read-mode .row-fluid div[class^="span"] > label {
     margin-top: 15px; }
+  .form-render.read-mode .table {
+    margin: 30px auto; }
   .form-render .uneditable-input {
     width: 80%; }
     .form-render .uneditable-input.input-col2 {

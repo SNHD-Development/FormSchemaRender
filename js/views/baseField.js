@@ -516,7 +516,21 @@ define([
           break;
 
         case 'number':
-          var _num_class = (field.options.decimals) ? 'number' : 'natural';
+          var _num_class;
+          if (!field.options.numbertype || field.options.decimals) {
+            _num_class = (field.options.decimals) ? 'number' : 'natural';
+          } else if (field.options.numbertype) {
+            switch (field.options.numbertype.toLowerCase()) {
+              case 'currency':
+              case 'double':
+                _num_class = 'number';
+                break;
+              default:
+                _num_class = 'natural';
+            }
+          } else {
+            _num_class = 'natural';
+          }
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], _num_class + ' span12');
           // Check to see how to render this
           if (field.options.decimals && this.options.formData.fields && this.options.formData.fields[field.name]) {

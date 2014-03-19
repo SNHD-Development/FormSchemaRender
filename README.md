@@ -422,9 +422,17 @@ It will set the number of decimal points when render.
 		}
 	}
 
+By Default, Type Number will store as integer.
+If we pass options "NumberType" as Currency, Integer, or Double. We will store as that.
+Note: for Currency will save as integer then will display as decimal.
+
+	"Options": {
+		"NumberType": "Double"
+	}
+
 If you want to display spinner, simply pass `Options.Spinner: true`. Please add css `<link rel="stylesheet" href="css/spinner.css">` as well.
 
-Sometime you want to be able to control what number types that user can put in. Passing `Options.NumberType: "type"`.
+Sometime you want to be able to control what number types that user can put in. Setting `Options.LimitInputValue: "type"`.
 "type" that we can use will be (By default it will be "natural")
 
 1. "natural": 1, 2, 3, 4, 5, ... (default behavior)
