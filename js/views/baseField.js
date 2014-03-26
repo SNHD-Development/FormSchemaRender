@@ -580,7 +580,7 @@ define([
             // throw 'In order to use submit button, must pass the Url value in the formSchema';
           }
           // AppendId
-          if (field.options.appendid) {
+          if (field.options.appendid && this.options.formData._id && this.options.formData._id['$oid']) {
             field.url = ((field.url) ? field.url : '') + ((field.url.indexOf('?') > -1) ? '&id=' : '/') + this.options.formData._id['$oid'];
           }
           $(this.el)
@@ -612,7 +612,7 @@ define([
         case 'button':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
           // AppendId
-          if (field.options.appendid) {
+          if (field.options.appendid && this.options.formData._id && this.options.formData._id['$oid']) {
             field.url = ((field.url) ? field.url : '') + ((field.url.indexOf('?') > -1) ? '&id=' : '/') + this.options.formData._id['$oid'];
           }
           // Adding the Confirmation Popover
@@ -725,7 +725,7 @@ define([
             field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
             field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href'] : '/form/getFile/') + that.options.formData.fields[field.name];
             // Check for other options
-            if (field.options.markdownloaddatetimeof && this.options.formData._id['$oid']) {
+            if (field.options.markdownloaddatetimeof && this.options.formData._id && this.options.formData._id['$oid']) {
               var _markDownloadDateTime = field.options.markdownloaddatetimeof.toLowerCase();
               if (_markDownloadDateTime === '*' || this.options.internal && _markDownloadDateTime === 'internal' || !this.options.internal && _markDownloadDateTime === 'external') {
                 field.attributes['href'] += '?formid=' + this.options.formData._id['$oid'];
@@ -954,7 +954,7 @@ define([
       }
 
       // If this is type VisibleOn and in Read Mode will not render if does not have data
-      if (this.options.mode === 'read' && !$.isEmptyObject(value.options.visibleon) && !this.options.formData.fields[value.name] && !(_type === 'address' || _type === 'buttonclipboard')) {
+      if (this.options.mode === 'read' && !$.isEmptyObject(value.options.visibleon) && !this.options.formData.fields[value.name] && !(_type === 'fullname' || _type === 'address' || _type === 'buttonclipboard')) {
         return false;
       }
 

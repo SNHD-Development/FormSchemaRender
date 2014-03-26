@@ -267,7 +267,7 @@ define([
       this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
 
       // Check Data
-
+      Utils.getDefaultValues(this.formView.el); // Make sure to get default value for each type.
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid()) {
 
         // If there is an hidden type that has data-value, then will need to send this as well

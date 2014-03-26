@@ -95,35 +95,35 @@ define([
           _name = value.name + '_address_street';
           _attrs[_name] = '';
           setValidationData(_name, attrs, _validation, ' (Street)');
-          if (_addToModelBinder) {
+          if (_addToModelBinder && !value.options.visibleon) {
             model.bindings[_name] = '[name="' + _name + '"]';
           }
 
           _name = value.name + '_address_city';
           _attrs[_name] = '';
           setValidationData(_name, attrs, _validation, ' (City)');
-          if (_addToModelBinder) {
+          if (_addToModelBinder && !value.options.visibleon) {
             model.bindings[_name] = '[name="' + _name + '"]';
           }
 
           _name = value.name + '_address_state';
           _attrs[_name] = '';
           setValidationData(_name, attrs, _validation, ' (State)');
-          if (_addToModelBinder) {
+          if (_addToModelBinder && !value.options.visibleon) {
             model.bindings[_name] = '[name="' + _name + '"]';
           }
 
           _name = value.name + '_address_zip';
           _attrs[_name] = '';
           setValidationData(_name, attrs, _validation, ' (ZIP)');
-          if (_addToModelBinder) {
+          if (_addToModelBinder && !value.options.visibleon) {
             model.bindings[_name] = '[name="' + _name + '"]';
           }
 
           _name = value.name + '_address_country';
           _attrs[_name] = '';
           setValidationData(_name, attrs, _validation, ' (Country)');
-          if (_addToModelBinder) {
+          if (_addToModelBinder && !value.options.visibleon) {
             model.bindings[_name] = '[name="' + _name + '"]';
           }
 
@@ -134,7 +134,7 @@ define([
             _name = value.name + '_fullname_middle_name';
             _attrs[_name] = '';
             setValidationData(_name, attrs, _validation, ' (Middle Name)');
-            if (_addToModelBinder) {
+            if (_addToModelBinder && !value.options.visibleon) {
               model.bindings[_name] = '[name="' + _name + '"]';
             }
           }
@@ -142,14 +142,14 @@ define([
           _name = value.name + '_fullname_first_name';
           _attrs[_name] = '';
           setValidationData(_name, attrs, _validation, ' (First Name)');
-          if (_addToModelBinder) {
+          if (_addToModelBinder && !value.options.visibleon) {
             model.bindings[_name] = '[name="' + _name + '"]';
           }
 
           _name = value.name + '_fullname_last_name';
           _attrs[_name] = '';
           setValidationData(_name, attrs, _validation, ' (Last Name)');
-          if (_addToModelBinder) {
+          if (_addToModelBinder && !value.options.visibleon) {
             model.bindings[_name] = '[name="' + _name + '"]';
           }
 
