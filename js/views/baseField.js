@@ -316,7 +316,7 @@ define([
           }
         case 'select':
           if (field.options.url) {
-            field.attributes['data-url'] = field.options.url;
+            field.attributes['data-url'] = field.options.url.replace(/'/ig, '&#39;');
           }
           if (field.options.data) {
             field.attributes['data-url-data'] = JSON.stringify(field.options.data);
@@ -852,6 +852,7 @@ define([
           _type = 'hidden';
         } else {
           _.each(field.attributes, function(value, key) {
+            // value might be a JSON, that why we escape as '' not ""
             _attr += ' ' + key + '=\'' + value + '\'';
           });
         }

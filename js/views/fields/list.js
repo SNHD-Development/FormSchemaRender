@@ -151,6 +151,9 @@ define([
         if (firstTime) {
           that.$('.form-actions button.btn-cancel').click();
         }
+
+        // Set Up Ajax Call
+        Utils.setupUrlAjaxCall(that.$el);
       });
     },
     /**

@@ -780,6 +780,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Fix the attributes to be able to parse the JavaScript code
 	- Submit Button not require to have url attr
 	- Fix validation for require on checkbox field type
+	- Add ability for SubForm to pull remote select values from AJAX
 
 
 * 0.1.1
