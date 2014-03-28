@@ -1248,7 +1248,7 @@ define([
           dataType: "json",
           success: function(data, textStatus) {
             if (textStatus === 'success') {
-              var _opts = '',
+              var _opts = '<option value="">--- Please Select ---</option>',
                 _type = $urlEndPoint.prop('type'),
                 _dataArray = [];
               _.each(data, function(element) {
