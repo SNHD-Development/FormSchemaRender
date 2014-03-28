@@ -45,9 +45,32 @@ $text_area_min_height:  100px;
 		padding: 0px !important;
 	}
 
-
+	/**
+	 * Placeholder
+	 */
 	.placeholder {
-		color: #888;
+		color: #BBB !important;
+		font-style: italic !important;
+	}
+
+	::-webkit-input-placeholder {
+		color: #BBB !important;
+		font-style: italic !important;
+	}
+
+	::-moz-placeholder {
+		color: #BBB !important;
+		font-style: italic !important;
+	}
+
+	:-ms-input-placeholder {
+		color: #BBB !important;
+		font-style: italic !important;
+	}
+
+	input:-moz-placeholder {
+		color: #BBB !important;
+		font-style: italic !important;
 	}
 
 	margin: 25px 20px;

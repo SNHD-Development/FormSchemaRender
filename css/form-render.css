@@ -11,6 +11,9 @@
   /**
    * IE 8 Utilities Class
    **/
+  /**
+   * Placeholder
+   */
   margin: 25px 20px;
   /**
    * Fraction
@@ -85,7 +88,20 @@
     margin: 0px !important;
     padding: 0px !important; }
   .form-render .placeholder {
-    color: #888; }
+    color: #BBB !important;
+    font-style: italic !important; }
+  .form-render ::-webkit-input-placeholder {
+    color: #BBB !important;
+    font-style: italic !important; }
+  .form-render ::-moz-placeholder {
+    color: #BBB !important;
+    font-style: italic !important; }
+  .form-render :-ms-input-placeholder {
+    color: #BBB !important;
+    font-style: italic !important; }
+  .form-render input:-moz-placeholder {
+    color: #BBB !important;
+    font-style: italic !important; }
   .form-render label span.required {
     color: #B94A48;
     font-size: 18px;

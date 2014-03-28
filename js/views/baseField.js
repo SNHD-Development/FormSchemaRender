@@ -501,6 +501,8 @@ define([
           } else if (this.options.mode === 'update' && this.options.formData.fields[field.name + '_address_country'] !== 'US') {
             // Will Render Input
             field['default_value_state'] = this.options.formData.fields[field.name + '_address_state'];
+          } else if (this.options.mode === 'create') {
+            this.model.set(field.name + '_address_state', 'NV'); // Default to NV for create mode
           }
 
           // If there is "Options.ZipCodeFormat" option
