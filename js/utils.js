@@ -1225,8 +1225,9 @@ define([
 
     /**
      * Setup Ajax Call if the form has URL in options
-     * @param  {[type]} $form [description]
-     * @return {[type]}       [description]
+     * For Dynamic AJAX look up
+     * @param  object $form
+     * @return
      */
     setupUrlAjaxCall: function($form, $scope) {
       $scope = $scope || null;
@@ -1341,6 +1342,8 @@ define([
                 };
                 $this.one('change', _dataCallback);
               }
+              // Trigger dataloaded event
+              $this.trigger('dataloaded');
             }
           },
           error: function(jqXHR, textStatus, errorThrown) {

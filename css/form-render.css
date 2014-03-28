@@ -157,8 +157,14 @@
     font-size: 18px; }
   .form-render .subform-container {
     padding: 20px;
-    margin-bottom: 30px; }
+    margin-bottom: 30px;
+    /**
+     * Select 2 Container
+     */ }
     .form-render .subform-container input, .form-render .subform-container select, .form-render .subform-container textarea {
+      margin-bottom: 15px; }
+    .form-render .subform-container .select2-container {
+      margin-left: 0;
       margin-bottom: 15px; }
     .form-render .subform-container div.active {
       padding: 30px 20px 0;

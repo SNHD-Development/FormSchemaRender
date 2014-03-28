@@ -152,8 +152,30 @@ define([
           that.$('.form-actions button.btn-cancel').click();
         }
 
+        // Will need to loop through the value and trigger change
+        _.each(that.model.toJSON(), function(value, key) {
+          if (value === '') {
+            return;
+          }
+          var _inputName = that.$el.find(':input[name="' + key + '"]'),
+            _val = _inputName.val();
+          if (_val === '') {
+            if (_inputName.is('select') && _inputName.attr('data-url')) {
+              // When the data comeback from AJAX Call will loaded the value in
+              _inputName.one('dataloaded', function() {
+                _inputName.find('option').filter(function() {
+                  return $(this).text() === value;
+                }).attr('selected', true).trigger('change');
+              });
+            } else {
+              _inputName.val(value);
+            }
+          }
+        });
+
         // Set Up Ajax Call
         Utils.setupUrlAjaxCall(that.$el);
+
       });
     },
     /**
