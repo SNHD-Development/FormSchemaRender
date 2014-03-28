@@ -1128,6 +1128,14 @@ define([
       if (!field.name) {
         throw 'In order to use VisibleOn option, we need to pass in the Name';
       }
+      if (!parentContainer) {
+        // Check if this VisibleOn define the ParentContainer
+        if (field.options.visibleon.parentcontainer) {
+          parentContainer = field.options.visibleon.parentcontainer;
+        } else if (_typeLowerCase === 'booleaninput') {
+          parentContainer = '.form-render_booleaninput_wrapper';
+        }
+      }
 
       switch (_typeLowerCase) {
         case 'address':

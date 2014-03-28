@@ -165,16 +165,20 @@ $text_area_min_height:  100px;
 	/**
 	 * Yes Or No (BooleanInput Field Type)
 	 */
+	.form-render_booleaninput_wrapper {
+		margin-top: 10px;
+		overflow: hidden;
+	}
+
 	.form-render_booleaninput {
 		margin-left: 30px;
 		margin-bottom: 20px;
+		float: left;
 	}
 
 	.booleaninput-value-render {
-		display: inline;
-		position: relative;
-		top: -5px;
-		left: 20px;
+		float: left;
+		margin-left: 30px !important;
 	}
 
 	/**

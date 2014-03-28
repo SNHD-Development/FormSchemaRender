@@ -462,6 +462,7 @@ To turn on Provider, simply pass in "Options.ShowProvider" = true;
 ### VisibleOn Options
 
 There are sometime that the value from another field will effect the flow of the form. In this case, we will use `Options.VisibleOn = { Name: 'Name of other field', Values: 'Array of that field values that will trigger this field' };` to handle this situation.
+To specific the ParentContainer please pass in the css selector.
 
 Example: If a user select on a value in select area, this will trigger the Depend field.
 
@@ -491,7 +492,8 @@ VisibleOn Options
 				"Values": [
 					"Option 1",
 					"Option 3"
-				]
+				],
+				"ParentContainer": ".parent"
 			}
 		}
 	},
@@ -781,6 +783,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Submit Button not require to have url attr
 	- Fix validation for require on checkbox field type
 	- Add ability for SubForm to pull remote select values from AJAX
+	- Add VisibleOn options to set the parent container to render the html
 
 
 * 0.1.1
