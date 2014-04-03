@@ -1477,10 +1477,11 @@ define([
       $form.on('click', '.radio-container button', function(e) {
         e.preventDefault();
         var $this = $(e.target),
-          $input = $this.closest('.radio-container')
-            .find('input[type="hidden"]');
-        $input.val($this.attr('value'))
-          .trigger('change');
+          _val = $this.attr('value'),
+          $container = $this.closest('.radio-container'),
+          $input = $container.find('input[type="hidden"]');
+        $input.val(_val).trigger('change');
+        $container.find('.radio-value-render').html(_val).show('slow');
       });
     },
 
