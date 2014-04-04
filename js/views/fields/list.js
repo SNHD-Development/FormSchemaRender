@@ -176,6 +176,13 @@ define([
         // Set Up Ajax Call
         Utils.setupUrlAjaxCall(that.$el);
 
+        // Find the first input in the form
+        var $fInput = that.$(':input').not(':hidden').first().focus();
+        if ($fInput.length) {
+          $('html, body').animate({
+            scrollTop: $fInput.offset().top
+          }, 2000);
+        }
       });
     },
     /**
