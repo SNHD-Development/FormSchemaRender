@@ -178,11 +178,9 @@ define([
 
         // Find the first input in the form
         var $fInput = that.$(':input').not(':hidden').first().focus();
-        if ($fInput.length) {
-          $('html, body').animate({
-            scrollTop: $fInput.offset().top
-          }, 2000);
-        }
+        $('html, body').animate({
+          scrollTop: that.$el.offset().top
+        }, 2000);
       });
     },
     /**
