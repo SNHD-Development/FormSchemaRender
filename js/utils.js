@@ -1483,6 +1483,17 @@ define([
         $input.val(_val).trigger('change');
         $container.find('.radio-value-render').html(_val).show('slow');
       });
+      //If this is edit, will need to render this as well.
+      var $radioContainer = $form.find('.radio-container');
+      $radioContainer.each(function() {
+        var $this = $(this),
+          $hidden = $this.find('input[type="hidden"]'),
+          _val = $.trim($hidden.val());
+        if (_val === '') {
+          return;
+        }
+        $this.find('button[value="' + _val + '"]').trigger('click');
+      });
     },
 
     /**
