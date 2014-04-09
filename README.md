@@ -751,6 +751,32 @@ Example,
     }
 
 
+(Read mode) By Default, it will sort by string.
+If we want to change the way it sorted, we need to specify either ["int", "string", "string-ins", "float", "date"]
+Note: for date, will convert to int and sort by int.
+Thank you for this awesome project, [Stupid Table Plugin](http://joequery.github.io/Stupid-Table-Plugin/)
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do"
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?",
+            "Options": {
+            	"SortBy": "int"
+            }
+        }]
+    }
+
 ## Internal Only Options
 
 These options will be used in internal only mode.
@@ -771,7 +797,7 @@ Sometime there are some fileds that internal should not be able to update these 
 ## Version
 
 * 0.1.3
-
+	- Add ability to sort by column in List field type
 
 * 0.1.2
 

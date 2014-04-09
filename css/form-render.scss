@@ -419,6 +419,15 @@ $text_area_min_height:  100px;
 			margin: 30px auto;
 		}
 
+		/** Table Sorter **/
+		.stupidtable {
+			th {
+				&:hover {
+					cursor: pointer;
+					text-decoration: underline;
+				}
+			}
+		}
 	}
 
 	.uneditable-input {

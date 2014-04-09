@@ -40,6 +40,7 @@ require.config({
     "jquery.lightbox": 'libs/lightbox/lightbox-2.6',
     "jquery.zclip": 'libs/copy/jquery.zclip.min',
     "jquery.select2": 'libs/select2/select2.min',
+    "jquery.stupidtable": 'libs/jquery/stupidtable.min',
 
     // FileUpload
     //'blueimp-helper': 'libs/file-upload/dependency/load-image.min',
@@ -114,6 +115,10 @@ require.config({
       deps: ['jquery', 'bootstrap'],
       exports: 'jQuery.zclip'
     },
+    "jquery.stupidtable": {
+      deps: ['jquery'],
+      exports: 'jQuery.stupidtable'
+    },
     "jquery.select2": ['jquery']
   }
 });
@@ -124,7 +129,8 @@ require([
   'jquery',
   'views/app',
   'vm',
-  'utils'
+  'utils',
+  'libs/date'
 ], function($, AppView, Vm, Utils) {
 
   // Prevent IE 9 and Below for console object

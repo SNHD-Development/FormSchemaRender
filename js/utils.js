@@ -14,6 +14,7 @@ define([
   'jquery.placeholder',
   'jquery.expose',
   'jquery.zclip',
+  'jquery.stupidtable',
   'xdr'
 ], function($, _, Backbone, Vm) {
 
@@ -1007,6 +1008,17 @@ define([
           location.reload();
         }, _delay);
       });
+
+      // Make the subform be able to sort by column
+      var stupidtable = $('table.stupidtable').stupidtable();
+      if (stupidtable.length) {
+        stupidtable.on('aftertablesort', function(event, data) {
+          var th = $(this).find("th");
+          th.find(".dir-icon").remove();
+          var arrow = data.direction === "asc" ? "icon-arrow-up" : "icon-arrow-down";
+          th.eq(data.column).append('<i class="dir-icon ' + arrow + '" style="position:relative; left: 10px; top: -3px;"></i>');
+        });
+      }
     },
     /**
      * Setup Read Mode

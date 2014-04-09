@@ -752,11 +752,18 @@ define([
           // If this is 'list' type
           if (typeof this.options.formData.fields[field.name] !== 'undefined' && (this.options.formData.fields[field.name].length > 0 || _.size(this.options.formData.fields[field.name]) > 0)) {
             var _labels = [],
+              _sortBy = [],
+              _sortByVal = [],
               _keys = {},
               _cnt = 0,
               _values = new Array(this.options.formData.fields[field.name].length || _.size(this.options.formData.fields[field.name]));
             _.each(field.fields, function(element, index) {
               _labels.push(element.description);
+              if (element.options.sortby && element.options.sortby.toLowerCase() === 'date') {
+                _sortBy.push('data-sort="int"');
+              } else {
+                _sortBy.push((element.options.sortby) ? 'data-sort="' + element.options.sortby + '"' : 'data-sort="string"');
+              }
               _.each(that.options.formData.fields[field.name], function(modelData, index) {
                 var _fullName;
                 if (!_.isNumber(index)) {
@@ -771,6 +778,14 @@ define([
                 }
                 if (typeof _values[index] === 'undefined') {
                   _values[index] = [];
+                  _sortByVal[index] = [];
+                }
+                // Setup Sort By Element
+                if (element.options.sortby && element.options.sortby.toLowerCase() === 'date') {
+                  var _dateTime = Date.parseString(modelData[element.name], 'M/d/yyyy h:mm:ss a');
+                  _sortByVal[index].push('data-sort-value="' + _dateTime.getTime() + '"');
+                } else {
+                  _sortByVal[index].push(null);
                 }
                 switch (element.type.toLowerCase()) {
                   case 'timestamp':
@@ -809,6 +824,9 @@ define([
             _html += that.inputTemplate['subform-table']({
               labels: _labels,
               values: _values,
+              mode: readMode,
+              sortBy: _sortBy,
+              sortByVal: _sortByVal,
               heading: ((typeof field.options.readmodedescription === 'undefined') ? field.description : field.options.readmodedescription)
             });
           } else {
