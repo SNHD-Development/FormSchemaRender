@@ -995,7 +995,8 @@ define([
         _options = {
           el: '#' + id + this.prefixedName['listdisplayid'],
           formSchema: field,
-          formId: id
+          formId: id,
+          options: this.options
         }, _listView = _.extend({}, Backbone.Events);
       $(this.el)
         .on('click', '#' + id + '_add_btn', _options, this.displaySubForm)
