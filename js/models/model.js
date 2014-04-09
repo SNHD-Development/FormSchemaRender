@@ -223,9 +223,6 @@ define([
           _attrs[value.name] = '';
           if (typeof attrs.validation[value.name] !== 'undefined') {
             _validation[value.name] = _.clone(attrs.validation[value.name]);
-            if (_addToModelBinder) {
-              model.bindings[value.name] = '[name="' + value.name + '"]';
-            }
             if (value.options.autocomplete) {
               var _emailValidation = _.clone(attrs.validation[value.name]),
                 _emailServerValidation = _.clone(attrs.validation[value.name]);
@@ -237,18 +234,20 @@ define([
 
               _name = value.name + '_username';
               _validation[_name] = _emailValidation;
-              // Binding the Server
-              if (_addToModelBinder) {
-                model.bindings[_name] = '[name="' + _name + '"]';
-              }
 
               _name = value.name + '_server';
               _validation[_name] = _emailServerValidation;
-              // Binding the Server
-              if (_addToModelBinder) {
-                model.bindings[_name] = '[name="' + _name + '"]';
-              }
 
+            }
+          }
+          // Add to model binder
+          if (_addToModelBinder) {
+            model.bindings[value.name] = '[name="' + value.name + '"]';
+            if (value.options.autocomplete) {
+              _name = value.name + '_username';
+              model.bindings[_name] = '[name="' + _name + '"]';
+              _name = value.name + '_server';
+              model.bindings[_name] = '[name="' + _name + '"]';
             }
           }
           break;

@@ -67,9 +67,9 @@ define([
         var _html = '',
           _required, formView = Vm.create(that, 'BaseField', BaseField, {
             formSchema: that.options.formSchema
-          });
+          }),
+          _options = that.options;
         _.each(that.options.formSchema.fields, function(value, key, list) {
-          var _options = that.options;
           // Check for Show On Mode
           if (!BaseField.prototype.checkShowOnMode.call(that, value, _options.options.mode, _options.options.formData.status)) {
             if (that.model.bindings[value.name]) {

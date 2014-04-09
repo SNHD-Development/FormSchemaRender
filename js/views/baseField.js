@@ -1099,7 +1099,7 @@ define([
       if (models) {
         var _model = Backbone.Model.extend({});
         _.each(models, function(element) {
-          var _element = new _model;
+          var _element = new _model();
           _element.set(element);
           e.data.model.get(_key)
             .add(_element);
@@ -1113,7 +1113,8 @@ define([
         var _data = {
           el: '#' + list.options.formId + e.data.prefixedName['collectiondisplayid'],
           formSchema: list.options.formSchema,
-          collection: e.data.model.get(_key)
+          collection: e.data.model.get(_key),
+          options: list.options.options
         }, collectionView = Vm.create(this, 'CollectionView' + e.data.formId, CollectionView, _data);
         collectionView.render();
 
