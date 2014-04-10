@@ -12,7 +12,7 @@ if (heading) {
 		<tr>
 			<% _.each( labels, function(element, index) { %>
 			<%
-			var _sortBy = (sortBy[index]) ? sortBy[index]: 'data-sort="string"';
+			var _sortBy = (typeof sortBy !== 'undefined' && sortBy[index]) ? sortBy[index]: 'data-sort="string"';
 			_sortBy = (mode) ? _sortBy : '';
 			%>
 			<th <%= _sortBy %>><%= element %></th>
@@ -26,7 +26,7 @@ if (heading) {
 		<% _.each( values, function(element1, index) { %>
 		<tr>
 			<% _.each( element1, function(element2, index2) { %>
-			<% var _sortByVal = (mode && sortByVal[index][index2]) ? sortByVal[index][index2]: '' %>
+			<% var _sortByVal = (mode && typeof sortByVal !== 'undefined' && sortByVal[index][index2]) ? sortByVal[index][index2]: '' %>
 			<td <%= _sortByVal %>><%= element2 %></td>
 			<% }); %>
 			<% if(_model) { %>

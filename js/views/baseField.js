@@ -758,6 +758,7 @@ define([
               _cnt = 0,
               _values = new Array(this.options.formData.fields[field.name].length || _.size(this.options.formData.fields[field.name]));
             _.each(field.fields, function(element, index) {
+              element.options = element.options || {};
               _labels.push(element.description);
               if (element.options.sortby && element.options.sortby.toLowerCase() === 'date') {
                 _sortBy.push('data-sort="int"');
