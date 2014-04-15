@@ -4,6 +4,15 @@
 $text_area_min_height:  100px;
 
 /**
+ * Override BootStrap
+ */
+.typeahead {
+	&.dropdown-menu {
+		z-index: 1028;
+	}
+}
+
+/**
  * Form Render Global Styles
  **/
 .form-render {
@@ -296,6 +305,12 @@ $text_area_min_height:  100px;
 
 		.actions {
 			padding: 15px 25px 0;
+
+			.required {
+				font-size: 18px;
+				font-weight: bold;
+				color: inherit;
+			}
 		}
 
 		.subform-collection {

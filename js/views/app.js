@@ -283,7 +283,8 @@ define([
         if (this.options.token !== '') {
           $form.prepend('<input type="hidden" name="token" value="' + this.options.token + '"/>');
         }
-        if (this.options.mode === 'create') {
+        var _action = $form.attr('action');
+        if (this.options.mode === 'create' && _action.search(/name=\w/ig) === -1) {
           $form.prepend('<input type="hidden" name="form_name" value="' + this.options.formSchema.name + '"/>');
         }
 

@@ -2,6 +2,12 @@
  * Global Variables
  **/
 /**
+ * Override BootStrap
+ */
+.typeahead.dropdown-menu {
+  z-index: 1028; }
+
+/**
  * Form Render Global Styles
  **/
 .form-render {
@@ -199,6 +205,10 @@
           margin-bottom: 5px; }
     .form-render .subform-container .actions {
       padding: 15px 25px 0; }
+      .form-render .subform-container .actions .required {
+        font-size: 18px;
+        font-weight: bold;
+        color: inherit; }
     .form-render .subform-container .subform-collection {
       margin: 20px auto; }
     .form-render .subform-container .subform-actions {
