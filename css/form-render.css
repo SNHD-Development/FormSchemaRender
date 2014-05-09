@@ -49,6 +49,9 @@
    * Popover Form
    **/
   /**
+   * Select 2
+   */
+  /**
    * SubForm Style
    **/
   /**
@@ -183,6 +186,8 @@
     margin-left: 3px;
     margin-right: 3px;
     font-size: 18px; }
+  .form-render .select2-container {
+    margin-bottom: 15px; }
   .form-render .subform-container {
     padding: 20px;
     margin-bottom: 30px;

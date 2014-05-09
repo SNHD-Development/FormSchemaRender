@@ -251,12 +251,13 @@ define([
     submitForm: function(e) {
       var $form = $('#' + this.options.formSchema.name, this.el),
         $submitBtn = $('.form-actions button[type="submit"]', this.el),
-        _opt, _options;
+        _opt, _options,
+        that = this;
       if ($form.hasClass('form_submitted')) {
         return;
       }
       $form.addClass('form_submitted')
-        .removeClass('validation_pass validation_error');
+        .removeClass('validation_pass validation_error not_sending_data_yet');
       this.getBDateinput(this.el, this.formView.model);
       Utils.getUserId(this.el, this.formView.model);
       // Remove Not needed input from submitting data
@@ -268,6 +269,12 @@ define([
 
       // Check Data
       Utils.getDefaultValues(this.formView.el); // Make sure to get default value for each type.
+      // Select2 Dynamic Validation
+      $form.find(':input.has-select2-dynamic').each(function() {
+        var $this = $(this);
+        that.formView.model.set($this.attr('name'), $this.val());
+      });
+
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid()) {
 
         // If there is an hidden type that has data-value, then will need to send this as well
@@ -346,10 +353,10 @@ define([
           $form.ajaxSubmit(_options);
         } else {
           // This is not using AJAX to send POST
-          $form.trigger($form.attr('id') + '.preSubmit');
+          $form.trigger($form.attr('id') + '.preSubmit', [e, $form]);
         }
 
-        if (this.formView.options.formSchema.view !== 'wizard') {
+        if (this.formView.options.formSchema.view !== 'wizard' && !$form.hasClass('not_sending_data_yet')) {
           var _t_1, _t_2;
           switch (this.formView.options.lang) {
             case 'sp':

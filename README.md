@@ -114,19 +114,41 @@ Every events in our form render will follow this namespace `"form_id.event_name"
 * Form before submit Event: `form_id.preSubmit`
 * Form when received respond back Event: `form_id.postSubmit`
 
+Note:
+
+For preSubmit event, the parameters for POST and using AJAX are different,
+Using AJAX will be function (e, formData, jqForm, options)
+Normal Form POST will be function (e, submitEvent, $form)
+
 Then you need to pass your custom event into
 
 	var formEvents = {
-		'renderCompleted' : function() {
+		'renderCompleted' : function(e, view) {
 			console.log('Render Form Completed.');
 		},
-		'preSubmit' : function() {
+		'preSubmit' : function(e, formData, jqForm, options) {
 			console.log('Before Submitting this form.');
 		},
-		'postSubmit' : function () {
+		'postSubmit' : function (e, responseText, _jsonText, statusText, xhr, $form) {
 			console.log('Let\'s check the respond.');
 		}
 	};
+
+Or we can add this key to the FormSchema as well.
+
+	{
+		Events: {
+			'renderCompleted' : "function(e, view) {
+				console.log('Render Form Completed.');
+			}",
+			'preSubmit' : "function(e, formData, jqForm, options) {
+				console.log('Before Submitting this form.');
+			}",
+			'postSubmit' : "function (e, responseText, _jsonText, statusText, xhr, $form) {
+				console.log('Let\'s check the respond.');
+			}"
+		}
+	}
 
 ### Multi-Languages Support
 
@@ -374,6 +396,45 @@ To change languages for Select field add "Values-language" like,
 	}
 
 To order the select value, you can simply set Options.OrderBy = "alphabetical"
+
+To Enabled, multiple select. Set Attributes.multiple = true
+
+	{
+		"Name": "OpenBy",
+		"Type": "Select",
+		"Description": "Box Opened By",
+		"Featured": true,
+		"Attributes": {
+			"multiple": true
+		}
+	}
+
+To loaded look up value dynamically need to set up LookUp Object in Options key
+
+	{
+		"Name": "By",
+		"Type": "Select",
+		"Description": "By",
+		"Featured": true,
+		"Options": {
+			"LookUp": {
+				"Url": "/users/searchforuser?query={{this}}&internalOnly=true"
+			}
+		}
+	}
+
+LookUp Object expected the JSON data to be an array that contain objects.
+
+By default will use "id" as the value and "text" as a text to display in that object key.
+If we want to change the key, simply Set LookUp Object as,
+
+	{
+		"LookUp": {
+			"Url": "/users/searchforuser?query={{this}}&internalOnly=true",
+			"Value": "YourValueKey",
+			"Text": "YourTextKey"
+		}
+	}
 
 
 ### CheckBox Field
@@ -798,6 +859,7 @@ Sometime there are some fileds that internal should not be able to update these 
 
 * 0.1.3
 	- Add ability to sort by column in List field type
+	- Add Events Key in FormSchema
 
 * 0.1.2
 

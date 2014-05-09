@@ -117,7 +117,7 @@ define([
       };
       // Not render label
       this.notRenderLabel = [
-        'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox', 'timestamp'
+        'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox', 'timestamp', 'hidden'
       ];
       // Not render label for read
       this.notRenderLabelRead = [
@@ -289,6 +289,10 @@ define([
 
         case 'userid':
           this._hasUserId = true;
+          // Make this compatible with LookUp Key
+          if (field.options && field.options.lookup && field.options.lookup.url) {
+            field.options.url = field.options.lookup.url;
+          }
           if (field.options.url) {
             field.attributes['data-url'] = field.options.url;
           }
@@ -315,6 +319,21 @@ define([
             _type = 'select';
           }
         case 'select':
+          // Make this compatible with LookUp Key
+          if (field.options && field.options.lookup && field.options.lookup.url) {
+            field.options.url = field.options.lookup.url;
+            // Setup Key of Text or Value to look up.
+            if (field.options.lookup.value) {
+              field.attributes['data-select-key-value'] = field.options.lookup.value;
+            }
+            if (field.options.lookup.text) {
+              field.attributes['data-select-key-text'] = field.options.lookup.text;
+            }
+            // If this is read mode and have the value for this field
+            if (this.options.mode === 'update' && this.options.formData.fields[field.name]) {
+              field.attributes['data-select-value'] = this.options.formData.fields[field.name];
+            }
+          }
           if (field.options.url) {
             field.attributes['data-url'] = field.options.url.replace(/'/ig, '&#39;');
           }

@@ -150,6 +150,10 @@ require([
     }
     // Cast to lowercase
     Vm.toLower(formSchema);
+
+    // Set the View Property
+    _view = (typeof view !== 'undefined') ? view.toLowerCase() : 'horizontal';
+
     // Change the Languages
     if (lang && lang !== 'en') {
       Vm.changeLanguage(formSchema.fields, lang);
@@ -165,10 +169,9 @@ require([
         delete formData.internalfields;
       }
     } else {
-      _mode = (typeof mode !== 'undefined' && config.view.indexOf(view.toLowerCase()) > -1) ? mode.toLowerCase() : 'create';
+      _mode = (typeof mode !== 'undefined' && config.view.indexOf(_view) > -1) ? mode.toLowerCase() : 'create';
     }
 
-    _view = (typeof view !== 'undefined') ? view.toLowerCase() : 'horizontal';
     _token = (typeof token !== 'undefined' && _mode !== 'read') ? token : '';
 
     _opts = {
@@ -183,6 +186,19 @@ require([
 
     if (typeof formActionUrl !== 'undefined') {
       _opts.formActionUrl = formActionUrl;
+    }
+
+    // Merge formEvents with the Key if Existed
+    // formEvents from global scope take precedent
+    if (formSchema.events) {
+      if (typeof formEvents === 'undefined') {
+        formEvents = {};
+      }
+      _.each(formSchema.events, function(value, key) {
+        if (!formEvents[key]) {
+          eval('formEvents[key]=' + value);
+        }
+      });
     }
 
     // Render Custom Script Here

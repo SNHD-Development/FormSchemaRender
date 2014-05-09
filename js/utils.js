@@ -98,6 +98,22 @@ define([
           return $1.toUpperCase();
         });
     },
+
+    /**
+     * Looking for {{words}} will return an array if founded, otherwise return null
+     * @param  string str
+     * @return mixed
+     */
+    parseTemplateString: function(str) {
+      var _reg = /\w+=\{\{(\w|\.)+\}\}/ig;
+      return str.match(_reg);
+    },
+
+    parseTemplateStringGet: function(str) {
+      var _reg = /\w+=(\w|\.)+/ig;
+      return str.match(_reg);
+    },
+
     /**
      * Need to find the required field for label
      **/
@@ -1253,140 +1269,242 @@ define([
         var $this = $(this),
           _url = $this.attr('data-url');
         // console.log(_url);
-        // $.support.cors = true;
-        $.ajax({
-          // crossDomain: true,
-          url: _url,
-          dataType: "json",
-          success: function(data, textStatus) {
-            if (textStatus === 'success') {
-              var _opts = '<option value="">--- Please Select ---</option>',
-                _type = $urlEndPoint.prop('type'),
-                _dataArray = [];
-              _.each(data, function(element) {
-                switch (_type) {
-                  case 'select-one':
-                    _opts += '<option value="' + element + '">' + element + '</option>';
-                    $this.find('option')
-                      .remove();
-                    $this.append(_opts);
-                    $this.select2({
-                      containerCssClass: 'span12'
-                    });
-                    $('#s2id_' + $this.attr('id') + ' .select2-drop', $form)
-                      .hide();
+        // Detect the {{}} Template, then this will be look up dynamic
+        var _tokens = that.parseTemplateString(_url);
+        if (_tokens) {
+          var _tokensStatic = that.parseTemplateStringGet(_url);
+          if (_tokensStatic) {
+            // If there is some GET data that do not match with {{Template}}
+            var _staticResult = {};
+            _.each(_tokensStatic, function(element) {
+              var _keyVal = element.split('=');
+              if (_keyVal.length !== 2) {
+                return;
+              }
+              _staticResult[_keyVal[0]] = _keyVal[1];
+            });
+          }
+          // Then we will be using select2 (Dynamic Lookup)
+          if (!$this.select2) {
+            throw 'Error: select2 is not yet loaded. Please refresh this page again! (Setup "' + $this.attr('id') + '"")';
+          }
+          // Select2 does not work on select element for Ajax Call
+          var _domStr = '<input type="hidden" name="' + $this.attr('name') + '" id="' + $this.attr('id') + '" class="' + $this.attr('class') + ' has-select2-dynamic" />',
+            _value = $this.attr('data-select-key-value'),
+            _text = $this.attr('data-select-key-text'),
+            _fieldValue = $this.attr('data-select-value');
+          $this.replaceWith(_domStr);
+          $this = $(':input[name="' + $this.attr('name') + '"]');
+          if (_fieldValue) {
+            $this.val(_fieldValue);
+          }
+
+          // Default Parameters for Select2
+          var _ajaxObj = {
+            url: _url.match(/^(\w|\.|\/|:)+\(?/ig).shift(),
+            data: function(term, page) {
+              var _result = _staticResult || {};
+              _.each(_tokens, function(element) {
+                var _keyVal = element.split('='),
+                  _rep = _keyVal.pop().replace(/(\{\{|\}\})/ig, ''),
+                  _val;
+                switch (_rep) {
+                  case 'this':
+                    _val = term;
                     break;
                   default:
-                    _dataArray.push(element[$this.attr('id')]);
+                    // Look up name value
+                    var $obj = $(':input[name="' + _rep + '"]');
+                    _val = $obj.val();
                 }
+                _result[_keyVal] = _val;
               });
-              if (_dataArray.length) {
-                $this.attr({
-                  "autocomplete": "off"
-                });
-                $this.typeahead({
-                  minLength: 3,
-                  source: _dataArray
-                });
-                // If this value has change, we need to auto populate the data
-                var _dataCallback = function(e) {
-                  var _val = $this.val(),
-                    _matchData = _.find(data, function(element) {
-                      if (_val === element[$this.attr('id')]) {
-                        return true;
-                      }
-                    }),
-                    _attachEvent = true;
-                  if (_matchData) {
-                    _.each(_matchData, function(value, key) {
-                      if (value === '') {
-                        return;
-                      } else if (typeof value === 'object') {
-                        // If there is the View and Data in them means we need to render the view for user to select
-
-                        if (value.length) {
-
-                          var _listName;
-                          _.some(value[0], function(listValue, listKey) {
-                            _listName = listKey.split('_')
-                              .shift();
-                            return true;
-                          });
-                          $('#subform_' + _listName, $form)
-                            .trigger('subform_' + _listName + '.ajaxUpdate', [value]);
-
-                        } else if (value.data && value.view && value.title) {
-                          var _listName;
-                          _.some(value.data[0], function(listValue, listKey) {
-                            _listName = listKey.split('_')
-                              .shift();
-                            return true;
-                          });
-                          _attachEvent = false;
-                          // This is special case and need to render View and Data
-                          require(['views/' + value.view + 'AjaxView'], function(AjaxView) {
-                            var _opts = {
-                              $form: $form,
-                              collection: new Backbone.Collection(value.data),
-                              id: key + '_AjaxView',
-                              $input: $this,
-                              input_callback: _dataCallback,
-                              title: value.title,
-                              listName: _listName
-                            },
-                              ajaxView = Vm.create(that, 'AjaxView', AjaxView, _opts);
-                            ajaxView.render();
-                          });
-                        }
-
-                      } else {
-                        var $targetInput = $(':input[name="' + key + '"]', $form);
-                        if ($targetInput) {
-                          $targetInput.val(value)
-                            .trigger('change');
-                        }
-                      }
-                    });
+              return _result;
+            },
+            results: function(data, page) {
+              // By Default will use id and text, otherwise will need to parse the data
+              if (_value || _text) {
+                var _tmp = [];
+                _.each(data, function(element) {
+                  var _tmpObj = {};
+                  if (_value && _text) {
+                    _tmpObj.id = element[_value];
+                    _tmpObj.text = element[_text];
+                    _tmp.push(_tmpObj);
+                  } else if (_value) {
+                    _tmpObj.id = element[_value];
+                    _tmpObj.text = element.text;
+                    _tmp.push(_tmpObj);
+                  } else if (_text) {
+                    _tmpObj.id = element.id;
+                    _tmpObj.text = element[_text];
+                    _tmp.push(_tmpObj);
                   }
-                  if (_attachEvent) {
-                    $this.one('change', _dataCallback);
-                  }
-                };
-                $this.one('change', _dataCallback);
+                });
+                data = _tmp;
               }
-              // Trigger dataloaded event
-              $this.trigger('dataloaded');
+              return {
+                more: false,
+                results: data
+              };
             }
           },
-          error: function(jqXHR, textStatus, errorThrown) {
-            if (console && console.log) {
-              console.log('Error: when trying to request AJAX data in setupUrlAjaxCall');
+            _opts = {
+              placeholder: '--- Please Select ---',
+              minimumInputLength: 3,
+              initSelection: function(element, callback) {
+                if (_fieldValue) {
+                  // Will statically set the
+                  $.ajax({
+                    url: _ajaxObj.url,
+                    data: _ajaxObj.data(_fieldValue),
+                    success: function(data, textStatus, jqXHR) {
+                      if (data.length === 1) {
+                        var element = data.pop(),
+                          _tmpObj = {};
+                        if (_value && _text) {
+                          _tmpObj.id = element[_value];
+                          _tmpObj.text = element[_text];
+                        } else if (_value) {
+                          _tmpObj.id = element[_value];
+                          _tmpObj.text = element.text;
+                        } else if (_text) {
+                          _tmpObj.id = element.id;
+                          _tmpObj.text = element[_text];
+                        }
+                        callback(_tmpObj);
+                      } else {
+                        callback({
+                          id: _fieldValue,
+                          text: _fieldValue
+                        });
+                      }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                      callback({
+                        id: _fieldValue,
+                        text: _fieldValue
+                      });
+                    }
+                  });
+                }
+              },
+              ajax: _ajaxObj
+            };
+          // Setup Select2 for Dynamic Lookup
+          $this.select2(_opts);
+        } else {
+          // Static Lookup
+          // $.support.cors = true;
+          $.ajax({
+            // crossDomain: true,
+            url: _url,
+            dataType: "json",
+            success: function(data, textStatus) {
+              if (textStatus === 'success') {
+                var _opts = '<option value="">--- Please Select ---</option>',
+                  _type = $urlEndPoint.prop('type'),
+                  _dataArray = [];
+                _.each(data, function(element) {
+                  switch (_type) {
+                    case 'select-one':
+                      _opts += '<option value="' + element + '">' + element + '</option>';
+                      $this.find('option')
+                        .remove();
+                      $this.append(_opts);
+                      $this.select2({
+                        containerCssClass: 'span12'
+                      });
+                      $('#s2id_' + $this.attr('id') + ' .select2-drop', $form)
+                        .hide();
+                      break;
+                    default:
+                      _dataArray.push(element[$this.attr('id')]);
+                  }
+                });
+                if (_dataArray.length) {
+                  $this.attr({
+                    "autocomplete": "off"
+                  });
+                  $this.typeahead({
+                    minLength: 3,
+                    source: _dataArray
+                  });
+                  // If this value has change, we need to auto populate the data
+                  var _dataCallback = function(e) {
+                    var _val = $this.val(),
+                      _matchData = _.find(data, function(element) {
+                        if (_val === element[$this.attr('id')]) {
+                          return true;
+                        }
+                      }),
+                      _attachEvent = true;
+                    if (_matchData) {
+                      _.each(_matchData, function(value, key) {
+                        if (value === '') {
+                          return;
+                        } else if (typeof value === 'object') {
+                          // If there is the View and Data in them means we need to render the view for user to select
+
+                          if (value.length) {
+
+                            var _listName;
+                            _.some(value[0], function(listValue, listKey) {
+                              _listName = listKey.split('_')
+                                .shift();
+                              return true;
+                            });
+                            $('#subform_' + _listName, $form)
+                              .trigger('subform_' + _listName + '.ajaxUpdate', [value]);
+
+                          } else if (value.data && value.view && value.title) {
+                            var _listName;
+                            _.some(value.data[0], function(listValue, listKey) {
+                              _listName = listKey.split('_')
+                                .shift();
+                              return true;
+                            });
+                            _attachEvent = false;
+                            // This is special case and need to render View and Data
+                            require(['views/' + value.view + 'AjaxView'], function(AjaxView) {
+                              var _opts = {
+                                $form: $form,
+                                collection: new Backbone.Collection(value.data),
+                                id: key + '_AjaxView',
+                                $input: $this,
+                                input_callback: _dataCallback,
+                                title: value.title,
+                                listName: _listName
+                              },
+                                ajaxView = Vm.create(that, 'AjaxView', AjaxView, _opts);
+                              ajaxView.render();
+                            });
+                          }
+
+                        } else {
+                          var $targetInput = $(':input[name="' + key + '"]', $form);
+                          if ($targetInput) {
+                            $targetInput.val(value)
+                              .trigger('change');
+                          }
+                        }
+                      });
+                    }
+                    if (_attachEvent) {
+                      $this.one('change', _dataCallback);
+                    }
+                  };
+                  $this.one('change', _dataCallback);
+                }
+                // Trigger dataloaded event
+                $this.trigger('dataloaded');
+              }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              alert('Error: when trying to request AJAX data to "' + _url + '" for "' + $this.attr('id') + '".');
             }
-            window.setTimeout(function() {
-              window.location.reload();
-            }, 3000);
-          }
-        });
-        // $.getJSON(_url, function(data, textStatus) {
-        //     if (textStatus === 'success') {
-        //         var _opts = '';
-        //         _.each(data, function(element) {
-        //             _opts += '<option value="' + element + '">' + element + '</option>';
-        //         });
-        //         $this.find('option').remove();
-        //         $this.append(_opts);
-        //         $this.select2({
-        //             containerCssClass: 'span12'
-        //         });
-        //         $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
-        //     }
-        // }).fail(function(jqXHR, textStatus, errorThrown) {
-        //     debugger;
-        //     console.log('jqXHR');
-        //     console.log(jqXHR);
-        //     console.log('errorThrown');
-        //     console.log(errorThrown);
-        // });
+          });
+        }
       });
     },
 

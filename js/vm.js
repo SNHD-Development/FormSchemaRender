@@ -290,7 +290,7 @@ define([
         }
         if (typeof obj[keyLower] === 'object') {
           // Validation need to match exactly with the name of the input
-          if (keyLower === 'validation' || keyLower.search(/^values-*/) !== -1) {
+          if (keyLower === 'validation' || keyLower.search(/^values-*/) !== -1 || keyLower === 'events') {
             continue;
           } else if (typeof skipKey !== 'undefined' && ((!_.isArray(skipKey) && keyLower === skipKey) || (_.isArray(skipKey) && _.indexOf(skipKey, keyLower) > -1))) {
             continue;
