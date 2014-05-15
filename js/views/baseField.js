@@ -432,7 +432,7 @@ define([
           _type = 'date';
         case 'date':
           // Check for $date
-          if (this.options.formData && typeof this.options.formData.fields[field.name] === 'object') {
+          if (this.options.formData && this.options.formData.fields && typeof this.options.formData.fields[field.name] === 'object') {
             var _tmpDate = new Date(this.options.formData.fields[field.name].$date);
             var _month = _tmpDate.getMonth() + 1;
             if (_month < 10) {
