@@ -431,6 +431,22 @@ define([
         case 'dateinput':
           _type = 'date';
         case 'date':
+          // Check for $date
+          if (this.options.formData && typeof this.options.formData.fields[field.name] === 'object') {
+            var _tmpDate = new Date(this.options.formData.fields[field.name].$date);
+            var _month = _tmpDate.getMonth() + 1;
+            if (_month < 10) {
+              _month = '0' + _month;
+            }
+            _month += '/';
+            var _date = _tmpDate.getDate();
+            if (_date < 10) {
+              _date = '0' + _date;
+            }
+            _date += '/';
+
+            this.options.formData.fields[field.name] = _month + _date + _tmpDate.getFullYear();
+          }
           if (field.attributes && !field.attributes.placeholder) {
             field.attributes.placeholder = 'mm/dd/yyyy';
           }

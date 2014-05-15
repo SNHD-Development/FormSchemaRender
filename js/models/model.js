@@ -318,7 +318,7 @@ define([
 
       this.notBinding = []; // will be used to check what field will not need to render.
 
-      var _attrs = parseFields(this, this.attributes, this.is_internal);
+      var _attrs = parseFields(this, this.attributes, this.attributes.is_internal);
       this.clear();
       this.set(_attrs);
 
