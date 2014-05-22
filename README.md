@@ -436,6 +436,8 @@ If we want to change the key, simply Set LookUp Object as,
 		}
 	}
 
+To Create Tag, simply set Options.Tags = true
+
 
 ### CheckBox Field
 
@@ -858,6 +860,7 @@ Sometime there are some fileds that internal should not be able to update these 
 ## Version
 
 * 0.1.4
+	- Adding Tag in Select Type as a options
 
 * 0.1.3
 	- Add ability to sort by column in List field type

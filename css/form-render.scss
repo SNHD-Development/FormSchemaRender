@@ -1,627 +1,543 @@
 /**
  * Global Variables
  **/
-$text_area_min_height:  100px;
+$text_area_min_height: 100px;
 
 /**
  * Override BootStrap
  */
 .typeahead {
-	&.dropdown-menu {
-		z-index: 1028;
-	}
+    &.dropdown-menu {
+        z-index: 1028;
+    }
 }
 
 /**
  * Form Render Global Styles
  **/
 .form-render {
-
-	// Disable Browser Default
-	input::-webkit-calendar-picker-indicator {
-    	display: none;
-	}
-
-	input[type="date"]::-webkit-input-placeholder {
-    	visibility: hidden !important;
-	}
-
-	input::-webkit-outer-spin-button,
-	input::-webkit-inner-spin-button {
-	    /* display: none; <- Crashes Chrome on hover */
-	    -webkit-appearance: none;
-	    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-	}
-
-	/**
-	 * Show File Input
-	 **/
-	.showInputFile {
-		display: inline !important;
-		margin-right: 20px !important;
-	}
-
-	/**
-	 * IE 8 Utilities Class
-	 **/
-	.hideInputFile {
-		display: block !important;
-		position: relative !important;
-		left: -999999px !important;
-		width: 1px !important;
-		height: 1px !important;
-		margin: 0px !important;
-		padding: 0px !important;
-	}
-
-	/**
-	 * Placeholder
-	 */
-	.placeholder {
-		color: #BBB !important;
-		font-style: italic !important;
-	}
-
-	::-webkit-input-placeholder {
-		color: #BBB !important;
-		font-style: italic !important;
-	}
-
-	::-moz-placeholder {
-		color: #BBB !important;
-		font-style: italic !important;
-	}
-
-	:-ms-input-placeholder {
-		color: #BBB !important;
-		font-style: italic !important;
-	}
-
-	input:-moz-placeholder {
-		color: #BBB !important;
-		font-style: italic !important;
-	}
-
-	margin: 25px 20px;
-
-	label {
-		span {
-			&.required {
-				color: #B94A48;
-				font-size: 18px;
-				font-weight: bold;
-				margin-left: 5px;
-			}
-		}
-	}
-
-	fieldset {
-		clear: both;
-
-		&.birthday-picker {
-			clear: none;
-		}
-	}
-
-	/**
-	 * Fraction
-	 */
-	.form-fraction {
-		span {
-			margin: auto 5px;
-		}
-		input {
-			width: 40%;
-		}
-	}
-
-	/**
-	 * Select
-	 **/
-	select {
-		min-width: 220px;
-		width: auto;
-		&[class^="birth-"] {
-			min-width: 0;
-		}
-	}
-
-
-	/**
-	 * Radio
-	 */
-
-	.radio-container {
-		overflow: hidden;
-		margin-bottom: 10px;
-
-		label {
-			&.radio {
-				margin-left: 30px;
-
-				input {
-					&[type="radio"] {
-						margin-left: -25px;
-					}
-				}
-			}
-		}
-
-		.radio-value-render {
-			display: inline;
-			margin-left: 30px !important;
-			margin-bottom: 0;
-		}
-	}
-
-	/**
-	 * CheckBox
-	 */
-	.checkbox-container {
-
-		margin-bottom: 10px;
-		overflow: hidden;
-
-		.text-right {
-			margin-top: 10px;
-			margin-bottom: 20px;
-			button {
-				margin-right: 20px;
-			}
-		}
-
-		label {
-			&.checkbox {
-				margin-left: 30px;
-
-				input {
-					&[type="checkbox"] {
-						margin-left: -25px;
-					}
-				}
-			}
-		}
-
-		textarea {
-
-			&.other-textbox {
-				display: none;
-				margin-top: 10px;
-			}
-
-		}
-	}
-	/**
-	 * Telephone
-	 */
-	.tel-wrapper {
-		.tel-provider {
-			margin-left: 20px;
-		}
-	}
-
-	/**
-	 * Yes Or No (BooleanInput Field Type)
-	 */
-	.form-render_booleaninput_wrapper {
-		margin-top: 10px;
-		overflow: hidden;
-	}
-
-	.form-render_booleaninput {
-		margin-left: 30px;
-		margin-bottom: 20px;
-		float: left;
-	}
-
-	.booleaninput-value-render {
-		float: left;
-		margin-left: 30px !important;
-	}
-
-	/**
-	 * Override Text Area
-	 **/
-	textarea {
-		min-height: $text_area_min_height;
-	}
-
-	.row-fluid [class*="span"] {
-		textarea {
-			min-height: $text_area_min_height;
-		}
-	}
-
-	/**
-	 * Birthday Picker
-	 **/
-	.birthday-picker {
-		select {
-			margin-right: 10px;
-			&:last-child {
-				margin-right: 0;
-			}
-		}
-	}
-
-	/**
-	 * Popover Form
-	 **/
-	.popover-form, .subform-actions {
-		.popover-action {
-			text-align: center;
-			.popover-submit {
-				margin-right: 30px;
-			}
-		}
-	}
-
-	.controls-row {
-		input, select, textarea {
-			margin-bottom: 15px;
-		}
-		.add-on {
-			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-			margin-left: 3px;
-			margin-right: 3px;
-			font-size: 18px;
-		}
-	}
-
-	/**
-	 * Select 2
-	 */
-	.select2-container {
-		margin-bottom: 15px;
-	}
-
-	/**
-	 * SubForm Style
-	 **/
-	.subform-container {
-
-		padding: 20px;
-		margin-bottom: 30px;
-
-		input, select, textarea {
-			margin-bottom: 15px;
-		}
-
-		/**
-		 * Select 2 Container
-		 */
-		.select2-container {
-			margin-left: 0;
-			margin-bottom: 15px;
-		}
-
-		div.active {
-			padding: 30px 20px 0;
-			border: 1px solid #D5D5D5;
-			border-radius: 8px;
-			background: #FFF;
-
-			form {
-				margin-bottom: 0;
-
-				.form-actions {
-					margin-bottom: 5px;
-				}
-			}
-		}
-
-		.actions {
-			padding: 15px 25px 0;
-
-			.required {
-				font-size: 18px;
-				font-weight: bold;
-				color: inherit;
-			}
-		}
-
-		.subform-collection {
-			margin: 20px auto;
-		}
-
-		.subform-actions {
-			text-align: center;
-			.subform-edit-model {
-				margin-right: 30px;
-			}
-
-			// Reduce L R Padding for Popover
-			.popover-title {
-				padding: 12px;
-			}
-		}
-	}
-
-	/**
-	 * Actions Container
-	 **/
-	.form-actions {
-		text-align: center;
-		padding: 19px 20px 20px;
-
-		.btn {
-			margin-right: 50px;
-			&:last-child {
-				margin-right: 0;
-			}
-		}
-
-		// Popover
-		.popover-title, .popover-inner {
-			color: #b94a48;
-		}
-
-		.popover {
-			&.success {
-				.popover-title, .popover-inner {
-					color: #468847;
-				}
-			}
-		}
-
-		.popover-title {
-			text-align: left;
-			font-weight: bold;
-		}
-	}
-
-	/**
-	 * Error Styles
-	 **/
-	div {
-		&.invalid {
-			a {
-				&.select2-choice {
-					border-color: #b94a48;
-					-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-					-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-					box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-				}
-			}
-		}
-	}
-
-	input, select, textarea {
-
-		margin-bottom: 10px;
-
-		&[type="file"].invalid {
-			border: solid 1px #b94a48;
-		}
-		&.invalid {
-			border-color: #b94a48;
-			-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-			-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-		}
-	}
-
-	/**
-	 * Read Mode Styles
-	 **/
-	&.read-mode {
-		fieldset {
-			&.table-view {
-				margin-bottom: 30px;
-			}
-		}
-
-		.read-checkbox {
-			margin: 10px auto 20px;
-			width: 95%;
-			span {
-				&.uneditable-input {
-					width: auto;
-					margin-right: 20px;
-					padding: 4px 8px;
-				}
-			}
-		}
-
-		.add-on {
-			margin: auto 10px;
-		}
-
-		.row-fluid {
-
-			div[class^="span"] {
-				> label {
-					margin-top: 15px;
-				}
-			}
-
-		}
-
-		.table {
-			margin: 30px auto;
-		}
-
-		/** Table Sorter **/
-		.stupidtable {
-			th {
-				&:hover {
-					cursor: pointer;
-					text-decoration: underline;
-				}
-			}
-		}
-	}
-
-	.uneditable-input {
-		width: 80%;
-
-		&.input-col2 {
-			width: 40%;
-		}
-
-	}
-
-	.uneditable-input-textarea {
-		height: auto;
-	}
-
-	.uneditable-input-image {
-		max-height: 250px;
-		max-width: 500px;
-	}
-
-	.control-group {
-
-		.uneditable-input {
-
-			&.input-col2 {
-				width: 34%;
-			}
-
-		}
-
-	}
-
-	/**
-	 * Fields Style
-	 **/
-	.emailpicker {
-		.add-on {
-			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-			position: relative;
-			top: -3px;
-			font-size: 16px;
-		}
-	}
-
-	/**
-	 * CopyValuesFrom Options
-	 **/
-	.copy-values-from {
-		margin: 20px auto;
-
-		label {
-			display: inline;
-		}
-		.btn-group {
-			margin-left: 30px;
-		}
-	}
-
-	/**
-	 * For btn-group in Wizard View
-	 **/
-	.wizard-view {
-		.step-content {
-			.btn-group {
-				.active {
-					display: inline;
-				}
-			}
-		}
-	}
-
-	/**
-	 * For MultiFiles Field Type
-	 **/
-	.fileupload-buttonbar {
-
-		input[type="file"] {
-			display: none;
-		}
-
-		.fileinput-button {
-			margin-right: 30px;
-		}
-
-		.btn {
-			i {
-				margin-right: 3px;
-			}
-
-			&.cancel {
-				margin-left: 10px;
-				display: inline;
-			}
-		}
-	}
-
-	.table-multi-files {
-		margin-top: 20px;
-
-		input[type="file"] {
-			display: none;
-		}
-
-		td {
-			.btn {
-				i {
-					margin-right: 3px;
-				}
-			}
-		}
-	}
-
-	// Button Decision Style
-	.btn-decision-data-wrapper {
-		margin: 20px auto;
-
-		.btn-decision-data-render {
-			caption {
-				text-align: left;
-				font-weight: bold;
-				font-size: 16px;
-				margin-bottom: 20px;
-				padding-bottom: 10px;
-				border-bottom: 1px solid #DDD;
-			}
-
-			thead {
-				td {
-					font-weight: bold;
-				}
-			}
-
-		}
-	}
+    // Disable Browser Default
+    input::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+    input[type="date"]::-webkit-input-placeholder {
+        visibility: hidden !important;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0;
+        /* <-- Apparently some margin are still there even though it's hidden */
+    }
+    /**
+     * Show File Input
+     **/
+    .showInputFile {
+        display: inline !important;
+        margin-right: 20px !important;
+    }
+    /**
+     * IE 8 Utilities Class
+     **/
+    .hideInputFile {
+        display: block !important;
+        position: relative !important;
+        left: -999999px !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: 0px !important;
+        padding: 0px !important;
+    }
+    /**
+     * Placeholder
+     */
+    .placeholder {
+        color: #bbbbbb !important;
+        font-style: italic !important;
+    }
+    ::-webkit-input-placeholder {
+        color: #bbbbbb !important;
+        font-style: italic !important;
+    }
+    ::-moz-placeholder {
+        color: #bbbbbb !important;
+        font-style: italic !important;
+    }
+    :-ms-input-placeholder {
+        color: #bbbbbb !important;
+        font-style: italic !important;
+    }
+    input:-moz-placeholder {
+        color: #bbbbbb !important;
+        font-style: italic !important;
+    }
+    margin: 25px 20px;
+    label {
+        span {
+            &.required {
+                color: #B94A48;
+                font-size: 18px;
+                font-weight: bold;
+                margin-left: 5px;
+            }
+        }
+    }
+    fieldset {
+        clear: both;
+        &.birthday-picker {
+            clear: none;
+        }
+    }
+    /**
+     * Fraction
+     */
+    .form-fraction {
+        span {
+            margin: auto 5px;
+        }
+        input {
+            width: 40%;
+        }
+    }
+    /**
+     * Select
+     **/
+    select {
+        min-width: 220px;
+        width: auto;
+        &[class^="birth-"] {
+            min-width: 0;
+        }
+    }
+    /**
+     * Radio
+     */
+    .radio-container {
+        overflow: hidden;
+        margin-bottom: 10px;
+        label {
+            &.radio {
+                margin-left: 30px;
+                input {
+                    &[type="radio"] {
+                        margin-left: -25px;
+                    }
+                }
+            }
+        }
+        .radio-value-render {
+            display: inline;
+            margin-left: 30px !important;
+            margin-bottom: 0;
+        }
+    }
+    /**
+     * CheckBox
+     */
+    .checkbox-container {
+        margin-bottom: 10px;
+        overflow: hidden;
+        .text-right {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            button {
+                margin-right: 20px;
+            }
+        }
+        label {
+            &.checkbox {
+                margin-left: 30px;
+                input {
+                    &[type="checkbox"] {
+                        margin-left: -25px;
+                    }
+                }
+            }
+        }
+        textarea {
+            &.other-textbox {
+                display: none;
+                margin-top: 10px;
+            }
+        }
+    }
+    /**
+     * Telephone
+     */
+    .tel-wrapper {
+        .tel-provider {
+            margin-left: 20px;
+        }
+    }
+    /**
+     * Yes Or No (BooleanInput Field Type)
+     */
+    .form-render_booleaninput_wrapper {
+        margin-top: 10px;
+        overflow: hidden;
+    }
+    .form-render_booleaninput {
+        margin-left: 30px;
+        margin-bottom: 20px;
+        float: left;
+    }
+    .booleaninput-value-render {
+        float: left;
+        margin-left: 30px !important;
+    }
+    /**
+     * Override Text Area
+     **/
+    textarea {
+        min-height: $text_area_min_height;
+    }
+    .row-fluid [class*="span"] {
+        textarea {
+            min-height: $text_area_min_height;
+        }
+    }
+    /**
+     * Birthday Picker
+     **/
+    .birthday-picker {
+        select {
+            margin-right: 10px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+    /**
+     * Popover Form
+     **/
+    .popover-form, .subform-actions {
+        .popover-action {
+            text-align: center;
+            .popover-submit {
+                margin-right: 30px;
+            }
+        }
+    }
+    .controls-row {
+        input, select, textarea {
+            margin-bottom: 15px;
+        }
+        .add-on {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            margin-left: 3px;
+            margin-right: 3px;
+            font-size: 18px;
+        }
+    }
+    /**
+     * Select 2
+     */
+    .select2-container {
+        margin-bottom: 15px;
+    }
+    /**
+     * SubForm Style
+     **/
+    .subform-container {
+        padding: 20px;
+        margin-bottom: 30px;
+        input, select, textarea {
+            margin-bottom: 15px;
+        }
+        /**
+         * Select 2 Container
+         */
+        .select2-container {
+            margin-left: 0;
+            margin-bottom: 15px;
+        }
+        div.active {
+            padding: 30px 20px 0;
+            border: 1px solid #d5d5d5;
+            border-radius: 8px;
+            background: #FFF;
+            form {
+                margin-bottom: 0;
+                .form-actions {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+        .actions {
+            padding: 15px 25px 0;
+            .required {
+                font-size: 18px;
+                font-weight: bold;
+                color: inherit;
+            }
+        }
+        .subform-collection {
+            margin: 20px auto;
+        }
+        .subform-actions {
+            text-align: center;
+            .subform-edit-model {
+                margin-right: 30px;
+            }
+            // Reduce L R Padding for Popover
+            .popover-title {
+                padding: 12px;
+            }
+        }
+    }
+    /**
+     * Actions Container
+     **/
+    .form-actions {
+        text-align: center;
+        padding: 19px 20px 20px;
+        .btn {
+            margin-right: 50px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+        // Popover
+        .popover-title, .popover-inner {
+            color: #b94a48;
+        }
+        .popover {
+            &.success {
+                .popover-title, .popover-inner {
+                    color: #468847;
+                }
+            }
+        }
+        .popover-title {
+            text-align: left;
+            font-weight: bold;
+        }
+    }
+    /**
+     * Error Styles
+     **/
+    div {
+        &.invalid {
+            a {
+                &.select2-choice {
+                    border-color: #b94a48;
+                    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                }
+            }
+        }
+    }
+    input, select, textarea {
+        margin-bottom: 10px;
+        &[type="file"].invalid {
+            border: solid 1px #b94a48;
+        }
+        &.invalid {
+            border-color: #b94a48;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        }
+    }
+    /**
+     * Read Mode Styles
+     **/
+    &.read-mode {
+        fieldset {
+            &.table-view {
+                margin-bottom: 30px;
+            }
+        }
+        .read-checkbox {
+            margin: 10px auto 20px;
+            width: 95%;
+            span {
+                &.uneditable-input {
+                    width: auto;
+                    margin-right: 20px;
+                    padding: 4px 8px;
+                }
+            }
+        }
+        .add-on {
+            margin: auto 10px;
+        }
+        .row-fluid {
+            div[class^="span"] {
+                > label {
+                    margin-top: 15px;
+                }
+            }
+        }
+        .table {
+            margin: 30px auto;
+        }
+        /** Tags **/
+        .select-tags {
+            padding: 0;
+            ul {
+                overflow: hidden;
+                padding-left: 5px;
+                margin-left: 5px;
+                margin-bottom: 0;
+                li {
+                    list-style-type: none;
+                    float: left;
+                    margin-right: 30px;
+                    line-height: 30px;
+                }
+            }
+        }
+        /** Table Sorter **/
+        .stupidtable {
+            th {
+                &:hover {
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    .uneditable-input {
+        width: 80%;
+        &.input-col2 {
+            width: 40%;
+        }
+    }
+    .uneditable-input-textarea {
+        height: auto;
+    }
+    .uneditable-input-image {
+        max-height: 250px;
+        max-width: 500px;
+    }
+    .control-group {
+        .uneditable-input {
+            &.input-col2 {
+                width: 34%;
+            }
+        }
+    }
+    /**
+     * Fields Style
+     **/
+    .emailpicker {
+        .add-on {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            position: relative;
+            top: -3px;
+            font-size: 16px;
+        }
+    }
+    /**
+     * CopyValuesFrom Options
+     **/
+    .copy-values-from {
+        margin: 20px auto;
+        label {
+            display: inline;
+        }
+        .btn-group {
+            margin-left: 30px;
+        }
+    }
+    /**
+     * For btn-group in Wizard View
+     **/
+    .wizard-view {
+        .step-content {
+            .btn-group {
+                .active {
+                    display: inline;
+                }
+            }
+        }
+    }
+    /**
+     * For MultiFiles Field Type
+     **/
+    .fileupload-buttonbar {
+        input[type="file"] {
+            display: none;
+        }
+        .fileinput-button {
+            margin-right: 30px;
+        }
+        .btn {
+            i {
+                margin-right: 3px;
+            }
+            &.cancel {
+                margin-left: 10px;
+                display: inline;
+            }
+        }
+    }
+    .table-multi-files {
+        margin-top: 20px;
+        input[type="file"] {
+            display: none;
+        }
+        td {
+            .btn {
+                i {
+                    margin-right: 3px;
+                }
+            }
+        }
+    }
+    // Button Decision Style
+    .btn-decision-data-wrapper {
+        margin: 20px auto;
+        .btn-decision-data-render {
+            caption {
+                text-align: left;
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #dddddd;
+            }
+            thead {
+                td {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
 }
 
 /**
  * Override DatePicker
  */
 .datepicker {
-	&.dropdown-menu {
-		z-index: 2000;
-	}
+    &.dropdown-menu {
+        z-index: 2000;
+    }
 }
 
 /**
  * IE8 Style Only
  **/
 body.ie8 {
-	.form-render {
-
-		.controls-row {
-
-			margin-bottom: 10px;
-
-			input {
-				min-height: 20px !important;
-			}
-
-			.span6 {
-				width: 43%;
-			}
-
-		}
-
-		input, select {
-			&[class*="span"] {
-				min-height: 20px;
-			}
-		}
-
-	}
+    .form-render {
+        .controls-row {
+            margin-bottom: 10px;
+            input {
+                min-height: 20px !important;
+            }
+            .span6 {
+                width: 43%;
+            }
+        }
+        input, select {
+            &[class*="span"] {
+                min-height: 20px;
+            }
+        }
+    }
 }
 
 /**
@@ -629,35 +545,24 @@ body.ie8 {
  **/
 
 body.ie7 {
-
-	.form-render {
-
-		.controls-row {
-
-			margin-bottom: 10px;
-
-			input {
-				min-height: 20px;
-			}
-
-			.span6 {
-				width: 43%;
-			}
-
-			.span5 {
-				width: 36%;
-			}
-
-			.span4 {
-				width: 29%;
-			}
-
-			.span3 {
-				width: 21%;
-			}
-
-		}
-
-	}
-
+    .form-render {
+        .controls-row {
+            margin-bottom: 10px;
+            input {
+                min-height: 20px;
+            }
+            .span6 {
+                width: 43%;
+            }
+            .span5 {
+                width: 36%;
+            }
+            .span4 {
+                width: 29%;
+            }
+            .span3 {
+                width: 21%;
+            }
+        }
+    }
 }

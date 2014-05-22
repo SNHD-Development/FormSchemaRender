@@ -109,6 +109,15 @@ define([
 
           // Set Up Ajax Call
           Utils.setupUrlAjaxCall($('form.form-render'));
+
+          // Set Up Select2 when having class .
+          Utils.setupSelect2(that.formView);
+
+          // Bind Model Here
+          that.formView._modelBinder.bind(that.formView.model, that.formView.el, that.formView.model.bindings);
+          Backbone.Validation.bind(that.formView, {
+            forceUpdate: true
+          });
         });
       }
     },
@@ -302,6 +311,9 @@ define([
 
         // Some Browser Does not support placeholder, will need to check for it.
         Utils.resetPlaceHolderValue(this.el);
+
+        // Some Data Clean Up
+        Utils.convertDataToArrayString($form);
 
         // If this form has Java Pow Upload need to send those in as well
         if (this.formView._javaUpload.length) {

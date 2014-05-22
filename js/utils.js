@@ -7,6 +7,7 @@ define([
   'underscore',
   'backbone',
   'vm',
+  'select2helper',
   'bootstrap',
   'jquery.select2',
   'jquery.spinner',
@@ -16,7 +17,7 @@ define([
   'jquery.zclip',
   'jquery.stupidtable',
   'xdr'
-], function($, _, Backbone, Vm) {
+], function($, _, Backbone, Vm, Select2Helper) {
 
   /**
    * Setup DependOn Options (Values)
@@ -1509,6 +1510,20 @@ define([
     },
 
     /**
+     * Set up select2 for select type
+     * @param  object $container
+     * @return
+     */
+    setupSelect2: function(form) {
+      $(form.el + ' .selecttwo-render').each(function() {
+        var $this = $(this);
+        if ($this.hasClass('tags')) {
+          Select2Helper.renderTags($this, form);
+        }
+      });
+    },
+
+    /**
      * Setup Select and Clear Button for Check Box
      * @param  object $form
      * @return
@@ -1901,6 +1916,29 @@ define([
 
       // Convert back to days and return
       return Math.round(difference_ms / ONE_DAY);
+    },
+
+    /**
+     * Convert field value to array str "[value1, value2]"
+     * @param  {[type]} formId [description]
+     * @return {[type]}        [description]
+     */
+    convertDataToArrayString: function($form) {
+      var checkClass = ['value-as-array'];
+      _.each(checkClass, function(element) {
+        var $inputEl = $(':input.' + element, $form);
+        $inputEl.each(function() {
+          var $this = $(this);
+          var val = $inputEl.val();
+          if (val && val !== '') {
+            val = val.split(',');
+          } else {
+            // Make it as emptied Array
+            val = [];
+          }
+          $this.val(JSON.stringify(val));
+        });
+      });
     }
   };
 });

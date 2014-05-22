@@ -97,19 +97,19 @@
     margin: 0px !important;
     padding: 0px !important; }
   .form-render .placeholder {
-    color: #BBB !important;
+    color: #bbbbbb !important;
     font-style: italic !important; }
   .form-render ::-webkit-input-placeholder {
-    color: #BBB !important;
+    color: #bbbbbb !important;
     font-style: italic !important; }
   .form-render ::-moz-placeholder {
-    color: #BBB !important;
+    color: #bbbbbb !important;
     font-style: italic !important; }
   .form-render :-ms-input-placeholder {
-    color: #BBB !important;
+    color: #bbbbbb !important;
     font-style: italic !important; }
   .form-render input:-moz-placeholder {
-    color: #BBB !important;
+    color: #bbbbbb !important;
     font-style: italic !important; }
   .form-render label span.required {
     color: #B94A48;
@@ -201,7 +201,7 @@
       margin-bottom: 15px; }
     .form-render .subform-container div.active {
       padding: 30px 20px 0;
-      border: 1px solid #D5D5D5;
+      border: 1px solid #d5d5d5;
       border-radius: 8px;
       background: #FFF; }
       .form-render .subform-container div.active form {
@@ -251,6 +251,7 @@
       -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
   .form-render.read-mode {
+    /** Tags **/
     /** Table Sorter **/ }
     .form-render.read-mode fieldset.table-view {
       margin-bottom: 30px; }
@@ -267,6 +268,18 @@
       margin-top: 15px; }
     .form-render.read-mode .table {
       margin: 30px auto; }
+    .form-render.read-mode .select-tags {
+      padding: 0; }
+      .form-render.read-mode .select-tags ul {
+        overflow: hidden;
+        padding-left: 5px;
+        margin-left: 5px;
+        margin-bottom: 0; }
+        .form-render.read-mode .select-tags ul li {
+          list-style-type: none;
+          float: left;
+          margin-right: 30px;
+          line-height: 30px; }
     .form-render.read-mode .stupidtable th:hover {
       cursor: pointer;
       text-decoration: underline; }
@@ -317,7 +330,7 @@
       font-size: 16px;
       margin-bottom: 20px;
       padding-bottom: 10px;
-      border-bottom: 1px solid #DDD; }
+      border-bottom: 1px solid #dddddd; }
     .form-render .btn-decision-data-wrapper .btn-decision-data-render thead td {
       font-weight: bold; }
 

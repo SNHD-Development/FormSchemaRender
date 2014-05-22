@@ -9,6 +9,7 @@ events.js
 vm.js
 libs/bootstrap/bootstrap.js
 libs/select2/select2.min.js
+select2helper.js
 libs/fuelux/spinner.js
 libs/jquery-form-plugin/bdate-picker.js
 libs/jquery-form-plugin/jquery.placeholder.js

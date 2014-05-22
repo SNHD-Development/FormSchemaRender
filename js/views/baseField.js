@@ -43,6 +43,7 @@ define([
   'text!templates/fields/list.html',
   'text!templates/fields/uneditableinput.html',
   'text!templates/fields/uneditablecheck.html',
+  'text!templates/fields/uneditabletag.html',
   'text!templates/fields/uneditabletel.html',
   'text!templates/fields/uneditablefile.html',
   'text!templates/fields/uneditableimage.html',
@@ -52,7 +53,7 @@ define([
   'jquery.datepicker',
   'jquery.birthdaypicker',
   'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
   return Backbone.View.extend({
     _modelBinder: undefined,
     // Clean Data Binding
@@ -83,6 +84,7 @@ define([
       this._buttonDecision = []; //Decision Button
       this._ajaxDataCall = []; // Some Fields can call ajax call to auto populate data
       this._javaUpload = []; // Java Upload Object
+      this._elementData = {}; // Use for Element Data
       this._ajaxSubmit = true;
 
       // Wizard View Counters
@@ -155,6 +157,7 @@ define([
         "list": _.template(listTemplate),
         "uneditableinput": _.template(uneditableinputTemplate),
         "uneditablecheck": _.template(uneditablecheckTemplate),
+        "uneditabletag": _.template(uneditabletagTemplate),
         "uneditabletel": _.template(uneditabletelTemplate),
         "uneditablefile": _.template(uneditablefileTemplate),
         "uneditableimage": _.template(uneditableimageTemplate),
@@ -333,6 +336,15 @@ define([
             if (this.options.mode === 'update' && this.options.formData.fields[field.name]) {
               field.attributes['data-select-value'] = this.options.formData.fields[field.name];
             }
+          } else if (field.options) {
+            if (field.options.tags) {
+              field.attributes['class'] = ((field.attributes['class']) ? field.attributes['class'] : '') + ' selecttwo-render tags value-as-array';
+            }
+            // If there is an events
+            if (field.options.events) {
+              // Field Name, Key, Value
+              this.addDataToElementData(field.name, 'events', field.options.events);
+            }
           }
           if (field.options.url) {
             field.attributes['data-url'] = field.options.url.replace(/'/ig, '&#39;');
@@ -341,6 +353,10 @@ define([
             field.attributes['data-url-data'] = JSON.stringify(field.options.data);
           }
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
+          // Set the Data
+          if (this.options.formData && this.options.formData.fields && this.options.formData.fields[field.name]) {
+            this.addDataToElementData(field.name, 'value', this.options.formData.fields[field.name]);
+          }
           break;
 
         case 'checkbox':
@@ -883,6 +899,13 @@ define([
             label: field.description,
             id: field.name,
             otherValue: (field._otherValue) ? field._otherValue : ''
+          });
+        } else if (_type === 'select' && field.options && field.options.tags) {
+          _field_data.sort();
+          // This is check box and need to render to make it look easy to read
+          _html += that.inputTemplate['uneditabletag']({
+            value: _field_data,
+            id: field.name,
           });
         } else {
           var _textarea = '';
@@ -1485,6 +1508,19 @@ define([
         };
       }
       field.values.sort(_func);
+    },
+
+    /**
+     * Append Data to _elementData
+     * @param string fieldName
+     * @param object dataKey
+     * @param object dataValue
+     */
+    addDataToElementData: function(fieldName, dataKey, dataValue) {
+      if (!this._elementData[fieldName]) {
+        this._elementData[fieldName] = {};
+      }
+      this._elementData[fieldName][dataKey] = dataValue;
     }
   });
 });
