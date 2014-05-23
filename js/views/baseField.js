@@ -99,7 +99,8 @@ define([
       // Setup Model
       this.model = new Model(_.extend(this.options.formSchema, {
         is_internal: this.options.internal,
-        render_mode: this.options.mode
+        render_mode: this.options.mode,
+        status: (this.options.mode === 'update' && this.options.formData && this.options.formData.status) ? this.options.formData.status : null
       }));
       // If user pass in formData
       if (!$.isEmptyObject(this.options.formData)) {

@@ -29,6 +29,8 @@ define([
         return;
       } else if (_internal && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {
         return;
+      } else if (model.attributes.status && value.options.showonstatus && _.indexOf(value.options.showonstatus, model.attributes.status) < 0) {
+        return;
       }
       if (typeof attrs.validation[value.name] !== 'undefined') {
         _.each(attrs.validation[value.name], function(validationValue, key) {
@@ -293,7 +295,16 @@ define([
       if (value.options && value.options.visibleon && model.bindings[value.name]) {
         delete model.bindings[value.name];
       }
+
+      // Check for ShowOnStatus
+      if (model.bindings[value.name] && model.attributes.status && value.options && value.options.showonstatus) {
+        var _index = _.indexOf(value.options.showonstatus, model.attributes.status);
+        if (_index < 0) {
+          delete model.bindings[value.name];
+        }
+      }
     });
+
     model.validation = _validation;
     return _attrs;
   },
