@@ -40,7 +40,11 @@ define([
           return '';
         }
 
-        if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {} else if (typeof value.description !== 'undefined' && (_.indexOf(that.notRenderLabel, _typeLowerCase) === -1 || _typeLowerCase === 'html' && value.options.visibleon)) {
+        if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {
+          if (_typeLowerCase === 'image') {
+            _wrapper = true;
+          }
+        } else if (typeof value.description !== 'undefined' && (_.indexOf(that.notRenderLabel, _typeLowerCase) === -1 || _typeLowerCase === 'html' && value.options.visibleon)) {
           _wrapper = true;
         }
 

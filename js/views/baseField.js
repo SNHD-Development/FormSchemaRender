@@ -935,7 +935,39 @@ define([
             id: field.name
           });
         }
+      } else if (_type === 'image' && typeof field.options.internalcanupdate !== 'undefined' && this.options.internal && field.options.internalcanupdate === false) {
+        // Start render the Image here
+        // Render Image As Read Mode, (Depending on the Options.InternalCanUpdate value)
+        var _field_data = '',
+          _href = '';
+        _.each(_name, function(element) {
+          if (typeof that.options.formData.fields[element] !== 'object') {
+            _field_data += ((typeof that.options.formData.fields[element] !== 'undefined') ? that.options.formData.fields[element] : '') + ' ';
+          } else {
+            _field_data = that.options.formData.fields[element];
+          }
+        });
+        if (typeof _field_data === 'string') {
+          _field_data = $.trim(_field_data);
+        }
+        field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src'] : '/form/getFile/') + that.options.formData.fields[field.name];
+        _href = field.attributes['src'];
+        delete field.attributes['accept'];
+        _.each(field.attributes, function(value, key) {
+          if (value.search('\'')) {
+            value = value.replace(/\'/ig, '"');
+          }
+          _attr += ' ' + key + '=\'' + value + '\'';
+        });
+        _html += that.inputTemplate['uneditable' + _type]({
+          value: _field_data,
+          text: field.description,
+          _attr: _attr,
+          id: field.name,
+          href: _href
+        });
       } else {
+        //*** Create and Update Mode ***//
 
         // Check if this is internal and has InternalCanUpdate Options
         if (this.options.internal && typeof field.options.internalcanupdate !== 'undefined' && !field.options.internalcanupdate) {
@@ -1066,7 +1098,9 @@ define([
           return false;
         }
       } else if (this.options.internal && readMode === 'update' && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {
-        return false;
+        if (_type !== 'image') {
+          return false;
+        }
       }
 
       return true;

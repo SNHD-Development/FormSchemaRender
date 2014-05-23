@@ -710,6 +710,20 @@ define([
         });
       }
 
+      // If there is any lightbox markup, will need to check if this a valid photo or not
+      $('a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]')
+        .each(function() {
+          var $this = $(this);
+          $("<img>", {
+            src: $this.attr('href'),
+            error: function() {
+              $this.hide();
+              $this.next('.btn')
+                .show();
+            }
+          });
+        });
+
       // Setup Ajax Call for fields
       if (view._ajaxDataCall.length > 0) {
         this.setupAjaxCall(view, $form);

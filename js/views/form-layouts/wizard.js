@@ -41,7 +41,12 @@ define([
           return '';
         }
 
-        if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {} else if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, _typeLowerCase) === -1) {
+        if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {
+          if (_typeLowerCase === 'image') {
+            _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
+            _temp += that.renderLabel(value, _required);
+          }
+        } else if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabel, _typeLowerCase) === -1) {
           _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
           _temp += that.renderLabel(value, _required);
         } else if (_typeLowerCase === 'step') {
