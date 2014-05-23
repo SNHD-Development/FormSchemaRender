@@ -1036,6 +1036,19 @@ define([
           th.eq(data.column).append('<i class="dir-icon ' + arrow + '" style="position:relative; left: 10px; top: -3px;"></i>');
         });
       }
+
+      // Make the Tags List has the same width
+      $('.select-tags').each(function() {
+        var $selectTag = $(this);
+        var maxWidth = 0;
+        $selectTag.find('li').each(function() {
+          var $li = $(this),
+            _width = $li.width();
+          if (_width > maxWidth) {
+            maxWidth = _width;
+          }
+        }).width(maxWidth);
+      });
     },
     /**
      * Setup Read Mode

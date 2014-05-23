@@ -1,1 +1,1 @@
-define(function() { var str ='<div class="select-tags"><ul><% _.each(value, function(element) { %><li><%= element %></li><% }); %></ul></div>';return str;});
+define(function() { var str ='<div class="select-tags"><ul><% _.each(value, function(element) { %><li><span class="uneditable-input"><%= element %></span></li><% }); %></ul></div>';return str;});

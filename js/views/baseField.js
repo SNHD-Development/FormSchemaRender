@@ -355,6 +355,11 @@ define([
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
           // Set the Data
           if (this.options.formData && this.options.formData.fields && this.options.formData.fields[field.name]) {
+            if (_.isArray(this.options.formData.fields[field.name])) {
+              this.options.formData.fields[field.name].sort(function(a, b) {
+                return a - b;
+              });
+            }
             this.addDataToElementData(field.name, 'value', this.options.formData.fields[field.name]);
           }
           break;
@@ -901,7 +906,12 @@ define([
             otherValue: (field._otherValue) ? field._otherValue : ''
           });
         } else if (_type === 'select' && field.options && field.options.tags) {
-          _field_data.sort();
+          // Sort Tag by Numerical
+          if (_.isArray(_field_data)) {
+            _field_data.sort(function(a, b) {
+              return a - b;
+            });
+          }
           // This is check box and need to render to make it look easy to read
           _html += that.inputTemplate['uneditabletag']({
             value: _field_data,

@@ -279,7 +279,8 @@
           list-style-type: none;
           float: left;
           margin-right: 30px;
-          line-height: 30px; }
+          line-height: 30px;
+          margin-bottom: 5px; }
     .form-render.read-mode .stupidtable th:hover {
       cursor: pointer;
       text-decoration: underline; }

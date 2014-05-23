@@ -1,7 +1,9 @@
 <div class="select-tags">
 	<ul>
 	<% _.each(value, function(element) { %>
-		<li><%= element %></li>
+		<li>
+			<span class="uneditable-input"><%= element %></span>
+		</li>
 	<% }); %>
 	</ul>
 </div>
