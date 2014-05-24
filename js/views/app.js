@@ -262,6 +262,7 @@ define([
         $submitBtn = $('.form-actions button[type="submit"]', this.el),
         _opt, _options,
         that = this;
+      $form.trigger($form.attr('id') + '.preValidation', [e, $form, this]);
       if ($form.hasClass('form_submitted')) {
         return;
       }
@@ -365,7 +366,7 @@ define([
           $form.ajaxSubmit(_options);
         } else {
           // This is not using AJAX to send POST
-          $form.trigger($form.attr('id') + '.preSubmit', [e, $form]);
+          $form.trigger($form.attr('id') + '.preSubmit', [e, $form, this]);
         }
 
         if (this.formView.options.formSchema.view !== 'wizard' && !$form.hasClass('not_sending_data_yet')) {

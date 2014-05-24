@@ -777,8 +777,12 @@ define([
         }
         if (_type === 'file' || _type === 'image') {
           if (_type === 'image') {
-            field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src'] : '/form/getFile/') + that.options.formData.fields[field.name];
-            _href = field.attributes['src'];
+            if (that.options.formData.fields[field.name] === 'deleted') {
+              _href = null;
+            } else {
+              field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src'] : '/form/getFile/') + that.options.formData.fields[field.name];
+              _href = field.attributes['src'];
+            }
           } else {
             field.attributes['target'] = '_blank';
             field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
@@ -950,8 +954,12 @@ define([
         if (typeof _field_data === 'string') {
           _field_data = $.trim(_field_data);
         }
-        field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src'] : '/form/getFile/') + that.options.formData.fields[field.name];
-        _href = field.attributes['src'];
+        if (that.options.formData.fields[field.name] === 'deleted') {
+          _href = null;
+        } else {
+          field.attributes['src'] = ((typeof field.attributes['src'] !== 'undefined') ? field.attributes['src'] : '/form/getFile/') + that.options.formData.fields[field.name];
+          _href = field.attributes['src'];
+        }
         delete field.attributes['accept'];
         _.each(field.attributes, function(value, key) {
           if (value.search('\'')) {

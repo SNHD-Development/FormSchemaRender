@@ -126,6 +126,9 @@ Then you need to pass your custom event into
 		'renderCompleted' : function(e, view) {
 			console.log('Render Form Completed.');
 		},
+		'preValidation': function (e, originalEvent, $form, form) {
+			console.log('Before Validating this form.');
+		},
 		'preSubmit' : function(e, formData, jqForm, options) {
 			console.log('Before Submitting this form.');
 		},
@@ -141,6 +144,9 @@ Or we can add this key to the FormSchema as well.
 			'renderCompleted' : "function(e, view) {
 				console.log('Render Form Completed.');
 			}",
+			'preValidation': function (e, originalEvent, $form, form) {
+				console.log('Before Validating this form.');
+			},
 			'preSubmit' : "function(e, formData, jqForm, options) {
 				console.log('Before Submitting this form.');
 			}",
