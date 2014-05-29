@@ -35,35 +35,64 @@ define([
   }
 
   function setupEvents($element, events) {
+    var token, tokens, that = this;
     if (!_.isObject(events)) {
       throw 'setupEvents() required events to be a valid object';
     }
     _.each(events, function(value, key) {
       var _func;
       if (_.isString(value)) {
-        // Only support predefined function
-        eval('_func = ' + value + ';');
+        token = value.match(/\(([^)]+)\)/ig);
+        if (token) {
+          token = token[0].replace(/(\(|\))/ig, '');
+          tokens = token.split(',');
+          // Only support predefined function
+          token = value.match(/^\s*(\w+)/ig);
+          if (token) {
+            eval('_func = ' + token[0] + ';');
+          }
+        } else {
+          // Only support predefined function
+          eval('_func = ' + value + ';');
+        }
       }
       if (typeof _func !== 'function') {
         throw 'setupEvents() require events to be a valid function.';
       }
       $element.on(key, function(e) {
-        _func($element, e);
+        // console.log('*** Here ***');
+        // console.log(tokens);
+        if (tokens) {
+          _func.apply(that, _.union([$element, e], tokens));
+        } else {
+          _func($element, e);
+        }
       });
     });
   }
 
   /*** Events Functions for Select2 ***/
 
+  /**
+   * Look at the string like 123-5 or 123 - 5
+   * @param  object $element
+   * @param  object e
+   * @return
+   */
+
   function parseNumberList($element, e) {
+    // console.log('*** parseNumberList ***');
+    // console.log(this);
+    // console.log($element);
+    // console.log(e);
     if (e.added) {
       // Search string for -
       var txt = e.added.text;
-      if (txt.indexOf(' - ') >= 0) {
-        var _tokens = txt.match(/(\d+) - (\d+)/ig);
+      if (txt.indexOf('-') >= 0) {
+        var _tokens = txt.match(/(\d+)(\s*)-(\s*)(\d+)/ig);
         if (_tokens) {
           var _token = _tokens.shift();
-          _token = _token.split(' - ');
+          _token = _token.split('-');
           var first = parseInt(_token.shift(), 10),
             second = parseInt(_token.shift(), 10),
             _cnt;
@@ -80,8 +109,8 @@ define([
               return;
             }
           }
-          if (_cnt > 1000) {
-            alert('Cannot have the range greater than 1000. (from ' + first + ' to ' + second + ')');
+          if (_cnt > 200) {
+            alert('Cannot have the range greater than 200. (from ' + first + ' to ' + second + ')');
             return;
           }
           e.val = _.without(e.val, txt);
@@ -91,6 +120,41 @@ define([
           $element.select2('val', e.val);
         }
       }
+    }
+  }
+
+  function addNumberFromField($element, e, fieldName) {
+    // console.log('*** addNumberFromField ***');
+    // console.log(this);
+    // console.log($element);
+    // console.log(e);
+    // console.log(fieldName);
+    if (e.added) {
+      // Check for the empty values
+      if (e.val.length > 1) {
+        return;
+      }
+      var txt = parseFloat(e.added.text);
+      if (_.isNaN(txt)) {
+        return;
+      }
+      // Auto Add the number.
+      var $targetNumber = $('#' + fieldName),
+        _val = parseFloat($targetNumber.val());
+      if (_.isNaN(_val)) {
+        return;
+      }
+      if (_val > 200) {
+        alert('Cannot have the range greater than 200.');
+        return;
+      }
+      e.val = [];
+      while (_val) {
+        e.val.push(txt);
+        txt++;
+        _val--;
+      }
+      $element.select2('val', e.val);
     }
   }
 
