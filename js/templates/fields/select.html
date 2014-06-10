@@ -3,7 +3,13 @@ var _description ;
 if (options.defaulttext) {
 	_description = description;
 } else {
-	_description = 'Select ' + description.toLowerCase();
+	switch(_lang) {
+		case 'sp':
+			_description = 'Seleccione ' + description.replace(/Seleccione /i, '').toLowerCase();
+			break;
+		default:
+			_description = 'Select ' + description.replace(/Select /i, '').toLowerCase();
+	}
 }
 %>
 <select id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>" name="<%= name %>"<%= _attr %>>

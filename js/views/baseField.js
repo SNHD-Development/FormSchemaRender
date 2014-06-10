@@ -468,6 +468,7 @@ define([
             _date += '/';
 
             this.options.formData.fields[field.name] = _month + _date + _tmpDate.getFullYear();
+            field.attributes['value'] = this.options.formData.fields[field.name];
           }
           if (field.attributes && !field.attributes.placeholder) {
             field.attributes.placeholder = 'mm/dd/yyyy';
@@ -560,6 +561,7 @@ define([
             field['default_value_state'] = this.options.formData.fields[field.name + '_address_state'];
           } else if (this.options.mode === 'create') {
             this.model.set(field.name + '_address_state', 'NV'); // Default to NV for create mode
+            this.model.set(field.name + '_address_country', 'US'); // Default to USA for create mode
           }
 
           // If there is "Options.ZipCodeFormat" option
@@ -993,7 +995,8 @@ define([
         }
 
         _html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({
-          _attr: _attr
+          _attr: _attr,
+          _lang: this.options.lang
         }, field)) : '';
       }
 

@@ -217,7 +217,7 @@ define([
           } else {
             _attrs[value.name] = '';
             setValidationData(value.name, attrs, _validation, '');
-            model.bindings[value.name] = '[name="' + value.name + '"]';
+            // model.bindings[value.name] = '[name="' + value.name + '"]';
           }
           break;
 

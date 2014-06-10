@@ -1,10 +1,18 @@
 <%
 var _hide = (options.visibleon) ? ' style="display:none"': '';
+var _description = description;
+switch (_lang) {
+	case 'sp':
+		if (typeof _submit !== 'undefined') {
+			_description = 'Enviar';
+		}
+		break;
+}
 %>
 <% if (typeof _submit === 'undefined' && typeof url !== 'undefined') { %>
-<a id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>" href="<%= url %>" <%= _attr %><%= _hide %>><%= description %></a>
+<a id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>" href="<%= url %>" <%= _attr %><%= _hide %>><%= _description %></a>
 <% } else {
 var _btnType = (typeof _submit === 'undefined') ? 'button' : 'submit';
 %>
-<button type="<%= _btnType %>" id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>"<%= _attr %><%= _hide %>><%= description %></button>
+<button type="<%= _btnType %>" id="<%= (typeof attributes.id !== 'undefined') ? attributes.id: name %>"<%= _attr %><%= _hide %>><%= _description %></button>
 <% } %>

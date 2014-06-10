@@ -403,10 +403,9 @@ define([
     setupDateInput: function(el) {
       $('.datepicker', el)
         .each(function() {
-          var _options = {}, maxDate, nowTemp;
-          if ($(this)
-            .attr('data-maxdate')) {
-            switch ($(this)
+          var _options = {}, maxDate, nowTemp, $this = $(this);
+          if ($this.attr('data-maxdate')) {
+            switch ($this
               .attr('data-maxdate')
               .toLowerCase()) {
               case 'today':
@@ -418,9 +417,8 @@ define([
                 break;
             }
           }
-          if ($(this)
-            .attr('data-mindate')) {
-            switch ($(this)
+          if ($this.attr('data-mindate')) {
+            switch ($this
               .attr('data-mindate')
               .toLowerCase()) {
               case 'today':
@@ -432,8 +430,7 @@ define([
                 break;
             }
           }
-          $(this)
-            .datepicker(_options)
+          $this.datepicker(_options)
             .on('changeDate', function(e) {
               var _dateInput = $(e.currentTarget)
                 .removeClass('invalid')

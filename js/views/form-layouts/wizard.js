@@ -16,6 +16,7 @@ define([
   'bootstrap',
   'jquery.birthdaypicker'
 ], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate) {
+  var _lang;
   var AppView = BaseFieldView.extend({
     _modelBinder: undefined,
     template: _.template(formLayoutTemplate),
@@ -28,6 +29,7 @@ define([
         throw 'formSchema is not in the options parameters';
       }
       this.el = '#' + this.options.formSchema.name;
+      _lang = this.options.lang;
     },
     render: function() {
       var that = this,
@@ -172,7 +174,15 @@ define([
               }
 
             case (_numSteps - 1):
-              e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> Submit');
+              var btnSubmit;
+              switch (_lang) {
+                case 'sp':
+                  btnSubmit = 'Enviar';
+                  break;
+                default:
+                  btnSubmit = 'Submit';
+              }
+              e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> ' + btnSubmit);
               break;
           }
         }
@@ -258,8 +268,7 @@ define([
           html: true,
           placement: 'top',
           trigger: 'manual'
-        },
-        _lang = 'en';
+        };
       if ($form.hasClass('validation_pass')) {
         var _t_1, _t_2;
         switch (_lang) {
