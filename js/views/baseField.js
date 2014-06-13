@@ -206,6 +206,10 @@ define([
         _attr = '';
       field.lang = this.options.lang; // Set up default lang for each field for simple work in template
       field.attributes = field.attributes || {};
+      // Auto Set to not autocomplete
+      if (!field.attributes.autocomplete) {
+        field.attributes.autocomplete = 'off';
+      }
       field.options = field.options || {};
       this.options.formSchema.validation = this.options.formSchema.validation || {};
       this.options.formData = this.options.formData || {};
@@ -580,6 +584,9 @@ define([
           var _num_class;
           if (!field.options.numbertype || field.options.decimals) {
             _num_class = (field.options.decimals) ? 'number' : 'natural';
+            if (field.options.decimals) {
+              field.attributes['data-decimal'] = field.options.decimals;
+            }
           } else if (field.options.numbertype) {
             switch (field.options.numbertype.toLowerCase()) {
               case 'currency':
@@ -597,9 +604,13 @@ define([
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], _num_class + ' span12');
           // Check to see how to render this
           if (field.options.decimals && this.options.formData.fields && this.options.formData.fields[field.name]) {
-            var _float_pts = parseFloat(this.options.formData.fields[field.name] / Math.pow(10, parseInt(field.options.decimals)));
+            var _float_pts = parseFloat(this.options.formData.fields[field.name] / Math.pow(10, parseInt(field.options.decimals, 10)));
             if (!isNaN(_float_pts)) {
-              this.options.formData.fields[field.name] = _float_pts.toFixed(2);
+              this.options.formData.fields[field.name] = _float_pts.toFixed(field.options.decimals);
+              field.attributes['value'] = this.options.formData.fields[field.name];
+              if (this.model.has(field.name)) {
+                this.model.set(field.name, this.options.formData.fields[field.name]);
+              }
             }
           }
           if (typeof field.options.spinner !== 'undefined' && field.options.spinner) {

@@ -1963,6 +1963,16 @@ define([
           $this.val(JSON.stringify(val));
         });
       });
+    },
+
+    convertNumberToDecimal: function($form) {
+      $form.find(':input[data-decimal]').each(function() {
+        var $this = $(this),
+          _val = $this.val(),
+          _numberDecimal = parseInt($this.attr('data-decimal'), 10);
+        _val *= Math.pow(10, _numberDecimal);
+        $this.val(parseInt(_val, 10));
+      });
     }
   };
 });

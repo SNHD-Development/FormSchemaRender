@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.1.3`
+Version `version 0.1.4`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -865,8 +865,12 @@ Sometime there are some fileds that internal should not be able to update these 
 
 ## Version
 
+* 0.1.5
+
+
 * 0.1.4
 	- Adding Tag in Select Type as a options
+	- Set autocomplete off by default
 
 * 0.1.3
 	- Add ability to sort by column in List field type

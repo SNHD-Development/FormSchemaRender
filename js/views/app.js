@@ -316,6 +316,9 @@ define([
         // Some Data Clean Up
         Utils.convertDataToArrayString($form);
 
+        // Need to check for the Number default (integer)
+        Utils.convertNumberToDecimal($form);
+
         // If this form has Java Pow Upload need to send those in as well
         if (this.formView._javaUpload.length) {
           var _javaPowSubmit = false,
@@ -400,7 +403,7 @@ define([
         // console.log(JSON.stringify($form.serializeArray()));
         // e.preventDefault();
         // if (console && console.log) {
-        //     console.log(this.model.toJSON());
+        // console.log(this.model.toJSON());
         // }
         // return false;
       } else {
