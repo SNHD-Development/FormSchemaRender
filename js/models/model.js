@@ -50,6 +50,12 @@ define([
 
       _typeLowerCase = value.type.toLowerCase();
       switch (_typeLowerCase) {
+        case 'radio':
+          _addToModelBinder = false;
+          break;
+      }
+
+      switch (_typeLowerCase) {
 
         case 'booleaninput':
           _attrs[value.name] = '';

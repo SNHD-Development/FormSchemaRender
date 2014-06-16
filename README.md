@@ -871,6 +871,7 @@ Sometime there are some fileds that internal should not be able to update these 
 * 0.1.4
 	- Adding Tag in Select Type as a options
 	- Set autocomplete off by default
+	- Visible On with Radio Field Type
 
 * 0.1.3
 	- Add ability to sort by column in List field type

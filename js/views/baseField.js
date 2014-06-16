@@ -86,6 +86,7 @@ define([
       this._javaUpload = []; // Java Upload Object
       this._elementData = {}; // Use for Element Data
       this._ajaxSubmit = true;
+      this._radioFieldName = []; // List of Field that is a radio field.
 
       // Wizard View Counters
       this._stepDiv = 0; // Count number of open div for step (wizard view)
@@ -229,6 +230,7 @@ define([
           break;
 
         case 'radio':
+          this._radioFieldName.push(field.name);
           if (!this._hasRadioBtnGroup && field.options.render) {
             this._hasRadioBtnGroup = true;
           }
@@ -1282,6 +1284,11 @@ define([
           parentContainer = field.options.visibleon.parentcontainer;
         } else if (_typeLowerCase === 'booleaninput') {
           parentContainer = '.form-render_booleaninput_wrapper';
+        } else {
+          // Check to see the delegate element
+          if (field.options.visibleon && field.options.visibleon.name && _.indexOf(this._radioFieldName, field.options.visibleon.name) > -1) {
+            parentContainer = '.radio-container';
+          }
         }
       }
 
