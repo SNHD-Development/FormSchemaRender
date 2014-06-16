@@ -889,6 +889,10 @@ define([
                     _values[index].push((modelData[element.name] ? 'Yes' : 'No'));
                     break;
 
+                  case 'number':
+                    if (element.options && element.options.decimals && modelData[element.name]) {
+                      modelData[element.name] = (modelData[element.name] / Math.pow(10, element.options.decimals)).toFixed(element.options.decimals);
+                    }
                   default:
                     if (typeof modelData[element.name] === 'undefined') {
                       delete(_labels[_labels.length - 1]);
