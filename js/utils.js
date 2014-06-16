@@ -752,6 +752,11 @@ define([
         this.setupCheckBoxOtherTextBox($form);
       }
 
+      // If there are radio buttons.
+      if (view._radioFieldName.length) {
+        this.setupRadioButtonsValue(view);
+      }
+
       // Setup ButtonCondition
       // By Default, will require all data to be valid
       // Default Success Call Back must return JSON with key = "value"
@@ -1972,6 +1977,23 @@ define([
           _numberDecimal = parseInt($this.attr('data-decimal'), 10);
         _val *= Math.pow(10, _numberDecimal);
         $this.val(parseInt(_val, 10));
+      });
+    },
+
+    /**
+     * Setup Radio Value in Update Mode
+     * @param  object view
+     * @return
+     */
+    setupRadioButtonsValue: function(view) {
+      if (!view.options.formData || !view.options.formData.fields) {
+        return;
+      }
+      _.each(view._radioFieldName, function(element) {
+        if (!view.options.formData.fields[element]) {
+          return;
+        }
+        $(":radio[value=" + view.options.formData.fields[element] + "]").attr('checked', true)
       });
     }
   };

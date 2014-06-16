@@ -236,6 +236,9 @@ define([
           }
           if (this.options.formData.fields && this.options.formData.fields[field.name]) {
             // Copy by reference
+            if (this.options.mode === 'read' && field.values && _.isObject(field.values)) {
+              this.options.formData['fields'][field.name] = field.values[this.options.formData['fields'][field.name]];
+            }
             field._data = this.options.formData['fields'][field.name];
           }
           // If there is an Options.OrderBy will need to sort Values
