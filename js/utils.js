@@ -1993,7 +1993,7 @@ define([
         if (!view.options.formData.fields[element]) {
           return;
         }
-        $(":radio[value=" + view.options.formData.fields[element] + "]").attr('checked', true);
+        $(':radio[value="' + view.options.formData.fields[element] + '"]').attr('checked', true).trigger('change');
       });
     },
 
