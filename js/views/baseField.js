@@ -477,6 +477,13 @@ define([
             _date += '/';
 
             this.options.formData.fields[field.name] = _month + _date + _tmpDate.getFullYear();
+            if (field.options.render && this.options.mode === 'read') {
+              switch (field.options.render.toLowerCase()) {
+                case 'datetime':
+                  this.options.formData.fields[field.name] += ' ' + Utils.formatAMPM(_tmpDate);
+                  break;
+              }
+            }
             field.attributes['value'] = this.options.formData.fields[field.name];
           }
           if (field.attributes && !field.attributes.placeholder) {
@@ -484,7 +491,7 @@ define([
           }
           // If pass in options.render, by default will render as 'DatePicker'
           if (field.options.render && field.options.render.toLowerCase() === 'select') {
-            _type = 'birthdate'
+            _type = 'birthdate';
             this._hasBDate = true;
             field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'birthdaypicker');
             var _validation_tmp = this.getFormValidationData(field.name),

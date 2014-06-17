@@ -647,6 +647,8 @@ Note: Since JavaPowUpload will send all the post data as AJAX, we then need to p
 
 By default `Type = "Date"` will render as DatePicker, However sometime it is very difficult to select birthday with Datepicker, so if you set `Options.Render = "Select"`. This will render the date field as select box.
 
+To render time, pass option "Render": "DateTime"
+
 	{
 		Name: "MyDate",
 		Type: "Date",
@@ -872,8 +874,9 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Adding Tag in Select Type as a options
 	- Set autocomplete off by default
 	- Visible On with Radio Field Type
-	- Render Decimal in read mode with list type.
+	- Render Decimal in read mode with list type
 	- Radio can now render multilple language
+	- Date Field can now render Date and Time
 
 * 0.1.3
 	- Add ability to sort by column in List field type

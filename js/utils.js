@@ -1993,8 +1993,24 @@ define([
         if (!view.options.formData.fields[element]) {
           return;
         }
-        $(":radio[value=" + view.options.formData.fields[element] + "]").attr('checked', true)
+        $(":radio[value=" + view.options.formData.fields[element] + "]").attr('checked', true);
       });
+    },
+
+    /**
+     * Function to format Date Object to return time
+     * @param  object date
+     * @return
+     */
+    formatAMPM: function(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return strTime;
     }
   };
 });
