@@ -259,9 +259,9 @@ define([
           }
         }
       }
-    }
+    },
 
-    , create = function(context, name, View, options) {
+    create = function(context, name, View, options) {
       // View clean up isn't actually implemented yet but will simply call .clean, .remove and .unbind
       remove(name);
 
@@ -275,10 +275,10 @@ define([
       }
       Events.trigger('viewCreated');
       return view;
-    }
+    },
 
     // Convert all key to lowercase
-    , toLower = function(obj, skipKey) {
+    toLower = function(obj, skipKey) {
       var keys = Object.keys(obj),
         n = keys.length;
       while (n--) {
@@ -298,10 +298,10 @@ define([
           this.toLower(obj[keyLower]);
         }
       }
-    }
+    },
 
     // Parse HTML Code to normal text
-    , decodeHtml = function(obj) {
+    decodeHtml = function(obj) {
       if (obj.fields) {
         _.each(obj.fields, function(value, key) {
           if (typeof value === 'object') {
@@ -311,15 +311,16 @@ define([
           obj.fields[key] = _value.replace(/&#39;/g, "'");
         });
       }
-    }
+    },
 
     // Change Language
-    , changeLanguage = function(obj, language) {
+    changeLanguage = function(obj, language) {
       _.each(obj, function(element) {
         if (element.description && element.languages && element.languages[language]) {
           element.description = element.languages[language];
         }
         switch (element.type.toLowerCase()) {
+          case 'radio':
           case 'select':
             if (element['values-' + language]) {
               element.values = element['values-' + language];
@@ -333,10 +334,10 @@ define([
             break;
         }
       });
-    }
+    },
 
     // Get Country from 2 Digit Code
-    , getCountry = function(code) {
+    getCountry = function(code) {
       return countries[code];
     };
 

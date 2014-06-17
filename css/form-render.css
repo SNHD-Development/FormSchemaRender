@@ -287,7 +287,10 @@
       cursor: pointer;
       text-decoration: underline; }
   .form-render .uneditable-input {
-    width: 80%; }
+    width: 80%;
+    height: auto;
+    overflow: auto;
+    white-space: normal; }
     .form-render .uneditable-input.input-col2 {
       width: 40%; }
   .form-render .uneditable-input-textarea {

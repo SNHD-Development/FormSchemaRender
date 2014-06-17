@@ -405,6 +405,9 @@ $text_area_min_height: 100px;
     }
     .uneditable-input {
         width: 80%;
+        height: auto;
+        overflow: auto;
+        white-space: normal;
         &.input-col2 {
             width: 40%;
         }

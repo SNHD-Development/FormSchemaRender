@@ -873,6 +873,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Set autocomplete off by default
 	- Visible On with Radio Field Type
 	- Render Decimal in read mode with list type.
+	- Radio can now render multilple language
 
 * 0.1.3
 	- Add ability to sort by column in List field type
