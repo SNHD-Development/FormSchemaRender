@@ -279,9 +279,9 @@ define([
           $(this).birthdaypicker($(this).attr('data-options'));
           var $hidden = $(':input[type="hidden"]', this),
             _token, $month, $day, $year;
-          if ($hidden.val() !== '' && model.get($hidden.attr('name')) !== '') {
-            _token = $hidden.val()
-              .split("/");
+          var _value = $hidden.val();
+          if (_value !== '' && model.get($hidden.attr('name')) !== '') {
+            _token = _value.split("/");
             if (_token.length === 3) {
               if (_token[0][0] === '0') {
                 _token[0] = _token[0].substr(1);
@@ -300,6 +300,9 @@ define([
               model.set($month.attr('name'), _token[0]);
               model.set($day.attr('name'), _token[1]);
               model.set($year.attr('name'), _token[2]);
+              // if (model.get($hidden.attr('name')) === '') {
+              // model.set($hidden.attr('name'), _value);
+              // }
             }
           }
         });
@@ -2008,6 +2011,11 @@ define([
       $radios.each(function() {
         var $this = $(this);
         $this.trigger('change');
+        if (view.model) {
+          var name = $this.attr('name'),
+            _val = $this.val();
+          view.model.set(name, _val);
+        }
       });
     },
 

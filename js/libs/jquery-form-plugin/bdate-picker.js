@@ -185,19 +185,6 @@
             }
             $(this).append($fieldset);
 
-            // Set the default date if given
-            if (settings["defaultdate"]) {
-                var date;
-                if ($.isArray(_tmp) && _tmp.length === 3) {
-                    date = new Date(_tmp[2], _tmp[0] - 1, _tmp[1]);
-                } else {
-                    date = new Date(settings["defaultdate"] + "T00:00:00");
-                }
-                $year.val(date.getFullYear());
-                $month.val(date.getMonth() + 1);
-                $day.val(date.getDate());
-            }
-
             // Update the option sets according to options and user selections
             $fieldset.change(function() {
                 // todays date values
@@ -215,9 +202,9 @@
                     curMaxMonth = parseInt($month.children(":last").val(), 10),
                     curMaxDay = parseInt($day.children(":last").val(), 10);
 
-                if (isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDay)) {
-                    return;
-                }
+                // if (isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDay)) {
+                //     return;
+                // }
 
                 // Dealing with the number of days in a month
                 // http://bugs.jquery.com/ticket/3041
@@ -232,6 +219,9 @@
                         $day.append("<option value=" + curMaxDay + ">" + curMaxDay + "</option>");
                     }
                 }
+                $day = $(':input[name="'+settings['id']+'"]');
+                var _option = $day.find('option[value="'+selectedDay+'"]');
+                _option.attr('selected', true);
 
                 // Dealing with future months/days in current year
                 // or months/days that fall after the minimum age
@@ -268,11 +258,31 @@
                     selectedDay = (selectedDay < 10) ? '0' + selectedDay : selectedDay;
                     hiddendate = selectedMonth + "/" + selectedDay + "/" + selectedYear;
                     $(this).find('#' + settings["fieldid"]).val(hiddendate);
+                    // $day.val(selectedDay);
                     if (settings["onchange"] != null) {
                         settings["onchange"](hiddendate);
                     }
                 }
             });
+
+            // Set the default date if given
+            if (settings["defaultdate"]) {
+                var date;
+                if ($.isArray(_tmp) && _tmp.length === 3) {
+                    date = new Date(_tmp[2], _tmp[0] - 1, _tmp[1]);
+                } else {
+                    date = new Date(settings["defaultdate"] + "T00:00:00");
+                }
+                $year.val(date.getFullYear());
+                $month.val(date.getMonth() + 1);
+                $day.val(date.getDate());
+            } else {
+                // Will auto set the year to prevent the problem on reset the date (Current Year)
+                // var date = new Date();
+                // $year.val(date.getFullYear());
+                // $month.val(date.getMonth() + 1);
+                // $day.val(date.getDate()).trigger('change');
+            }
         });
     };
 })(jQuery);
