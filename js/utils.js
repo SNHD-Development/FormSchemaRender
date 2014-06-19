@@ -448,7 +448,8 @@ define([
     /**
      * Setup Spinner
      **/
-    setupSpinner: function(el) {
+    setupSpinner: function(el, mode) {
+      mode = mode || null;
       $('.spinner', el)
         .each(function() {
           // Be Default, will render as 1
@@ -457,11 +458,14 @@ define([
             _dataDefaultValue = ($spinnerInput.attr('data-default-value') !== undefined) ? $spinnerInput.attr('data-default-value') : 1,
             _number = ($spinnerInput.val() !== '') ?
               $spinnerInput.val() :
-              _dataDefaultValue,
-            _opt = {
-              value: parseInt(_number, 10),
-              min: _dataDefaultValue
-            };
+              _dataDefaultValue;
+          if (mode && mode === 'create' && _number === '0') {
+            _number = '1';
+          }
+          var _opt = {
+            value: parseInt(_number, 10),
+            min: _dataDefaultValue
+          };
           $(this)
             .spinner(_opt);
         });
@@ -1994,6 +1998,18 @@ define([
           return;
         }
         $(':radio[value="' + view.options.formData.fields[element] + '"]').attr('checked', true).trigger('change');
+      });
+    },
+
+    setModelRadioValues: function(el, view) {
+      view = view || null;
+      var $radios = el.find(':radio:checked');
+      if (!$radios.length) {
+        return;
+      }
+      $radios.each(function() {
+        var $this = $(this);
+        $this.trigger('change');
       });
     },
 

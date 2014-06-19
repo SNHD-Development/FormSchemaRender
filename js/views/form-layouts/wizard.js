@@ -141,6 +141,8 @@ define([
       e.data.$formWizard.wizard('previous');
     },
     clickNext: function(e) {
+      var $form = $(e.data.el);
+      Utils.setModelRadioValues($form, e.data);
       e.data.$formWizard.wizard('next');
     },
     /**

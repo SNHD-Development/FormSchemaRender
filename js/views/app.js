@@ -75,7 +75,7 @@ define([
           Utils.setupAddressEvent(that.el, that);
 
           // Setup Spinner
-          Utils.setupSpinner(that.el);
+          Utils.setupSpinner(that.el, that.formView.options.mode);
 
           // Placeholder Setup for Older Browser
           Utils.setupPlaceHolder(that.el);
@@ -500,12 +500,14 @@ define([
       var that = this;
       _.each(this.formView.model.attributes, function(value, key) {
         if (typeof value.reset === 'function') {
-          that.formView.model.get(key)
-            .reset();
+          that.formView.model.get(key).reset();
         } else {
-          $(':input[name="' + key + '"]', that.el)
-            .val('')
-            .trigger('change');
+          var $field = $(':input[name="' + key + '"]', that.el);
+          if ($field.is(':checked')) {
+            $field.attr('checked', false);
+          }
+          $field.val('');
+          $field.trigger('change');
           that.formView.model.set(key, '');
         }
       });
