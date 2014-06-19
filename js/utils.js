@@ -276,9 +276,7 @@ define([
     setupBDateInput: function(el, model) {
       $('.birthdaypicker', el)
         .each(function() {
-          $(this)
-            .birthdaypicker($(this)
-              .attr('data-options'));
+          $(this).birthdaypicker($(this).attr('data-options'));
           var $hidden = $(':input[type="hidden"]', this),
             _token, $month, $day, $year;
           if ($hidden.val() !== '' && model.get($hidden.attr('name')) !== '') {

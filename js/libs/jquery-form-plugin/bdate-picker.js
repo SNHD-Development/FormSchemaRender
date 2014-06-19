@@ -212,8 +212,12 @@
                     // number of days in currently selected year/month
                     actMaxDay = (new Date(selectedYear, selectedMonth, 0)).getDate(),
                     // max values currently in the markup
-                    curMaxMonth = parseInt($month.children(":last").val()),
-                    curMaxDay = parseInt($day.children(":last").val());
+                    curMaxMonth = parseInt($month.children(":last").val(), 10),
+                    curMaxDay = parseInt($day.children(":last").val(), 10);
+
+                if (isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDay)) {
+                    return;
+                }
 
                 // Dealing with the number of days in a month
                 // http://bugs.jquery.com/ticket/3041
