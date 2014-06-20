@@ -647,6 +647,16 @@ define([
           if (field.options.url) {
             this._ajaxDataCall.push(field);
           }
+          if (this.options.mode === 'read' && field.options && field.options.highlight) {
+            var _highlight = field.options.highlight.toLowerCase().split(',');
+            _.each(_highlight, function(element) {
+              var _tmp_name = field.name + '_fullname_' + element;
+              if (!that.options.formData.fields[_tmp_name]) {
+                return;
+              }
+              that.options.formData.fields[_tmp_name] = '<u>' + that.options.formData.fields[_tmp_name] + '</u>';
+            });
+          }
           break;
 
         case 'clear':
