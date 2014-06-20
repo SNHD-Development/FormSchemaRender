@@ -403,7 +403,7 @@ define([
         // console.log(JSON.stringify($form.serializeArray()));
         // e.preventDefault();
         // if (console && console.log) {
-        // console.log(this.model.toJSON());
+        // console.log(that.formView.model.toJSON());
         // }
         // return false;
       } else {

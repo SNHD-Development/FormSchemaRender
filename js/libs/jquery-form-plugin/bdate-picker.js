@@ -219,7 +219,7 @@
                         $day.append("<option value=" + curMaxDay + ">" + curMaxDay + "</option>");
                     }
                 }
-                $day = $(':input[name="'+settings['id']+'"]');
+                $day = $(':input[name="'+settings['id']+'_birth[day]"]');
                 var _option = $day.find('option[value="'+selectedDay+'"]');
                 _option.attr('selected', true);
 
@@ -232,7 +232,9 @@
                             curMaxMonth--;
                         }
                         // reset the day selection
-                        $day.children(":first").attr("selected", "selected");
+                        if (!_option.length) {
+                            $day.children(":first").attr("selected", "selected");
+                        }
                     }
                     if (selectedMonth === todayMonth) {
                         while (curMaxDay > todayDay) {
@@ -275,7 +277,7 @@
                 }
                 $year.val(date.getFullYear());
                 $month.val(date.getMonth() + 1);
-                $day.val(date.getDate());
+                $day.val(date.getDate()).trigger('change');
             } else {
                 // Will auto set the year to prevent the problem on reset the date (Current Year)
                 // var date = new Date();
