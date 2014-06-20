@@ -247,6 +247,8 @@
     margin-bottom: 10px; }
     .form-render input[type="file"].invalid, .form-render select[type="file"].invalid, .form-render textarea[type="file"].invalid {
       border: solid 1px #b94a48; }
+    .form-render input[type="radio"].invalid, .form-render select[type="radio"].invalid, .form-render textarea[type="radio"].invalid {
+      outline: 1px solid #b94a48; }
     .form-render input.invalid, .form-render select.invalid, .form-render textarea.invalid {
       border-color: #b94a48;
       -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);

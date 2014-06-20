@@ -301,7 +301,7 @@ define([
       window.setTimeout(
         function() {
           var $firstError = $('.invalid:first', $form);
-          if (!$firstError.is(':checkbox')) {
+          if (!($firstError.is(':checkbox') || $firstError.is(':radio'))) {
             $firstError.focus();
           }
           $btn.attr('disabled', false).popover('destroy');

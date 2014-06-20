@@ -2010,7 +2010,7 @@ define([
       }
       $radios.each(function() {
         var $this = $(this);
-        $this.trigger('change');
+        $this.attr('checked', true).trigger('change');
         if (view.model) {
           var name = $this.attr('name'),
             _val = $this.val();

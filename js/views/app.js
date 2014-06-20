@@ -284,6 +284,7 @@ define([
         var $this = $(this);
         that.formView.model.set($this.attr('name'), $this.val());
       });
+      Utils.setModelRadioValues($form, this.formView);
 
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid()) {
 
@@ -403,7 +404,7 @@ define([
         // console.log(JSON.stringify($form.serializeArray()));
         // e.preventDefault();
         // if (console && console.log) {
-        // console.log(that.formView.model.toJSON());
+        //   console.log(that.formView.model.toJSON());
         // }
         // return false;
       } else {
@@ -434,8 +435,10 @@ define([
 
           window.setTimeout(
             function() {
-              $('.invalid:first', $form)
-                .focus();
+              var $firstError = $('.invalid:first', $form);
+              if (!($firstError.is(':checkbox') || $firstError.is(':radio'))) {
+                $firstError.focus();
+              }
               $submitBtn.attr('disabled', false)
                 .popover('destroy');
               $submitBtn.next('.popover')
