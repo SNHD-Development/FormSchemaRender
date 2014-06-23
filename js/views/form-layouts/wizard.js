@@ -143,7 +143,7 @@ define([
     clickNext: function(e) {
       var $form = $(e.data.el);
       Utils.setModelRadioValues($form, e.data);
-      Utils.setModelCheckValues($form, this.formView);
+      Utils.setModelCheckValues($form, e.data);
       e.data.$formWizard.wizard('next');
     },
     /**
