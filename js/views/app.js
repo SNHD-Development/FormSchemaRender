@@ -285,6 +285,7 @@ define([
         that.formView.model.set($this.attr('name'), $this.val());
       });
       Utils.setModelRadioValues($form, this.formView);
+      Utils.setModelCheckValues($form, this.formView);
 
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid()) {
 

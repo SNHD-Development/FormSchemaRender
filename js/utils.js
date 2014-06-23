@@ -2019,6 +2019,23 @@ define([
       });
     },
 
+    setModelCheckValues: function(el, view) {
+      view = view || null;
+      var $checks = el.find(':checkbox:checked');
+      if (!$checks.length) {
+        return;
+      }
+      $checks.each(function() {
+        var $this = $(this);
+        $this.attr('checked', true).trigger('change');
+        if (view.model) {
+          var name = $this.attr('name'),
+            _val = $this.val();
+          view.model.set(name, _val);
+        }
+      });
+    },
+
     /**
      * Function to format Date Object to return time
      * @param  object date

@@ -877,6 +877,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Render Decimal in read mode with list type
 	- Radio can now render multilple language
 	- Date Field can now render Date and Time
+	- Fix the Checkbox Model binder
 
 * 0.1.3
 	- Add ability to sort by column in List field type
