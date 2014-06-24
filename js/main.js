@@ -244,6 +244,32 @@ require([
       $(appView.el)
         .html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
 
+      // Render Modules
+      // Pending Modules
+      if (false && _opts.formSchema.modules) {
+        var _collection = Backbone.Collection.extend({});
+        _.each(_opts.formSchema.modules, function(enable, module) {
+          if (!enable) {
+            return;
+          }
+          var _module = module.toLowerCase();
+          // Load Modules
+          try {
+            require(['views/modules/' + _module], function(ModuleView) {
+              var moduleView = Vm.create(appView, module + 'View', ModuleView, {
+                el: appView.el,
+                collection: new _collection()
+              });
+              $('div#app').on(_opts.formSchema.name + '.renderCompleted', function() {
+                moduleView.render();
+              });
+            });
+          } catch (err) {
+            alert('Cannot load module ' + '"' + module + '", Error: ' + err);
+          }
+        });
+      }
+
       appView.render();
 
     } catch (err) {

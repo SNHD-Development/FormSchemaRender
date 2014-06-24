@@ -1202,6 +1202,10 @@ define([
         data: _options
       }, {}, true, _listView);
     },
+    /**
+     * Show Modal List View
+     * This will be called when List View (Sub Form) Render
+     */
     displaySubForm: function(e, model, hidden, listView) {
       model = model || {};
       hidden = hidden || false;

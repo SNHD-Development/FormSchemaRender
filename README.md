@@ -868,7 +868,7 @@ Sometime there are some fileds that internal should not be able to update these 
 ## Version
 
 * 0.1.5
-
+	- Fix the List to be able to render Select2
 
 * 0.1.4
 	- Adding Tag in Select Type as a options

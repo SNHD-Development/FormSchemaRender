@@ -117,6 +117,11 @@ define([
             html: _html
           }, that.options.formSchema)));
         }
+        var $inputs = that.$(':input[value!=""]').not(':button');
+        $inputs.each(function() {
+          var $this = $(this);
+          that.model.set($this.attr('name'), $this.val());
+        });
 
         // Bind Model
         try {
@@ -186,7 +191,7 @@ define([
         });
 
         // Set Up Ajax Call
-        Utils.setupUrlAjaxCall(that.$el);
+        Utils.setupUrlAjaxCall(that.$el, null, that.model);
 
         // Find the first input in the form
         var $fInput = that.$(':input').not(':hidden').first().focus();
@@ -236,6 +241,13 @@ define([
       _submitBtn.addClass('submitted');
 
       Utils.setHiddenField(this.el);
+
+      // Set the Values to Model
+      var $inputs = that.$(':input[value!=""]').not(':button');
+      $inputs.each(function() {
+        var $this = $(this);
+        that.model.set($this.attr('name'), $this.val());
+      });
 
       if (this.model.isValid(true)) {
         var $not_sending = $('.not_sending', this.el).trigger('change').attr('disabled', true);

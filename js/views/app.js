@@ -49,6 +49,10 @@ define([
           readView.render();
 
           Utils.finalReadSetup(readView);
+          // Render Form Complete
+          // Send view at second parameter
+          $('#' + that.options.formSchema.name, that.el)
+            .trigger(that.options.formSchema.name + '.renderCompleted', that);
         });
       } else {
         // Will render Form

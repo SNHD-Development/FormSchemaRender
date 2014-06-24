@@ -1292,8 +1292,9 @@ define([
      * @param  object $form
      * @return
      */
-    setupUrlAjaxCall: function($form, $scope) {
+    setupUrlAjaxCall: function($form, $scope, model) {
       $scope = $scope || null;
+      model = model || null;
       var $urlEndPoint = ($scope) ? $scope : $(':input[data-url]'),
         that = this;
       if ($urlEndPoint.length === 0 || !$urlEndPoint.attr('data-url')) {
@@ -1324,6 +1325,12 @@ define([
             throw 'Error: select2 is not yet loaded. Please refresh this page again! (Setup "' + $this.attr('id') + '"")';
           }
           // Select2 does not work on select element for Ajax Call
+          if (model) {
+            var _modelValue = model.get($this.attr('name'));
+            if (_modelValue && _modelValue !== '') {
+              $this.attr('data-select-value', _modelValue);
+            }
+          }
           var _domStr = '<input type="hidden" name="' + $this.attr('name') + '" id="' + $this.attr('id') + '" class="' + $this.attr('class') + ' has-select2-dynamic" />',
             _value = $this.attr('data-select-key-value'),
             _text = $this.attr('data-select-key-text'),
