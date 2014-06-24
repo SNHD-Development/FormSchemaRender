@@ -279,7 +279,7 @@ define([
         .attr('disabled', true);
 
       // Attached the subform input
-      this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields);
+      this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields, this.formView._listSchema);
 
       // Check Data
       Utils.getDefaultValues(this.formView.el); // Make sure to get default value for each type.

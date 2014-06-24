@@ -379,7 +379,8 @@ define([
     /**
      * Parse nested JSON data, case Model -> Collection and append to the form input
      **/
-    appendSubFormInput: function(formId, internalField) {
+    appendSubFormInput: function(formId, internalField, listSchema) {
+      listSchema = listSchema || null;
       var _data = _.clone(this.toJSON()),
         _postfix,
         $form = $('#' + formId);
@@ -387,6 +388,28 @@ define([
       _.each(_data, function(value, key) {
         _postfix = (internalField.indexOf(key) > -1) ? '_internal' : '';
         if (typeof value !== 'undefined' && typeof value.toJSON === 'function') {
+          // Need to Check FormSchema and Parse the correct Data into input
+          if (listSchema && listSchema[key].fields) {
+            _.each(listSchema[key].fields, function(fieldsSchema) {
+              if (!fieldsSchema || !fieldsSchema.name || !fieldsSchema.type) {
+                return;
+              }
+              var _listFieldType = fieldsSchema.type.toLowerCase();
+              _.each(value.models, function(modelValue) {
+                switch (_listFieldType) {
+                  case 'number':
+                    var _tmpNum = parseFloat(modelValue.get(fieldsSchema.name));
+                    if (!isNaN(_tmpNum)) {
+                      if (fieldsSchema.options && fieldsSchema.options.decimals) {
+                        _tmpNum *= Math.pow(10, fieldsSchema.options.decimals);
+                      }
+                      modelValue.set(fieldsSchema.name, _tmpNum);
+                    }
+                    break;
+                }
+              });
+            })
+          }
           var _tmpJsonTxt = JSON.stringify(value.toJSON());
           $form.prepend('<input type="hidden" name="' + key + _postfix + '" value="" class="subform_before_submit">');
           $form.find(':input[name="' + key + _postfix + '"]').val(_tmpJsonTxt);

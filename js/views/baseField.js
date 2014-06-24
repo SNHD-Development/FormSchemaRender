@@ -87,6 +87,7 @@ define([
       this._elementData = {}; // Use for Element Data
       this._ajaxSubmit = true;
       this._radioFieldName = []; // List of Field that is a radio field.
+      this._listSchema = {};
 
       // Wizard View Counters
       this._stepDiv = 0; // Count number of open div for step (wizard view)
@@ -767,6 +768,9 @@ define([
 
           var _validation = (typeof this.options.formSchema.validation[field.name] !== 'undefined') ? this.options.formSchema.validation[field.name] : {};
           this.attachSubFormEvent(field.attributes.id, field, _validation);
+
+          // Save the Schema to be used later.
+          this._listSchema[field.name] = field;
           break;
       }
 
