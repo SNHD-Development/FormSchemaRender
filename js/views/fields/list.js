@@ -15,6 +15,49 @@ define([
   'jquery.expose',
   'bootstrap'
 ], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events, subFormLayoutTemplate) {
+
+  function formatModel(view) {
+    _.each(view.options.formSchema.fields, function(element) {
+      if (!element.name || !element.type) {
+        return;
+      }
+      var _type = element.type.toLowerCase(),
+        _valModel = view.model.get(element.name);
+      switch (_type) {
+        case 'number':
+          _valModel = parseFloat(_valModel);
+          if (!isNaN(_valModel)) {
+            if (element.options && element.options.decimals) {
+              _valModel *= Math.pow(10, element.options.decimals);
+            }
+            view.model.set(element.name, _valModel);
+          }
+          break;
+      }
+    });
+  }
+
+  function reFormatModel(view) {
+    _.each(view.options.formSchema.fields, function(element) {
+      if (!element.name || !element.type) {
+        return;
+      }
+      var _type = element.type.toLowerCase(),
+        _valModel = view.model.get(element.name);
+      switch (_type) {
+        case 'number':
+          _valModel = parseFloat(_valModel);
+          if (!isNaN(_valModel)) {
+            if (element.options && element.options.decimals) {
+              _valModel /= Math.pow(10, element.options.decimals);
+            }
+            view.model.set(element.name, _valModel);
+          }
+          break;
+      }
+    });
+  }
+
   return Backbone.View.extend({
     _modelBinder: undefined,
     // Clean Data Binding
@@ -122,6 +165,11 @@ define([
           var $this = $(this);
           that.model.set($this.attr('name'), $this.val());
         });
+
+        // Format Values
+        if (that.options.model) {
+          reFormatModel(that);
+        }
 
         // Bind Model
         try {
@@ -249,6 +297,9 @@ define([
         that.model.set($this.attr('name'), $this.val());
       });
 
+      // Need to format the value
+      formatModel(this);
+
       if (this.model.isValid(true)) {
         var $not_sending = $('.not_sending', this.el).trigger('change').attr('disabled', true);
         $not_sending.each(function() {
@@ -281,6 +332,10 @@ define([
     },
     clickCancel: function(e) {
       e.preventDefault();
+      // Format Values
+      if (this.options.model) {
+        formatModel(this);
+      }
       Vm.remove('SubFormView' + this.options.formId, true);
       Vm.remove('SubFormViewEdit' + this.options.formId, true);
       this.$el.trigger(this.options.formId + '.close', this);

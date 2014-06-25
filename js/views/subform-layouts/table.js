@@ -87,6 +87,16 @@ define([
               _values[index].push(_booleanVal);
               break;
 
+            case 'number':
+              var _number;
+              if (element.options && element.options.decimals && model[element.name]) {
+                _number = (model[element.name] / Math.pow(10, element.options.decimals)).toFixed(element.options.decimals);
+              } else {
+                _number = model[element.name];
+              }
+              _values[index].push(_number);
+              break;
+
             default:
               _values[index].push(model[element.name]);
           }

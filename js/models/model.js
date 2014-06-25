@@ -400,15 +400,15 @@ define([
                   case 'number':
                     var _tmpNum = parseFloat(modelValue.get(fieldsSchema.name));
                     if (!isNaN(_tmpNum)) {
-                      if (fieldsSchema.options && fieldsSchema.options.decimals) {
-                        _tmpNum *= Math.pow(10, fieldsSchema.options.decimals);
-                      }
+                      // if (fieldsSchema.options && fieldsSchema.options.decimals) {
+                      //   _tmpNum *= Math.pow(10, fieldsSchema.options.decimals);
+                      // }
                       modelValue.set(fieldsSchema.name, _tmpNum);
                     }
                     break;
                 }
               });
-            })
+            });
           }
           var _tmpJsonTxt = JSON.stringify(value.toJSON());
           $form.prepend('<input type="hidden" name="' + key + _postfix + '" value="" class="subform_before_submit">');
