@@ -30,6 +30,8 @@ define([
         _html = '';
       _.each(this.options.formSchema.fields, function(value, key, list) {
 
+        Utils.addFormSubmittedData(value, that);
+
         // Check if the data is empty, will not render
         if (!Utils.isRenderReadMode(that, value)) {
           return '';

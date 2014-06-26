@@ -35,6 +35,8 @@ define([
 
         var _typeLowerCase = value.type.toLowerCase();
 
+        Utils.addFormSubmittedData(value, that);
+
         // Check if the data is empty, will not render
         if (!Utils.isRenderReadMode(that, value)) {
           return '';

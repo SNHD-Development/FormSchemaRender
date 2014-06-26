@@ -13,11 +13,17 @@ define([
     events: {},
     render: function(data) {
       var that = this,
+        template,
+        selector;
+      if (data.html) {
+        template = data.html;
+        selector = '#snhd-payment-form';
+      } else {
         template = this.template(data);
-      $(this.el)
-        .append(template);
-      $('#form-render-hidden-form')
-        .trigger('submit');
+        selector = '#form-render-hidden-form';
+      }
+      $(this.el).append(template);
+      $(selector).trigger('submit');
     },
   });
   return AppView;

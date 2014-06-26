@@ -371,6 +371,10 @@ define([
                 return a - b;
               });
             }
+            // Copy by reference
+            if (this.options.mode === 'read' && field.values && _.isObject(field.values)) {
+              field._data = field.values[this.options.formData['fields'][field.name]];
+            }
             this.addDataToElementData(field.name, 'value', this.options.formData.fields[field.name]);
           }
           break;
@@ -857,6 +861,7 @@ define([
               _keys = {},
               _cnt = 0,
               _values = new Array(this.options.formData.fields[field.name].length || _.size(this.options.formData.fields[field.name]));
+
             _.each(field.fields, function(element, index) {
               element.options = element.options || {};
               _labels.push(element.description);
@@ -974,6 +979,11 @@ define([
               break;
             case 'timestamp':
               _field_data = Utils.getHumanTime(_field_data);
+              break;
+            case 'select':
+              if (field._data) {
+                _field_data = field._data;
+              }
               break;
           }
           _html += that.inputTemplate['uneditableinput']({

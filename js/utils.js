@@ -2057,6 +2057,23 @@ define([
       minutes = minutes < 10 ? '0' + minutes : minutes;
       var strTime = hours + ':' + minutes + ' ' + ampm;
       return strTime;
+    },
+
+    addFormSubmittedData: function(field, view) {
+      // If this is log, will auto added the create date and time
+      if (field.name && field.name === 'LogEntries') {
+        if (view.options.formData.fields) {
+          var _createItemObj = {
+            'LogMessage': 'Form submitted',
+            'LogTime': view.options.formData.createddate_pacific.$date / 1000,
+            'LogUser': view.options.formData.createduser
+          };
+          if (!view.options.formData.fields[field.name]) {
+            view.options.formData.fields[field.name] = [];
+          }
+          view.options.formData.fields[field.name].unshift(_createItemObj);
+        }
+      }
     }
   };
 });
