@@ -308,10 +308,16 @@ define([
           var _index = _.indexOf(value.options.showonstatus, model.attributes.status);
           if (_index < 0) {
             delete model.bindings[value.name];
+            if (_validation[value.name]) {
+              delete _validation[value.name];
+            }
           }
         } else {
           // Create Mode (No Status Yet)
           delete model.bindings[value.name];
+          if (_validation[value.name]) {
+            delete _validation[value.name];
+          }
         }
       }
     });
