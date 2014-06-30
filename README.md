@@ -869,6 +869,8 @@ Sometime there are some fileds that internal should not be able to update these 
 
 * 0.1.5
 	- Fix the List to be able to render Select2
+	- Force All UpperCase Field Value with "touppercase" class name
+	- Allowed only one space not multiple space with "allowedonespace" class name
 
 * 0.1.4
 	- Adding Tag in Select Type as a options

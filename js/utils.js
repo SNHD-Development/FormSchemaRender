@@ -202,6 +202,15 @@ define([
         if ($e.hasClass('toucwords')) {
           _val = this.ucwords(_val);
         }
+        // Need to check for touppercase class
+        else if ($e.hasClass('touppercase') && _val.toUpperCase) {
+          _val = _val.toUpperCase();
+        }
+
+        // Need to check for only allowed one space
+        if ($e.hasClass('allowedonespace') && _val.replace) {
+          _val = _val.replace(/ +(?= )/g, '');
+        }
 
         $e.val(_val)
           .trigger('change');
