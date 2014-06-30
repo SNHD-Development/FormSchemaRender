@@ -303,9 +303,14 @@ define([
       }
 
       // Check for ShowOnStatus
-      if (model.bindings[value.name] && model.attributes.status && value.options && value.options.showonstatus) {
-        var _index = _.indexOf(value.options.showonstatus, model.attributes.status);
-        if (_index < 0) {
+      if (model.bindings[value.name] && value.options && value.options.showonstatus) {
+        if (model.attributes.status) {
+          var _index = _.indexOf(value.options.showonstatus, model.attributes.status);
+          if (_index < 0) {
+            delete model.bindings[value.name];
+          }
+        } else {
+          // Create Mode (No Status Yet)
           delete model.bindings[value.name];
         }
       }
