@@ -266,10 +266,22 @@ define([
         $submitBtn = $('.form-actions button[type="submit"]', this.el),
         _opt, _options,
         that = this;
+
+      // DatePicker
+      var $datepickers = $form.find('.datepicker');
+      $datepickers.each(function() {
+        var $this = $(this),
+          _val = $this.val();
+        if (_val && _val !== '') {
+          that.formView.model.set($this.attr('name'), _val);
+        }
+      });
+
       $form.trigger($form.attr('id') + '.preValidation', [e, $form, this]);
       if ($form.hasClass('form_submitted')) {
         return;
       }
+
       $form.addClass('form_submitted')
         .removeClass('validation_pass validation_error not_sending_data_yet');
       this.getBDateinput(this.el, this.formView.model);
