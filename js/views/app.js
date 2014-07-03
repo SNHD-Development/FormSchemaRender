@@ -483,7 +483,45 @@ define([
       }
     },
     showResponse: function(responseText, statusText, xhr, $form) {
-      var _jsonText = (_.isString(responseText)) ? $.parseJSON(responseText) : responseText;
+      var _jsonText;
+      try {
+        _jsonText = (_.isString(responseText)) ? $.parseJSON(responseText) : responseText;
+      } catch (err) {
+        // console.log(err);
+        // IE 9 and Below
+        // console.log(responseText);
+        try {
+          var _index = responseText.search('<pre>');
+          if (_index > -1) {
+            // Found Pre Tag
+            responseText = responseText.replace(/<pre>|<\/pre>/ig, '');
+          }
+          _jsonText = JSON.parse(responseText);
+          if (_jsonText.html) {
+            var _max = 5;
+            while (_max) {
+              _max--;
+              if (_jsonText.html.search(/&\w+;/ig) > -1) {
+                _jsonText.html = _.unescape(_jsonText.html);
+              } else {
+                break;
+              }
+            }
+            // Special Case
+            require(['views/hiddenForm'], function(HiddenFormView) {
+              var hiddenFormView = Vm.create({}, 'FormView', HiddenFormView);
+              hiddenFormView.render(_jsonText);
+            });
+            return;
+          }
+        } catch (err) {
+          if (console && console.log) {
+            console.log(err);
+          }
+          alert('Response is invalid. Please try again.');
+          return;
+        }
+      }
       _.each(_jsonText, function(value, key) {
         if (typeof value === 'string') {
           _jsonText[key] = _.unescape(value);

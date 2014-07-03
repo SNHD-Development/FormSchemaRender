@@ -1381,16 +1381,20 @@ define([
                   if (_value && _text) {
                     _tmpObj.id = element[_value];
                     _tmpObj.text = element[_text];
-                    _tmp.push(_tmpObj);
                   } else if (_value) {
                     _tmpObj.id = element[_value];
                     _tmpObj.text = element.text;
-                    _tmp.push(_tmpObj);
                   } else if (_text) {
                     _tmpObj.id = element.id;
                     _tmpObj.text = element[_text];
+                  }
+                  if (!_.isEmpty(_tmpObj)) {
+                    if ($this.hasClass('tolowercase') && _tmpObj.id && _tmpObj.text && _tmpObj.id.toLowerCase && _tmpObj.text.toLowerCase) {
+                      _tmpObj.id = _tmpObj.id.toLowerCase();
+                    }
                     _tmp.push(_tmpObj);
                   }
+
                 });
                 data = _tmp;
               }

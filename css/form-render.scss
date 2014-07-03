@@ -23,6 +23,9 @@ $text_area_min_height: 100px;
     input[type="date"]::-webkit-input-placeholder {
         visibility: hidden !important;
     }
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         /* display: none; <- Crashes Chrome on hover */

@@ -79,6 +79,8 @@
     display: none; }
   .form-render input[type="date"]::-webkit-input-placeholder {
     visibility: hidden !important; }
+  .form-render input[type='number'] {
+    -moz-appearance: textfield; }
   .form-render input::-webkit-outer-spin-button,
   .form-render input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
