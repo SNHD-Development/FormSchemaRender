@@ -491,7 +491,7 @@ define([
         // IE 9 and Below
         // console.log(responseText);
         try {
-          var _index = responseText.search('<pre>');
+          var _index = responseText.search(/<pre>/ig);
           if (_index > -1) {
             // Found Pre Tag
             responseText = responseText.replace(/<pre>|<\/pre>/ig, '');
