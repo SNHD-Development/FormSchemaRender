@@ -87,6 +87,7 @@ define([
       this._elementData = {}; // Use for Element Data
       this._ajaxSubmit = true;
       this._radioFieldName = []; // List of Field that is a radio field.
+      this._lookupValues = {}; // Hold the new value mapping to use with VisibleOn
       this._listSchema = {};
 
       // Wizard View Counters
@@ -238,6 +239,11 @@ define([
           if (this.options.formData.fields && this.options.formData.fields[field.name]) {
             // Copy by reference
             if (this.options.mode === 'read' && field.values && _.isObject(field.values)) {
+              // Need to save this as well.
+              this._lookupValues[field.name] = {
+                'value': this.options.formData['fields'][field.name],
+                'text': field.values[this.options.formData['fields'][field.name]]
+              };
               this.options.formData['fields'][field.name] = field.values[this.options.formData['fields'][field.name]];
             }
             field._data = this.options.formData['fields'][field.name];

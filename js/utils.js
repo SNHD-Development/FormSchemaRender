@@ -966,7 +966,13 @@ define([
             return false;
           }
         } else {
-          if (value.options.visibleon.values.indexOf(view.options.formData.fields[_visibleOnName]) === -1) {
+          var _lookupValue;
+          if (view._lookupValues && view._lookupValues[_visibleOnName]) {
+            _lookupValue = view._lookupValues[_visibleOnName].value;
+          } else {
+            _lookupValue = view.options.formData.fields[_visibleOnName];
+          }
+          if (value.options.visibleon.values.indexOf(_lookupValue) === -1) {
             return false;
           }
         }
