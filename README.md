@@ -867,6 +867,9 @@ Sometime there are some fileds that internal should not be able to update these 
 
 ## Version
 
+* 0.1.6
+	- For "UserPermissions" SubForm name will only allowed that user to edit their own information, (Options.Permission field need to be set)
+
 * 0.1.5
 	- Fix the List to be able to render Select2
 	- Force All UpperCase Field Value with "touppercase" class name

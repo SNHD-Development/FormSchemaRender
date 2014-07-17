@@ -1187,15 +1187,16 @@ define([
           formSchema: field,
           formId: id,
           options: this.options
-        }, _listView = _.extend({}, Backbone.Events);
+        },
+        _listView = _.extend({}, Backbone.Events);
       $(this.el)
         .on('click', '#' + id + '_add_btn', _options, this.displaySubForm)
-      // User click cancel button
-      .on(id + '.close', this.closeSubForm)
-      // User added a model
-      .on(id + '.add', _.extend({
-        formId: id
-      }, this), this.addSubformData);
+        // User click cancel button
+        .on(id + '.close', this.closeSubForm)
+        // User added a model
+        .on(id + '.add', _.extend({
+          formId: id
+        }, this), this.addSubformData);
 
       // If there are subform data
       if (this.options.mode === 'update' && typeof this.options.formData.fields[field.name] !== 'undefined' && this.options.formData.fields[field.name].length > 0) {
@@ -1305,15 +1306,41 @@ define([
       // Render View
       require(['views/subform-layouts/' + _view], function(CollectionView) {
         var _data = {
-          el: '#' + list.options.formId + e.data.prefixedName['collectiondisplayid'],
-          formSchema: list.options.formSchema,
-          collection: e.data.model.get(_key),
-          options: list.options.options
-        }, collectionView = Vm.create(this, 'CollectionView' + e.data.formId, CollectionView, _data);
+            el: '#' + list.options.formId + e.data.prefixedName['collectiondisplayid'],
+            formSchema: list.options.formSchema,
+            collection: e.data.model.get(_key),
+            options: list.options.options
+          },
+          collectionView = Vm.create(this, 'CollectionView' + e.data.formId, CollectionView, _data);
         collectionView.render();
 
         // Closed Subform
         e.data.closeSubForm(e, list);
+
+        // Render Table View for Sub Form
+        if (list.options.formSchema.options && list.options.formSchema.options.permission) {
+          var _currentUserId = Utils.getUserId().replace('\\', '\\\\'),
+            _reg = new RegExp(_currentUserId, 'ig');
+          switch (list.options.formSchema.options.permission.toLowerCase()) {
+            case 'readwriteselfcreated':
+              collectionView.$el.find('table tr').each(function() {
+                var $tr = $(this),
+                  _found = false;
+                $tr.find('td').each(function() {
+                  var $td = $(this);
+                  if ($td.text().match(_reg)) {
+                    _found = true;
+                  }
+                });
+                if (!_found) {
+                  $tr.find('td.subform-actions button.btn').remove();
+                }
+              });
+              break;
+            default:
+              throw list.options.formSchema.options.permission + ' not implement yet!';
+          }
+        }
       });
     },
     /**

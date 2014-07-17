@@ -413,7 +413,8 @@ define([
     setupDateInput: function(el) {
       $('.datepicker', el)
         .each(function() {
-          var _options = {}, maxDate, nowTemp, $this = $(this);
+          var _options = {},
+            maxDate, nowTemp, $this = $(this);
           if ($this.attr('data-maxdate')) {
             switch ($this
               .attr('data-maxdate')
@@ -467,8 +468,8 @@ define([
           var $spinnerInput = $(':input.spinner-input', this),
             _dataDefaultValue = ($spinnerInput.attr('data-default-value') !== undefined) ? $spinnerInput.attr('data-default-value') : 1,
             _number = ($spinnerInput.val() !== '') ?
-              $spinnerInput.val() :
-              _dataDefaultValue;
+            $spinnerInput.val() :
+            _dataDefaultValue;
           if (mode && mode === 'create' && _number === '0') {
             _number = '1';
           }
@@ -650,8 +651,8 @@ define([
       _.each(names, function(element, index) {
         var _val = (values && values[index]) ? values[index] : '',
           $input = $(':input[name="' + element + '"]', el)
-            .val(_val)
-            .trigger('change');
+          .val(_val)
+          .trigger('change');
         model.set(element, _val);
         if (model.isValid(element)) {
           $input.removeClass('invalid');
@@ -792,7 +793,7 @@ define([
           // If this is internal, will not render the button. Will render only hidden input.
           if (view.options.internal === true) {
             var $btnContainer = $btn_decision.parents('.control-group');
-            ($btnContainer.length > 0) ? $btnContainer.hide() : $btn_decision.hide();
+            ($btnContainer.length > 0) ? $btnContainer.hide(): $btn_decision.hide();
             return true;
           }
 
@@ -803,7 +804,8 @@ define([
               return false;
             }
             var _url = element.url + '?',
-              _data = {}, _error = false,
+              _data = {},
+              _error = false,
               _opt, $invalidObj = [],
               _canEmpty = (element.options.datacanempty) ? element.options.datacanempty : [],
               _success = element.options.events || function(e) {
@@ -1226,7 +1228,8 @@ define([
             });
 
             if (!_error) {
-              var _param = {}, _url = element.options.url + '?';
+              var _param = {},
+                _url = element.options.url + '?';
               _.each(element.options.data, function(dataObj) {
                 _.each(dataObj, function(dataVal, dataKey) {
                   _param[dataKey] = _request[dataVal];
@@ -1358,58 +1361,58 @@ define([
 
           // Default Parameters for Select2
           var _ajaxObj = {
-            url: _url.match(/^(\w|\.|\/|:)+\(?/ig).shift(),
-            data: function(term, page) {
-              var _result = _staticResult || {};
-              _.each(_tokens, function(element) {
-                var _keyVal = element.split('='),
-                  _rep = _keyVal.pop().replace(/(\{\{|\}\})/ig, ''),
-                  _val;
-                switch (_rep) {
-                  case 'this':
-                    _val = term;
-                    break;
-                  default:
-                    // Look up name value
-                    var $obj = $(':input[name="' + _rep + '"]');
-                    _val = $obj.val();
-                }
-                _result[_keyVal] = _val;
-              });
-              return _result;
-            },
-            results: function(data, page) {
-              // By Default will use id and text, otherwise will need to parse the data
-              if (_value || _text) {
-                var _tmp = [];
-                _.each(data, function(element) {
-                  var _tmpObj = {};
-                  if (_value && _text) {
-                    _tmpObj.id = element[_value];
-                    _tmpObj.text = element[_text];
-                  } else if (_value) {
-                    _tmpObj.id = element[_value];
-                    _tmpObj.text = element.text;
-                  } else if (_text) {
-                    _tmpObj.id = element.id;
-                    _tmpObj.text = element[_text];
+              url: _url.match(/^(\w|\.|\/|:)+\(?/ig).shift(),
+              data: function(term, page) {
+                var _result = _staticResult || {};
+                _.each(_tokens, function(element) {
+                  var _keyVal = element.split('='),
+                    _rep = _keyVal.pop().replace(/(\{\{|\}\})/ig, ''),
+                    _val;
+                  switch (_rep) {
+                    case 'this':
+                      _val = term;
+                      break;
+                    default:
+                      // Look up name value
+                      var $obj = $(':input[name="' + _rep + '"]');
+                      _val = $obj.val();
                   }
-                  if (!_.isEmpty(_tmpObj)) {
-                    if ($this.hasClass('tolowercase') && _tmpObj.id && _tmpObj.text && _tmpObj.id.toLowerCase && _tmpObj.text.toLowerCase) {
-                      _tmpObj.id = _tmpObj.id.toLowerCase();
-                    }
-                    _tmp.push(_tmpObj);
-                  }
-
+                  _result[_keyVal] = _val;
                 });
-                data = _tmp;
+                return _result;
+              },
+              results: function(data, page) {
+                // By Default will use id and text, otherwise will need to parse the data
+                if (_value || _text) {
+                  var _tmp = [];
+                  _.each(data, function(element) {
+                    var _tmpObj = {};
+                    if (_value && _text) {
+                      _tmpObj.id = element[_value];
+                      _tmpObj.text = element[_text];
+                    } else if (_value) {
+                      _tmpObj.id = element[_value];
+                      _tmpObj.text = element.text;
+                    } else if (_text) {
+                      _tmpObj.id = element.id;
+                      _tmpObj.text = element[_text];
+                    }
+                    if (!_.isEmpty(_tmpObj)) {
+                      if ($this.hasClass('tolowercase') && _tmpObj.id && _tmpObj.text && _tmpObj.id.toLowerCase && _tmpObj.text.toLowerCase) {
+                        _tmpObj.id = _tmpObj.id.toLowerCase();
+                      }
+                      _tmp.push(_tmpObj);
+                    }
+
+                  });
+                  data = _tmp;
+                }
+                return {
+                  more: false,
+                  results: data
+                };
               }
-              return {
-                more: false,
-                results: data
-              };
-            }
-          },
+            },
             _opts = {
               placeholder: '--- Please Select ---',
               minimumInputLength: 3,
@@ -1529,14 +1532,14 @@ define([
                             // This is special case and need to render View and Data
                             require(['views/' + value.view + 'AjaxView'], function(AjaxView) {
                               var _opts = {
-                                $form: $form,
-                                collection: new Backbone.Collection(value.data),
-                                id: key + '_AjaxView',
-                                $input: $this,
-                                input_callback: _dataCallback,
-                                title: value.title,
-                                listName: _listName
-                              },
+                                  $form: $form,
+                                  collection: new Backbone.Collection(value.data),
+                                  id: key + '_AjaxView',
+                                  $input: $this,
+                                  input_callback: _dataCallback,
+                                  title: value.title,
+                                  listName: _listName
+                                },
                                 ajaxView = Vm.create(that, 'AjaxView', AjaxView, _opts);
                               ajaxView.render();
                             });
@@ -1617,7 +1620,7 @@ define([
       $form.on('click', '.checkbox-container input[type="checkbox"].checkbox-other', function(e) {
         var $this = $(e.target),
           $textarea = $this.parent()
-            .next('.other-textbox');
+          .next('.other-textbox');
         if ($this.is(':checked')) {
           $textarea.removeClass('not_sending')
             .show('slow');
@@ -1711,7 +1714,7 @@ define([
       $hidden.each(function() {
         var $this = $(this),
           $target = $this.closest('.radio-container')
-            .find('button[value="' + $this.val() + '"]');
+          .find('button[value="' + $this.val() + '"]');
         if ($target) {
           $target.addClass('active');
         } else {
@@ -1742,8 +1745,8 @@ define([
                 });
                 $input.append(_opts);
                 $input.select2({
-                  containerCssClass: 'span12'
-                })
+                    containerCssClass: 'span12'
+                  })
                   .on('change', function(e) {
                     if (e.val && e.val !== '') {
                       $input.removeClass('invalid');
@@ -2092,6 +2095,14 @@ define([
           }
           view.options.formData.fields[field.name].unshift(_createItemObj);
         }
+      }
+    },
+
+    getUserId: function(id) {
+      id = id || null;
+      if (!id) {
+        return $('#snhd_user_network_login').text().toLowerCase();
+        //return $('#snhd_user_network_login').text().replace(/\s*\w+\\/ig, '').toLowerCase();
       }
     }
   };
