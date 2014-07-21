@@ -19,6 +19,15 @@ define([
   'jquery.select2',
   'jloader'
 ], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
+
+  function removePopover($ele) {
+    $ele.attr('disabled', false)
+      .popover('destroy')
+      .next('.popover')
+      .removeClass('success')
+      .remove();
+  }
+
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),
     el: '#app',
@@ -325,7 +334,8 @@ define([
 
         _options = {
           beforeSubmit: this.showRequest,
-          success: this.showResponse
+          success: this.showResponse,
+          error: this.processError
         };
 
         // Some Browser Does not support placeholder, will need to check for it.
@@ -545,6 +555,47 @@ define([
         3000
       );
     },
+    processError: function(jqXHR, textStatus, errorThrown, $element) {
+      // If Error Happen in AJAX
+      var $submitBtn = $('.form-actions button[type="submit"]'),
+        errorTxt = errorThrown;
+      if ($submitBtn.length) {
+        // Remove Popover
+        removePopover($submitBtn);
+
+        // Generate New Popover Error Message
+        if (jqXHR.responseText) {
+          // Try to parse JSON
+          try {
+            errorTxt = JSON.parse(jqXHR.responseText);
+            if (errorTxt.message && console && console.log) {
+              console.log('*** Error ***');
+              console.log(errorTxt.message);
+            }
+          } catch (err) {
+            console.log('*** Error (Exception) ***');
+            console.log(err);
+          }
+          errorTxt = errorThrown + ', please try again later.'
+        }
+        _opt = {
+          html: true,
+          placement: 'top',
+          trigger: 'manual',
+          title: 'Application Error',
+          content: errorTxt
+        };
+        $submitBtn.attr('disabled', true)
+          .popover(_opt)
+          .popover('show')
+          .next('.popover');
+      } else {
+        alert(errorTxt + ', please try again later.');
+        if (console && console.log && jqXHR.responseText) {
+          console.log(jqXHR.responseText);
+        }
+      }
+    },
     /**
      * Update the View Model
      **/
@@ -604,28 +655,29 @@ define([
         throw 'Please set jSerialNumber to match with your purchase number.';
       }
       var parameters = {
-        "progressbar": "true",
-        "boxmessage": "Loading File Uploader Applet ...",
-        "Common.SerialNumber": window.jSerialNumber,
-        "Common.UploadMode": "true",
-        "Common.UseLiveConnect": "true",
-        "Common.ProgressArea.DownloadButton.Visible": "false",
-        "Common.SkinLF.ThemepackURL": "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip",
-        "Common.Language.AutoDetect": "true",
-        "Upload.UploadUrl": $(this.formView.el)
-          .attr('action'),
-        "Upload.Compress.Enabled": "true",
-        "Upload.Compress.ArchiveFileName": "#UNIQUEID#",
-        "Upload.Compress.Format": "ZIP",
-        "Upload.Compress.Level": "DEFAULT",
-        "Upload.HttpUpload.FieldName.FilePath": "SelectedPath_#COUNTER#",
-        "Upload.HttpUpload.FormName": this.formView.el.replace('#', ''),
-        "Upload.HttpUpload.AddFormValuesToPostFields": "true",
-        "Upload.HttpUpload.AddFormValuesToHeaders": "false",
-        "Upload.HttpUpload.AddFormValuesToQueryString": "false",
-        "Upload.HttpUpload.FieldName.FileBody": "FileBody_#COUNTER#",
-        "Upload.HttpUpload.SendBrowserCookie": "true"
-      }, version = '1.5.1';
+          "progressbar": "true",
+          "boxmessage": "Loading File Uploader Applet ...",
+          "Common.SerialNumber": window.jSerialNumber,
+          "Common.UploadMode": "true",
+          "Common.UseLiveConnect": "true",
+          "Common.ProgressArea.DownloadButton.Visible": "false",
+          "Common.SkinLF.ThemepackURL": "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip",
+          "Common.Language.AutoDetect": "true",
+          "Upload.UploadUrl": $(this.formView.el)
+            .attr('action'),
+          "Upload.Compress.Enabled": "true",
+          "Upload.Compress.ArchiveFileName": "#UNIQUEID#",
+          "Upload.Compress.Format": "ZIP",
+          "Upload.Compress.Level": "DEFAULT",
+          "Upload.HttpUpload.FieldName.FilePath": "SelectedPath_#COUNTER#",
+          "Upload.HttpUpload.FormName": this.formView.el.replace('#', ''),
+          "Upload.HttpUpload.AddFormValuesToPostFields": "true",
+          "Upload.HttpUpload.AddFormValuesToHeaders": "false",
+          "Upload.HttpUpload.AddFormValuesToQueryString": "false",
+          "Upload.HttpUpload.FieldName.FileBody": "FileBody_#COUNTER#",
+          "Upload.HttpUpload.SendBrowserCookie": "true"
+        },
+        version = '1.5.1';
 
       // console.log(parameters["Upload.UploadUrl"]);
 
