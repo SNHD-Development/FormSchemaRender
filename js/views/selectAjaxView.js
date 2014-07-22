@@ -18,8 +18,7 @@ define([
         return;
       }
 
-      var $container = this.options.$form.parent()
-        .find('#' + this.id),
+      var $container = this.options.$form.parent().find('#' + this.id),
         _data = {
           collection: this.collection.toJSON(),
           title: this.options.title
@@ -53,8 +52,7 @@ define([
     submitData: function(e) {
       e.preventDefault();
       var $checked = this.$el.find('.form-select input:checked'),
-        $container = this.options.$form.parent()
-          .find('#' + this.id),
+        $container = this.options.$form.parent().find('#' + this.id),
         that = this;
 
       if ($checked.length) {

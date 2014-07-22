@@ -265,7 +265,8 @@ define([
       'keydown :input.telephone': 'formatTelephoneNumber',
       'blur :input.telephone': 'formatTelephoneNumber',
       'keydown :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
-      'blur :input.allowzipcodeplusfour': 'formatZipCodePlusFour'
+      'blur :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
+      'keypress :input': 'preventEnterPressed'
     },
     /**
      * Submit Form
@@ -620,6 +621,14 @@ define([
           that.formView.model.set(key, '');
         }
       });
+    },
+    preventEnterPressed: function(e) {
+      if (e.keyCode === 13) {
+        if ($(e.currentTarget).is('input')) {
+          e.stopPropagation();
+          return false;
+        }
+      }
     },
     /**
      * Setup hidden form and send this data

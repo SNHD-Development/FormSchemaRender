@@ -991,6 +991,9 @@ define([
                 _field_data = field._data;
               }
               break;
+            case 'booleaninput':
+              _field_data = (_field_data === 'true' || _field_data === true) ? 'Yes' : 'No';
+              break;
           }
           _html += that.inputTemplate['uneditableinput']({
             value: _field_data,
@@ -1191,12 +1194,12 @@ define([
         _listView = _.extend({}, Backbone.Events);
       $(this.el)
         .on('click', '#' + id + '_add_btn', _options, this.displaySubForm)
-        // User click cancel button
-        .on(id + '.close', this.closeSubForm)
-        // User added a model
-        .on(id + '.add', _.extend({
-          formId: id
-        }, this), this.addSubformData);
+      // User click cancel button
+      .on(id + '.close', this.closeSubForm)
+      // User added a model
+      .on(id + '.add', _.extend({
+        formId: id
+      }, this), this.addSubformData);
 
       // If there are subform data
       if (this.options.mode === 'update' && typeof this.options.formData.fields[field.name] !== 'undefined' && this.options.formData.fields[field.name].length > 0) {
@@ -1210,8 +1213,7 @@ define([
         _listView.on(_options.formId + '.listViewCreated', function(list) {
           var $subFormList = $('#' + _options.formId, that.el),
             _callback = function(e, data) {
-              $(that.el)
-                .trigger(id + '.add', [list, data, true]);
+              $(that.el).trigger(id + '.add', [list, data, true]);
               $subFormList.one(_options.formId + '.ajaxUpdate', _callback);
             };
           $subFormList.one(_options.formId + '.ajaxUpdate', _callback);
@@ -1228,6 +1230,9 @@ define([
      * This will be called when List View (Sub Form) Render
      */
     displaySubForm: function(e, model, hidden, listView) {
+      if (!e.data) {
+        return;
+      }
       model = model || {};
       hidden = hidden || false;
       listView = listView || false;
