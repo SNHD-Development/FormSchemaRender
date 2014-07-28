@@ -2108,12 +2108,25 @@ define([
       }
     },
 
-    getUserId: function(id) {
+    getUserIdFormHtml: function(id) {
       id = id || null;
       if (!id) {
         return $('#snhd_user_network_login').text().toLowerCase();
         //return $('#snhd_user_network_login').text().replace(/\s*\w+\\/ig, '').toLowerCase();
       }
+    },
+
+    shouldRenderWithShowOnStatusOrShowOnMode: function(field, status, mode) {
+      // Check ShowOnStatus
+      if (field.options.showonstatus && _.indexOf(field.options.showonstatus, status) < 0) {
+        return false;
+      }
+      // Check ShowOnMode
+      if (field.options.showonmode && _.indexOf(field.options.showonmode, mode) < 0) {
+        return false;
+      }
+
+      return true;
     }
   };
 });

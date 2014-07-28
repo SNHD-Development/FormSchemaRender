@@ -731,6 +731,28 @@ define([
                 content: '<a class="btn btn-success btn-confirmed" data-href="' + field.url + '">Yes</button><a class="btn btn-danger btn-confirmed">No</button>'
               };
             field.attributes['data-popover-confirm'] = JSON.stringify(_popoverOptions);
+          } else if (field.options.subbuttons) {
+
+            if (!field.name) {
+              field.name = 'subbuttons_' + field.description.replace(/ /g, '').toLowerCase();
+              if (!field.attributes.id) {
+                field.attributes.id = field.name;
+              }
+            }
+
+            // Since this will have the SubButtons in the options, will need to build this UI
+            require(['views/subform-layouts/subbuttons'], function(SubButtonsView) {
+              var _subBtnId = (field.attributes.id) ? field.attributes.id : field.name;
+              var subButtonsView = Vm.create(this, _subBtnId, SubButtonsView, {
+                'subbuttons': field.options.subbuttons,
+                'internal': (that.options.internal) ? that.options.internal : false,
+                'mode': that.options.mode,
+                'status': (that.options.formData && that.options.formData.status) ? that.options.formData.status : null,
+                '_id': _subBtnId,
+                'button': $('.form-render #' + _subBtnId),
+                '_oid': (that.options.formData && that.options.formData._id && that.options.formData._id['$oid']) ? that.options.formData._id['$oid'] : null
+              });
+            });
           }
           break;
 
@@ -1324,7 +1346,7 @@ define([
 
         // Render Table View for Sub Form
         if (list.options.formSchema.options && list.options.formSchema.options.permission) {
-          var _currentUserId = Utils.getUserId().replace('\\', '\\\\'),
+          var _currentUserId = Utils.getUserIdFormHtml().replace('\\', '\\\\'),
             _reg = new RegExp(_currentUserId, 'ig');
           switch (list.options.formSchema.options.permission.toLowerCase()) {
             case 'readwriteselfcreated':

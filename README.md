@@ -872,6 +872,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Will Render Error upon the AJAX submission.
 	- Fix the Modal View when having the Options.Url in TextBox
 	- Meaningful Text when render for BooleanInput
+	- Adding SubButtons Schema in Button Type, will render as Popovers
 
 * 0.1.5
 	- Fix the List to be able to render Select2
