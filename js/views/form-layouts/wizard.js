@@ -104,7 +104,7 @@ define([
     renderWizardNavBar: function() {
       var _html = '',
         _icon, $steps, _stepWidth, _offset, $li
-        _maxHeight = 0;
+      _maxHeight = 0;
       _.each(this._steps, function(element, index) {
         element['class'] = element['class'] || '';
         if (index === 0) {
@@ -187,6 +187,15 @@ define([
               }
               e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> ' + btnSubmit);
               break;
+          }
+          // Auto Move the Screen to top
+          if ((_numSteps - 1) !== data.step) {
+            var $topView = $('#wizard_step' + (data.step + 1)).parent();
+            if ($topView.length) {
+              $('html, body').animate({
+                scrollTop: $topView.offset().top - 5
+              }, 1500);
+            }
           }
         }
       } else {

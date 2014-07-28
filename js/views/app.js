@@ -493,8 +493,19 @@ define([
         return false;
       }
     },
+    /**
+     * Success Callback when perform Ajax Submit Request
+     * @param  object responseText
+     * @param  string statusText
+     * @param  object xhr
+     * @param  object $form
+     */
     showResponse: function(responseText, statusText, xhr, $form) {
-      var _jsonText;
+      var _jsonText,
+        $submitBtn = $('.form-actions.wizard-actions button[type="button"].btn_next');
+      if (!$submitBtn.length) {
+        $submitBtn = $('.form-actions button[type="submit"]');
+      }
       try {
         _jsonText = (_.isString(responseText)) ? $.parseJSON(responseText) : responseText;
       } catch (err) {
@@ -518,36 +529,67 @@ define([
                 break;
               }
             }
-            // Special Case
-            require(['views/hiddenForm'], function(HiddenFormView) {
-              var hiddenFormView = Vm.create({}, 'FormView', HiddenFormView);
-              hiddenFormView.render(_jsonText);
-            });
-            return;
           }
-        } catch (err) {
+        } catch (_err) {
           if (console && console.log) {
-            console.log(err);
+            console.log(_err);
           }
           alert('Response is invalid. Please try again.');
           return;
         }
+      }
+      // Perform the Hidden Form
+      if (_jsonText.html) {
+        // Special Case
+        require(['views/hiddenForm'], function(HiddenFormView) {
+          var hiddenFormView = Vm.create({}, 'FormView', HiddenFormView);
+          hiddenFormView.render(_jsonText);
+        });
+        return;
       }
       _.each(_jsonText, function(value, key) {
         if (typeof value === 'string') {
           _jsonText[key] = _.unescape(value);
         }
       });
-      $(':hidden[name="token"], :hidden[name="form_name"]', $form)
-        .remove();
+      if (_jsonText.status && _jsonText.status === 'error') {
+        removePopover($submitBtn);
+        var _errorMsg = _jsonText.error_message || _jsonText.message || _jsonText.response || 'Please try again.';
+        _opt = {
+          html: true,
+          placement: 'top',
+          trigger: 'manual',
+          title: 'Application Error',
+          content: '<b>Error Message:</b> <br>' + _errorMsg + '<br> <hr> Please fill all the required fields completely. We will reload this form in <span id="count_time">20</span> seconds.'
+        };
+        $submitBtn.attr('disabled', true)
+          .popover(_opt)
+          .popover('show')
+          .next('.popover');
+        window.setTimeout(function() {
+          var $timer = $('#count_time');
+          setTimeout(function() {
+            location.reload();
+          }, parseInt($timer.text(), 10) * 1000);
+          setInterval(function() {
+            var cnt = parseInt($timer.text(), 10);
+            cnt--;
+            if (cnt < 1) {
+              return;
+            }
+            $timer.text(cnt);
+          }, 1000);
+        }, 2000);
+        return;
+      }
+      $(':hidden[name="token"], :hidden[name="form_name"]', $form).remove();
       $form.removeClass('form_submitted');
       $('.not_sending', $form)
         .attr('disabled', false);
       $form.trigger($form.attr('id') + '.postSubmit', [responseText, _jsonText, statusText, xhr, $form]);
       window.setTimeout(
         function() {
-          $('.form-actions button[type="submit"]', $form)
-            .attr('disabled', false)
+          $submitBtn.attr('disabled', false)
             .popover('destroy')
             .next('.popover')
             .removeClass('success')
@@ -556,6 +598,13 @@ define([
         3000
       );
     },
+    /**
+     * Ajax Request Error
+     * @param  object jqXHR
+     * @param  string textStatus
+     * @param  string errorThrown
+     * @param  object $element
+     */
     processError: function(jqXHR, textStatus, errorThrown, $element) {
       // If Error Happen in AJAX
       var $submitBtn = $('.form-actions button[type="submit"]'),
@@ -577,7 +626,7 @@ define([
             console.log('*** Error (Exception) ***');
             console.log(err);
           }
-          errorTxt = errorThrown + ', please try again later.'
+          errorTxt = errorThrown + ', please try again later.';
         }
         _opt = {
           html: true,
