@@ -874,6 +874,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Meaningful Text when render for BooleanInput
 	- Adding SubButtons Schema in Button Type, will render as Popovers
 	- When Clear Form button pressed, should not clear some of the fields like Status and other radio values
+	- Adding Array.prototype.forEach for old browser
 
 * 0.1.5
 	- Fix the List to be able to render Select2

@@ -81,6 +81,13 @@ define([
           return -1;
         };
       }
+      if (!Array.prototype.forEach) {
+        Array.prototype.forEach = function(action, that) {
+          for (var i = 0, n = this.length; i < n; i++)
+            if (i in this)
+              action.call(that, this[i], i, this);
+        };
+      }
     },
     // http://kevin.vanzonneveld.net
     // +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
