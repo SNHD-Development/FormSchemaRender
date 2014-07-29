@@ -664,6 +664,8 @@ define([
           var $field = $(':input[name="' + key + '"]', that.el);
           if ($field.is(':checked')) {
             $field.attr('checked', false);
+          } else if ($field.is(':radio')) {
+            return;
           }
           $field.val('');
           $field.trigger('change');
