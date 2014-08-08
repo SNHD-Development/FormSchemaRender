@@ -57,8 +57,8 @@ define([
       // If there are no options passing in will perform basic
       var url = $.url(),
         options = this.options.options;
-      this.baseUrl = url.attr('protocol') + '://' + url.attr('host');
-      this.ajaxUrl = this.baseUrl + '/formproxy';
+      // this.baseUrl = url.attr('protocol') + '://' + url.attr('host');
+      this.ajaxUrl = /*this.baseUrl +*/ '/formproxy';
       if (options.formData._id && options.formData._id.$oid) {
         this.ajaxUrl += '?id=' + $.trim(options.formData._id.$oid);
       }
