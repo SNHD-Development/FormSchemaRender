@@ -41,6 +41,7 @@ require.config({
     "jquery.zclip": 'libs/copy/jquery.zclip.min',
     "jquery.select2": 'libs/select2/select2.min',
     "jquery.stupidtable": 'libs/jquery/stupidtable.min',
+    "jquery.purl": "libs/purl",
 
     // FileUpload
     //'blueimp-helper': 'libs/file-upload/dependency/load-image.min',
@@ -119,6 +120,10 @@ require.config({
       deps: ['jquery'],
       exports: 'jQuery.stupidtable'
     },
+    "jquery.purl": {
+      deps: ['jquery'],
+      exports: 'jQuery.purl'
+    },
     "jquery.select2": ['jquery']
   }
 });
@@ -143,7 +148,8 @@ require([
     var _mode, _view, _token, _opts, appView, config = {
         mode: ["read", "update", "create"],
         view: ["default", "horizontal", "wizard"]
-      }, lang = (typeof language === 'undefined') ? 'en' : language;
+      },
+      lang = (typeof language === 'undefined') ? 'en' : language;
 
     if (typeof formSchema === 'undefined') {
       throw 'formSchema is undefined';
@@ -246,7 +252,7 @@ require([
 
       // Render Modules
       // Pending Modules
-      if (false && _opts.formSchema.modules) {
+      if (_opts.formSchema.modules) {
         var _collection = Backbone.Collection.extend({});
         _.each(_opts.formSchema.modules, function(enable, module) {
           if (!enable) {
@@ -258,7 +264,8 @@ require([
             require(['views/modules/' + _module], function(ModuleView) {
               var moduleView = Vm.create(appView, module + 'View', ModuleView, {
                 el: appView.el,
-                collection: new _collection()
+                collection: new _collection(),
+                options: appView.options
               });
               $('div#app').on(_opts.formSchema.name + '.renderCompleted', function() {
                 moduleView.render();

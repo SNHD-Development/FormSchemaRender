@@ -240,6 +240,31 @@ In order to build form when user click a button can be done by adding class "btn
 
 To add confirmation before click simply add the Options.Confirmed = true.
 
+To look up the User can Options.ShowOnUser as an array of string.
+
+	{
+		"Type": "Button",
+		"Description": "Mark as Testing",
+		"Url": "{Valid URL Logic}",
+		"Attributes": {
+			"Class": "btn btn-success"
+		},
+		"Options": {
+			"Internal": true,
+			"AppendId": true,
+			"ShowOnStatus": [
+				"Status One"
+			],
+			"ShowOnMode": [
+				"read"
+			],
+			"ShowOnUser": [
+				"user one"
+			],
+			"Confirmed": true
+		}
+	}
+
 ### UserId Field
 
 This is the user id from user collection. This will link to user collection to check the claim for each form.
@@ -875,6 +900,8 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Adding SubButtons Schema in Button Type, will render as Popovers
 	- When Clear Form button pressed, should not clear some of the fields like Status and other radio values
 	- Adding Array.prototype.forEach for old browser
+	- Add ShowOnUser for button field type
+	- Add Modules Feature, currently support "FormReloadWhenStatusChange"
 
 * 0.1.5
 	- Fix the List to be able to render Select2

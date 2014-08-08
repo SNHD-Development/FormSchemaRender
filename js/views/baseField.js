@@ -339,6 +339,10 @@ define([
             _type = 'select';
           }
         case 'select':
+          // If this is read mode and have the value for this field
+          if (this.options.mode === 'update' && this.options.formData.fields[field.name]) {
+            field.attributes['data-select-value'] = this.options.formData.fields[field.name];
+          }
           // Make this compatible with LookUp Key
           if (field.options && field.options.lookup && field.options.lookup.url) {
             field.options.url = field.options.lookup.url;
@@ -348,10 +352,6 @@ define([
             }
             if (field.options.lookup.text) {
               field.attributes['data-select-key-text'] = field.options.lookup.text;
-            }
-            // If this is read mode and have the value for this field
-            if (this.options.mode === 'update' && this.options.formData.fields[field.name]) {
-              field.attributes['data-select-value'] = this.options.formData.fields[field.name];
             }
           } else if (field.options) {
             if (field.options.tags) {
@@ -715,6 +715,12 @@ define([
           break;
 
         case 'button':
+
+          // Before Render will check for Options.ShowOnUser First
+          if (!Utils.shouldRenderShowOnUser(field)) {
+            return '';
+          }
+
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
           // AppendId
           if (field.options.appendid && this.options.formData._id && this.options.formData._id['$oid']) {

@@ -1425,7 +1425,7 @@ define([
               minimumInputLength: 3,
               initSelection: function(element, callback) {
                 if (_fieldValue) {
-                  // Will statically set the
+                  // Will statically set the fields
                   $.ajax({
                     url: _ajaxObj.url,
                     data: _ajaxObj.data(_fieldValue),
@@ -1477,11 +1477,13 @@ define([
                 if (textStatus === 'success') {
                   var _opts = '<option value="">--- Please Select ---</option>',
                     _type = $urlEndPoint.prop('type'),
-                    _dataArray = [];
+                    _dataArray = [],
+                    dataSelectValue = $this.attr('data-select-value');
                   _.each(data, function(element) {
                     switch (_type) {
                       case 'select-one':
-                        _opts += '<option value="' + element + '">' + element + '</option>';
+                        var _tmpSelect = (dataSelectValue && dataSelectValue === element) ? ' selected ' : '';
+                        _opts += '<option value="' + element + '" ' + _tmpSelect + '>' + element + '</option>';
                         $this.find('option')
                           .remove();
                         $this.append(_opts);
@@ -1581,7 +1583,7 @@ define([
                 }
               },
               error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error: when trying to request AJAX data to "' + _url + '" for "' + $this.attr('id') + '".');
+                alert('Error: when trying to request AJAX data to "' + _url + '" for "' + $this.attr('id') + '". Please try again.');
               }
             });
           }
@@ -2134,6 +2136,27 @@ define([
       }
 
       return true;
+    },
+
+    shouldRenderShowOnUser: function(field) {
+      if (!(field.options && field.options.showonuser)) {
+        return true;
+      }
+      if (!_.isArray(field.options.showonuser)) {
+        throw 'In order to use Options.ShowOnUser for ' + field.type + ' with "' + field.name + '" required an array!';
+      }
+      // Perform Logic to check the User
+      var _curr_user = this.getUserIdFormHtml();
+      if (_curr_user && _curr_user !== '') {
+        var _userRegEx = /(\w+)$/i,
+          _nameToken = _curr_user.match(_userRegEx);
+        if (_nameToken) {
+          if (_.indexOf(field.options.showonuser, _nameToken.pop()) > -1) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
   };
 });

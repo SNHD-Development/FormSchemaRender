@@ -5,7 +5,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/modules/userpermissions.html',
+  'text!templates/modules/userpermissions.html'
 ], function($, _, Backbone, userPermissionsTemplate) {
 
   var userpermissions = Backbone.View.extend({
@@ -13,10 +13,13 @@ define([
     template: _.template(userPermissionsTemplate),
 
     initialize: function() {
+      return;
       this.collection.bind("reset", this.render, this);
     },
 
     render: function() {
+      // Still developing this module.
+      return;
       console.log('*** Render ***');
 
       // Properties

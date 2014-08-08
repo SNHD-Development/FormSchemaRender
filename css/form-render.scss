@@ -534,6 +534,21 @@ $text_area_min_height: 100px;
 }
 
 /**
+ * Modules
+ */
+
+#formreloadwhenstatuschange {
+    width: 480px;
+    .modal-header {
+        padding: 12px;
+        h3 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    }
+}
+
+/**
  * IE8 Style Only
  **/
 body.ie8 {
