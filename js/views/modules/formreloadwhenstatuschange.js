@@ -13,6 +13,7 @@ define([
   function pollAjaxData(view) {
     setTimeout(function() {
       $.ajax({
+        cache: false,
         url: view.ajaxUrl,
         success: function(data, textStatus) {
           if (_.isString(data)) {
