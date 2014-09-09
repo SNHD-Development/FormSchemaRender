@@ -902,6 +902,7 @@ Sometime there are some fileds that internal should not be able to update these 
 	- Adding Array.prototype.forEach for old browser
 	- Add ShowOnUser for button field type
 	- Add Modules Feature, currently support "FormReloadWhenStatusChange"
+    - Improve VisibleOn Options to be able to handle checkbox and radio with nested values
 
 * 0.1.5
 	- Fix the List to be able to render Select2

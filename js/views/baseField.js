@@ -1479,16 +1479,16 @@ define([
                       if (_bindingName !== field.name) {
                         return;
                       }
-                      if ($(':input[name="' + _bindingName + _suffix + '"]')
-                        .length) {
+                      if ($(':input[name="' + _bindingName + _suffix + '"]').length) {
                         _bindingName = field.name + _suffix;
                       }
                     });
 
-                    if ($(':input[name="' + _bindingName + '"]')
-                      .length) {
+                    if ($(':input[name="' + _bindingName + '"]').length && _typeLowerCase !== 'checkbox') {
                       that.model.bindModelBinder(_bindingName, field.type);
+                      // console.log('*** Before Binding for ' + _bindingName + ', Type: ' + field.type + ' Lowercase: ' + _typeLowerCase + ' ***');
                       that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                      // console.log('***');
                     }
                   }
                 });
