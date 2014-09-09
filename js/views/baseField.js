@@ -1378,6 +1378,7 @@ define([
     },
     /**
      * Setup the VisibleOn Options
+     * This is the function to handle all of logic for VisibleOn
      **/
     setupVisibleOn: function(field, htmlTmpl, parentContainer) {
       parentContainer = parentContainer || false;
@@ -1419,6 +1420,7 @@ define([
 
       $(this.el)
         .on('change', ':input[name="' + field.options.visibleon.name + '"]', function(e) {
+          // console.log('*** Input [' + field.options.visibleon.name + '] changed ***');
           var $currentTarget = $(e.currentTarget),
             $container = (parentContainer) ? $currentTarget.parents(parentContainer) : $currentTarget,
             $containerOptions, $nextContainer, _addressArray = [],
@@ -1442,14 +1444,20 @@ define([
                   }
                 });
             }
+          } else if ($currentTarget.is(':radio')) {
+            // console.log('[x] Radio Found in VisibleOn.');
+            // console.log(_visibleVal);
+            // console.log($currentTarget);
+            $container = $currentTarget.closest('.radio-container');
           }
           if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1) {
+            // console.log('[x] Match Value with VisibleOn, will render.');
             // Insert this into markup
-            if ($('.options-visible-on-' + field.name, that.el)
-              .length < 1) {
+            if ($('.options-visible-on-' + field.name, that.el).length < 1) {
               $container.after(htmlTmpl);
               $containerOptions = $container.next('.options-visible-on-' + field.name)
                 .fadeIn('slow', function() {
+                  // console.log('[x] Render VisibleOn for "' + field.name + '"');
                   $(this)
                     .addClass('visible-parent-' + _visibleOnName)
                     .attr('data-parent', _visibleOnName);
@@ -1485,9 +1493,12 @@ define([
                     });
 
                     if ($(':input[name="' + _bindingName + '"]').length && _typeLowerCase !== 'checkbox') {
+                      // console.log('[x] Binding Values');
+                      // console.log(that.model.bindings);
                       that.model.bindModelBinder(_bindingName, field.type);
                       // console.log('*** Before Binding for ' + _bindingName + ', Type: ' + field.type + ' Lowercase: ' + _typeLowerCase + ' ***');
                       that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                      // console.log(that.model.bindings);
                       // console.log('***');
                     }
                   }
@@ -1572,6 +1583,7 @@ define([
               }
             }
           } else {
+            // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '"');
             // Trigger Event to let other objects know that this fields will go out of markup
             $('#' + field.name, that.el)
               .trigger('removeVisibleOn');
@@ -1611,7 +1623,11 @@ define([
                 delete that.model.validation[_address_name];
               }
             } else if (_typeLowerCase !== 'html') {
+              // console.log('[*] Model values for "' + field.name + '"');
+              // console.log(that.model.get(field.name));
               that.model.set(field.name, '');
+              // console.log(that.model.get(field.name));
+              // console.log(that.model.toJSON());
               if (that.model.validation[field.name]) {
                 // Remove Validation Scheme, if has one
                 delete that.model.validation[field.name];
@@ -1628,10 +1644,25 @@ define([
                   that._modelBinder.bind(that.model, that.el, that.model.bindings);
                   // For Checkbox, this caused the value to be set to empty string.
                   if (!$currentTarget.is(':checkbox')) {
-                    $currentTarget.val(_visibleVal);
+                    var _currentTargetName = $currentTarget.attr('name');
+                    // Check the Model Value
+                    // console.log('[x] Set Value for "' + _currentTargetName + '"" with "' + _visibleVal + '"');
+                    // console.log($currentTarget);
+                    if (!$currentTarget.is(':radio')) {
+                      $currentTarget.val(_visibleVal);
+                    }
+                    if (that.model.get(_currentTargetName) !== _visibleVal) {
+                      // console.log('[*] Model value for "' + _currentTargetName + '" before, ' + that.model.get(_currentTargetName));
+                      that.model.set(_currentTargetName, _visibleVal);
+                      // console.log('[*] Model value for "' + _currentTargetName + '" after, ' + that.model.get(_currentTargetName));
+                    }
                   }
                 }
               });
+
+              if ($currentTarget.is(':radio')) {
+                $currentTarget.prop('checked', true);
+              }
             }
           }
         });
