@@ -34,7 +34,8 @@ define([
     render: function() {
       var that = this,
         _required, _parentRender = BaseFieldView.prototype.render,
-        _html = '';
+        _html = '',
+        visibleOnArray = [];
       _.each(this.options.formSchema.fields, function(value, key, list) {
         var _temp = '',
           _typeLowerCase = value.type.toLowerCase();
@@ -64,10 +65,19 @@ define([
         // If this has VisibleOn in options
         if (value.options.visibleon && !(_typeLowerCase === 'button' || _typeLowerCase === 'submit')) {
           _temp = '<div class="options-visible-on-' + value.name + '" style="display:none">' + _temp + '</div>';
-          BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp);
+          visibleOnArray.unshift({
+            value: value,
+            html: _temp
+          });
+          // BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp);
         } else {
           _html += _temp;
         }
+      });
+
+      // Make VisibleOn from Top Down
+      _.each(visibleOnArray, function(ele) {
+        BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html);
       });
 
       // Closed open div

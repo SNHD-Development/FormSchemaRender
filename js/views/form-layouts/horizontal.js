@@ -30,7 +30,8 @@ define([
       var that = this,
         _parentRender = BaseFieldView.prototype.render,
         _html = '',
-        _required;
+        _required,
+        visibleOnArray = [];
       _.each(this.options.formSchema.fields, function(value, key, list) {
         var _temp = '',
           _wrapper = false,
@@ -87,10 +88,19 @@ define([
           if (_typeLowerCase === 'checkbox') {
             _temp = _temp.replace(/<label>(\s*)\w+(\s*)<\/label>/i, '');
           }
-          BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
+          visibleOnArray.unshift({
+            value: value,
+            html: _temp
+          });
+          // BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
         } else {
           _html += _temp;
         }
+      });
+
+      // Make VisibleOn from Top Down
+      _.each(visibleOnArray, function(ele) {
+        BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html, '.control-group');
       });
 
       // Closed open div
