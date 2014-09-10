@@ -1595,6 +1595,21 @@ define([
                     // console.log($inputTmp);
                   }
                 });
+              } else if (that.options.mode === 'update' && that.options.formData.fields[field.name]) {
+                var $inputTmp = $(':input[name="' + field.name + '"]', $containerOptions);
+                // console.log('*** Checked [' + field.name + '] ***');
+                // console.log(that.options.formData.fields[field.name]);
+                if ($inputTmp.is(':radio') || $inputTmp.is(':checkbox')) {
+                  // console.log($inputTmp);
+                  // console.log(that.model.get(field.name));
+                  // if (!_.isObject(that.options.formData.fields[field.name])) {
+                  //   $inputTmp.filter('[value="' + that.options.formData.fields[field.name] + '"]').prop('checked', true);
+                  // }
+                } else {
+                  $inputTmp.val(that.options.formData.fields[field.name]);
+                  that.model.set(field.name, that.options.formData.fields[field.name]);
+                }
+                // console.log($inputTmp);
               }
 
               // Check to see if this has UserId Field Type

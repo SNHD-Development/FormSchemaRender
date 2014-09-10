@@ -30,6 +30,10 @@ define([
           var $this = $(this);
           if (!($this.is(':radio') || $this.is(':checkbox'))) {
             $this.val(formData.fields[value.name]).trigger('change');
+          } else {
+            if ($this.val() === formData.fields[value.name]) {
+              $this.prop('checked', true);
+            }
           }
         });
         // Need to trigger the value
