@@ -1578,18 +1578,21 @@ define([
                   if (that.options.formData.fields[element]) {
                     // Need to set default value to the model
                     that.model.set(element, that.options.formData.fields[element]);
+                    var $inputTmp = $(':input[name="' + element + '"]', $containerOptions);
+                    // console.log('*** Checked ***');
+                    // console.log($inputTmp);
                     switch (_typeLowerCase) {
                       case 'radio':
                       case 'check':
                       case 'checkbox':
-                        $(':input[name="' + element + '"]', $containerOptions).filter('[value="' + that.options.formData.fields[element] + '"]').prop('checked', true);
+                        $inputTmp.filter('[value="' + that.options.formData.fields[element] + '"]').prop('checked', true);
                         break;
                       default:
-                        var $inputTmp = $(':input[name="' + element + '"]', $containerOptions);
                         if (!($inputTmp.is(':radio') || $inputTmp.is(':checkbox'))) {
                           $inputTmp.val(that.options.formData.fields[element]);
                         }
                     }
+                    // console.log($inputTmp);
                   }
                 });
               }
@@ -1621,12 +1624,11 @@ define([
           } else {
             // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '"');
             // Trigger Event to let other objects know that this fields will go out of markup
-            $('#' + field.name, that.el)
-              .trigger('removeVisibleOn');
+            $('#' + field.name, that.el).trigger('removeVisibleOn');
 
             // Remove this out of the markup
-            $('.options-visible-on-' + field.name, that.el)
-              .remove();
+            $('.options-visible-on-' + field.name, that.el).remove();
+
             if (_typeLowerCase === 'address') {
               var _address_name = field.name + '_address_street';
               that.model.set(_address_name, '');

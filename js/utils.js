@@ -26,12 +26,12 @@ define([
   function setValueDependOn(el, visibleOnObj, formData) {
     _.each(visibleOnObj, function(value) {
       if (formData.fields[value.name]) {
-        $(el)
-          .on('visibleOnRenderComplete', ':input[name="' + value.name + '"]', function() {
-            $(this)
-              .val(formData.fields[value.name])
-              .trigger('change');
-          });
+        $(el).on('visibleOnRenderComplete', ':input[name="' + value.name + '"]', function() {
+          var $this = $(this);
+          if (!($this.is(':radio') || $this.is(':checkbox'))) {
+            $this.val(formData.fields[value.name]).trigger('change');
+          }
+        });
         // Need to trigger the value
         $(':input[name="' + value.options.visibleon.name + '"]')
           .trigger('change');
