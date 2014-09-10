@@ -244,7 +244,9 @@ define([
                 'value': this.options.formData['fields'][field.name],
                 'text': field.values[this.options.formData['fields'][field.name]]
               };
-              this.options.formData['fields'][field.name] = field.values[this.options.formData['fields'][field.name]];
+              if (!_.isArray(field.values)) {
+                this.options.formData['fields'][field.name] = field.values[this.options.formData['fields'][field.name]];
+              }
             }
             field._data = this.options.formData['fields'][field.name];
           }
@@ -1381,6 +1383,7 @@ define([
      * This is the function to handle all of logic for VisibleOn
      **/
     setupVisibleOn: function(field, htmlTmpl, parentContainer) {
+
       parentContainer = parentContainer || false;
       var that = this,
         _typeLowerCase = field.type.toLowerCase();
@@ -1418,6 +1421,7 @@ define([
           delete this.model.validation[field.name];
       }
 
+      // Attched Event to these input.
       $(this.el)
         .on('change', ':input[name="' + field.options.visibleon.name + '"]', function(e) {
           // console.log('*** Input [' + field.options.visibleon.name + '] changed ***');
@@ -1426,7 +1430,15 @@ define([
             $containerOptions, $nextContainer, _addressArray = [],
             _visibleOnName = field.options.visibleon.name,
             _visibleVal = $currentTarget.val(),
-            _checkBindingArray = ['', '[]'];
+            _checkBindingArray = ['', '[]'],
+            debug = false;
+          // console.log($currentTarget);
+          // if (field.name === 'ReproducedDataPublication') {
+          //   debug = true;
+          // }
+          // if (debug) {
+          //   console.log($container);
+          // }
           if (_visibleOnName.match(/\[\]$/ig)) {
             if (!$container.length) {
               $container = $currentTarget.closest('.checkbox-container');
@@ -1444,17 +1456,21 @@ define([
                   }
                 });
             }
-          } else if ($currentTarget.is(':radio')) {
+          } else if ($currentTarget.is(':radio') && !parentContainer) {
             // console.log('[x] Radio Found in VisibleOn.');
             // console.log(_visibleVal);
             // console.log($currentTarget);
             $container = $currentTarget.closest('.radio-container');
           }
           if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1) {
-            // console.log('[x] Match Value with VisibleOn, will render.');
+            // console.log('[x] Match Value with VisibleOn, will render [' + field.name + '].');
+            // console.log($currentTarget);
             // Insert this into markup
             if ($('.options-visible-on-' + field.name, that.el).length < 1) {
               $container.after(htmlTmpl);
+              // if (debug) {
+              //   console.log($container);
+              // }
               $containerOptions = $container.next('.options-visible-on-' + field.name)
                 .fadeIn('slow', function() {
                   // console.log('[x] Render VisibleOn for "' + field.name + '"');
@@ -1562,8 +1578,18 @@ define([
                   if (that.options.formData.fields[element]) {
                     // Need to set default value to the model
                     that.model.set(element, that.options.formData.fields[element]);
-                    $(':input[name="' + element + '"]', $containerOptions)
-                      .val(that.options.formData.fields[element]);
+                    switch (_typeLowerCase) {
+                      case 'radio':
+                      case 'check':
+                      case 'checkbox':
+                        $(':input[name="' + element + '"]', $containerOptions).filter('[value="' + that.options.formData.fields[element] + '"]').prop('checked', true);
+                        break;
+                      default:
+                        var $inputTmp = $(':input[name="' + element + '"]', $containerOptions);
+                        if (!($inputTmp.is(':radio') || $inputTmp.is(':checkbox'))) {
+                          $inputTmp.val(that.options.formData.fields[element]);
+                        }
+                    }
                   }
                 });
               }
@@ -1581,6 +1607,16 @@ define([
               if (that._hasDate) {
                 Utils.setupDateInput(that.el);
               }
+
+              // If this is Radio, will need to do magic work by set the value that match with Model
+              // var modelVal = that.model.get(field.name);
+              // if (_typeLowerCase === 'radio' && that.options.mode === 'update' && modelVal) {
+              //   console.log('*** Check Model and Input Value: ' + field.name + ' ***');
+              //   console.log(modelVal);
+              //   var currentRadios = $(':input[name="' + field.name + '"]', $containerOptions);
+              //   console.log(currentRadios);
+              // }
+
             }
           } else {
             // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '"');

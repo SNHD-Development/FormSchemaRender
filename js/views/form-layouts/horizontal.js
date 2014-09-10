@@ -46,8 +46,9 @@ define([
           }
         } else if (typeof value.description !== 'undefined' && (_.indexOf(that.notRenderLabel, _typeLowerCase) === -1 || _typeLowerCase === 'html' && value.options.visibleon)) {
           _wrapper = true;
+        } else if (value.options.visibleon && _typeLowerCase === 'checkbox') {
+          _wrapper = true;
         }
-
         if (_wrapper) {
           var _visibleon = '',
             _style = '';
@@ -83,6 +84,9 @@ define([
 
         // If this has VisibleOn in options
         if (value.options.visibleon && !(_typeLowerCase === 'button' || _typeLowerCase === 'submit')) {
+          if (_typeLowerCase === 'checkbox') {
+            _temp = _temp.replace(/<label>(\s*)\w+(\s*)<\/label>/i, '');
+          }
           BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
         } else {
           _html += _temp;
