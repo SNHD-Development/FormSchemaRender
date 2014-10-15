@@ -178,6 +178,11 @@ define([
       if (form._elementData[elementName] && form._elementData[elementName].events) {
         setupEvents($hidden, form._elementData[elementName].events);
       }
+    },
+    render: function($element, form) {
+      if ($element.is('select')) {
+        $element.select2();
+      }
     }
   };
 });

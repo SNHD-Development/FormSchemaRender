@@ -509,7 +509,7 @@ define([
       if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46 || e.keyCode === 9) {
         return true;
       } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 190 || e.keyCode === 110) ||
-        val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
+          val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
         e.preventDefault();
       }
     },
@@ -523,7 +523,7 @@ define([
       } else if ((e.keyCode === 45 || e.keyCode === 109 || e.keyCode === 189) && val === '') {
         // Ignore Filter
       } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 190 || e.keyCode === 110) ||
-        val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
+          val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
         e.preventDefault();
       }
     },
@@ -534,8 +534,8 @@ define([
       if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46 || e.keyCode === 9) {
         return true;
       } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 110)) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105) || (e.keyCode === 48 && $(e.currentTarget)
-        .val()
-        .length === 0)) {
+          .val()
+          .length === 0)) {
         e.preventDefault();
       }
     },
@@ -804,7 +804,7 @@ define([
           // If this is internal, will not render the button. Will render only hidden input.
           if (view.options.internal === true) {
             var $btnContainer = $btn_decision.parents('.control-group');
-            ($btnContainer.length > 0) ? $btnContainer.hide() : $btn_decision.hide();
+            ($btnContainer.length > 0) ? $btnContainer.hide(): $btn_decision.hide();
             return true;
           }
 
@@ -1605,6 +1605,9 @@ define([
         var $this = $(this);
         if ($this.hasClass('tags')) {
           Select2Helper.renderTags($this, form);
+        } else {
+          // This is Select 2 Render
+          Select2Helper.render($this, form);
         }
       });
     },
@@ -1768,8 +1771,8 @@ define([
                 });
                 $input.append(_opts);
                 $input.select2({
-                  containerCssClass: 'span12'
-                })
+                    containerCssClass: 'span12'
+                  })
                   .on('change', function(e) {
                     if (e.val && e.val !== '') {
                       $input.removeClass('invalid');

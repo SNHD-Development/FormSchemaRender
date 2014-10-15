@@ -358,11 +358,24 @@ define([
           } else if (field.options) {
             if (field.options.tags) {
               field.attributes['class'] = ((field.attributes['class']) ? field.attributes['class'] : '') + ' selecttwo-render tags value-as-array';
+            } else if (field.options.render) {
+              // If these is an render tag
+              var _render = field.options.render.toLowerCase();
+              switch (_render) {
+                case 'select2':
+                  field.attributes['class'] = ((field.attributes['class']) ? field.attributes['class'] : '') + ' selecttwo-render';
+                  break;
+              }
             }
             // If there is an events
             if (field.options.events) {
               // Field Name, Key, Value
               this.addDataToElementData(field.name, 'events', field.options.events);
+            }
+
+            // If there is an Options.OrderBy will need to sort Values
+            if (field.options.orderby) {
+              this.sortOrderBy(field);
             }
           }
           if (field.options.url) {
@@ -818,7 +831,7 @@ define([
       if (_type === 'button' && field.options.visibleon) {
         var _btnVisibleOnChanged = function(e) {
           if (e.type === 'change' && field.options.visibleon.values.indexOf($(this)
-            .val()) > -1) {
+              .val()) > -1) {
             $('#' + field.name, that.el)
               .show('slow');
           } else {
@@ -866,12 +879,17 @@ define([
             field.attributes['target'] = '_blank';
             field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
             field.attributes['href'] = ((typeof field.attributes['href'] !== 'undefined') ? field.attributes['href'] : '/form/getFile/') + that.options.formData.fields[field.name];
+            if (!field.attributes.id) {
+              field.attributes.id = field.name;
+            }
             // Check for other options
             if (field.options.markdownloaddatetimeof && this.options.formData._id && this.options.formData._id['$oid']) {
               var _markDownloadDateTime = field.options.markdownloaddatetimeof.toLowerCase();
               if (_markDownloadDateTime === '*' || this.options.internal && _markDownloadDateTime === 'internal' || !this.options.internal && _markDownloadDateTime === 'external') {
                 field.attributes['href'] += '?formid=' + this.options.formData._id['$oid'];
               }
+            } else if (field.options.appendid && this.options.formData._id && this.options.formData._id['$oid']) {
+              field.attributes['href'] += '?formid=' + this.options.formData._id['$oid'];
             }
           }
           delete field.attributes['accept'];
@@ -1195,7 +1213,8 @@ define([
         var _showOnStatus = _.map(value.options.showonstatus, function(element) {
           return element.toLowerCase();
         });
-        if (status === false || _showOnStatus.indexOf(status.toLowerCase()) === -1) {
+        // 0.1.7: This has been added if this is the create mode, will ignore this featured.
+        if (this.options.mode !== 'create' && (status === false || _showOnStatus.indexOf(status.toLowerCase()) === -1)) {
           return false;
         }
       } else if (this.options.internal && readMode === 'update' && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {
@@ -1224,12 +1243,12 @@ define([
         _listView = _.extend({}, Backbone.Events);
       $(this.el)
         .on('click', '#' + id + '_add_btn', _options, this.displaySubForm)
-      // User click cancel button
-      .on(id + '.close', this.closeSubForm)
-      // User added a model
-      .on(id + '.add', _.extend({
-        formId: id
-      }, this), this.addSubformData);
+        // User click cancel button
+        .on(id + '.close', this.closeSubForm)
+        // User added a model
+        .on(id + '.add', _.extend({
+          formId: id
+        }, this), this.addSubformData);
 
       // If there are subform data
       if (this.options.mode === 'update' && typeof this.options.formData.fields[field.name] !== 'undefined' && this.options.formData.fields[field.name].length > 0) {
@@ -1766,6 +1785,7 @@ define([
       if (!_orderBy && !field.values) {
         return;
       }
+      _orderBy = _orderBy.toLowerCase();
       switch (_orderBy) {
 
         // Always alphabetical
@@ -1773,7 +1793,9 @@ define([
           return a.localeCompare(b);
         };
       }
-      field.values.sort(_func);
+      if (field.values.sort) {
+        field.values.sort(_func);
+      }
     },
 
     /**

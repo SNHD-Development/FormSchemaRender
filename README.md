@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.1.6`
+Version `version 0.1.7`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -469,6 +469,32 @@ If we want to change the key, simply Set LookUp Object as,
 
 To Create Tag, simply set Options.Tags = true
 
+To Order Values,
+
+This will order by values, alphabetically.
+
+    {
+        "Options": {
+            "OrderBy" : "value-alphabetical"
+        }
+    }
+
+To render as Select2,
+
+    {
+        "Options": {
+            "Render" : "Select2"
+        }
+    }
+
+If you want to add any options for Select2
+
+    {
+        "Options": {
+            "Render" : "Select2",
+            "RenderOptions": "Object"
+        }
+    }
 
 ### CheckBox Field
 
@@ -891,6 +917,12 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ## Version
+
+* 0.1.7
+    - Sort Select by Values if the values are object
+    - By Default, Select will search Text for Others and put it at the end of the list.
+    - ShowOnStatus will skip if this is create mode.
+    - Adding Options.Render = "Select2", this will enable Select2 for Select Type
 
 * 0.1.6
 	- For "UserPermissions" SubForm name will only allowed that user to edit their own information, (Options.Permission field need to be set)
