@@ -1601,15 +1601,25 @@ define([
      * @return
      */
     setupSelect2: function(form) {
-      $(form.el + ' .selecttwo-render').each(function() {
-        var $this = $(this);
-        if ($this.hasClass('tags')) {
-          Select2Helper.renderTags($this, form);
+      function setup(el, _form) {
+        if (el.hasClass('tags')) {
+          Select2Helper.renderTags(el, _form);
         } else {
           // This is Select 2 Render
-          Select2Helper.render($this, form);
+          Select2Helper.render(el, _form);
         }
-      });
+      }
+      if (form.el) {
+        $(form.el + ' .selecttwo-render').each(function() {
+          var $this = $(this);
+          setup($this, form);
+        });
+      } else {
+        var $el = form.find('.selecttwo-render');
+        if ($el.length) {
+          setup($el, form);
+        }
+      }
     },
 
     /**

@@ -1493,9 +1493,12 @@ define([
               $containerOptions = $container.next('.options-visible-on-' + field.name)
                 .fadeIn('slow', function() {
                   // console.log('[x] Render VisibleOn for "' + field.name + '"');
-                  $(this)
+                  var $_element = $(this)
                     .addClass('visible-parent-' + _visibleOnName)
                     .attr('data-parent', _visibleOnName);
+
+                  // If this is select might have select2
+                  Utils.setupSelect2($_element);
 
                   // Remove the class that not belong to this visibleOn
                   var $parent = $('.options-visible-on-' + _visibleOnName, that.el);
