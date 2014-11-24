@@ -209,7 +209,7 @@ define([
 
         // If there are DatePicker
         if (formView._hasDate) {
-          Utils.setupDateInput(that.$el);
+          Utils.setupDateInput(that.$el, that);
         }
 
         // If this is the first time need to click cancel button

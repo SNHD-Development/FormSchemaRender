@@ -421,42 +421,109 @@ define([
     /**
      * Setup Date Input
      **/
-    setupDateInput: function(el) {
+    setupDateInput: function(el, view) {
+      var fViewArr;
+      // Logic for Validation
+      if (view && view.formView && view.formView._DatePickerLogicArr) {
+        fViewArr = view.formView._DatePickerLogicArr;
+      }
+
       $('.datepicker', el)
         .each(function() {
           var _options = {},
             maxDate, nowTemp, $this = $(this);
-          if ($this.attr('data-maxdate')) {
-            switch ($this
-              .attr('data-maxdate')
-              .toLowerCase()) {
-              case 'today':
-                nowTemp = new Date();
-                maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-                _options.onRender = function(date) {
-                  return date.valueOf() > maxDate.valueOf() ? 'disabled' : '';
-                };
-                break;
+          var _id = $(this).attr('name');
+          // This is special case
+          if (fViewArr && fViewArr[_id]) {
+            var logicOpts = fViewArr[_id];
+            if (!logicOpts.getvaluefrom) {
+              throw 'In order to use setupDateInput with "DatepickerOptions". Required to have "GetValueFrom" key!';
+            }
+            if (!logicOpts.comparison) {
+              throw 'In order to use setupDateInput with "DatepickerOptions". Required to have "Comparison" key!';
+            }
+            // Start Creating the new Logic
+            // XXX: Working need to create custom logic to be able to compare with another field
+            // Need to do onchange call back
+            _options.onRender = function(date) {
+              var targetDate = logicOpts.getvaluefrom;
+              if (!fViewArr[targetDate] || !fViewArr[targetDate].element) {
+                throw 'Could not be able to find Datepicker Object with "' + targetDate + '"!';
+              }
+              var _cmd;
+              if ($this.attr('data-maxdate')) {
+                var _today = new Date();
+                _cmd = fViewArr[targetDate].element.date.valueOf() + " " + logicOpts.comparison + "  " + date.valueOf() + " || " + date.valueOf() + "  > " + _today.getTime() + " ? 'disabled' : ''";
+              } else if ($this.attr('data-mindate')) {
+                var _today = new Date();
+                _cmd = fViewArr[targetDate].element.date.valueOf() + " " + logicOpts.comparison + "  " + date.valueOf() + " || " + date.valueOf() + "  < " + _today.getTime() + " ? 'disabled' : ''";
+              } else {
+                _cmd = fViewArr[targetDate].element.date.valueOf() + " " + logicOpts.comparison + " " + date.valueOf() + " ? 'disabled' : ''";
+              }
+              return eval(_cmd);
+            };
+            if (!fViewArr[logicOpts.getvaluefrom]) {
+              fViewArr[logicOpts.getvaluefrom] = {};
+            }
+            fViewArr[logicOpts.getvaluefrom].changeDate = function(ev) {
+              var targetDate = _id;
+              var tmpComp = logicOpts.comparison.substr(0, 1);
+              var newDate = new Date(ev.date);
+              var logic = ev.date.valueOf() + ' ' + tmpComp + ' ' + fViewArr[targetDate].element.date.valueOf();
+              if (eval(logic)) {
+                // newDate.setDate(newDate.getDate() + 1);
+                $('#' + targetDate).datepicker('setValue', newDate);
+              } else {
+                if ($this.val() === '') {
+                  $this.datepicker('setValue', newDate);
+                } else {
+                  // Since this is special case, need to reset the values.
+                  newDate = new Date($this.val());
+                  $this.datepicker('setValue', newDate);
+                  $this.removeClass('invalid').trigger('change');
+                }
+              }
+            };
+          } else {
+            if ($this.attr('data-maxdate')) {
+              switch ($this
+                .attr('data-maxdate')
+                .toLowerCase()) {
+                case 'today':
+                  nowTemp = new Date();
+                  maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                  _options.onRender = function(date) {
+                    return date.valueOf() > maxDate.valueOf() ? 'disabled' : '';
+                  };
+                  break;
+              }
+            }
+            if ($this.attr('data-mindate')) {
+              switch ($this
+                .attr('data-mindate')
+                .toLowerCase()) {
+                case 'today':
+                  nowTemp = new Date();
+                  maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                  _options.onRender = function(date) {
+                    return date.valueOf() < maxDate.valueOf() ? 'disabled' : '';
+                  };
+                  break;
+              }
             }
           }
-          if ($this.attr('data-mindate')) {
-            switch ($this
-              .attr('data-mindate')
-              .toLowerCase()) {
-              case 'today':
-                nowTemp = new Date();
-                maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-                _options.onRender = function(date) {
-                  return date.valueOf() < maxDate.valueOf() ? 'disabled' : '';
-                };
-                break;
-            }
-          }
-          $this.datepicker(_options)
+
+          var $dpicker = $this.datepicker(_options)
             .on('changeDate', function(e) {
-              var _dateInput = $(e.currentTarget)
-                .removeClass('invalid')
-                .trigger('change');
+              var _dateInput = $(e.currentTarget);
+              // This could have special Event
+              var dateId = _dateInput.attr('id');
+              if (fViewArr && fViewArr[dateId] && fViewArr[dateId].changeDate) {
+                if (typeof fViewArr[dateId].changeDate === 'function') {
+                  fViewArr[dateId].changeDate(e);
+                }
+              }
+              _dateInput.removeClass('invalid').trigger('change');
               _dateInput.datepicker('hide');
             })
             .on('click', function(e) {
@@ -465,6 +532,17 @@ define([
               $(e.currentTarget)
                 .datepicker('show');
             });
+          if ($this.val() === '') {
+            $dpicker = $dpicker.data('datepicker');
+            if (fViewArr) {
+              if (!fViewArr[_id]) {
+                fViewArr[_id] = {
+                  element: null
+                };
+              }
+              fViewArr[_id].element = $dpicker;
+            }
+          }
         });
     },
     /**

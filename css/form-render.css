@@ -74,7 +74,12 @@
    **/
   /**
    * For MultiFiles Field Type
-   **/ }
+   **/
+  /**
+   * For Modal
+   */ }
+  .form-render label:hover {
+    cursor: pointer; }
   .form-render input::-webkit-calendar-picker-indicator {
     display: none; }
   .form-render input[type="date"]::-webkit-input-placeholder {
@@ -190,7 +195,9 @@
     margin-right: 3px;
     font-size: 18px; }
   .form-render .select2-container {
-    margin-bottom: 15px; }
+    margin-bottom: 15px;
+    width: 90%;
+    float: none; }
   .form-render .subform-container {
     padding: 20px;
     margin-bottom: 30px;
@@ -343,6 +350,41 @@
       border-bottom: 1px solid #dddddd; }
     .form-render .btn-decision-data-wrapper .btn-decision-data-render thead td {
       font-weight: bold; }
+  .form-render #module-approval-modal .modal-header .close {
+    opacity: 0.4; }
+  .form-render #module-approval-modal .modal-body {
+    padding: 30px; }
+    .form-render #module-approval-modal .modal-body form {
+      width: 90%; }
+  .form-render #module-approval-modal .modal-footer {
+    overflow: hidden;
+    padding-left: 50px;
+    padding-right: 50px; }
+    .form-render #module-approval-modal .modal-footer .btn-success {
+      float: left; }
+    .form-render #module-approval-modal .modal-footer .btn-danger {
+      float: right; }
+    .form-render #module-approval-modal .modal-footer .btn {
+      margin-bottom: 0; }
+  .form-render form.render-default {
+    margin: auto; }
+    .form-render form.render-default label, .form-render form.render-default input, .form-render form.render-default textarea {
+      float: none;
+      text-align: left;
+      display: block;
+      width: 90%; }
+  .form-render .modal {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    background-clip: border-box; }
+    .form-render .modal .modal-header {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-radius: 6px 6px 0 0; }
+      .form-render .modal .modal-header h3 {
+        font-size: 24.5px;
+        font-weight: bold; }
 
 /**
  * Override DatePicker

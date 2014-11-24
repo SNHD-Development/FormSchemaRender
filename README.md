@@ -734,6 +734,35 @@ Validation FormSchema
 		}
 	}
 
+Datepicker Options:
+
+If we want to add a logic to limit the date in datepicker we can do so by adding
+
+    {
+        "Name" : "CheckIn",
+        "Type" : "Date",
+        "Description" : "Check In Date",
+        "Options": {
+            "Render": "Datepicker"
+        }
+    }
+    {
+        "Name" : "CheckOut",
+        "Type" : "Date",
+        "Description" : "Check Out Date",
+        "Options": {
+            "Render": "Datepicker",
+            "DatepickerOptions": {
+                "GetValueFrom": "CheckIn",
+                "Comparison": ">="
+            }
+        }
+    }
+
+In above example, CheckOut field will show the date that greater than or equal to CheckIn field.
+
+Support All Comparison.
+
 ### Fraction
 
 When we want to render Fraction we can use this field type, example can be used as Blood Pressure Fields
@@ -923,6 +952,9 @@ Sometime there are some fileds that internal should not be able to update these 
     - By Default, Select will search Text for Others and put it at the end of the list.
     - ShowOnStatus will skip if this is create mode.
     - Adding Options.Render = "Select2", this will enable Select2 for Select Type
+    - Adding "FormApprovalProcess" Module
+    - When click on No on "CopyValuesFrom" will do nothing
+    - Fix ModelBinder Bug when performing maxdate validation
 
 * 0.1.6
 	- For "UserPermissions" SubForm name will only allowed that user to edit their own information, (Options.Permission field need to be set)

@@ -51,7 +51,7 @@ define([
         console.log('*** click on save ***');
         this.$modalForm.modal('hide');
         this.collection.reset([]);
-      },
+      }
     }
   });
 

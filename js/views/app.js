@@ -75,7 +75,7 @@ define([
           }
 
           if (that.formView._hasDate) {
-            that.setupDateInput();
+            that.setupDateInput(null, that);
           }
           if (that.formView._hasBDate) {
             that.setupBDateInput();
@@ -156,7 +156,7 @@ define([
      * Init Dateinput
      **/
     setupDateInput: function() {
-      Utils.setupDateInput(this.el);
+      Utils.setupDateInput(this.el, this);
     },
     /**
      * Prevent Space Bar
@@ -436,6 +436,7 @@ define([
         // }
         // return false;
       } else {
+        // Invalid: Events
         e.preventDefault();
         $form.addClass('validation_error');
         $form.removeClass('form_submitted');
@@ -650,7 +651,9 @@ define([
      * Update the View Model
      **/
     preValidate: function(e) {
-      Utils.preValidate(e, this.formView.model);
+      if (this.formView) {
+        Utils.preValidate(e, this.formView.model);
+      }
     },
     /**
      * Clear Form Data
@@ -793,7 +796,7 @@ define([
       // Attached the OnCompleted Event
       window.JavaPowUpload_onUploadFinish = function() {
         // Will Refresh the page
-        (window.jRedirect) ? location.replace(window.jRedirect) : location.reload(true);
+        (window.jRedirect) ? location.replace(window.jRedirect): location.reload(true);
       };
     }
   });

@@ -71,6 +71,7 @@ define([
       this._hasUserId = false; // Tracking the UserId Field
       this._hasDate = false; // Tracking the dateinput element
       this._hasBDate = false; // Tracking the Birthdate element
+      this._DatePickerLogicArr = {}; // Keep Logic in for Validation
       this._hasEmailPicker = false; // Tracking the EmailPicker element
       this._hasBooleanInput = false;
       this._hasRadioBtnGroup = false; // For Radio Button Group
@@ -552,6 +553,10 @@ define([
             }
             if (_validation_tmp.mindate) {
               field.attributes['data-mindate'] = _validation_tmp.mindate;
+            }
+            if (field.options && field.options.datepickeroptions) {
+              // If has the special validation, will add to logic
+              this._DatePickerLogicArr[field.name] = field.options.datepickeroptions;
             }
           }
           break;
@@ -1645,7 +1650,7 @@ define([
 
               // If there are DatePicker
               if (that._hasDate) {
-                Utils.setupDateInput(that.el);
+                Utils.setupDateInput(that.el, that);
               }
 
               // If this is Radio, will need to do magic work by set the value that match with Model
@@ -1769,8 +1774,9 @@ define([
             _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
             Utils.setFieldsValues(that.el, that.model, _currentFields, _values);
           } else {
-            _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
-            Utils.setFieldsValues(that.el, that.model, _currentFields);
+            // If user click "No", will do nothing
+            // _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
+            // Utils.setFieldsValues(that.el, that.model, _currentFields);
           }
         });
 

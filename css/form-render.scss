@@ -16,6 +16,11 @@ $text_area_min_height: 100px;
  * Form Render Global Styles
  **/
 .form-render {
+    label {
+        &:hover {
+            cursor: pointer;
+        }
+    }
     // Disable Browser Default
     input::-webkit-calendar-picker-indicator {
         display: none;
@@ -239,6 +244,8 @@ $text_area_min_height: 100px;
      */
     .select2-container {
         margin-bottom: 15px;
+        width: 90%;
+        float: none;
     }
     /**
      * SubForm Style
@@ -522,6 +529,62 @@ $text_area_min_height: 100px;
         }
     }
     // Modules
+    #module-approval-modal {
+        .modal-header {
+            .close {
+                opacity: 0.4;
+            }
+        }
+        .modal-body {
+            padding: 30px;
+            form {
+                width: 90%;
+            }
+        }
+        .modal-footer {
+            overflow: hidden;
+            padding-left: 50px;
+            padding-right: 50px;
+            .btn-success {
+                float: left;
+            }
+            .btn-danger {
+                float: right;
+            }
+            .btn {
+                margin-bottom: 0;
+            }
+        }
+    }
+    form {
+        &.render-default {
+            margin: auto;
+            label, input, textarea {
+                float: none;
+                text-align: left;
+                display: block;
+                width: 90%;
+            }
+        }
+    }
+    /**
+     * For Modal
+     */
+    .modal {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        background-clip: border-box;
+        .modal-header {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 6px 6px 0 0;
+            h3 {
+                font-size: 24.5px;
+                font-weight: bold;
+            }
+        }
+    }
 }
 
 /**
