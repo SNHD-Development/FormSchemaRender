@@ -289,7 +289,7 @@ define([
 
       $form.trigger($form.attr('id') + '.preValidation', [e, $form, this]);
       if ($form.hasClass('form_submitted')) {
-        return;
+        return false;
       }
 
       $form.addClass('form_submitted')
@@ -312,8 +312,9 @@ define([
       });
       Utils.setModelRadioValues($form, this.formView);
       Utils.setModelCheckValues($form, this.formView);
+      var _isCheckBoxGood = Utils.validateCheckBox($form);
 
-      if (this.formView.model.isValid(true) && this.formView.model.isSubformValid()) {
+      if (this.formView.model.isValid(true) && this.formView.model.isSubformValid() && _isCheckBoxGood) {
 
         // If there is an hidden type that has data-value, then will need to send this as well
         $form.find(':input:hidden[data-value]')

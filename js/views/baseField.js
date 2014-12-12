@@ -445,6 +445,11 @@ define([
           // Check Validation
           if (typeof this.options.formSchema.validation[field.name + '[]'] !== 'undefined') {
             field._required = true;
+            if (!field.attributes) {
+              field.attributes = {};
+            }
+            // If this is Required, need to double check
+            field.attributes['data-check-required'] = true;
             var _validation_tmp = this.getFormValidationData(field.name + '[]');
             if (typeof this._stepValidated[(this._currentStep) - 2] !== 'undefined' && !$.isEmptyObject(_validation_tmp)) {
               this._stepValidated[(this._currentStep) - 2].push(field.name + '[]');

@@ -31,6 +31,9 @@ define([
     if (!_.isString(action)) {
       throw buildFormDataForComment + ' expected action to be a string.';
     }
+    if (!view.username) {
+      return;
+    }
     // Adding Spin
     view._modal.find('.modal-body #module-approval-loader').show();
 
@@ -52,16 +55,31 @@ define([
         Username: view.username,
         Status: null,
         Comment: (!comment || comment === '') ? null : comment,
-        DecisionTime: (new Date().getTime()) / 1000
+        DecisionTime: {
+          $date: new Date().getTime()
+        }
       };
     switch (action) {
       case 'deny':
-        result.Status = 'Deny';
+        result.Status = 'Denied';
         break;
       default:
-        result.Status = 'Approve';
+        result.Status = 'Approved';
     }
-    userPermission.push(result);
+    var currentUser = view.username.split('\\').pop();
+    // Loop Through the same user name
+    _.each(userPermission, function(element, index) {
+      if (!element.Username) {
+        return;
+      }
+      var _username = element.Username.toLowerCase();
+      if (_username !== currentUser) {
+        return;
+      }
+      userPermission[index].Status = result.Status;
+      userPermission[index].Comment = result.Comment;
+      userPermission[index].DecisionTime = result.DecisionTime;
+    });
     // Send Post Data
     buildNewFormElement(formData._id.$oid, userPermission);
   }
@@ -71,7 +89,8 @@ define([
     template: _.template(formApprovalProcessTemplate),
     initialize: function() {
       var formData = this.options.options.formData,
-        mode = this.options.options.mode;
+        mode = this.options.options.mode,
+        that = this;
       // Catch if this is create form.
       if (mode !== 'read' || typeof formData === 'undefined' || !_.isObject(formData) || !formData.fields) {
         return;
@@ -93,6 +112,8 @@ define([
       if (!this.username.length || this.username === '') {
         return;
       }
+      // Assigned current User to this first.
+      this.username = this.userId;
       // If this is Debug Mode
       if (DEBUG) {
         this.username = SUP_USERNAME;
@@ -101,12 +122,27 @@ define([
         this.username = null;
         return;
       }
-      if (formData.fields && formData.fields.UserPermissions) {
+      if (formData.fields && formData.fields.UserPermissions && formData.fields.UserPermissions.length) {
         var allUsers = _.pluck(formData.fields.UserPermissions, 'Username');
         if (_.indexOf(allUsers, this.username) > -1) {
           this.username = null;
           return;
         }
+        // If they already signed will
+        var usernameOnly = this.username.split('\\').pop();
+        _.each(formData.fields.UserPermissions, function(el) {
+          var cName = el.Username.toLowerCase();
+          if (usernameOnly !== cName) {
+            return;
+          }
+          if (el.Status.toLowerCase() !== 'pending') {
+            that.username = null;
+            return;
+          }
+        });
+      } else {
+        this.username = null;
+        return;
       }
     },
     render: function() {

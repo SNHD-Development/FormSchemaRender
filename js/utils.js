@@ -475,7 +475,10 @@ define([
                 $('#' + targetDate).datepicker('setValue', newDate);
               } else {
                 if ($this.val() === '') {
-                  $this.datepicker('setValue', newDate);
+                  // User doesn't like to auto set the date!
+                  // $this.datepicker('setValue', newDate);
+                  // console.log($this);
+                  $this.attr('logic-date', newDate.getTime());
                 } else {
                   // Since this is special case, need to reset the values.
                   newDate = new Date($this.val());
@@ -527,21 +530,24 @@ define([
               _dateInput.datepicker('hide');
             })
             .on('click', function(e) {
+              var logicDate = $this.attr('logic-date'),
+                currentVal = $this.val(),
+                $currentTarget = $(e.currentTarget);
+              if (logicDate && logicDate !== '' && !currentVal && currentVal === '') {
+                $currentTarget.datepicker('setValue', logicDate);
+              }
               $('div.datepicker.dropdown-menu')
                 .css('display', 'none');
-              $(e.currentTarget)
-                .datepicker('show');
+              $currentTarget.datepicker('show');
             });
-          if ($this.val() === '') {
-            $dpicker = $dpicker.data('datepicker');
-            if (fViewArr) {
-              if (!fViewArr[_id]) {
-                fViewArr[_id] = {
-                  element: null
-                };
-              }
-              fViewArr[_id].element = $dpicker;
+          $dpicker = $dpicker.data('datepicker');
+          if (fViewArr) {
+            if (!fViewArr[_id]) {
+              fViewArr[_id] = {
+                element: null
+              };
             }
+            fViewArr[_id].element = $dpicker;
           }
         });
     },
@@ -1348,7 +1354,7 @@ define([
                 }
               });
             }
-          })
+          });
         });
 
       });
@@ -1551,29 +1557,35 @@ define([
           // $.support.cors = true;
           if (!$this.hasClass('send-ajax-request')) {
             $this.addClass('send-ajax-request');
+            var tmpOptionsHtml = $this.find('option').html();
+            $this.find('option').remove();
+            $this.append('<option value="">--- Loading Data ---</option>');
             $.ajax({
               // crossDomain: true,
               url: _url,
               dataType: "json",
               success: function(data, textStatus) {
                 if (textStatus === 'success') {
-                  var _opts = '<option value="">--- Please Select ---</option>',
+                  var _opts = '<option value="">' + tmpOptionsHtml + '</option>',
                     _type = $urlEndPoint.prop('type'),
                     _dataArray = [],
                     dataSelectValue = $this.attr('data-select-value');
+                  switch (_type) {
+                    case 'select-one':
+                      $this.find('option').remove();
+                      break;
+                  }
                   _.each(data, function(element) {
+                    var _tmpSelect;
                     switch (_type) {
                       case 'select-one':
-                        var _tmpSelect = (dataSelectValue && dataSelectValue === element) ? ' selected ' : '';
-                        _opts += '<option value="' + element + '" ' + _tmpSelect + '>' + element + '</option>';
-                        $this.find('option')
-                          .remove();
-                        $this.append(_opts);
-                        $this.select2({
-                          containerCssClass: 'span12'
-                        });
-                        $('#s2id_' + $this.attr('id') + ' .select2-drop', $form)
-                          .hide();
+                        if (_.isObject(element) && element.id && element.text) {
+                          _tmpSelect = (dataSelectValue && dataSelectValue === element.id) ? ' selected ' : '';
+                          _opts += '<option value="' + element.id + '" ' + _tmpSelect + '>' + element.text + '</option>';
+                        } else {
+                          _tmpSelect = (dataSelectValue && dataSelectValue === element) ? ' selected ' : '';
+                          _opts += '<option value="' + element + '" ' + _tmpSelect + '>' + element + '</option>';
+                        }
                         break;
                       default:
                         _dataArray.push(element[$this.attr('id')]);
@@ -1659,6 +1671,12 @@ define([
                       $this.addClass('attached-change');
                       $this.one('change', _dataCallback);
                     }
+                  } else {
+                    $this.append(_opts);
+                    $this.select2({
+                      containerCssClass: 'span12'
+                    });
+                    $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
                   }
                   // Trigger dataloaded event
                   $this.trigger('dataloaded');
@@ -2252,6 +2270,29 @@ define([
         }
       }
       return false;
+    },
+
+    validateCheckBox: function($form) {
+      var valid = true;
+      try {
+        $form.find('.checkbox-container[data-check-required="true"]').each(function() {
+          var $this = $(this),
+            $labels = $this.find('label.checkbox');
+          if ($this.find(':checked').length) {
+            $labels.removeClass('invalid');
+          } else {
+            $labels.addClass('invalid');
+            valid = false;
+          }
+        });
+      } catch (err) {
+        if (console && console.log) {
+          console.log('[x] Error: validateCheckBox');
+          console.log(err);
+        }
+        valid = false;
+      }
+      return valid;
     }
   };
 });
