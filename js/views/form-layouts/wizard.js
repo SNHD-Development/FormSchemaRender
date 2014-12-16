@@ -237,6 +237,15 @@ define([
       if (typeof this._stepValidated[index] !== 'undefined') {
         _.each(this._stepValidated[index], function(element) {
           $element = $(':input[name="' + element + '"]', that.el).removeClass('invalid');
+          if (!$element.is(':checkbox') && !$element.is(':radio') && that.model.has(element)) {
+            var _tmpModelVal = that.model.get(element);
+            if (!_tmpModelVal || _tmpModelVal === '') {
+              var _tmpEleVal = $element.val();
+              if (_tmpEleVal && _tmpEleVal !== '') {
+                that.model.set(element, _tmpEleVal);
+              }
+            }
+          }
           _elementError = that.model.isValid(element);
           if (!_elementError) {
             $element.addClass('invalid');
