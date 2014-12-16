@@ -199,13 +199,8 @@ define([
               break;
           }
           // Auto Move the Screen to top
-          if ((_numSteps - 1) !== data.step) {
-            var $topView = $('#wizard_step' + (data.step + 1)).parent();
-            if ($topView.length) {
-              $('html, body').animate({
-                scrollTop: $topView.offset().top - 5
-              }, 1500);
-            }
+          if (_numSteps !== data.step) {
+            e.data.scrollToTopView(data.step);
           }
         }
       } else {
@@ -346,6 +341,14 @@ define([
         },
         3000
       );
+    },
+    scrollToTopView: function(step) {
+      var $topView = $('#wizard_step' + (step + 1)).parent();
+      if ($topView.length) {
+        $('html, body').animate({
+          scrollTop: $topView.offset().top - 5
+        }, 1500);
+      }
     }
   });
   return AppView;
