@@ -252,7 +252,12 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections'], function
               $('#' + value.name + '_btn_condition').val(val).trigger('change');
             });
           default:
-            _attrs[value.name] = '';
+            // Set If there is attributes.value
+            if (value.attributes && value.attributes.value) {
+              _attrs[value.name] = value.attributes.value;
+            } else {
+              _attrs[value.name] = '';
+            }
             setValidationData(value.name, attrs, _validation, '');
             if (_typeLowerCase !== 'buttondecision' && _addToModelBinder) {
               model.bindings[value.name] = '[name="' + value.name + '"]';

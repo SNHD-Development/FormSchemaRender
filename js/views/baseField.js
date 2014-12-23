@@ -959,7 +959,13 @@ define([
                 }
                 switch (element.type.toLowerCase()) {
                   case 'timestamp':
-                    _labels[_labels.length - 1] = 'Time';
+                    var _tLabel;
+                    if (element.options && element.options.tabletitle) {
+                      _tLabel = element.options.tabletitle;
+                    } else {
+                      _tLabel = 'Timestamps';
+                    }
+                    _labels[_labels.length - 1] = _tLabel;
                     // Convert to Human Readable Time
                     _values[index].push(Utils.getHumanTime(modelData[element.name]));
                     break;
@@ -1032,7 +1038,7 @@ define([
           // This is check box and need to render to make it look easy to read
           _html += that.inputTemplate['uneditabletag']({
             value: _field_data,
-            id: field.name,
+            id: field.name
           });
         } else {
           var _textarea = '';

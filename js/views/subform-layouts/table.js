@@ -63,7 +63,7 @@ define([
           }
           switch (element.type.toLowerCase()) {
             case 'timestamp':
-              _labels[_labels.length - 1] = 'Time';
+              _labels[_labels.length - 1] = 'Timestamps';
               // Convert to Human Readable Time
               _values[index].push(Utils.getHumanTime(model[element.name]));
               break;
