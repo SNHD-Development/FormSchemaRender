@@ -54,6 +54,9 @@ define([
   'jquery.birthdaypicker',
   'bootstrap'
 ], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+  // Debug Flag
+  var DEBUG = false;
+
   return Backbone.View.extend({
     _modelBinder: undefined,
     // Clean Data Binding
@@ -1118,6 +1121,13 @@ define([
           _type = 'file';
         }
 
+        // Save HTML Mark UP Here!
+        if (DEBUG) {
+          console.log('');
+          console.log('[*] Render HTML Field');
+          console.log(field);
+          console.log(_attr);
+        }
         _html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({
           _attr: _attr,
           _lang: this.options.lang

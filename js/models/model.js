@@ -158,6 +158,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections'], function
             // model.bindings[_name] = '[name="' + _name + '"]';
             break;
             // Will ignore these types
+          case 'hidden':
           case 'buttonclipboard':
           case 'fieldsetstart':
           case 'fieldsetend':

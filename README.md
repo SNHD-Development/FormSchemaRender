@@ -955,6 +955,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Adding "FormApprovalProcess" Module
     - When click on No on "CopyValuesFrom" will do nothing
     - Fix ModelBinder Bug when performing maxdate validation
+    - Hidden Fields will always have the same data
 
 * 0.1.6
 	- For "UserPermissions" SubForm name will only allowed that user to edit their own information, (Options.Permission field need to be set)
