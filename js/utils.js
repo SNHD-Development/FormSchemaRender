@@ -2293,6 +2293,43 @@ define([
         valid = false;
       }
       return valid;
+    },
+
+    formatUriSegment: function(url, formData) {
+      var DEBUG = false;
+      formData = formData || null;
+      if (!formData) {
+        if (console && console.log) {
+          console.log('[x] formData is null in "formatUriSegment".');
+        }
+        return;
+      }
+      var tokens = url.match(/{\w+}/ig);
+      if (DEBUG) {
+        console.log('[*] Current URL');
+        console.log(tokens);
+        console.log('[*] FormData');
+        console.log(formData);
+      }
+      _.each(tokens, function(element) {
+        if (DEBUG) {
+          console.log('***');
+          console.log(element);
+        }
+        switch (element) {
+          case '{id}':
+            if (!formData || !formData._id || !formData._id.$oid) {
+              throw 'formatUriSegment could not find _id.$oid.';
+            }
+            url = url.replace(element, formData._id.$oid);
+            break;
+        }
+      });
+      if (DEBUG) {
+        console.log('[*] New URL');
+        console.log(url);
+      }
+      return url;
     }
   };
 });
