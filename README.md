@@ -123,16 +123,19 @@ Normal Form POST will be function (e, submitEvent, $form)
 Then you need to pass your custom event into
 
 	var formEvents = {
-		'renderCompleted' : function(e, view) {
+        "init": function(options) {
+            console.log('init event');
+        },
+		"renderCompleted" : function(e, view) {
 			console.log('Render Form Completed.');
 		},
-		'preValidation': function (e, originalEvent, $form, form) {
+		"preValidation": function (e, originalEvent, $form, form) {
 			console.log('Before Validating this form.');
 		},
-		'preSubmit' : function(e, formData, jqForm, options) {
+		"preSubmit" : function(e, formData, jqForm, options) {
 			console.log('Before Submitting this form.');
 		},
-		'postSubmit' : function (e, responseText, _jsonText, statusText, xhr, $form) {
+		"postSubmit" : function (e, responseText, _jsonText, statusText, xhr, $form) {
 			console.log('Let\'s check the respond.');
 		}
 	};
@@ -957,6 +960,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Fix ModelBinder Bug when performing maxdate validation
     - Hidden Fields will always have the same data
     - For Button Type can look up for {id} placeholder
+    - Hidden Field will have a value from the FormData in update mode
 
 * 0.1.6
 	- For "UserPermissions" SubForm name will only allowed that user to edit their own information, (Options.Permission field need to be set)

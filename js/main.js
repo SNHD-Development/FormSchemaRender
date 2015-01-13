@@ -180,20 +180,6 @@ require([
 
     _token = (typeof token !== 'undefined' && _mode !== 'read') ? token : '';
 
-    _opts = {
-      formSchema: formSchema,
-      formData: ((typeof formData === 'undefined') ? {} : formData),
-      mode: _mode,
-      token: _token,
-      internal: ((typeof internal === 'undefined') ? false : internal),
-      hideButtons: ((typeof hideButtons === 'undefined') ? false : hideButtons),
-      lang: lang
-    };
-
-    if (typeof formActionUrl !== 'undefined') {
-      _opts.formActionUrl = formActionUrl;
-    }
-
     // Merge formEvents with the Key if Existed
     // formEvents from global scope take precedent
     if (formSchema.events) {
@@ -216,6 +202,24 @@ require([
           }, value);
       });
     }
+
+    // Set Up Parameters
+    _opts = {
+      formSchema: formSchema,
+      formData: ((typeof formData === 'undefined') ? {} : formData),
+      mode: _mode,
+      token: _token,
+      internal: ((typeof internal === 'undefined') ? false : internal),
+      hideButtons: ((typeof hideButtons === 'undefined') ? false : hideButtons),
+      lang: lang
+    };
+
+    if (typeof formActionUrl !== 'undefined') {
+      _opts.formActionUrl = formActionUrl;
+    }
+
+    // Send beforeRender Event
+    $('div#app').trigger(_opts.formSchema.name + '.init', _opts);
 
     // Clean Up Global Object
     formSchema = null;
