@@ -50,6 +50,11 @@ define([
 
       this.$el.html(this.template(this.options.formSchema));
 
+      // Generic Setup
+      $('#' + this.options.formSchema.name, this.el).on(this.options.formSchema.name + '.renderCompleted', function() {
+        Utils.genericSetup(that);
+      });
+
       if (typeof this.options.mode !== 'undefined' && this.options.mode === 'read') {
         $('#' + that.options.formSchema.name, that.el)
           .addClass('read-mode');
@@ -71,7 +76,12 @@ define([
             that.formView = Vm.create(that, 'FormView', FormView, _opts);
             that.formView.render();
           } catch (err) {
+            if (console && console.log) {
+              console.log('Exception: in app.js');
+              console.log(err);
+            }
             Utils.renderError(that.$el, err);
+            return;
           }
 
           if (that.formView._hasDate) {

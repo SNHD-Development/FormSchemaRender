@@ -200,6 +200,7 @@ These are the list of fields that currently support.
 + FullName:
 + Address:
 + State:
++ County:
 + Zipcode:
 + Country:
 + BooleanInput:
@@ -386,6 +387,18 @@ This will enable ZIP+4 (By default, it will only allowed to have 5 digits)
         }
     },
 
+### County Field
+
+This Field will show all the US County data.
+
+    {
+        "Name" : "County",
+        "Type" : "County",
+        "Description" : "Your County",
+        "Options": {
+            "FilterById": "dom_id"
+        }
+    }
 
 ### Select Field
 
@@ -961,6 +974,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Hidden Fields will always have the same data
     - For Button Type can look up for {id} placeholder
     - Hidden Field will have a value from the FormData in update mode
+    - Adding US County Field Type
 
 * 0.1.6
 	- For "UserPermissions" SubForm name will only allowed that user to edit their own information, (Options.Permission field need to be set)

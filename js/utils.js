@@ -8,6 +8,7 @@ define([
   'backbone',
   'vm',
   'select2helper',
+  'text!data/county.json',
   'bootstrap',
   'jquery.select2',
   'jquery.spinner',
@@ -17,7 +18,7 @@ define([
   'jquery.zclip',
   'jquery.stupidtable',
   'xdr'
-], function($, _, Backbone, Vm, Select2Helper) {
+], function($, _, Backbone, Vm, Select2Helper, countyData) {
 
   /**
    * Setup DependOn Options (Values)
@@ -771,6 +772,10 @@ define([
         }
       }
       return appendClass;
+    },
+    genericSetup: function(view) {
+      var $dom = view.$el;
+      this.setupCounty($dom);
     },
     /**
      * Final Setup before Render the form
@@ -2159,7 +2164,8 @@ define([
         if (!view.options.formData.fields[element]) {
           return;
         }
-        $(':radio[value="' + view.options.formData.fields[element] + '"]').attr('checked', true).trigger('change');
+        var $targetRadio = $(':radio[name="' + element + '"]').filter('[value="' + view.options.formData.fields[element] + '"]');
+        $targetRadio.attr('checked', true).trigger('change');
       });
     },
 
@@ -2330,6 +2336,61 @@ define([
         console.log(url);
       }
       return url;
+    },
+
+    setupCounty: function($markup) {
+      var $county = $markup.find('.select2-county');
+      if (!$().select2) {
+        throw 'Select 2 is not found!';
+      }
+      $county.each(function() {
+        var $this = $(this);
+        $this.select2();
+      });
+      var $countyLookUp = $markup.find('.select2-county-lookup');
+      if (typeof countyData === 'string') {
+        countyData = $.parseJSON(countyData);
+      }
+      $countyLookUp.each(function() {
+        var $this = $(this),
+          idLookUp = $this.attr('data-filterbyid');
+        $this.select2();
+        $markup.on('change', '#' + idLookUp, function() {
+          var $target = $(this),
+            val = $target.val(),
+            _st = $this.attr('data-state');
+          if (_st === val) {
+            return;
+          }
+          // Set up Options
+          var targetData = '<option value="">-- Select County in ' + val + ' --</option>';
+          _.each(countyData[val], function(county) {
+            targetData += '<option value="' + county + '">' + county + '</option>';
+          });
+          $this.val('');
+          $this.select2('val', '');
+          $this.select2('destroy');
+          $this.empty().append(targetData);
+          $this.select2();
+          $this.val('');
+          $this.select2('val', '');
+          $this.select2('open');
+          $this.select2('close');
+          $this.attr('data-state', val);
+        });
+        var $checkTarget = $('#' + idLookUp, $markup),
+          _v = $checkTarget.val();
+        if (_v && _v !== '') {
+          $checkTarget.trigger('change');
+        }
+        // If there is a default value
+        var _deVal = $this.attr('data-countyvalue');
+        if (_deVal && _deVal !== '') {
+          $this.select2('destroy');
+          $this.select2();
+          $this.select2('val', _deVal);
+        }
+      });
     }
   };
 });

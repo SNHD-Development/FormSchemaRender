@@ -10,6 +10,8 @@ vm.js
 libs/bootstrap/bootstrap.js
 libs/select2/select2.min.js
 select2helper.js
+libs/require/text.js
+text!data/county.json
 libs/fuelux/spinner.js
 libs/jquery-form-plugin/bdate-picker.js
 libs/jquery-form-plugin/jquery.placeholder.js
@@ -18,7 +20,6 @@ libs/copy/jquery.zclip.min.js
 libs/jquery/stupidtable.min.js
 libs/xhr/jquery.xdomainrequest.min.js
 utils.js
-libs/require/text.js
 text!templates/layout.html
 libs/jquery-form-plugin/jquery.form.min.js
 libs/bootstrap-datepicker/bootstrap-datepicker.js

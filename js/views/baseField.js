@@ -13,6 +13,7 @@ define([
   'views/fields/list',
   'text!data/email.json',
   'text!data/schooles.json',
+  'text!data/county.json',
   'text!templates/fields/html.html',
   'text!templates/fields/label.html',
   'text!templates/fields/text.html',
@@ -27,6 +28,7 @@ define([
   'text!templates/fields/file.html',
   'text!templates/fields/multifiles.html',
   'text!templates/fields/state.html',
+  'text!templates/fields/county.html',
   'text!templates/fields/zipcode.html',
   'text!templates/fields/country.html',
   'text!templates/fields/fullname.html',
@@ -53,7 +55,7 @@ define([
   'jquery.datepicker',
   'jquery.birthdaypicker',
   'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
   // Debug Flag
   var DEBUG = false;
 
@@ -149,6 +151,7 @@ define([
         "file": _.template(fileTemplate),
         "multifiles": _.template(multifilesTemplate),
         "state": _.template(stateTemplate),
+        "county": _.template(countyTemplate),
         "zipcode": _.template(zipcodeTemplate),
         "country": _.template(countryTemplate),
         "fullname": _.template(fullnameTemplate),
@@ -401,6 +404,31 @@ define([
               field._data = field.values[this.options.formData['fields'][field.name]];
             }
             this.addDataToElementData(field.name, 'value', this.options.formData.fields[field.name]);
+          }
+          break;
+
+        case 'county':
+          // Normal Case
+          if (typeof countyData === 'string') {
+            countyData = $.parseJSON(countyData);
+          }
+          field._options = countyData;
+          if (!field.attributes.id) {
+            field.attributes.id = field.name;
+          }
+          var classNameToAdd = 'select2-county';
+          // If there is a default ID to look value up will attached that event
+          if (field.options.filterbyid) {
+            classNameToAdd = 'select2-county-lookup';
+          }
+          if (!field.attributes.class) {
+            field.attributes.class = classNameToAdd;
+          } else {
+            field.attributes.class += ' ' + classNameToAdd;
+          }
+          // If there is default data
+          if (this.options.formData && this.options.formData.fields && this.options.formData.fields[field.name]) {
+            field.attributes['data-countyvalue'] = this.options.formData.fields[field.name];
           }
           break;
 
@@ -1154,6 +1182,7 @@ define([
         }
         this._visibleOn.push(field);
       }
+
       return _html;
     },
     /**

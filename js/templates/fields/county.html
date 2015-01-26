@@ -1,0 +1,22 @@
+<%
+var optionValues = '';
+if (!options.filterbyid) {
+    _.each(_options, function(county, state) {
+        optionValues += '<optgroup label="County in '+state+'">';
+        optionValues += county.map(function(c) {
+            return '<option value="' + state + ':' + c + '">' + c + '</option>';
+        });
+        optionValues += '</optgroup>';
+    });
+} else {
+    _attr += ' data-filterbyid="'+options.filterbyid+'"';
+}
+%>
+<select id="<%= attributes.id %>" name="<%= name %>"<%= _attr %>>
+    <% if (!options.filterbyid) { %>
+    <option value="">-- Select County --</option>
+    <% } else { %>
+    <option value="">-- Please select a State First --</option>
+    <% } %>
+    <%= optionValues %>
+</select>
