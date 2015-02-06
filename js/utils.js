@@ -687,7 +687,7 @@ define([
             } else if (strLen === 3) {
               nums = nums.replace(/(\d{3})/ig, '($1)');
             } else if (strLen <= 6) {
-              nums = nums.replace(/(\d{3})(\d{3})?(\d{1,4})?/ig, '($1) $2');
+              nums = nums.replace(/(\d{3})(\d{1,3})?/ig, '($1) $2');
             } else {
               nums = nums.replace(/(\d{3})(\d{3})?(\d{1,4})?/ig, '($1) $2-$3');
             }
