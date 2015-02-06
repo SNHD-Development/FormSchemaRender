@@ -659,3 +659,22 @@ body.ie7 {
         }
     }
 }
+
+/**
+ * Mobile
+ */
+@media (max-width: 767px) {
+    .form-render {
+        .radio-container {
+            label {
+                &.radio {
+                    width: auto;
+                    margin-left: 5px;
+                    input {
+                        &[type="radio"] {}
+                    }
+                }
+            }
+        }
+    }
+}

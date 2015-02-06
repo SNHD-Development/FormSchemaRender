@@ -237,6 +237,20 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections'], function
               model.bindings[value.name] = '[name="' + value.name + '"]';
             }
             break;
+
+          case 'socialsecurity':
+            _attrs[value.name] = '';
+            if (typeof attrs.validation[value.name] !== 'undefined') {
+              _validation[value.name] = _.clone(attrs.validation[value.name]);
+              if (_validation[value.name].required) {
+                _validation[value.name].pattern = /^\d{3}\-\d{2}-\d{4}$/i;
+              }
+            }
+            if (_addToModelBinder) {
+              model.bindings[value.name] = '[name="' + value.name + '"]';
+            }
+            break;
+
           case 'userid':
             _attrs[value.name] = '';
             if (typeof attrs.validation[value.name] !== 'undefined') {

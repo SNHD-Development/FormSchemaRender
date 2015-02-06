@@ -594,6 +594,15 @@ To turn on Provider, simply pass in "Options.ShowProvider" = true;
         }
     }
 
+### Social Security
+
+To capture Social Security Number simply
+
+    {
+        "Name" : "SSN",
+        "Type" : "SocialSecurity",
+        "Description" : "Your Social Security Number"
+    }
 
 ### VisibleOn Options
 
@@ -975,6 +984,8 @@ Sometime there are some fileds that internal should not be able to update these 
     - For Button Type can look up for {id} placeholder
     - Hidden Field will have a value from the FormData in update mode
     - Adding US County Field Type
+    - Adding Social Security Field Type
+    - Fix Telephone Auto Format
 
 * 0.1.6
 	- For "UserPermissions" SubForm name will only allowed that user to edit their own information, (Options.Permission field need to be set)

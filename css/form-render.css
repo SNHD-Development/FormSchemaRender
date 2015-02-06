@@ -430,3 +430,11 @@ body.ie7 .form-render .controls-row {
     width: 29%; }
   body.ie7 .form-render .controls-row .span3 {
     width: 21%; }
+
+/**
+ * Mobile
+ */
+@media (max-width: 767px) {
+  .form-render .radio-container label.radio {
+    width: auto;
+    margin-left: 5px; } }

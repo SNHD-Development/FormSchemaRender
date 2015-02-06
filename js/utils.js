@@ -635,6 +635,127 @@ define([
       }
     },
     /**
+     * Allow Phone Number with Area Code
+     * (xxx) xxx-xxxx
+     */
+    allowPhoneNumber: function(e) {
+      var DEBUG = false;
+      var $currentTarget = $(e.currentTarget),
+        _val = $currentTarget.val(),
+        _tmp = '';
+      if (DEBUG) {
+        console.log('*** allowPhoneNumber [' + e.type + '] ***');
+        console.log(e.keyCode);
+      }
+      if (e.type === 'keydown' && (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+        if (DEBUG) {
+          console.log('[x] keydown');
+          console.log(_val.length);
+          console.log(_val);
+        }
+        switch (_val.length) {
+          case 0:
+            if (e.keyCode === 48 || e.keyCode === 105) {
+              e.preventDefault();
+              return;
+            }
+            $currentTarget.val('(' + _val);
+            break;
+
+          case 4:
+            $currentTarget.val(_val + ') ');
+            break;
+
+          case 9:
+            $currentTarget.val(_val + '-');
+        }
+        if (e.update) {
+          $currentTarget.val($currentTarget.val() + String.fromCharCode(e.keyCode));
+        }
+      } else {
+        switch (e.type) {
+          case 'focusout':
+            var nums = _val.replace(/[^0-9]+/ig, '');
+            var strLen = nums.length;
+            if (DEBUG) {
+              console.log(nums);
+            }
+            if (strLen < 1) {
+              nums = '';
+            } else if (strLen < 3) {
+              nums = nums.replace(/(\d{1,2})/ig, '($1');
+            } else if (strLen === 3) {
+              nums = nums.replace(/(\d{3})/ig, '($1)');
+            } else if (strLen <= 6) {
+              nums = nums.replace(/(\d{3})(\d{3})?(\d{1,4})?/ig, '($1) $2');
+            } else {
+              nums = nums.replace(/(\d{3})(\d{3})?(\d{1,4})?/ig, '($1) $2-$3');
+            }
+            if (DEBUG) {
+              console.log(strLen);
+              console.log(_val.replace(/[^0-9]+/ig, ''));
+              console.log(nums);
+            }
+            $currentTarget.val(nums);
+            break;
+        }
+      }
+    },
+    /**
+     * Allow Social Security Number
+     * xxx-xx-xxxx
+     */
+    allowSocialSecurity: function(e) {
+      var DEBUG = false;
+      var $currentTarget = $(e.currentTarget),
+        _val = $currentTarget.val(),
+        _tmp = '';
+      if (DEBUG) {
+        console.log('*** allowSocialSecurity [' + e.type + '] ***');
+        console.log(e.keyCode);
+      }
+      if (e.type === 'keydown' && (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+        if (DEBUG) {
+          console.log('[x] keydown');
+          console.log(_val.length);
+          console.log(_val);
+        }
+        switch (_val.length) {
+          case 3:
+          case 6:
+            $currentTarget.val(_val + '-');
+            break;
+        }
+        if (e.update) {
+          $currentTarget.val($currentTarget.val() + String.fromCharCode(e.keyCode));
+        }
+      } else {
+        switch (e.type) {
+          case 'focusout':
+            var nums = _val.replace(/[^0-9]+/ig, '');
+            var strLen = nums.length;
+            if (DEBUG) {
+              console.log(nums.length);
+              console.log(nums);
+            }
+            // Perform custom regex
+            if (strLen <= 3) {
+              nums = nums.replace(/(\d{1,3})?/ig, '$1');
+            } else if (strLen <= 5) {
+              nums = nums.replace(/(\d{3})(\d{1,2})?/ig, '$1-$2');
+            } else {
+              nums = nums.replace(/(\d{3})(\d{2})?(\d{1,4})?/ig, '$1-$2-$3');
+            }
+            if (DEBUG) {
+              console.log(nums.length);
+              console.log(nums);
+            }
+            $currentTarget.val(nums);
+            break;
+        }
+      }
+    },
+    /**
      * Allow Only Integer Number in Keypress Event but will render as XXXXX-XXXX
      **/
     allowZipCodePlusFour: function(e) {

@@ -1,0 +1,1 @@
+define(function() { var str ='<%var _id = (options.id) ? options.id: name;%><input id="<%= _id %>" name="<%= name %>" type="text"<%= _attr %> maxlength="11" minlength="11" placeholder="xxx-xx-xxxx"/>';return str;});

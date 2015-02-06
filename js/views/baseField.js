@@ -19,6 +19,7 @@ define([
   'text!templates/fields/text.html',
   'text!templates/fields/password.html',
   'text!templates/fields/telephone.html',
+  'text!templates/fields/socialsecurity.html',
   'text!templates/fields/hidden.html',
   'text!templates/fields/timestamp.html',
   'text!templates/fields/useraccount.html',
@@ -55,7 +56,7 @@ define([
   'jquery.datepicker',
   'jquery.birthdaypicker',
   'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, socialsecurityTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
   // Debug Flag
   var DEBUG = false;
 
@@ -137,43 +138,44 @@ define([
       ];
       // Set up the input template
       this.inputTemplate = {
-        "html": _.template(htmlTemplate),
-        "label": _.template(labelTemplate),
-        "text": _.template(textTemplate),
-        "password": _.template(passwordTemplate),
-        "telephone": _.template(telephoneTemplate),
-        "hidden": _.template(hiddenTemplate),
-        "timestamp": _.template(timestampTemplate),
-        "useraccount": _.template(useraccountTemplate),
-        "fraction": _.template(fractionTemplate),
-        "booleaninput": _.template(booleanInputTemplate),
-        "radio": _.template(radioTemplate),
-        "file": _.template(fileTemplate),
-        "multifiles": _.template(multifilesTemplate),
-        "state": _.template(stateTemplate),
-        "county": _.template(countyTemplate),
-        "zipcode": _.template(zipcodeTemplate),
-        "country": _.template(countryTemplate),
-        "fullname": _.template(fullnameTemplate),
-        "address": _.template(addressTemplate),
-        "textarea": _.template(textareaTemplate),
-        "number": _.template(numberTemplate),
-        "email": _.template(emailTemplate),
-        "date": _.template(dateTemplate),
-        "select": _.template(selectTemplate),
-        "check": _.template(checkTemplate),
-        "birthdate": _.template(bdateTemplate),
-        "button": _.template(buttonTemplate),
-        "buttongroup": _.template(buttongroupTemplate),
-        "list": _.template(listTemplate),
-        "uneditableinput": _.template(uneditableinputTemplate),
-        "uneditablecheck": _.template(uneditablecheckTemplate),
-        "uneditabletag": _.template(uneditabletagTemplate),
-        "uneditabletel": _.template(uneditabletelTemplate),
-        "uneditablefile": _.template(uneditablefileTemplate),
-        "uneditableimage": _.template(uneditableimageTemplate),
-        "buttonclipboard": _.template(buttonclipboardTemplate),
-        "subform-table": _.template(tableTemplate)
+        'html': _.template(htmlTemplate),
+        'label': _.template(labelTemplate),
+        'text': _.template(textTemplate),
+        'password': _.template(passwordTemplate),
+        'telephone': _.template(telephoneTemplate),
+        'socialsecurity': _.template(socialsecurityTemplate),
+        'hidden': _.template(hiddenTemplate),
+        'timestamp': _.template(timestampTemplate),
+        'useraccount': _.template(useraccountTemplate),
+        'fraction': _.template(fractionTemplate),
+        'booleaninput': _.template(booleanInputTemplate),
+        'radio': _.template(radioTemplate),
+        'file': _.template(fileTemplate),
+        'multifiles': _.template(multifilesTemplate),
+        'state': _.template(stateTemplate),
+        'county': _.template(countyTemplate),
+        'zipcode': _.template(zipcodeTemplate),
+        'country': _.template(countryTemplate),
+        'fullname': _.template(fullnameTemplate),
+        'address': _.template(addressTemplate),
+        'textarea': _.template(textareaTemplate),
+        'number': _.template(numberTemplate),
+        'email': _.template(emailTemplate),
+        'date': _.template(dateTemplate),
+        'select': _.template(selectTemplate),
+        'check': _.template(checkTemplate),
+        'birthdate': _.template(bdateTemplate),
+        'button': _.template(buttonTemplate),
+        'buttongroup': _.template(buttongroupTemplate),
+        'list': _.template(listTemplate),
+        'uneditableinput': _.template(uneditableinputTemplate),
+        'uneditablecheck': _.template(uneditablecheckTemplate),
+        'uneditabletag': _.template(uneditabletagTemplate),
+        'uneditabletel': _.template(uneditabletelTemplate),
+        'uneditablefile': _.template(uneditablefileTemplate),
+        'uneditableimage': _.template(uneditableimageTemplate),
+        'buttonclipboard': _.template(buttonclipboardTemplate),
+        'subform-table': _.template(tableTemplate)
       };
 
       // Init Form Options
@@ -503,6 +505,10 @@ define([
           if (this.options.formData.fields && this.options.formData.fields[field.name + '_provider']) {
             field['_providerValue'] = this.options.formData.fields[field.name + '_provider'];
           }
+          break;
+
+        case 'socialsecurity':
+          field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer socialsecurity span12');
           break;
 
         case 'textarea':
@@ -1168,6 +1174,10 @@ define([
           console.log('[*] Render HTML Field');
           console.log(field);
           console.log(_attr);
+        }
+        // Check for Undefined Type
+        if (DEBUG && typeof this.inputTemplate[_type] === 'undefined') {
+          throw 'Template of "' + _type + '" not found!';
         }
         _html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({
           _attr: _attr,
