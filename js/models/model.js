@@ -1,5 +1,5 @@
 // Default FormSchema Backbone Model
-define(['jquery', 'underscore', 'backbone', 'collections/collections'], function($, _, Backbone, Collections) {
+define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils'], function($, _, Backbone, Collections, Utils) {
   /**
    * Function to parse formSchema to be used in this model
    * @param  objct model
@@ -41,11 +41,19 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections'], function
           _addToModelBinder = false;
         }
         _typeLowerCase = value.type.toLowerCase();
+        // Should bind Model?
         switch (_typeLowerCase) {
           case 'radio':
             _addToModelBinder = false;
             break;
         }
+        // Set Up for escapeHtmlInputs
+        switch (_typeLowerCase) {
+          case 'textarea':
+            model.escapeHtmlInputs.push(value.name);
+            break;
+        }
+        // Set Up Logic
         switch (_typeLowerCase) {
           case 'booleaninput':
             _attrs[value.name] = '';
@@ -317,9 +325,11 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections'], function
     };
   return Backbone.Model.extend({
     initialize: function() {
+      var self = this;
       this.subFormLists = [];
       this.bindings = {}; // To be used in ModelBinder
       this.notBinding = []; // will be used to check what field will not need to render.
+      this.escapeHtmlInputs = []; // Inputs that need to escape the HTML.
       var _attrs = parseFields(this, this.attributes, this.attributes.is_internal);
       this.clear();
       this.set(_attrs);
@@ -339,6 +349,28 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections'], function
       //     console.log('[x] Binding');
       //     console.log(this.bindings);
       // });
+
+      // HTML Entities
+      if (this.escapeHtmlInputs.length) {
+        var escOpts = {
+          silent: true
+        };
+        _.each(this.escapeHtmlInputs, function(name) {
+          var currentE = 'change:' + name;
+          // console.log('Set [' + name + ']');
+          self.on(currentE, function() {
+            if (self.has(name)) {
+              // console.log(name);
+              // console.log(self.get(name));
+              var esc = Utils.htmlspecialchars(self.get(name));
+              var newVal = {};
+              newVal[name] = esc;
+              self.set(newVal, escOpts);
+              // console.log(self.get(name));
+            }
+          });
+        });
+      }
     },
     /**
      * Trim the value before setting the value

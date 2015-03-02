@@ -5,7 +5,7 @@
  * Copyright (c) 2013 SNHD
  * Licensed under the MIT license.
  *
- * Version 0.1.7
+ * Version 0.1.8
  **/
 
 require.config({
@@ -124,7 +124,8 @@ require.config({
       deps: ['jquery'],
       exports: 'jQuery.purl'
     },
-    "jquery.select2": ['jquery']
+    "jquery.select2": ['jquery'],
+    "xdr": ['jquery']
   }
 });
 

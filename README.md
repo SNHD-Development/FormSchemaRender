@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.1.7`
+Version `version 0.1.8`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -971,6 +971,9 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ## Version
+
+* 0.1.8
+    - Escape html special character in Textarea
 
 * 0.1.7
     - Sort Select by Values if the values are object
