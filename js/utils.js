@@ -333,6 +333,11 @@ define([
         _isFile = $e.is(':file'),
         _val;
 
+      if ($e.closest('.subform-button-wrapper').length) {
+        // Should not be in .subform-button-wrapper
+        return;
+      }
+
       _val = (_isFile) ? $e.val() : $.trim($e.val());
 
       if (!_isFile) {

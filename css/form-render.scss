@@ -310,6 +310,11 @@ $text_area_min_height: 100px;
                 margin-right: 0;
             }
         }
+        .sub-button {
+            .btn {
+                margin: 10px auto;
+            }
+        }
         // Popover
         .popover-title, .popover-inner {
             color: #b94a48;
@@ -324,6 +329,26 @@ $text_area_min_height: 100px;
         .popover-title {
             text-align: left;
             font-weight: bold;
+        }
+        // For SubForm Button
+        .subform-button-wrapper {
+            color: #3a87ad;
+            .form-markup-field {
+                text-align: left;
+                margin: 8px auto;
+                input {
+                    width: 90%;
+                }
+            }
+            .btn {
+                margin-bottom: 0;
+            }
+            .subform-btn-submit {
+                width: 70%;
+            }
+            .icon-spinner {
+                margin: auto 8px;
+            }
         }
     }
     /**

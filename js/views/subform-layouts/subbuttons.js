@@ -41,7 +41,7 @@ define([
             } else {
               _class = 'btn-primary';
             }
-            _html += '<div><a class="btn ' + _class + '" ' + _attr + '>' + value.description + '</a></div>';
+            _html += '<div class="text-center sub-button"><a class="btn ' + _class + '" ' + _attr + '>' + value.description + '</a></div>';
             break;
         }
       });

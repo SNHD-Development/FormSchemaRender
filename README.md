@@ -269,6 +269,71 @@ To look up the User can Options.ShowOnUser as an array of string.
 		}
 	}
 
+If we want to use nested buttons, simply add "SubButtons" in "Options",
+
+    {
+        "Type": "Button",
+        "Description": "Parent Button",
+        "Attributes": {
+            "Class": "btn btn-inverse"
+        },
+        "Options": {
+            "SubButtons": [{
+                "Type": "Button",
+                "Description": "First Child Button",
+                "Url": "/link",
+                "Options": {
+                    "AppendId": true
+                }
+            }, {
+                "Type": "Button",
+                "Description": "Second Child Button",
+                "Url": "/link-second",
+                "Options": {
+                    "AppendId": true
+                }
+            }]
+        }
+    }
+
+If we want to create subform in the button, simply add "SubForm" in "Options", (Will show on "read" mode only)
+
+Note: All the buttons, (Eg: submit and cancel will automatic added)
+
+    {
+        "Name": "SubFormButtonTest",
+        "Type": "Button",
+        "Description": "Subform Button",
+        "Attributes": {
+            "Class": "btn btn-inverse"
+        },
+        "Options": {
+            "SubForm": {
+                "Url": "/url-to-send-form-to",
+                "GET": {
+                    "Key": "value"
+                },
+                "Fields": [
+                    {
+                        "Name": "Textarea",
+                        "Type": "Textarea",
+                        "Description": "Textarea"
+                    },
+                    {
+                        "Name": "TextBox",
+                        "Type": "TextBox",
+                        "Description": "TextBox"
+                    }
+                ],
+                "Validation": {
+                    "TextBox": {
+                        "required": true
+                    }
+                }
+            }
+        }
+    }
+
 ### UserId Field
 
 This is the user id from user collection. This will link to user collection to check the claim for each form.
@@ -974,6 +1039,7 @@ Sometime there are some fileds that internal should not be able to update these 
 
 * 0.1.8
     - Escape html special character in Textarea
+    - Adding Ability to have custom form within any buttons.
 
 * 0.1.7
     - Sort Select by Values if the values are object

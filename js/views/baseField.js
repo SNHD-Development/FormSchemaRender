@@ -60,6 +60,42 @@ define([
   // Debug Flag
   var DEBUG = false;
 
+  // Function to build simple HTML form markup
+  function buildHtmlBasicFormMarkup(field) {
+    var html,
+      defaultLabel = true;
+    if (DEBUG) {
+      console.log('[*] buildHtmlBasicFormMarkup');
+      console.log(arguments);
+    }
+    if (!field.description) {
+      throw 'Expected a "description" in buildHtmlBasicFormMarkup parameter.';
+    }
+    if (!field.name) {
+      throw 'Expected a "name" in buildHtmlBasicFormMarkup parameter.';
+    }
+    if (!field.type) {
+      throw 'Expected a "type" in buildHtmlBasicFormMarkup parameter.';
+    }
+    var typeLower = field.type.toLowerCase();
+    var className = '';
+    switch (typeLower) {
+      case 'textarea':
+        html = '<textarea name="' + field.name + '" class="' + className + '" id="' + field.name + '"></textarea>';
+        break;
+      case 'textbox':
+        html = '<input name="' + field.name + '" type="text" class="' + className + '" id="' + field.name + '"/>';
+        break;
+      default:
+        throw 'Not implement "' + field.type + '" yet in buildHtmlBasicFormMarkup.';
+    }
+    if (defaultLabel) {
+      html = '<label for="' + field.name + '">' + field.description + '</label>' + html;
+    }
+    // Wrap in Div
+    return '<div class="form-markup-field">' + html + '</div>';
+  }
+
   return Backbone.View.extend({
     _modelBinder: undefined,
     // Clean Data Binding
@@ -823,6 +859,121 @@ define([
                 '_id': _subBtnId,
                 'button': $('.form-render #' + _subBtnId),
                 '_oid': (that.options.formData && that.options.formData._id && that.options.formData._id['$oid']) ? that.options.formData._id['$oid'] : null
+              });
+            });
+          } else if (field.options.subform) {
+            // Working on SubForm inside Button (Simple Form)
+
+            // If this is read mode, we need to have the current form ID as well.
+            if (this.options.mode !== 'read') {
+              // Only have this option in read mode!
+              return '';
+            }
+            if (!field.name) {
+              throw 'Expected a valid Name for SubForm Button.';
+            }
+            var _currentFormId = (this.options.formData && this.options.formData._id && this.options.formData._id.$oid) ? this.options.formData._id.$oid : null;
+            if (!_currentFormId) {
+              throw 'Expected a valid ID for SubForm Button.';
+            }
+            var subFormBtnOptions = field.options.subform;
+            if (!subFormBtnOptions.url || typeof subFormBtnOptions.url !== 'string') {
+              throw 'Please pass in URL key as a string in SubForm options.';
+            }
+            if (!subFormBtnOptions.fields || !_.isArray(subFormBtnOptions.fields)) {
+              throw 'Please pass in URL key as an array in SubForm options.';
+            }
+            // Validated, build HTML
+            var htmlSubFormBtn = '';
+            var validationSubFormBtn = field.options.subform.validation;
+            _.each(subFormBtnOptions.fields, function(fieldSubFormBtn) {
+              // Simple HTML Render
+              htmlSubFormBtn += buildHtmlBasicFormMarkup(fieldSubFormBtn);
+            });
+            htmlSubFormBtn = '<div class="subform-button-wrapper">' + htmlSubFormBtn + '<div class="text-center"><a class="btn btn-primary subform-btn-submit">Submit</a></div></div>';
+            // Then add this html as a bs popover.
+            $('div#app').on(this.options.formSchema.name + '.renderCompleted', function(e, view) {
+              // Need to bind click event
+              var $currentBtn = $(this).find('button#' + field.name);
+              if ($currentBtn.length !== 1) {
+                throw 'Invalid SubForm Button, please make sure that the name is unique.';
+              }
+              // Attached Click Event
+              $currentBtn.popover({
+                html: true,
+                placement: 'top',
+                trigger: 'manual',
+                title: '<span class="text-info">Please complete this form.</span>',
+                content: htmlSubFormBtn
+              });
+              $currentBtn.on('click', function(e) {
+                if ($currentBtn.hasClass('submitted')) {
+                  return false;
+                }
+                if ($currentBtn.hasClass('shown')) {
+                  $currentBtn.removeClass('shown').popover('hide');
+                } else {
+                  $currentBtn.addClass('shown').popover('show');
+                }
+              });
+              // Form Submit Event
+              $currentBtn.parent().on('click', '.subform-btn-submit', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                // Validate against the validation
+                var $subFormWrapper = $currentBtn.next('.popover').find('.subform-button-wrapper');
+                var $inputs = $subFormWrapper.find(':input');
+                var resultObj = {};
+                var error = false;
+                // Build Form in body
+                $inputs.each(function() {
+                  var $this = $(this);
+                  var n = $this.attr('name');
+                  var v = $this.val();
+                  if (!n || n === '') {
+                    throw 'expect valid input name!';
+                  }
+                  if (validationSubFormBtn && validationSubFormBtn[n]) {
+                    // Check for Validation
+                    if (validationSubFormBtn[n].required && v === '') {
+                      $this.addClass('invalid');
+                      error = true;
+                    } else {
+                      $this.removeClass('invalid');
+                    }
+                  }
+                  resultObj[n] = v;
+                });
+                if (!error) {
+                  var currentFormId = 'subform-btn-' + new Date().getTime().toString();
+                  var _hidden = '';
+                  _.each(resultObj, function(_v, _k) {
+                    _hidden += '<input type="hidden" name="' + _k + '" value="' + _v + '"/>';
+                  });
+                  if (field.options.subform.url[field.options.subform.url.length - 1] !== '/') {
+                    field.options.subform.url += '/';
+                  }
+                  var currentAction = field.options.subform.url + _currentFormId;
+                  if (field.options.subform.get) {
+                    currentAction += '?' + $.param(field.options.subform.get);
+                  }
+                  // Validate Pass
+                  $('body').append('<form id="' + currentFormId + '" action="' + currentAction + '" method="POST">' + _hidden + '</form>');
+                  $currentBtn.removeClass('shown').popover('destroy');
+                  // Show Loader UI
+                  $currentBtn.popover({
+                    html: true,
+                    placement: 'top',
+                    trigger: 'manual',
+                    title: '<span class="text-info">Sending Information</span>',
+                    content: '<div class="text-center subform-button-wrapper"><i class="icon-spinner icon-spin icon-large"></i> Sending</div>'
+                  }).addClass('submitted').popover('show');
+                  $currentBtn.closest('.form-actions').find(':button').attr('disabled', true);
+                  window.setTimeout(function() {
+                    $('body').find('#' + currentFormId).submit();
+                  }, 1000);
+                }
+                return false;
               });
             });
           }

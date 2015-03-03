@@ -240,6 +240,8 @@
       margin-bottom: 20px; }
       .form-render .form-actions .btn:last-child {
         margin-right: 0; }
+    .form-render .form-actions .sub-button .btn {
+      margin: 10px auto; }
     .form-render .form-actions .popover-title, .form-render .form-actions .popover-inner {
       color: #b94a48; }
     .form-render .form-actions .popover.success .popover-title, .form-render .form-actions .popover.success .popover-inner {
@@ -247,6 +249,19 @@
     .form-render .form-actions .popover-title {
       text-align: left;
       font-weight: bold; }
+    .form-render .form-actions .subform-button-wrapper {
+      color: #3a87ad; }
+      .form-render .form-actions .subform-button-wrapper .form-markup-field {
+        text-align: left;
+        margin: 8px auto; }
+        .form-render .form-actions .subform-button-wrapper .form-markup-field input {
+          width: 90%; }
+      .form-render .form-actions .subform-button-wrapper .btn {
+        margin-bottom: 0; }
+      .form-render .form-actions .subform-button-wrapper .subform-btn-submit {
+        width: 70%; }
+      .form-render .form-actions .subform-button-wrapper .icon-spinner {
+        margin: auto 8px; }
   .form-render div.invalid a.select2-choice {
     border-color: #b94a48;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
