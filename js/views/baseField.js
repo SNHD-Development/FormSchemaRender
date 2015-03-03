@@ -68,6 +68,9 @@ define([
       console.log('[*] buildHtmlBasicFormMarkup');
       console.log(arguments);
     }
+    if (!field.attributes) {
+      field.attributes = {};
+    }
     if (!field.description) {
       throw 'Expected a "description" in buildHtmlBasicFormMarkup parameter.';
     }
@@ -80,6 +83,11 @@ define([
     var typeLower = field.type.toLowerCase();
     var className = '';
     switch (typeLower) {
+      case 'hidden':
+        defaultLabel = false;
+        var _val = field.attributes.value;
+        html = '<input type="hidden" name="' + field.name + '" value="' + _val + '"/>';
+        break;
       case 'textarea':
         html = '<textarea name="' + field.name + '" class="' + className + '" id="' + field.name + '"></textarea>';
         break;
