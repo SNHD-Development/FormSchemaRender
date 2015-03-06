@@ -197,6 +197,7 @@ These are the list of fields that currently support.
 + Fraction:
 + File:
 + MultiFiles:
++ FileRepository:
 + FullName:
 + Address:
 + State:
@@ -783,6 +784,20 @@ In order to validate file type, we can add "filetype" in the "Validation" field.
 
 Note: Since JavaPowUpload will send all the post data as AJAX, we then need to pass in jRedirect global variable in order to redirect after upload completed.
 
+### FileRepository Field
+
+This field type will allow us to keep file without deleting.
+Currently support in read mode only.
+
+    {
+        "Name": "UploadDocs",
+        "Type": "FileRepository",
+        "Description": "Upload Document",
+        "Options": {
+            "Url": "action"
+        }
+    }
+
 
 ### Date Field
 
@@ -1040,6 +1055,7 @@ Sometime there are some fileds that internal should not be able to update these 
 * 0.1.8
     - Escape html special character in Textarea
     - Adding Ability to have custom form within any buttons.
+    - Adding FileRepository type. Currently will show only on Read Mode.
 
 * 0.1.7
     - Sort Select by Values if the values are object

@@ -43,6 +43,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
         _typeLowerCase = value.type.toLowerCase();
         // Should bind Model?
         switch (_typeLowerCase) {
+          case 'filerepository':
           case 'radio':
             _addToModelBinder = false;
             break;

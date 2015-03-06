@@ -51,6 +51,7 @@ define([
         if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabelRead, value.type.toLowerCase()) === -1) {
           _html += that.renderLabel(value, false);
         }
+
         _html += _parentRender.call(that, value, true);
       });
       // not auto rendering the button

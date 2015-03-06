@@ -1,6 +1,49 @@
 /**
+ * Icons
+ */
+.show-ex-icon {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: 15px center; }
+  .show-ex-icon:hover p {
+    text-decoration: underline; }
+  .show-ex-icon.png {
+    background-image: url("./16px/png.png"); }
+  .show-ex-icon.jpg {
+    background-image: url("./16px/jpg.png"); }
+  .show-ex-icon.gif {
+    background-image: url("./16px/gif.png"); }
+  .show-ex-icon.doc {
+    background-image: url("./16px/doc.png"); }
+  .show-ex-icon.pdf {
+    background-image: url("./16px/pdf.png"); }
+  .show-ex-icon.ppt {
+    background-image: url("./16px/ppt.png"); }
+  .show-ex-icon.xls {
+    background-image: url("./16px/xls.png"); }
+  .show-ex-icon.xlsx {
+    background-image: url("./16px/xlsx.png"); }
+  .show-ex-icon.zip {
+    background-image: url("./16px/zip.png"); }
+  .show-ex-icon > p {
+    width: auto;
+    margin: 0 0 0 35px; }
+
+/**
  * Global Variables
  **/
+/**
+ * Text
+ */
+.text-left {
+  text-align: left !important; }
+
+.text-center {
+  text-align: center !important; }
+
+.text-right {
+  text-align: right !important; }
+
 /**
  * Override BootStrap
  */
@@ -77,6 +120,9 @@
    **/
   /**
    * For Modal
+   */
+  /**
+   * File Repository
    */ }
   .form-render label:hover {
     cursor: pointer; }
@@ -316,14 +362,17 @@
     width: 80%;
     height: auto;
     overflow: auto;
-    white-space: normal; }
+    white-space: normal;
+    min-height: 20px; }
     .form-render .uneditable-input.input-col2 {
       width: 40%; }
   .form-render .uneditable-input-textarea {
-    height: auto; }
+    height: auto;
+    min-height: 20px; }
   .form-render .uneditable-input-image {
     max-height: 250px;
-    max-width: 500px; }
+    max-width: 500px;
+    min-height: 20px; }
   .form-render .control-group .uneditable-input.input-col2 {
     width: 34%; }
   .form-render .emailpicker .add-on {
@@ -400,6 +449,27 @@
       .form-render .modal .modal-header h3 {
         font-size: 24.5px;
         font-weight: bold; }
+  .form-render .filerepository-wrapper {
+    padding: 0 20px; }
+    .form-render .filerepository-wrapper .filerepository-form-wrapper .icon-spinner {
+      margin: auto 20px; }
+    .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form {
+      padding: 0 20px 10px; }
+      .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form label, .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form textarea {
+        width: 98%;
+        margin: 8px auto; }
+      .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form label {
+        font-weight: bold; }
+      .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form textarea {
+        margin-bottom: 12px; }
+    .form-render .filerepository-wrapper .filerepository-form-wrapper .modal-footer .btn {
+      margin: auto 10px;
+      padding-left: 25px;
+      padding-right: 25px; }
+    .form-render .filerepository-wrapper .table td.show-ex-icon {
+      min-width: 150px; }
+    .form-render .filerepository-wrapper .table td img {
+      width: 80%; }
 
 /**
  * Override DatePicker

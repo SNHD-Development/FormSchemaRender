@@ -1,10 +1,13 @@
+'use strict';
+
 define([
   'jquery',
   'underscore',
   'backbone',
   'events'
 ], function($, _, Backbone, Events) {
-  var views = {}, countries = {
+  var views = {},
+    countries = {
       "US": "United States",
       "AF": "Afghanistan",
       "AX": "Aland Islands",
@@ -246,7 +249,8 @@ define([
       "YE": "Yemen",
       "ZM": "Zambia",
       "ZW": "Zimbabwe"
-    }, remove = function(name, clean) {
+    },
+    remove = function(name, clean) {
       clean = clean || false;
       if (typeof views[name] !== 'undefined') {
         views[name].undelegateEvents();
@@ -267,11 +271,14 @@ define([
 
       var view = new View(options);
       views[name] = view;
-      if (typeof context.children === 'undefined') {
-        context.children = {};
-        context.children[name] = view;
-      } else {
-        context.children[name] = view;
+
+      if (context) {
+        if (typeof context.children === 'undefined') {
+          context.children = {};
+          context.children[name] = view;
+        } else {
+          context.children[name] = view;
+        }
       }
       Events.trigger('viewCreated');
       return view;

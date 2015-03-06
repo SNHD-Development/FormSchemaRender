@@ -1,6 +1,7 @@
 /**
  * Main View Controller
  **/
+'use strict';
 
 define([
   'jquery',
@@ -19,6 +20,8 @@ define([
   'jquery.select2',
   'jloader'
 ], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
+
+  // Default Config
 
   function removePopover($ele) {
     $ele.attr('disabled', false)

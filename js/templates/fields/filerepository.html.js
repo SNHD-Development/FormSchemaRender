@@ -1,0 +1,1 @@
+define(function() { var str ='<div></div>';return str;});

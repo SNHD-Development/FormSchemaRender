@@ -1,4 +1,6 @@
 // Field Base Class
+'use strict';
+
 define([
   'jquery',
   'underscore',
@@ -28,6 +30,8 @@ define([
   'text!templates/fields/radio.html',
   'text!templates/fields/file.html',
   'text!templates/fields/multifiles.html',
+  'text!templates/fields/filerepository.html',
+  'text!templates/fields/read-filerepository.html',
   'text!templates/fields/state.html',
   'text!templates/fields/county.html',
   'text!templates/fields/zipcode.html',
@@ -56,7 +60,7 @@ define([
   'jquery.datepicker',
   'jquery.birthdaypicker',
   'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, socialsecurityTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, socialsecurityTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, filerepositoryTemplate, readFilerepositoryTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
   // Debug Flag
   var DEBUG = false;
 
@@ -196,6 +200,8 @@ define([
         'radio': _.template(radioTemplate),
         'file': _.template(fileTemplate),
         'multifiles': _.template(multifilesTemplate),
+        'filerepository': _.template(filerepositoryTemplate),
+        'read-filerepository': _.template(readFilerepositoryTemplate),
         'state': _.template(stateTemplate),
         'county': _.template(countyTemplate),
         'zipcode': _.template(zipcodeTemplate),
@@ -322,6 +328,18 @@ define([
 
           if (this.options.mode === 'read') {
             _type = 'file';
+          }
+          break;
+
+        case 'filerepository':
+          if (this.options.mode !== 'read') {
+            return '';
+          }
+          // Render In Read Mode
+
+          // Need URL Parameter
+          if (!field.options.url) {
+            throw 'Expected Url parameter in Options Key for "' + field.name + '".';
           }
           break;
 
@@ -1249,6 +1267,14 @@ define([
             value: _field_data,
             id: field.name
           });
+        } else if (_type === 'filerepository') {
+          // Render File Repository Here
+          // XXX: working on reder this field
+          _html += that.inputTemplate['read-filerepository'](_.extend({
+            data: this.options.formData.fields[field.name],
+            formId: this.options.formData._id.$oid,
+            Utils: Utils
+          }, field));
         } else {
           var _textarea = '';
           switch (_type) {
@@ -1352,6 +1378,11 @@ define([
         this._visibleOn.push(field);
       }
 
+      // Just Show Warning
+      if (field && field.type && !this.inputTemplate[_type] && console && console.warn) {
+        console.warn('[x] Template for "' + field.type + '" does not existed.');
+      }
+
       return _html;
     },
     /**
@@ -1411,6 +1442,14 @@ define([
       // First Check to see if rendering for internal or external
       if (value.options.internal != undefined && (value.options.internal !== this.options.internal)) {
         return false;
+      }
+
+      // These Field Type will render on Read Mode Only
+      switch (_type) {
+        case 'filerepository':
+          if (this.options.mode !== 'read') {
+            return false;
+          }
       }
 
       // If this is internal fields, we need to push to _internalFields array

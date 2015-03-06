@@ -1,0 +1,47 @@
+/**
+ * Icons
+ */
+
+$base_url: "./16px";
+
+.show-ex-icon {
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: 15px center;
+    &:hover {
+        p {
+            text-decoration: underline;
+        }
+    }
+    &.png {
+        background-image: url($base_url + "/png.png");
+    }
+    &.jpg {
+        background-image: url($base_url + "/jpg.png");
+    }
+    &.gif {
+        background-image: url($base_url + "/gif.png");
+    }
+    &.doc {
+        background-image: url($base_url + "/doc.png");
+    }
+    &.pdf {
+        background-image: url($base_url + "/pdf.png");
+    }
+    &.ppt {
+        background-image: url($base_url + "/ppt.png");
+    }
+    &.xls {
+        background-image: url($base_url + "/xls.png");
+    }
+    &.xlsx {
+        background-image: url($base_url + "/xlsx.png");
+    }
+    &.zip {
+        background-image: url($base_url + "/zip.png");
+    }
+    > p {
+        width: auto;
+        margin: 0 0 0 35px;
+    }
+}

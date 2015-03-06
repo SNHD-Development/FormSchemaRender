@@ -69,6 +69,7 @@
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
     bootstrap: 'libs/bootstrap/bootstrap',
     json: 'libs/json/json3.min',
+    moment: 'libs/moment',
 
     // Backbone Plugin
     modelbinder: 'libs/backbone-binder/Backbone.ModelBinder.min',

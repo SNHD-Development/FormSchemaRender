@@ -17,6 +17,7 @@ require.config({
     backbone: 'libs/backbone/backbone-min', // https://github.com/amdjs
     bootstrap: 'libs/bootstrap/bootstrap',
     json: 'libs/json/json3.min',
+    moment: 'libs/moment',
 
     // Backbone Plugin
     modelbinder: 'libs/backbone-binder/Backbone.ModelBinder.min',
@@ -136,7 +137,8 @@ require([
   'views/app',
   'vm',
   'utils',
-  'libs/date'
+  'libs/date',
+  'moment'
 ], function($, AppView, Vm, Utils) {
 
   // Prevent IE 9 and Below for console object

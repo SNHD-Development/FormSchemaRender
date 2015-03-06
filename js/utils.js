@@ -2,6 +2,8 @@
  * Utilities Functions
  * Events
  **/
+'use strict';
+
 define([
   'jquery',
   'underscore',
@@ -45,6 +47,10 @@ define([
   }
 
   return {
+    config: {
+      fileUrl: '/form/getFile'
+    },
+
     renderError: function($container, err) {
       $container.html('<div class="alert alert-danger"><i class="icon-wrench"></i> <strong>Error: Please refresh this page and try again.</strong> <br> ' + err + '</div>');
     },
@@ -1092,8 +1098,7 @@ define([
             src: $this.attr('href'),
             error: function() {
               $this.hide();
-              $this.next('.btn')
-                .show();
+              $this.next('.lightbox-fallback').show();
             }
           });
         });
@@ -1373,8 +1378,7 @@ define([
             src: $this.attr('href'),
             error: function() {
               $this.hide();
-              $this.next('.btn')
-                .show();
+              $this.next('.lightbox-fallback').show();
             }
           });
         });
@@ -1449,18 +1453,24 @@ define([
           }
         }).width(maxWidth);
       });
+
+      // Setup FileRepository Events
+      this.setupFileRepositoryEvent($form);
     },
     /**
      * Setup Read Mode
      * Check for valid data to be rendered
      **/
     isRenderReadMode: function(view, value) {
-
+      var alwaysAllow = [
+        'buttonclipboard',
+        'filerepository'
+      ];
       var _type = value.type.toLowerCase();
 
       if (value.options.internal && (value.options.internal !== view.options.internal)) {
         return false;
-      } else if (_type === 'buttonclipboard') {
+      } else if (_.indexOf(alwaysAllow, _type) > -1) {
         return true;
       } else if (view.options.formData.fields[value.name] === '') {
         return false;
@@ -2600,6 +2610,63 @@ define([
       return url;
     },
 
+    /**
+     * Setup FileRepo Event
+     */
+    setupFileRepositoryEvent: function($view) {
+      var self = this;
+      if (!$view.length) {
+        throw 'setupFileRepositoryEvent form not found.';
+      }
+      $view.on('hidden', '.filerepository-form-wrapper', function() {
+        var $this = $(this);
+        $this.find(':input').removeClass('invalid').each(function() {
+          var $input = $(this);
+          $input.val('');
+        });
+      }).on('click', '.filerepository-button', function(e) {
+        e.preventDefault();
+        var $btn = $(e.currentTarget);
+        var $wrapper = $btn.closest('.filerepository-wrapper');
+        $wrapper.find('.filerepository-form-wrapper').modal('show');
+        return false;
+      }).on('click', '.filerepository-form-wrapper .btn-submit-filerepository', function(e) {
+        e.preventDefault();
+        // Validate Form
+        var $modal = $(e.currentTarget).closest('.filerepository-form-wrapper');
+        var $form = $modal.find('.filerepository-form');
+        var $inputs = $(':input', $form);
+        var formError = false;
+        $inputs.each(function() {
+          var $input = $(this);
+          var _val = $input.val();
+          var error = false;
+          if (!_val || _val === '') {
+            error = true;
+            formError = true;
+          }
+          if (error) {
+            $input.addClass('invalid');
+          } else {
+            $input.removeClass('invalid');
+          }
+        });
+        if (formError) {
+          return false;
+        }
+        var $footer = $modal.find('.modal-footer');
+        $footer.find('.btn').fadeOut();
+        $modal.find('.modal-body .alert').html('<i class="icon-spinner icon-spin icon-large"></i> Sending information, please wait.');
+        // Pass Validation
+        // Build HTML Form and submit
+        self.buildFormAppendToBody($inputs.parent(), $modal.attr('data-url'));
+        return false;
+      });
+    },
+
+    /**
+     * Set Up US County
+     */
     setupCounty: function($markup) {
       var $county = $markup.find('.select2-county');
       if (!$().select2) {
@@ -2653,6 +2720,21 @@ define([
           $this.select2('val', _deVal);
         }
       });
+    },
+
+    /**
+     * Utilities for Buildding the Form by $inputs
+     * @param  object $input
+     */
+    buildFormAppendToBody: function($formWrapper, url) {
+      // Build Form
+      if (!url || url === '' || typeof url !== 'string') {
+        throw 'Expected url to be a valid string.'
+      }
+      var form = $('<form action="' + url + '" method="POST" enctype="multipart/form-data"></form>');
+      form.append($formWrapper);
+      form.appendTo('body');
+      form.submit();
     }
   };
 });
