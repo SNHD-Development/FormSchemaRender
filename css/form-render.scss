@@ -635,22 +635,23 @@ $text_area_min_height: 100px;
      */
     .filerepository-wrapper {
         padding: 0 20px;
+        margin-bottom: 20px;
+        .filerepository-form {
+            padding: 0 20px 10px;
+            label, input, textarea {
+                width: 98%;
+                margin: 8px auto;
+            }
+            label {
+                font-weight: bold;
+            }
+            input, textarea {
+                margin-bottom: 12px;
+            }
+        }
         .filerepository-form-wrapper {
             .icon-spinner {
                 margin: auto 20px;
-            }
-            .filerepository-form {
-                padding: 0 20px 10px;
-                label, input, textarea {
-                    width: 98%;
-                    margin: 8px auto;
-                }
-                label {
-                    font-weight: bold;
-                }
-                input, textarea {
-                    margin-bottom: 12px;
-                }
             }
             .modal-footer {
                 .btn {
@@ -670,6 +671,16 @@ $text_area_min_height: 100px;
                 }
             }
         }
+    }
+    /**
+     * Field UI Helper
+     */
+    .sub-fields-box {
+        margin-top: 15px;
+        padding: 10px 30px !important;
+        border: 1px solid #ccc;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+        border-radius: 4px;
     }
 }
 

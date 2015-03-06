@@ -787,7 +787,7 @@ Note: Since JavaPowUpload will send all the post data as AJAX, we then need to p
 ### FileRepository Field
 
 This field type will allow us to keep file without deleting.
-Currently support in read mode only.
+In Read Mode, can submit a new file.
 
     {
         "Name": "UploadDocs",

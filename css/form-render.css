@@ -123,6 +123,9 @@
    */
   /**
    * File Repository
+   */
+  /**
+   * Field UI Helper
    */ }
   .form-render label:hover {
     cursor: pointer; }
@@ -450,18 +453,19 @@
         font-size: 24.5px;
         font-weight: bold; }
   .form-render .filerepository-wrapper {
-    padding: 0 20px; }
-    .form-render .filerepository-wrapper .filerepository-form-wrapper .icon-spinner {
-      margin: auto 20px; }
-    .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form {
+    padding: 0 20px;
+    margin-bottom: 20px; }
+    .form-render .filerepository-wrapper .filerepository-form {
       padding: 0 20px 10px; }
-      .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form label, .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form textarea {
+      .form-render .filerepository-wrapper .filerepository-form label, .form-render .filerepository-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form textarea {
         width: 98%;
         margin: 8px auto; }
-      .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form label {
+      .form-render .filerepository-wrapper .filerepository-form label {
         font-weight: bold; }
-      .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form-wrapper .filerepository-form textarea {
+      .form-render .filerepository-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form textarea {
         margin-bottom: 12px; }
+    .form-render .filerepository-wrapper .filerepository-form-wrapper .icon-spinner {
+      margin: auto 20px; }
     .form-render .filerepository-wrapper .filerepository-form-wrapper .modal-footer .btn {
       margin: auto 10px;
       padding-left: 25px;
@@ -470,6 +474,12 @@
       min-width: 150px; }
     .form-render .filerepository-wrapper .table td img {
       width: 80%; }
+  .form-render .sub-fields-box {
+    margin-top: 15px;
+    padding: 10px 30px !important;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border-radius: 4px; }
 
 /**
  * Override DatePicker

@@ -332,11 +332,6 @@ define([
           break;
 
         case 'filerepository':
-          if (this.options.mode !== 'read') {
-            return '';
-          }
-          // Render In Read Mode
-
           // Need URL Parameter
           if (!field.options.url) {
             throw 'Expected Url parameter in Options Key for "' + field.name + '".';
@@ -1442,14 +1437,6 @@ define([
       // First Check to see if rendering for internal or external
       if (value.options.internal != undefined && (value.options.internal !== this.options.internal)) {
         return false;
-      }
-
-      // These Field Type will render on Read Mode Only
-      switch (_type) {
-        case 'filerepository':
-          if (this.options.mode !== 'read') {
-            return false;
-          }
       }
 
       // If this is internal fields, we need to push to _internalFields array
