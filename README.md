@@ -52,17 +52,32 @@ Load JS with RequireJS
 Example:
 
 	<script type="text/javascript">
-		var language = "en"
+		var language = 'en'
 		, formSchema = {}
 		, formActionUrl = '/action'
 		, formData = {}
-		, mode = ""
-		, view = ""
-		, token = ""
+		, mode = ''
+		, view = ''
+		, token = ''
 		, internal = boolean
 		, formEvents = { event : function }
 		, hideButtons = false;
 	</script>
+
+
+__Note:__
+Adding ability to perform field level updating in Read Mode.
+Simply put "UpdateOnReadMode" to "true" in "Options" at the Field level.
+
+    {
+        "Name": "UpdateOnReadMode",
+        "Type": "TextBox",
+        "Description": "Update On Read Mode",
+        "Options": {
+            "UpdateOnReadMode": true
+        }
+    }
+
 
 ### HTML Markup
 	<div id="app">
@@ -123,19 +138,19 @@ Normal Form POST will be function (e, submitEvent, $form)
 Then you need to pass your custom event into
 
 	var formEvents = {
-        "init": function(options) {
+        init: function(options) {
             console.log('init event');
         },
-		"renderCompleted" : function(e, view) {
+		renderCompleted : function(e, view) {
 			console.log('Render Form Completed.');
 		},
-		"preValidation": function (e, originalEvent, $form, form) {
+		preValidation: function (e, originalEvent, $form, form) {
 			console.log('Before Validating this form.');
 		},
-		"preSubmit" : function(e, formData, jqForm, options) {
+		preSubmit : function(e, formData, jqForm, options) {
 			console.log('Before Submitting this form.');
 		},
-		"postSubmit" : function (e, responseText, _jsonText, statusText, xhr, $form) {
+		postSubmit : function (e, responseText, _jsonText, statusText, xhr, $form) {
 			console.log('Let\'s check the respond.');
 		}
 	};
@@ -143,17 +158,17 @@ Then you need to pass your custom event into
 Or we can add this key to the FormSchema as well.
 
 	{
-		Events: {
-			'renderCompleted' : "function(e, view) {
+		"Events": {
+			"renderCompleted" : "function(e, view) {
 				console.log('Render Form Completed.');
 			}",
-			'preValidation': function (e, originalEvent, $form, form) {
+			"preValidation": function (e, originalEvent, $form, form) {
 				console.log('Before Validating this form.');
 			},
-			'preSubmit' : "function(e, formData, jqForm, options) {
+			"preSubmit" : "function(e, formData, jqForm, options) {
 				console.log('Before Submitting this form.');
 			}",
-			'postSubmit' : "function (e, responseText, _jsonText, statusText, xhr, $form) {
+			"postSubmit" : "function (e, responseText, _jsonText, statusText, xhr, $form) {
 				console.log('Let\'s check the respond.');
 			}"
 		}
@@ -170,7 +185,7 @@ By default will render with Description in en mode.
 		"Type" : "TextBox",
 		"Description" : "What Language is this?",
 		"Languages": {
-			"sp": "¿Qué idioma habla?"
+			"sp": "&iquest;Qu&eacute; idioma habla?"
 		}
 	}
 
@@ -709,9 +724,9 @@ VisibleOn Options
 		}
 	},
 	{
-		Name: "Test",
-		Type: "HTML",
-		Description: "<div>Hello to 'Option 2' or 'Option 4'</div>",
+		"Name": "Test",
+		"Type": "HTML",
+		"Description": "<div>Hello to 'Option 2' or 'Option 4'</div>",
 		"Options": {
 			"VisibleOn": {
 				"Name": "SelectMe",
@@ -726,12 +741,12 @@ VisibleOn Options
 Validation FormSchema
 
 	{
-		Validation: {
-			SelectMe: {
-				required: true
+		"Validation": {
+			"SelectMe": {
+				"required": true
 			},
-			OptionOne: {
-				required: true
+			"OptionOne": {
+				"required": true
 			}
 		}
 	}
@@ -743,18 +758,18 @@ By passing, `Options.CopyValuesFrom = "Name of the field that we want to copy da
 Note: in order to make this work, it must be the same field type.
 
 	{
-		Name: "MyBillingAddress",
-		Type: "Address",
-		Description: "Your Billing Address"
+		"Name": "MyBillingAddress",
+		"Type": "Address",
+		"Description": "Your Billing Address"
 	},
 	{
-		Name: "MyShippingAddress",
-		Type: "Address",
-		Description: "Your Shipping Address",
-		Options: {
-			CopyValuesFrom: {
-				Name: "MyBillingAddress",
-				Description: "Is your shipping same as billing address?"
+		"Name": "MyShippingAddress",
+		"Type": "Address",
+		"Description": "Your Shipping Address",
+		"Options": {
+			"CopyValuesFrom": {
+				"Name": "MyBillingAddress",
+				"Description": "Is your shipping same as billing address?"
 			}
 		}
 	}
@@ -806,35 +821,35 @@ By default `Type = "Date"` will render as DatePicker, However sometime it is ver
 To render time, pass option "Render": "DateTime"
 
 	{
-		Name: "MyDate",
-		Type: "Date",
-		Description: "Your DatePicker",
-		Options: {
-			Render: "Datepicker"
+		"Name": "MyDate",
+		"Type": "Date",
+		"Description": "Your DatePicker",
+		"Options": {
+			"Render": "Datepicker"
 		}
 	}
 
 	{
-		Name: "MySecondDate",
-		Type: "Date",
-		Description: "Your Birthday",
-		Options: {
-			Render: "Select"
+		"Name": "MySecondDate",
+		"Type": "Date",
+		"Description": "Your Birthday",
+		"Options": {
+			"Render": "Select"
 		}
 	}
 
 Validation FormSchema
 
 	{
-		Validation: {
-			MyDate: {
-				required: true,
-				maxDate: "today",
-				minDate: "01/01/1950"
+		"Validation": {
+			"MyDate": {
+				"required": true,
+				"maxDate": "today",
+				"minDate": "01/01/1950"
 			},
-			MySecondDate: {
-				required: true,
-				maxDate: "08/14/1995"
+			"MySecondDate": {
+				"required": true,
+				"maxDate": "08/14/1995"
 			}
 		}
 	}
@@ -895,7 +910,7 @@ When we want to control the flow of the form, we can have the button to look up 
 Return JSON Format (Required)
 
 	{
-		value: "any value that will return, this will trigger the button decision"
+		"value": "any value that will return, this will trigger the button decision"
 	}
 
 FormSchema:
@@ -946,21 +961,21 @@ Options.RenderResult: If there might some chance that the data might return more
 Return JSON Format (Required)
 
 	{
-		value: "any value that will return, if data existed in the JSON result. This will be ignored.",
-		data: {
-			caption: "Table Caption",
-			thead: {
-				key: value
+		"value": "any value that will return, if data existed in the JSON result. This will be ignored.",
+		"data": {
+			"caption": "Table Caption",
+			"thead": {
+				"key": "value"
 			},
-			data: {
-				data1 : {
-					key: value
+			"data": {
+				"data1" : {
+					"key": "value"
 				},
-				data2 : {
-					key: value
+				"data2" : {
+					"key": "value"
 				}
 			},
-			hiddenfields: [
+			"hiddenfields": [
 				'key1', 'key2'
 			]
 		}
@@ -973,10 +988,10 @@ Sometime in read mode, you want to provide the easy way for copy multiple text a
 This Field Type will only work in read mode and when user "click" the button. It will automatic copy into their clipboard.
 
 	{
-		Name : "CopyShippingInfo",
-		Type : "ButtonClipboard",
-		Description : "Copy Shipping Information",
-		Values : [ "ShippingName", "ShippingAddress" ]
+		"Name": "CopyShippingInfo",
+		"Type": "ButtonClipboard",
+		"Description": "Copy Shipping Information",
+		"Values": [ "ShippingName", "ShippingAddress" ]
 	}
 
 ### List Type (Sub Form)
@@ -1056,6 +1071,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Escape html special character in Textarea
     - Adding Ability to have custom form within any buttons.
     - Adding FileRepository type. Currently will show only on Read Mode.
+    - Adding "UpdateOnReadMode" key in "Options" to allow simple field update on read mode.
 
 * 0.1.7
     - Sort Select by Values if the values are object

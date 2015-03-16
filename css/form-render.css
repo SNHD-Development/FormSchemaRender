@@ -1,6 +1,12 @@
 /**
  * Icons
  */
+@import url(./humane-themes/bigbox.css);
+@import url(./humane-themes/boldlight.css);
+@import url(./humane-themes/jackedup.css);
+@import url(./humane-themes/libnotify.css);
+@import url(./humane-themes/original.css);
+@import url(./humane-themes/flatty.css);
 .show-ex-icon {
   position: relative;
   background-repeat: no-repeat;
@@ -30,8 +36,18 @@
     margin: 0 0 0 35px; }
 
 /**
+ * Libraries
+ */
+/** humane **/
+/**
  * Global Variables
  **/
+/**
+ * Visibility
+ */
+.force-hide {
+  display: none !important; }
+
 /**
  * Text
  */
@@ -329,7 +345,10 @@
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
   .form-render.read-mode {
     /** Tags **/
-    /** Table Sorter **/ }
+    /** Table Sorter **/
+    /**
+     * For Update on Read Mode
+     */ }
     .form-render.read-mode fieldset.table-view {
       margin-bottom: 30px; }
     .form-render.read-mode .read-checkbox {
@@ -361,6 +380,23 @@
     .form-render.read-mode .stupidtable th:hover {
       cursor: pointer;
       text-decoration: underline; }
+    .form-render.read-mode .update-on-read-mode:hover {
+      /**
+       * Show Edit Icon
+       */ }
+      .form-render.read-mode .update-on-read-mode:hover:after {
+        color: #08c;
+        content: "\f044";
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: 400;
+        margin-left: 8px;
+        transition: all 0.1s ease-in 0s;
+        font-size: 16px; }
+    .form-render.read-mode .update-on-read-mode [class*='input-'] {
+      width: 80%; }
+    .form-render.read-mode .update-on-read-mode .uneditable-input:hover {
+      cursor: pointer; }
   .form-render .uneditable-input {
     width: 80%;
     height: auto;

@@ -2,13 +2,13 @@
  * Utilities Functions
  * Events
  **/
-'use strict';
-
 define([
   'jquery',
   'underscore',
   'backbone',
   'vm',
+  'humane',
+  'models/form',
   'select2helper',
   'text!data/county.json',
   'bootstrap',
@@ -20,7 +20,15 @@ define([
   'jquery.zclip',
   'jquery.stupidtable',
   'xdr'
-], function($, _, Backbone, Vm, Select2Helper, countyData) {
+], function($,
+  _,
+  Backbone,
+  Vm,
+  humane,
+  FormModel,
+  Select2Helper,
+  countyData
+) {
 
   /**
    * Setup DependOn Options (Values)
@@ -530,7 +538,7 @@ define([
             if (_day < 10) {
               _day += 0 + _day;
             }
-            _val = _month + '/' + _day + '/' + _year
+            _val = _month + '/' + _day + '/' + _year;
             $bdateInput.val();
           }
 
@@ -598,12 +606,12 @@ define([
               if (!fViewArr[targetDate] || !fViewArr[targetDate].element) {
                 throw 'Could not be able to find Datepicker Object with "' + targetDate + '"!';
               }
-              var _cmd;
+              var _cmd, _today;
               if ($this.attr('data-maxdate')) {
-                var _today = new Date();
+                _today = new Date();
                 _cmd = fViewArr[targetDate].element.date.valueOf() + " " + logicOpts.comparison + "  " + date.valueOf() + " || " + date.valueOf() + "  > " + _today.getTime() + " ? 'disabled' : ''";
               } else if ($this.attr('data-mindate')) {
-                var _today = new Date();
+                _today = new Date();
                 _cmd = fViewArr[targetDate].element.date.valueOf() + " " + logicOpts.comparison + "  " + date.valueOf() + " || " + date.valueOf() + "  < " + _today.getTime() + " ? 'disabled' : ''";
               } else {
                 _cmd = fViewArr[targetDate].element.date.valueOf() + " " + logicOpts.comparison + " " + date.valueOf() + " ? 'disabled' : ''";
@@ -1160,7 +1168,11 @@ define([
           // If this is internal, will not render the button. Will render only hidden input.
           if (view.options.internal === true) {
             var $btnContainer = $btn_decision.parents('.control-group');
-            ($btnContainer.length > 0) ? $btnContainer.hide(): $btn_decision.hide();
+            if ($btnContainer.length > 0) {
+              $btnContainer.hide();
+            } else {
+              $btn_decision.hide();
+            }
             return true;
           }
 
@@ -1353,6 +1365,92 @@ define([
      **/
     finalReadSetup: function(view) {
       var $form = $(view.el);
+
+      if (!$form.length) {
+        throw '[x] finalReadSetup: could not be able to find form.';
+      }
+      var formId = view.options.formData._id.$oid;
+      if (typeof formId !== 'string' || formId === '') {
+        throw 'FormID is invalid. Requires a valid string.';
+      }
+      var timeOut = 3000;
+      var bigbox = humane.create({
+        baseCls: 'humane-bigbox',
+        timeout: timeOut,
+        clickToClose: false,
+        waitForMove: false
+      });
+      bigbox.error = bigbox.spawn({
+        addnCls: 'humane-bigbox-error'
+      });
+
+      // Attched Event for Update on Read Mode
+      // Set Up for Update On Read Mode
+      $form.on('click', '.update-on-read-mode', function(e) {
+        var $currentTarget = $(e.currentTarget);
+        e.preventDefault();
+        var DEBUG = false;
+        if (DEBUG) {
+          console.log('[*] finalReadSetup:click - update-on-read-mode');
+          console.log(arguments);
+          console.log($currentTarget);
+        }
+        if ($currentTarget.hasClass('ajax')) {
+          return false;
+        }
+        $currentTarget.addClass('ajax');
+
+        // Load Form Model.
+        var formModel = new FormModel({
+          id: formId
+        });
+        formModel.fetch({
+          success: function() {
+            var newValue = formModel.get('Fields');
+            if (DEBUG) {
+              console.log('[*] Success getting "' + formId + '"');
+              console.log(arguments);
+              console.log(formModel.toJSON());
+              console.log(newValue);
+            }
+            var inputName = $currentTarget.attr('data-field-name');
+            if (typeof inputName !== 'string' || inputName === '') {
+              throw 'Could not be able to find Field Name.';
+            }
+            var $currentInput = $currentTarget.find(':input[name="' + inputName + '"]');
+            if (!$currentInput.length) {
+              throw 'Error: Could not be able to find input name.';
+            }
+            if (typeof newValue[inputName] === 'undefined') {
+              throw 'Response: Field "' + inputName + '" is invalid.';
+            }
+            $currentInput.val(newValue[inputName]);
+            // Hide this and change to input instead
+            var $span = $currentTarget.find('#' + inputName);
+            if (!$span.length) {
+              throw 'Error: Could not be able to find span for "' + inputName + '".';
+            }
+            $span.html(newValue[inputName]).fadeOut('slow', function() {
+              // Now show the input
+              $currentInput.hide(function() {
+                $currentInput.removeClass('force-hide').fadeIn('slow');
+              });
+            });
+          },
+          error: function() {
+            if (console && console.error) {
+              console.error('[x] Error getting "' + formId + '"');
+              console.error(arguments);
+            }
+            bigbox.error('Error: Could not get data.');
+            setTimeout(function() {
+              $currentTarget.removeClass('ajax');
+            }, timeOut);
+          }
+        });
+        return false;
+      });
+
       // Attach Click Event to Copy to the Clipboard
       if (view._buttonClipboards.length > 0) {
         _.each(view._buttonClipboards, function(element) {
@@ -1389,7 +1487,7 @@ define([
         $form.on('click', '.btn-confirmed', function(e) {
           e.preventDefault();
           var $this = $(this);
-          _yes = $this.attr('data-href') || false;
+          var _yes = $this.attr('data-href') || false;
           if (!_yes) {
             $btnConfirmed.each(function(_index) {
               $(this)
@@ -1537,7 +1635,7 @@ define([
      * Reset Placeholder in older browser
      **/
     resetPlaceHolderValue: function(el) {
-      _isSetting = $(':input.placeholder', el);
+      var _isSetting = $(':input.placeholder', el);
       _isSetting.each(function() {
         var $this = $(this);
         if ($this.attr('placeholder') === $this.val()) {
@@ -1893,9 +1991,8 @@ define([
                           } else if (typeof value === 'object') {
                             // If there is the View and Data in them means we need to render the view for user to select
 
+                            var _listName;
                             if (value.length) {
-
-                              var _listName;
                               _.some(value[0], function(listValue, listKey) {
                                 _listName = listKey.split('_')
                                   .shift();
@@ -1906,7 +2003,6 @@ define([
                               $('#subform_' + _listName, $form).trigger('subform_' + _listName + '.ajaxUpdate', [value]);
 
                             } else if (value.data && value.view && value.title) {
-                              var _listName;
                               _.some(value.data[0], function(listValue, listKey) {
                                 _listName = listKey.split('_')
                                   .shift();
@@ -2246,8 +2342,8 @@ define([
           $parent = $this.parentsUntil('form', 'div.address-fieldset'),
           $select = $parent.find('select.us-state'),
           $input = $parent.find('input.us-state'),
-          $zip = $parent.find('input.postal-code');
-        _val = $this.val();
+          $zip = $parent.find('input.postal-code'),
+          _val = $this.val();
         if (_val === $this.attr('data-value')) {
           return;
         }
@@ -2313,7 +2409,7 @@ define([
           _t_2 = 'Please try again.';
       }
 
-      _opt = {
+      var _opt = {
         html: true,
         placement: 'top',
         trigger: 'manual',
@@ -2729,12 +2825,23 @@ define([
     buildFormAppendToBody: function($formWrapper, url) {
       // Build Form
       if (!url || url === '' || typeof url !== 'string') {
-        throw 'Expected url to be a valid string.'
+        throw 'Expected url to be a valid string.';
       }
       var form = $('<form action="' + url + '" method="POST" enctype="multipart/form-data"></form>');
       form.append($formWrapper);
       form.appendTo('body');
       form.submit();
+    },
+
+    /**
+     * Perform Final Setup for All modes
+     */
+    finalSetupAllMode: function(view) {
+      var $form = $(view.el);
+      if (!$form.length) {
+        throw '[x] finalSetupAllMode: could not be able to find form.';
+      }
     }
+
   };
 });

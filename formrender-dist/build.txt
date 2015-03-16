@@ -7,6 +7,8 @@ libs/underscore/underscore-min.js
 libs/backbone/backbone-min.js
 events.js
 vm.js
+libs/humane.min.js
+models/form.js
 libs/bootstrap/bootstrap.js
 libs/select2/select2.min.js
 select2helper.js

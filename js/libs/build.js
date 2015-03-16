@@ -70,6 +70,7 @@
     bootstrap: 'libs/bootstrap/bootstrap',
     json: 'libs/json/json3.min',
     moment: 'libs/moment',
+    humane: 'libs/humane.min',
 
     // Backbone Plugin
     modelbinder: 'libs/backbone-binder/Backbone.ModelBinder.min',

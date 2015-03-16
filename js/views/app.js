@@ -59,21 +59,33 @@ define([
       });
 
       if (typeof this.options.mode !== 'undefined' && this.options.mode === 'read') {
-        $('#' + that.options.formSchema.name, that.el)
-          .addClass('read-mode');
+        $('#' + that.options.formSchema.name, that.el).addClass('read-mode');
+        // Async Call
         require(['views/readonly/' + formLayout], function(ReadView) {
-          var readView = Vm.create(that, 'ReadView', ReadView, _opts);
-          readView.render();
+          try {
+            var readView = Vm.create(that, 'ReadView', ReadView, _opts);
+            readView.render();
 
-          Utils.finalReadSetup(readView);
-          // Render Form Complete
-          // Send view at second parameter
-          $('#' + that.options.formSchema.name, that.el)
-            .trigger(that.options.formSchema.name + '.renderCompleted', that);
+            Utils.finalReadSetup(readView);
+            // Render Form Complete
+            // Send view at second parameter
+            $('#' + that.options.formSchema.name, that.el)
+              .trigger(that.options.formSchema.name + '.renderCompleted', that);
+
+            // Final Setup for All Mode
+            Utils.finalSetupAllMode(readView);
+          } catch (err) {
+            if (console && console.error) {
+              console.error('[x] Rendering Read Mode Error');
+              console.error(err);
+            }
+            Utils.renderError($(readView.el), err);
+          }
         });
       } else {
         // Will render Form
         // Render Form Layout
+        // Async Call
         require(['views/form-layouts/' + formLayout], function(FormView) {
           try {
             that.formView = Vm.create(that, 'FormView', FormView, _opts);
@@ -87,63 +99,74 @@ define([
             return;
           }
 
-          if (that.formView._hasDate) {
-            that.setupDateInput(null, that);
+          try {
+            if (that.formView._hasDate) {
+              that.setupDateInput(null, that);
+            }
+            if (that.formView._hasBDate) {
+              that.setupBDateInput();
+            }
+            if (that.formView._hasEmailPicker) {
+              that.setupEmailInput();
+            }
+
+            // Attached Address Event
+            Utils.setupAddressEvent(that.el, that);
+
+            // Setup Spinner
+            Utils.setupSpinner(that.el, that.formView.options.mode);
+
+            // Placeholder Setup for Older Browser
+            Utils.setupPlaceHolder(that.el);
+
+            // Setup Files Input
+            Utils.setupFileInput(that.el);
+
+            // Final Setup
+            Utils.finalSetup(that.formView);
+
+            // Final Setup for All Mode
+            Utils.finalSetupAllMode(that.formView);
+
+            // Render Form Complete
+            // Send view at second parameter
+            $('#' + that.options.formSchema.name, that.el)
+              .trigger(that.options.formSchema.name + '.renderCompleted', that);
+
+            // Set the Action if has one
+            var $form = $(that.el)
+              .find('form.form-render');
+            if (that.options.formActionUrl) {
+              $form.attr('action', that.options.formActionUrl);
+            }
+
+            // Render the buttons
+            // Check for the .form-actions class
+            var $formButtons = $('div.form-actions', $form);
+
+            // If we have JavaUpload Need to Start it here
+            if (that.formView._javaUpload.length > 0) {
+              that.setupJavaUpload(that.formView._javaUpload);
+            }
+
+            // Set Up Ajax Call
+            Utils.setupUrlAjaxCall($('form.form-render'));
+
+            // Set Up Select2 when having class .
+            Utils.setupSelect2(that.formView);
+
+            // Bind Model Here
+            that.formView._modelBinder.bind(that.formView.model, that.formView.el, that.formView.model.bindings);
+            Backbone.Validation.bind(that.formView, {
+              forceUpdate: true
+            });
+          } catch (err) {
+            if (console && console.error) {
+              console.error('[x] Rendering ' + that.options.mode + ' Mode Error');
+              console.error(err);
+            }
+            Utils.renderError($(that.formView.el), err);
           }
-          if (that.formView._hasBDate) {
-            that.setupBDateInput();
-          }
-          if (that.formView._hasEmailPicker) {
-            that.setupEmailInput();
-          }
-
-          // Attached Address Event
-          Utils.setupAddressEvent(that.el, that);
-
-          // Setup Spinner
-          Utils.setupSpinner(that.el, that.formView.options.mode);
-
-          // Placeholder Setup for Older Browser
-          Utils.setupPlaceHolder(that.el);
-
-          // Setup Files Input
-          Utils.setupFileInput(that.el);
-
-          // Final Setup
-          Utils.finalSetup(that.formView);
-
-          // Render Form Complete
-          // Send view at second parameter
-          $('#' + that.options.formSchema.name, that.el)
-            .trigger(that.options.formSchema.name + '.renderCompleted', that);
-
-          // Set the Action if has one
-          var $form = $(that.el)
-            .find('form.form-render');
-          if (that.options.formActionUrl) {
-            $form.attr('action', that.options.formActionUrl);
-          }
-
-          // Render the buttons
-          // Check for the .form-actions class
-          var $formButtons = $('div.form-actions', $form);
-
-          // If we have JavaUpload Need to Start it here
-          if (that.formView._javaUpload.length > 0) {
-            that.setupJavaUpload(that.formView._javaUpload);
-          }
-
-          // Set Up Ajax Call
-          Utils.setupUrlAjaxCall($('form.form-render'));
-
-          // Set Up Select2 when having class .
-          Utils.setupSelect2(that.formView);
-
-          // Bind Model Here
-          that.formView._modelBinder.bind(that.formView.model, that.formView.el, that.formView.model.bindings);
-          Backbone.Validation.bind(that.formView, {
-            forceUpdate: true
-          });
         });
       }
     },
@@ -246,6 +269,7 @@ define([
      * Submit Form
      **/
     submitForm: function(e) {
+
       var $form = $('#' + this.options.formSchema.name, this.el),
         $submitBtn = $('.form-actions button[type="submit"]', this.el),
         _opt, _options,
@@ -477,6 +501,10 @@ define([
      * @param  object $form
      */
     showResponse: function(responseText, statusText, xhr, $form) {
+      if (console && console.info) {
+        console.info('[*] showResponse');
+        console.info(arguments);
+      }
       var _jsonText,
         $submitBtn = $('.form-actions.wizard-actions button[type="button"].btn_next');
       if (!$submitBtn.length) {
@@ -514,6 +542,9 @@ define([
           return;
         }
       }
+      if (console && console.info) {
+        console.info(_jsonText);
+      }
       // Perform the Hidden Form
       if (_jsonText.html) {
         // Special Case
@@ -531,7 +562,7 @@ define([
       if (_jsonText.status && _jsonText.status === 'error') {
         removePopover($submitBtn);
         var _errorMsg = _jsonText.error_message || _jsonText.message || _jsonText.response || 'Please try again.';
-        _opt = {
+        var _opt = {
           html: true,
           placement: 'top',
           trigger: 'manual',
@@ -582,6 +613,10 @@ define([
      * @param  object $element
      */
     processError: function(jqXHR, textStatus, errorThrown, $element) {
+      if (console && console.error) {
+        console.error('[*] showResponse');
+        console.error(arguments);
+      }
       // If Error Happen in AJAX
       var $submitBtn = $('.form-actions button[type="submit"]'),
         errorTxt = errorThrown;
@@ -604,7 +639,7 @@ define([
           }
           errorTxt = errorThrown + ', please try again later.';
         }
-        _opt = {
+        var _opt = {
           html: true,
           placement: 'top',
           trigger: 'manual',

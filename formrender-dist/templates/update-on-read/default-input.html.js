@@ -1,0 +1,1 @@
+define([],function(){var e='<%var field = arguments[0];var _id = (field.attributes.id) ? field.attributes.id: field.name;%><input type="<%= inputType %>" value="<%= data %>" class="input-xlarge force-hide" id="update_read_<%= _id %>" data-target-id="<%= _id %>" name="<%= field.name %>"/>';return e});

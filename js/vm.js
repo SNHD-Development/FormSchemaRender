@@ -286,6 +286,10 @@ define([
 
     // Convert all key to lowercase
     toLower = function(obj, skipKey) {
+      if (_.isNull(obj)) {
+        // Is this is null, no need to convert
+        return;
+      }
       var keys = Object.keys(obj),
         n = keys.length;
       while (n--) {

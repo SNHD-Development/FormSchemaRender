@@ -56,13 +56,75 @@ define([
   'text!templates/fields/uneditableimage.html',
   'text!templates/fields/buttonclipboard.html',
   'text!templates/subform-layouts/table.html',
+  'text!templates/update-on-read/default-input.html',
   'jquery.expose',
   'jquery.datepicker',
   'jquery.birthdaypicker',
   'bootstrap'
-], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, socialsecurityTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, filerepositoryTemplate, readFilerepositoryTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate) {
+], function(
+  $,
+  _,
+  Backbone,
+  Bootstrap,
+  Events,
+  Vm,
+  Utils,
+  Model,
+  Modelbinder,
+  Validation,
+  listView,
+  emailData,
+  schoolesData,
+  countyData,
+  htmlTemplate,
+  labelTemplate,
+  textTemplate,
+  passwordTemplate,
+  telephoneTemplate,
+  socialsecurityTemplate,
+  hiddenTemplate,
+  timestampTemplate,
+  useraccountTemplate,
+  fractionTemplate,
+  booleanInputTemplate,
+  radioTemplate,
+  fileTemplate,
+  multifilesTemplate,
+  filerepositoryTemplate,
+  readFilerepositoryTemplate,
+  stateTemplate,
+  countyTemplate,
+  zipcodeTemplate,
+  countryTemplate,
+  fullnameTemplate,
+  addressTemplate,
+  textareaTemplate,
+  numberTemplate,
+  emailTemplate,
+  dateTemplate,
+  selectTemplate,
+  checkTemplate,
+  bdateTemplate,
+  buttonTemplate,
+  buttongroupTemplate,
+  listTemplate,
+  uneditableinputTemplate,
+  uneditablecheckTemplate,
+  uneditabletagTemplate,
+  uneditabletelTemplate,
+  uneditablefileTemplate,
+  uneditableimageTemplate,
+  buttonclipboardTemplate,
+  tableTemplate,
+  readModeUpdatedefaultInputTemplate
+) {
   // Debug Flag
   var DEBUG = false;
+
+  // Cache Template
+  var UPDATE_ON_READ_TEMPLATE = {
+    'default-input': _.template(readModeUpdatedefaultInputTemplate)
+  };
 
   // Function to build simple HTML form markup
   function buildHtmlBasicFormMarkup(field) {
@@ -968,15 +1030,23 @@ define([
                 if (!error) {
                   var currentFormId = 'subform-btn-' + new Date().getTime().toString();
                   var _hidden = '';
+                  var _getParameters = _.extend({}, subFormBtnOptions.get);
                   _.each(resultObj, function(_v, _k) {
-                    _hidden += '<input type="hidden" name="' + _k + '" value="' + _v + '"/>';
+                    // Need to check for possible GET Request
+                    var _kLower = _k.toLowerCase();
+                    if (_getParameters.hasOwnProperty(_kLower)) {
+                      delete _getParameters[_kLower];
+                      _getParameters[_k] = _v;
+                    } else {
+                      _hidden += '<input type="hidden" name="' + _k + '" value="' + _v + '"/>';
+                    }
                   });
                   if (field.options.subform.url[field.options.subform.url.length - 1] !== '/') {
                     field.options.subform.url += '/';
                   }
                   var currentAction = field.options.subform.url + _currentFormId;
-                  if (field.options.subform.get) {
-                    currentAction += '?' + $.param(field.options.subform.get);
+                  if (_getParameters) {
+                    currentAction += '?' + $.param(_getParameters);
                   }
                   // Validate Pass
                   $('body').append('<form id="' + currentFormId + '" action="' + currentAction + '" method="POST">' + _hidden + '</form>');
@@ -1376,6 +1446,14 @@ define([
       // Just Show Warning
       if (field && field.type && !this.inputTemplate[_type] && console && console.warn) {
         console.warn('[x] Template for "' + field.type + '" does not existed.');
+      }
+
+      // Return HTML Here.
+
+      // Check to see if we allow to render update on read mode.
+      if (field.options.updateonreadmode) {
+        // Will add this class and attach event to the form, looking for .update-on-read-mode
+        _html = '<div class="update-on-read-mode" data-field-name="' + field.name + '">' + _html + this.generateMarkUpForUpdateOnReadMode(field) + '</div>';
       }
 
       return _html;
@@ -2076,6 +2154,48 @@ define([
         this._elementData[fieldName] = {};
       }
       this._elementData[fieldName][dataKey] = dataValue;
+    },
+
+    /**
+     * Generate HTML Mark Up for Update on Read Mode
+     * @param  object field
+     * @return string
+     */
+    generateMarkUpForUpdateOnReadMode: function(field) {
+      if (!field.type) {
+        if (console && console.warn) {
+          console.warn('[x] generateMarkUpForUpdateOnReadMode for "' + field.name + '" could not be able to find "Type".');
+        }
+        return '';
+      }
+      var DEBUG = false,
+        _type = field.type.trim().toLowerCase(),
+        _data = this.options.formData.fields[field.name],
+        _html, _typeHtml;
+
+      if (DEBUG) {
+        console.debug('[*] UpdateOnReadMode');
+        console.debug('     Name: ' + field.name);
+        console.debug('     Value: ' + _data);
+      }
+      // Format Input as HTML markup
+      switch (_type) {
+        case 'file':
+          throw 'Not yet support!';
+        default:
+          _typeHtml = 'text';
+      }
+      // Perform Set Mark Up for Input
+      switch (_type) {
+        default: _html = UPDATE_ON_READ_TEMPLATE['default-input'](_.extend({
+          inputType: _typeHtml,
+          data: _data
+        }, field));
+      }
+      if (DEBUG) {
+        console.debug('     HTML: ' + _html);
+      }
+      return _html;
     }
   });
 });

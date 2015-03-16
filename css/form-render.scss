@@ -1,9 +1,29 @@
 @import "icon";
 
 /**
+ * Libraries
+ */
+
+/** humane **/
+@import "./humane-themes/bigbox.css";
+@import "./humane-themes/boldlight.css";
+@import "./humane-themes/jackedup.css";
+@import "./humane-themes/libnotify.css";
+@import "./humane-themes/original.css";
+@import "./humane-themes/flatty.css";
+
+
+/**
  * Global Variables
  **/
 $text_area_min_height: 100px;
+
+/**
+ * Visibility
+ */
+.force-hide {
+    display: none !important;
+}
 
 /**
  * Text
@@ -456,6 +476,34 @@ $text_area_min_height: 100px;
                 &:hover {
                     cursor: pointer;
                     text-decoration: underline;
+                }
+            }
+        }
+        /**
+         * For Update on Read Mode
+         */
+        .update-on-read-mode {
+            &:hover {
+                /**
+                 * Show Edit Icon
+                 */
+                &:after {
+                    color: #08c;
+                    content: "\f044";
+                    font-family: FontAwesome;
+                    font-style: normal;
+                    font-weight: 400;
+                    margin-left: 8px;
+                    transition: all 0.1s ease-in 0s;
+                    font-size: 16px;
+                }
+            }
+            [class*='input-'] {
+                width: 80%;
+            }
+            .uneditable-input {
+                &:hover {
+                    cursor: pointer;
                 }
             }
         }
