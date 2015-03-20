@@ -1072,6 +1072,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Adding Ability to have custom form within any buttons.
     - Adding FileRepository type. Currently will show only on Read Mode.
     - Adding "UpdateOnReadMode" key in "Options" to allow simple field update on read mode.
+    - Not Autoset the date to today date if there is no value in edit mode
 
 * 0.1.7
     - Sort Select by Values if the values are object

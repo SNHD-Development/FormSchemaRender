@@ -452,6 +452,7 @@ define([
     setupBDateInput: function(el, model) {
       $('.birthdaypicker', el)
         .each(function() {
+          // Set up BirthDate MarkUp here
           $(this).birthdaypicker($(this).attr('data-options'));
           var $hidden = $(':input[type="hidden"]', this),
             _token, $month, $day, $year;
@@ -2593,8 +2594,8 @@ define([
         if (view.options.formData.fields) {
           var _createItemObj = {
             'LogMessage': 'Form submitted',
-            'LogTime': view.options.formData.createddate.$date / 1000,
-            'LogUser': view.options.formData.createduser
+            'LogTime': (view.options.formData.createddate && view.options.formData.createddate.$date) ? view.options.formData.createddate.$date / 1000 : null,
+            'LogUser': (view.options.formData.createduser) ? view.options.formData.createduser : null
           };
           if (!view.options.formData.fields[field.name]) {
             view.options.formData.fields[field.name] = [];

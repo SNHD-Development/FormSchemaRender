@@ -651,29 +651,37 @@ define([
           _type = 'date';
         case 'date':
           // Check for $date
-          if (this.options.formData && this.options.formData.fields && typeof this.options.formData.fields[field.name] === 'object') {
-            var _tmpDate = new Date(this.options.formData.fields[field.name].$date);
-            var _month = _tmpDate.getMonth() + 1;
-            if (_month < 10) {
-              _month = '0' + _month;
-            }
-            _month += '/';
-            var _date = _tmpDate.getDate();
-            if (_date < 10) {
-              _date = '0' + _date;
-            }
-            _date += '/';
+          if (this.options.formData && this.options.formData.fields) {
+            if (typeof this.options.formData.fields[field.name] === 'object') {
 
-            this.options.formData.fields[field.name] = _month + _date + _tmpDate.getFullYear();
-            if (field.options.render && this.options.mode === 'read') {
-              switch (field.options.render.toLowerCase()) {
-                case 'datetime':
-                  this.options.formData.fields[field.name] += ' ' + Utils.formatAMPM(_tmpDate);
-                  break;
+              var _tmpDate = new Date(this.options.formData.fields[field.name].$date);
+              var _month = _tmpDate.getMonth() + 1;
+              if (_month < 10) {
+                _month = '0' + _month;
               }
+              _month += '/';
+              var _date = _tmpDate.getDate();
+              if (_date < 10) {
+                _date = '0' + _date;
+              }
+              _date += '/';
+
+              this.options.formData.fields[field.name] = _month + _date + _tmpDate.getFullYear();
+              if (field.options.render && this.options.mode === 'read') {
+                switch (field.options.render.toLowerCase()) {
+                  case 'datetime':
+                    this.options.formData.fields[field.name] += ' ' + Utils.formatAMPM(_tmpDate);
+                    break;
+                }
+              }
+              field.attributes['value'] = this.options.formData.fields[field.name];
+
+            } else if (this.options.mode === 'create' && typeof this.options.formData.fields[field.name] === 'undefined') {
+              // Fix auto set date to current day if value is not existed
+              field._noDefaultValue = true;
             }
-            field.attributes['value'] = this.options.formData.fields[field.name];
           }
+
           if (field.attributes && !field.attributes.placeholder) {
             field.attributes.placeholder = 'mm/dd/yyyy';
           }
@@ -691,6 +699,10 @@ define([
             }
             if (typeof this.options.formData.fields !== 'undefined') {
               _options['defaultdate'] = this.options.formData.fields[field.name];
+            }
+            if (field._noDefaultValue) {
+              // Prevent auto fill the date to today.
+              _options['nodefaultvalue'] = true;
             }
             field.attributes['data-options'] = JSON.stringify(_.extend(_options, _validation_tmp));
 
