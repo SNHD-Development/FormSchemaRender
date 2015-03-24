@@ -394,7 +394,8 @@
         transition: all 0.1s ease-in 0s;
         font-size: 16px; }
     .form-render.read-mode .update-on-read-mode [class*='input-'] {
-      width: 80%; }
+      width: 80%;
+      margin-bottom: 0; }
     .form-render.read-mode .update-on-read-mode .uneditable-input:hover {
       cursor: pointer; }
   .form-render .uneditable-input {

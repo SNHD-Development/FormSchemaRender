@@ -12,7 +12,6 @@
 @import "./humane-themes/original.css";
 @import "./humane-themes/flatty.css";
 
-
 /**
  * Global Variables
  **/
@@ -500,6 +499,7 @@ $text_area_min_height: 100px;
             }
             [class*='input-'] {
                 width: 80%;
+                margin-bottom: 0;
             }
             .uneditable-input {
                 &:hover {

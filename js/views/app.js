@@ -263,7 +263,8 @@ define([
       'blur :input.socialsecurity': 'formatSocialSecurity',
       'keydown :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
       'blur :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
-      'keypress :input': 'preventEnterPressed'
+      'keypress :input': 'preventEnterPressed',
+      'keyup :input.field-keyboard-command': 'ajaxCommandByKeyBoard'
     },
     /**
      * Submit Form
@@ -808,7 +809,103 @@ define([
         // Will Refresh the page
         (window.jRedirect) ? location.replace(window.jRedirect): location.reload(true);
       };
+    },
+
+    /**
+     * Global Form Event for Capturing the Keyboard event for field
+     * @return {[type]} [description]
+     */
+    ajaxCommandByKeyBoard: function(e) {
+      var DEBUG = false;
+      var keyCode = e.keyCode;
+      var isInternal = this.options.internal;
+      var tmpUrl = (isInternal) ? '/form/edit?id=' + this.options.formData._id.$oid : null;
+      var $this = $(e.target);
+
+      // Function to switch to read view
+      var switchToReadField = function(updateSpan) {
+        var $container = $this.closest('.update-on-read-mode');
+        $this.fadeOut('slow', function() {
+          var $spanTxt = $container.find('.uneditable-input');
+          if (updateSpan) {
+            var newVal = updateSpan[$spanTxt.attr('id')];
+            if (newVal) {
+              $spanTxt.html(newVal);
+            } else {
+              if (console && console.error) {
+                console.error('[x] Error: Update New Value');
+                console.error(newVal);
+                console.log(updateSpan);
+              }
+              Utils.showHumaneErrorBox('Error, could not update new value!');
+            }
+          }
+          $spanTxt.fadeIn('slow', function() {
+            $this.addClass('force-hide');
+            $container.removeClass('ajax');
+          });
+        });
+      }
+
+      // Function to send POST Request
+      var sendPostRequest = function(targetUrl, data) {
+        if ($this.hasClass('ajax-submitted')) {
+          // Do nothing
+          return false;
+        }
+        // Start Sending AJAX
+        $this.addClass('ajax-submitted');
+        Utils.showHumaneSuccessBox('Updating');
+        $.ajax({
+          url: targetUrl,
+          type: 'POST',
+          data: data,
+          cache: false,
+          success: function(d, t, jqXHR) {
+            $this.removeClass('ajax-submitted');
+            Utils.showHumaneSuccessBox('Success');
+            switchToReadField(data);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            $this.removeClass('ajax-submitted');
+            if (console && console.error) {
+              console.error('[x] Error: Sending Data to POST "' + targetUrl + '"');
+              console.error(data);
+              console.error(arguments);
+            }
+            Utils.showHumaneErrorBox('Error, please try again!');
+          }
+        });
+      }
+
+      if (DEBUG) {
+        console.log('[*] ajaxCommandByKeyBoard: Key=' + keyCode);
+        console.log(arguments);
+        console.log(this);
+      }
+      switch (keyCode) {
+        case 13:
+          if (DEBUG) {
+            console.log('Enter Pressed!');
+          }
+          if (!tmpUrl) {
+            throw 'Not implement outside internal yet.';
+          }
+          // Get The ID
+          // Send POST Request
+          var _d = {};
+          _d[$this.attr('name')] = $.trim($this.val());
+          sendPostRequest(tmpUrl, _d);
+          break;
+        case 27:
+          if (DEBUG) {
+            console.log('ESC Pressed!');
+          }
+          switchToReadField();
+          break;
+      }
     }
+
   });
   return AppView;
 });

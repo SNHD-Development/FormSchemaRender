@@ -1431,11 +1431,25 @@ define([
             if (!$span.length) {
               throw 'Error: Could not be able to find span for "' + inputName + '".';
             }
+            // Update View
             $span.html(newValue[inputName]).fadeOut('slow', function() {
               // Now show the input
-              $currentInput.hide(function() {
-                $currentInput.removeClass('force-hide').fadeIn('slow');
-              });
+              if ($currentInput.hasClass('force-hide')) {
+                // Normal Input, will use Enter to save, ESC to return to read
+                $currentInput.hide(function() {
+                  $currentInput.removeClass('force-hide').fadeIn('slow', function() {
+                    // Now Make the cursor point here
+                    $currentInput.focus();
+                    $currentInput.val('');
+                    $currentInput.val(newValue[inputName]);
+                  });
+                });
+              } else {
+                if (console && console.error) {
+                  console.error($currentInput);
+                }
+                throw 'Not Implement Advance Update On Read Mode Type.';
+              }
             });
           },
           error: function() {
@@ -2842,6 +2856,35 @@ define([
       if (!$form.length) {
         throw '[x] finalSetupAllMode: could not be able to find form.';
       }
+    },
+
+    /**
+     * Show Success Box
+     * @param  {string}   txt text to show
+     * @param  {Function} cb  callback function
+     */
+    showHumaneSuccessBox: function(txt, cb) {
+      var jacked = humane.create({
+        baseCls: 'humane-jackedup',
+        addnCls: 'humane-jackedup-success',
+        timeout: 3000,
+        clickToClose: false,
+        waitForMove: false
+      });
+      jacked.log(txt, cb);
+    },
+
+    showHumaneErrorBox: function(txt, cb) {
+      var bigbox = humane.create({
+        baseCls: 'humane-bigbox',
+        timeout: 3000,
+        clickToClose: false,
+        waitForMove: false
+      });
+      bigbox.error = bigbox.spawn({
+        addnCls: 'humane-bigbox-error'
+      });
+      bigbox.error(txt, cb);
     }
 
   };
