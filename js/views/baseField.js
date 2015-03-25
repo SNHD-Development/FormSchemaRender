@@ -57,6 +57,9 @@ define([
   'text!templates/fields/buttonclipboard.html',
   'text!templates/subform-layouts/table.html',
   'text!templates/update-on-read/default-input.html',
+  'text!templates/update-on-read/default-input-radio.html',
+  'text!templates/update-on-read/default-input-textarea.html',
+  'text!templates/update-on-read/default-input-date.html',
   'jquery.expose',
   'jquery.datepicker',
   'jquery.birthdaypicker',
@@ -116,14 +119,20 @@ define([
   uneditableimageTemplate,
   buttonclipboardTemplate,
   tableTemplate,
-  readModeUpdatedefaultInputTemplate
+  readModeUpdatedefaultInputTemplate,
+  readModeUpdatedefaultInputRadioTemplate,
+  readModeUpdatedefaultInputTextAreaTemplate,
+  readModeUpdatedefaultInputDateTemplate
 ) {
   // Debug Flag
   var DEBUG = false;
 
   // Cache Template
   var UPDATE_ON_READ_TEMPLATE = {
-    'default-input': _.template(readModeUpdatedefaultInputTemplate)
+    'default-input': _.template(readModeUpdatedefaultInputTemplate),
+    'default-input-radio': _.template(readModeUpdatedefaultInputRadioTemplate),
+    'default-input-textarea': _.template(readModeUpdatedefaultInputTextAreaTemplate),
+    'default-input-date': _.template(readModeUpdatedefaultInputDateTemplate),
   };
 
   // Function to build simple HTML form markup
@@ -2194,15 +2203,35 @@ define([
       switch (_type) {
         case 'file':
           throw 'Not yet support!';
+
         default:
           _typeHtml = 'text';
       }
       // Perform Set Mark Up for Input
       switch (_type) {
-        default: _html = UPDATE_ON_READ_TEMPLATE['default-input'](_.extend({
-          inputType: _typeHtml,
-          data: _data
-        }, field));
+        case 'radio':
+          _html = UPDATE_ON_READ_TEMPLATE['default-input-radio'](_.extend({
+            data: _data
+          }, field));
+          break;
+
+        case 'textarea':
+          _html = UPDATE_ON_READ_TEMPLATE['default-input-textarea'](_.extend({
+            data: _data
+          }, field));
+          break;
+
+        case 'date':
+          _html = UPDATE_ON_READ_TEMPLATE['default-input-date'](_.extend({
+            data: _data
+          }, field));
+          break;
+
+        default:
+          _html = UPDATE_ON_READ_TEMPLATE['default-input'](_.extend({
+            inputType: _typeHtml,
+            data: _data
+          }, field));
       }
       if (DEBUG) {
         console.debug('     HTML: ' + _html);

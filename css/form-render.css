@@ -380,24 +380,36 @@
     .form-render.read-mode .stupidtable th:hover {
       cursor: pointer;
       text-decoration: underline; }
-    .form-render.read-mode .update-on-read-mode:hover {
-      /**
-       * Show Edit Icon
-       */ }
-      .form-render.read-mode .update-on-read-mode:hover:after {
-        color: #08c;
-        content: "\f044";
-        font-family: FontAwesome;
-        font-style: normal;
-        font-weight: 400;
-        margin-left: 8px;
-        transition: all 0.1s ease-in 0s;
-        font-size: 16px; }
-    .form-render.read-mode .update-on-read-mode [class*='input-'] {
-      width: 80%;
-      margin-bottom: 0; }
-    .form-render.read-mode .update-on-read-mode .uneditable-input:hover {
-      cursor: pointer; }
+    .form-render.read-mode .update-on-read-mode {
+      position: relative; }
+      .form-render.read-mode .update-on-read-mode:hover {
+        /**
+         * Show Edit Icon
+         */ }
+        .form-render.read-mode .update-on-read-mode:hover:after {
+          position: absolute;
+          color: #08c;
+          content: "\f044";
+          font-family: FontAwesome;
+          font-style: normal;
+          font-weight: 400;
+          margin-left: 8px;
+          transition: all 0.1s ease-in 0s;
+          font-size: 16px;
+          top: 5px;
+          right: 3%; }
+      .form-render.read-mode .update-on-read-mode [class*='input-'], .form-render.read-mode .update-on-read-mode .radio-container {
+        width: 80%;
+        margin-bottom: 0; }
+      .form-render.read-mode .update-on-read-mode .uneditable-input:hover {
+        cursor: pointer; }
+      .form-render.read-mode .update-on-read-mode .update-cancel {
+        margin-right: 30px; }
+      .form-render.read-mode .update-on-read-mode .update-buttons {
+        margin-top: 15px;
+        text-align: left; }
+        .form-render.read-mode .update-on-read-mode .update-buttons .btn {
+          display: inline-block; }
   .form-render .uneditable-input {
     width: 80%;
     height: auto;

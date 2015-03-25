@@ -1389,7 +1389,6 @@ define([
       // Set Up for Update On Read Mode
       $form.on('click', '.update-on-read-mode', function(e) {
         var $currentTarget = $(e.currentTarget);
-        e.preventDefault();
         var DEBUG = false;
         if (DEBUG) {
           console.log('[*] finalReadSetup:click - update-on-read-mode');
@@ -1397,8 +1396,14 @@ define([
           console.log($currentTarget);
         }
         if ($currentTarget.hasClass('ajax')) {
+          // Could be Radio
+          if ($currentTarget.hasClass('is-radio') || $currentTarget.hasClass('is-clickable')) {
+            return;
+          }
+          e.preventDefault();
           return false;
         }
+        e.preventDefault();
         $currentTarget.addClass('ajax');
 
         // Load Form Model.
@@ -1420,12 +1425,11 @@ define([
             }
             var $currentInput = $currentTarget.find(':input[name="' + inputName + '"]');
             if (!$currentInput.length) {
-              throw 'Error: Could not be able to find input name.';
+              throw 'Error: Could not be able to find input name "' + inputName + '".';
             }
             if (typeof newValue[inputName] === 'undefined') {
               throw 'Response: Field "' + inputName + '" is invalid.';
             }
-            $currentInput.val(newValue[inputName]);
             // Hide this and change to input instead
             var $span = $currentTarget.find('#' + inputName);
             if (!$span.length) {
@@ -1435,6 +1439,7 @@ define([
             $span.html(newValue[inputName]).fadeOut('slow', function() {
               // Now show the input
               if ($currentInput.hasClass('force-hide')) {
+                $currentInput.val(newValue[inputName]);
                 // Normal Input, will use Enter to save, ESC to return to read
                 $currentInput.hide(function() {
                   $currentInput.removeClass('force-hide').fadeIn('slow', function() {
@@ -1443,6 +1448,41 @@ define([
                     $currentInput.val('');
                     $currentInput.val(newValue[inputName]);
                   });
+                });
+              } else if ($currentInput.hasClass('has-field-container')) {
+                var $forceHideWrapper = $currentInput.closest('.force-hide');
+                if (!$forceHideWrapper.length) {
+                  throw 'Could not be able to find ' + $currentInput.attr('name') + ' wrapper.';
+                }
+                // Show the radio markup
+                $forceHideWrapper.removeClass('force-hide').fadeIn('slow', function() {
+                  var tmpVal = newValue[inputName];
+                  if (!$currentInput.hasClass('is-date-picker')) {
+                    $currentInput.focus();
+                  }
+                  $currentInput.val('');
+                  if ($currentInput.hasClass('is-date-picker') && tmpVal && tmpVal.$date) {
+                    var _date = new Date(tmpVal.$date);
+                    $currentInput.val((_date.getMonth() + 1) + '/' + _date.getDate() + '/' + _date.getFullYear());
+                  } else {
+                    $currentInput.val(tmpVal);
+                  }
+                  $currentTarget.addClass('is-clickable');
+                  // If this is a datepicker
+                  if ($currentInput.hasClass('is-date-picker')) {
+                    $currentInput.datepicker();
+                  }
+                });
+              } else if ($currentInput.is(':radio')) {
+                var $radioWrapper = $currentInput.closest('.force-hide');
+                if (!$radioWrapper.length) {
+                  throw 'Could not be able to find ' + $currentInput.attr('name') + ' wrapper.';
+                }
+                // Show the radio markup
+                $radioWrapper.removeClass('force-hide').fadeIn('slow', function() {
+                  $currentInput.attr('checked', false);
+                  $currentInput.filter('[value="' + newValue[inputName] + '"]').attr('checked', true);
+                  $currentTarget.addClass('is-radio');
                 });
               } else {
                 if (console && console.error) {

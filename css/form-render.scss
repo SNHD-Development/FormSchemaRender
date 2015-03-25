@@ -482,11 +482,13 @@ $text_area_min_height: 100px;
          * For Update on Read Mode
          */
         .update-on-read-mode {
+            position: relative;
             &:hover {
                 /**
                  * Show Edit Icon
                  */
                 &:after {
+                    position: absolute;
                     color: #08c;
                     content: "\f044";
                     font-family: FontAwesome;
@@ -495,15 +497,29 @@ $text_area_min_height: 100px;
                     margin-left: 8px;
                     transition: all 0.1s ease-in 0s;
                     font-size: 16px;
+                    top: 5px;
+                    right: 3%;
                 }
             }
-            [class*='input-'] {
+            [class*='input-'], .radio-container {
                 width: 80%;
                 margin-bottom: 0;
             }
             .uneditable-input {
                 &:hover {
                     cursor: pointer;
+                }
+            }
+
+            .update-cancel {
+                margin-right: 30px;
+            }
+
+            .update-buttons {
+                margin-top: 15px;
+                text-align: left;
+                .btn {
+                    display: inline-block;
                 }
             }
         }

@@ -264,7 +264,9 @@ define([
       'keydown :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
       'blur :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
       'keypress :input': 'preventEnterPressed',
-      'keyup :input.field-keyboard-command': 'ajaxCommandByKeyBoard'
+      'keyup :input.field-keyboard-command': 'ajaxCommandByKeyBoard',
+      'click .update-cancel': 'clickUpdateCancelBtn',
+      'click .update-submit': 'clickUpdateSubmitBtn'
     },
     /**
      * Submit Form
@@ -903,6 +905,88 @@ define([
           }
           switchToReadField();
           break;
+      }
+    },
+
+    clickUpdateCancelBtn: function(e) {
+      if (this.options.mode !== 'read') {
+        return;
+      }
+      // Only Activate on Read Mode
+      var $this = $(e.target);
+      var $container = $this.closest('.update-on-read-mode');
+      if (!$container.length) {
+        return;
+      }
+      var $fieldContainer = $container.find('.field-container');
+      $fieldContainer.fadeOut('slow', function() {
+        var $spanTxt = $container.find('.uneditable-input');
+        $spanTxt.fadeIn('slow', function() {
+          $container.removeClass('ajax');
+          $fieldContainer.addClass('force-hide');
+        });
+      });
+    },
+
+    clickUpdateSubmitBtn: function(e) {
+      if (this.options.mode !== 'read') {
+        return;
+      }
+      var $this = $(e.target);
+      if ($this.hasClass('ajax-submitted')) {
+        // Do nothing
+        return false;
+      }
+      // Start Sending AJAX
+      $this.addClass('ajax-submitted');
+      var that = this;
+      var $input, _val, _d = {},
+        _html;
+      var isInternal = this.options.internal;
+      var tmpUrl = (isInternal) ? '/form/edit?id=' + this.options.formData._id.$oid : null;
+
+      var sendPostRequest = function(targetUrl, data, htmlToUpdate) {
+        // Start Sending AJAX
+        $this.addClass('ajax-submitted');
+        Utils.showHumaneSuccessBox('Updating');
+        $.ajax({
+          url: targetUrl,
+          type: 'POST',
+          data: data,
+          cache: false,
+          success: function(d, t, jqXHR) {
+            $this.removeClass('ajax-submitted');
+            Utils.showHumaneSuccessBox('Success');
+            if (htmlToUpdate) {
+              $input.closest('.update-on-read-mode').find('.uneditable-input').html(htmlToUpdate);
+            }
+            that.clickUpdateCancelBtn(e);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            $this.removeClass('ajax-submitted');
+            if (console && console.error) {
+              console.error('[x] Error: Sending Data to POST "' + targetUrl + '"');
+              console.error(data);
+              console.error(arguments);
+            }
+            Utils.showHumaneErrorBox('Error, please try again!');
+          }
+        });
+      }
+
+      var $wrapper = $this.closest('.field-container');
+      if ($wrapper.hasClass('radio-container')) {
+        // This is Radio Container
+        $input = $wrapper.find(':radio:checked');
+        _val = $.trim($input.val());
+        _html = $input.attr('data-radio-value');
+        _d[$input.attr('name')] = _val;
+        sendPostRequest(tmpUrl, _d, _html);
+      } else {
+        $input = $wrapper.find(':input');
+        _val = $.trim($input.val());
+        _d[$input.attr('name')] = _val;
+        sendPostRequest(tmpUrl, _d, _val);
       }
     }
 
