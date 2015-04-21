@@ -355,6 +355,25 @@ define([
         return '';
       }
 
+      // Check for Options.RenderAs
+      if (field.options.renderas) {
+        switch (_type) {
+          case 'date':
+            if (this.options.formData && this.options.formData.fields && this.options.formData.fields[field.name]) {
+              if (this.options.formData.fields[field.name].$date) {
+                this.options.formData.fields[field.name] = Utils.formatDateAsString(this.options.formData.fields[field.name].$date);
+              }
+            }
+            break;
+
+          default:
+            throw 'Not Implement Options.RenderAs for "' + _type + '" yet!';
+        }
+        _type = field.options.renderas.toLowerCase();
+        // console.log('[*] Options.RenderAs for ' + field.name);
+        // console.log(_type);
+      }
+
       switch (_type) {
 
         case 'booleaninput':
@@ -932,6 +951,11 @@ define([
               field.url = Utils.formatUriSegment(field.url, this.options.formData);
             }
           }
+          // Parse Template
+          if (field.url) {
+            field.url = Utils.changeURLGetTemplateString(field.url);
+          }
+
           // Adding the Confirmation Popover
           if (field.options.confirmed) {
             // If there is ConfirmedText then will override the standard text.
@@ -994,7 +1018,7 @@ define([
               // Simple HTML Render
               htmlSubFormBtn += buildHtmlBasicFormMarkup(fieldSubFormBtn);
             });
-            htmlSubFormBtn = '<div class="subform-button-wrapper">' + htmlSubFormBtn + '<div class="text-center"><a class="btn btn-primary subform-btn-submit">Submit</a></div></div>';
+            htmlSubFormBtn = '<div class="subform-button-wrapper">' + htmlSubFormBtn + '<div class="text-center"><a class="btn btn-primary subform-btn-submit" data-button-name="' + field.name + '">Submit</a></div></div>';
             // Then add this html as a bs popover.
             $('div#app').on(this.options.formSchema.name + '.renderCompleted', function(e, view) {
               // Need to bind click event
@@ -1024,6 +1048,12 @@ define([
               $currentBtn.parent().on('click', '.subform-btn-submit', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                var currentDataBtnName = $(e.target).attr('data-button-name');
+                if (currentDataBtnName !== $currentBtn.attr('data-button-name')) {
+                  if ($currentBtn.next('.popover').find('.subform-btn-submit').attr('data-button-name') !== currentDataBtnName) {
+                    return false;
+                  }
+                }
                 // Validate against the validation
                 var $subFormWrapper = $currentBtn.next('.popover').find('.subform-button-wrapper');
                 var $inputs = $subFormWrapper.find(':input');
@@ -1141,7 +1171,11 @@ define([
           break;
 
         case 'hidden':
-          if (this.options.mode === 'update' && this.options.formData && this.options.formData.fields && this.options.formData.fields[field.name]) {
+          var _hiddenAllowMode = ['update', 'create'];
+          // console.log('===');
+          // console.log(field.name);
+          // console.log(this.options.formData.fields[field.name]);
+          if (_.indexOf(_hiddenAllowMode, this.options.mode) > -1 && this.options.formData && this.options.formData.fields && this.options.formData.fields[field.name]) {
             if (!field.attributes) {
               field.attributes = {};
             }
@@ -1380,11 +1414,20 @@ define([
               _field_data = (_field_data === 'true' || _field_data === true) ? 'Yes' : 'No';
               break;
           }
-          _html += that.inputTemplate['uneditableinput']({
-            value: _field_data,
-            css_class: _textarea,
-            id: field.name
-          });
+          // Special Case for render
+          var linkBackToParentForm = ['ParentFormId', 'FormRecordId'];
+          if (field.name && this.options.internal && _.indexOf(linkBackToParentForm, field.name) > -1) {
+            // Render as Special Button
+            // Can add any other options
+            var _tmpInternalViewUrl = Utils.config.internalViewUrl;
+            _html += '<a class="btn btn-primary" title="View FormId = ' + _field_data + '" href="' + _tmpInternalViewUrl + '/' + _field_data + '">View</a>';
+          } else {
+            _html += that.inputTemplate['uneditableinput']({
+              value: _field_data,
+              css_class: _textarea,
+              id: field.name
+            });
+          }
         }
       } else if (_type === 'image' && typeof field.options.internalcanupdate !== 'undefined' && this.options.internal && field.options.internalcanupdate === false) {
         // Start render the Image here
@@ -1488,6 +1531,10 @@ define([
       field.options = field.options || {};
       var _type = field.type.toLowerCase(),
         _cssClass = (typeof cssClass !== 'undefined' && cssClass) ? ' class="' + cssClass + '"' : '';
+      // If has RenderAs
+      if (field.options.renderas) {
+        _type = field.options.renderas.toLowerCase();
+      }
       switch (_type) {
         case 'hidden':
           if (this.options.mode === 'create') {
@@ -1764,7 +1811,6 @@ define([
      * This is the function to handle all of logic for VisibleOn
      **/
     setupVisibleOn: function(field, htmlTmpl, parentContainer) {
-
       parentContainer = parentContainer || false;
       var that = this,
         _typeLowerCase = field.type.toLowerCase();
@@ -1782,6 +1828,13 @@ define([
           if (field.options.visibleon && field.options.visibleon.name && _.indexOf(this._radioFieldName, field.options.visibleon.name) > -1) {
             parentContainer = '.radio-container';
           }
+        }
+      }
+
+      // Overwrite the parentcontainer key.
+      if (parentContainer && field.options && field.options.visibleon && field.options.visibleon.parentcontainer) {
+        if (field.options.visibleon.parentcontainer !== parentContainer) {
+          parentContainer = field.options.visibleon.parentcontainer;
         }
       }
 
@@ -1813,6 +1866,9 @@ define([
             _visibleVal = $currentTarget.val(),
             _checkBindingArray = ['', '[]'],
             debug = false;
+          if (!$container.length && parentContainer === field.options.visibleon.parentcontainer) {
+            $container = $currentTarget.parents('.form-render').find(parentContainer);
+          }
           // console.log($currentTarget);
           // if (field.name === 'ReproducedDataPublication') {
           //   debug = true;

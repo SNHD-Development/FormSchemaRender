@@ -56,7 +56,8 @@ define([
 
   return {
     config: {
-      fileUrl: '/form/getFile'
+      fileUrl: '/form/getFile',
+      internalViewUrl: '/Form/SingleView'
     },
 
     renderError: function($container, err) {
@@ -275,6 +276,70 @@ define([
     parseTemplateStringGet: function(str) {
       var _reg = /\w+=(\w|\.)+/ig;
       return str.match(_reg);
+    },
+
+    /**
+     * Will return only word in {{}}
+     * @param  string str
+     * @return mixed
+     */
+    parseTemplateStringCurlyBrace: function(str) {
+      var _reg = /\{\{([\w|\.]+)\}\}/ig;
+      var match = str.match(_reg);
+      if (match) {
+        if (RegExp.$1) {
+          match = RegExp.$1;
+        }
+        if (match.indexOf('{') > -1) {
+          throw 'Still Found Curly Brace in the string in parseTemplateStringCurlyBrace!';
+        }
+      }
+      return match;
+    },
+
+    /**
+     * Looking for {{template}} and replace with the correct values
+     * @param  string str
+     * @return string
+     */
+    changeURLGetTemplateString: function(str) {
+      var DEBUG = false;
+      if (DEBUG) {
+        console.log('[*] --- changeURLGetTemplateString ---');
+      }
+      var newStr = str;
+      var _tok = this.parseTemplateString(newStr);
+      if (_tok) {
+        for (var i in _tok) {
+          var _to = _tok[i],
+            _tmpArr;
+          if (DEBUG) {
+            console.log('[*] Token');
+            console.log(_to);
+          }
+          _tmpArr = this.parseTemplateStringCurlyBrace(_to);
+          if (!_tmpArr) {
+            continue;
+          }
+          // Found that {{word}}
+          if (DEBUG) {
+            console.log(_tmpArr);
+          }
+          if (!_tmpArr) {
+            throw 'Unexpected changeURLGetTemplateString, found more than one template variable for "' + _to + '"';
+          }
+          switch (_tmpArr) {
+            case 'userid':
+              newStr = newStr.replace('{{' + _tmpArr + '}}', this.getUserIdFormHtml());
+              break;
+            default:
+              if (console && console.info) {
+                console.info('[x] Info: Not Implement this "' + _tmpArr + '" Url Template Variable yet!');
+              }
+          }
+        }
+      }
+      return newStr;
     },
 
     /**
@@ -560,7 +625,8 @@ define([
     /**
      * Some select, check might have default value need to send change event
      **/
-    getDefaultValues: function(el) {
+    getDefaultValues: function(el, model) {
+      model = model || null;
       $('.has-default-val', el)
         .each(function() {
           var $this = $(this);
@@ -574,6 +640,21 @@ define([
               .removeClass('data-clean');
           }
         });
+
+      // Looking for All Hidden Input
+      $(':hidden:input', el).each(function() {
+        var $this = $(this),
+          _val = $this.val(),
+          _name = $this.attr('name');
+        if ($this.is(':radio'), $this.is(':checkbox')) {
+          return;
+        }
+        if (_name && _val && _val !== '') {
+          if (model) {
+            model.set(_name, _val);
+          }
+        }
+      });
     },
     /**
      * Setup Date Input
@@ -1600,7 +1681,7 @@ define([
         var maxWidth = 0;
         $selectTag.find('li').each(function() {
           var $li = $(this),
-            _width = $li.width();
+            _width = $li.outerWidth(true);
           if (_width > maxWidth) {
             maxWidth = _width;
           }
@@ -2889,13 +2970,23 @@ define([
     },
 
     /**
-     * Perform Final Setup for All modes
+     * Perform Final Setup for All modes, happened after renderCompleted event
      */
     finalSetupAllMode: function(view) {
       var $form = $(view.el);
       if (!$form.length) {
         throw '[x] finalSetupAllMode: could not be able to find form.';
       }
+      // $form.find(':hidden:input').each(function() {
+      //   var $this = $(this),
+      //     _val = $this.val();
+      //   if ($this.is(':radio') || $this.is(':checkbox')) {
+      //     return;
+      //   }
+      //   if (_val && _val !== '') {
+      //     $this.trigger('change');
+      //   }
+      // });
     },
 
     /**
@@ -2925,6 +3016,40 @@ define([
         addnCls: 'humane-bigbox-error'
       });
       bigbox.error(txt, cb);
+    },
+
+    /**
+     * Return as Date Value
+     * @param  integer date
+     * @param  string format
+     * @return string
+     */
+    formatDateAsString: function(date, format) {
+      format = format || null;
+
+      var _tmpDate = new Date(date);
+      if (!format) {
+        // return _tmpDate.getTime() / 1000;
+        // return _tmpDate.toString();
+        // return _tmpDate.toLocaleString();
+        return _tmpDate.toUTCString();
+      }
+      var _month = _tmpDate.getMonth() + 1;
+      if (_month < 10) {
+        _month = '0' + _month;
+      }
+      var _date = _tmpDate.getDate();
+      if (_date < 10) {
+        _date = '0' + _date;
+      }
+
+      switch (format) {
+        case 'm/d/Y':
+          return _month + '/' + _date + '/' + _tmpDate.getFullYear()
+          break;
+        default:
+          throw 'Not Implement ' + format + ' yet in "formatDateAsString"!';
+      }
     }
 
   };

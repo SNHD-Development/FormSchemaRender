@@ -125,13 +125,13 @@ define([
             // Final Setup
             Utils.finalSetup(that.formView);
 
-            // Final Setup for All Mode
-            Utils.finalSetupAllMode(that.formView);
-
             // Render Form Complete
             // Send view at second parameter
             $('#' + that.options.formSchema.name, that.el)
               .trigger(that.options.formSchema.name + '.renderCompleted', that);
+
+            // Final Setup for All Mode
+            Utils.finalSetupAllMode(that.formView);
 
             // Set the Action if has one
             var $form = $(that.el)
@@ -305,7 +305,7 @@ define([
       this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields, this.formView._listSchema);
 
       // Check Data
-      Utils.getDefaultValues(this.formView.el); // Make sure to get default value for each type.
+      Utils.getDefaultValues(this.formView.el, that.formView.model); // Make sure to get default value for each type.
       // Select2 Dynamic Validation
       $form.find(':input.has-select2-dynamic').each(function() {
         var $this = $(this);
