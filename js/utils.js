@@ -626,10 +626,22 @@ define([
      * Some select, check might have default value need to send change event
      **/
     getDefaultValues: function(el, model) {
+      var DEBUG = false;
+      if (DEBUG) {
+        console.log('[*] Debug - getDefaultValues');
+      }
       model = model || null;
+      if (DEBUG && model) {
+        console.log('    Before: .has-default-val');
+        // console.log(model.toJSON());
+        // console.log(model.get('Result'));
+      }
       $('.has-default-val', el)
         .each(function() {
           var $this = $(this);
+          if (DEBUG) {
+            console.log($this);
+          }
           if ($this.is(':disabled')) {
             return;
           }
@@ -640,21 +652,48 @@ define([
               .removeClass('data-clean');
           }
         });
+      if (DEBUG && model) {
+        console.log('    After: .has-default-val');
+        // console.log(model.toJSON());
+        // console.log(model.get('Result'));
+      }
 
       // Looking for All Hidden Input
+      if (DEBUG && model) {
+        console.log('    Before: :hidden');
+        // console.log(model.toJSON());
+        // console.log(model.get('Result'));
+      }
       $(':hidden:input', el).each(function() {
         var $this = $(this),
           _val = $this.val(),
           _name = $this.attr('name');
-        if ($this.is(':radio'), $this.is(':checkbox')) {
+        if (DEBUG) {
+          console.log($this);
+        }
+        if (!_name || _name === '') {
           return;
+        }
+        if ($this.is(':radio') || $this.is(':checkbox')) {
+          return;
+        }
+        if (DEBUG) {
+          console.log('    Before Set: ' + _name + ' with ' + _val);
         }
         if (_name && _val && _val !== '') {
           if (model) {
+            if (DEBUG && model) {
+              console.log('    Before Set: ' + _name + ' with ' + _val);
+            }
             model.set(_name, _val);
           }
         }
       });
+      if (DEBUG && model) {
+        console.log('    After: :hidden');
+        // console.log(model.toJSON());
+        // console.log(model.get('Result'));
+      }
     },
     /**
      * Setup Date Input
@@ -2674,18 +2713,41 @@ define([
     },
 
     setModelRadioValues: function(el, view) {
+      var DEBUG = false;
       view = view || null;
       var $radios = el.find(':radio:checked');
       if (!$radios.length) {
         return;
       }
+      if (DEBUG) {
+        console.log('[*] Debug - setModelRadioValues');
+        console.log($radios);
+        console.log(view);
+        console.log(view.model);
+        console.log(view.model.toJSON());
+      }
       $radios.each(function() {
-        var $this = $(this);
-        $this.attr('checked', true).trigger('change');
-        if (view.model) {
-          var name = $this.attr('name'),
-            _val = $this.val();
-          view.model.set(name, _val);
+        try {
+          var $this = $(this);
+          if (DEBUG) {
+            console.log($this);
+          }
+          $this.attr('checked', true).trigger('change');
+          if (view && view.model) {
+            var name = $this.attr('name'),
+              _val = $this.val();
+            if (DEBUG) {
+              console.log('    Model["' + name + '"] : ' + view.model.get(name));
+            }
+            view.model.set(name, _val);
+          }
+        } catch (err) {
+          // Error: Because of Model Binder (VisibleOn).
+          // Can skip Safely.
+          if (console && console.log) {
+            console.log('[x] Exception in setModelRadioValues');
+            console.log(err);
+          }
         }
       });
     },
@@ -2697,12 +2759,21 @@ define([
         return;
       }
       $checks.each(function() {
-        var $this = $(this);
-        $this.attr('checked', true).trigger('change');
-        if (view.model) {
-          var name = $this.attr('name'),
-            _val = $this.val();
-          view.model.set(name, _val);
+        try {
+          var $this = $(this);
+          $this.attr('checked', true).trigger('change');
+          if (view && view.model) {
+            var name = $this.attr('name'),
+              _val = $this.val();
+            view.model.set(name, _val);
+          }
+        } catch (err) {
+          // Error: Because of Model Binder (VisibleOn).
+          // Can skip Safely.
+          if (console && console.log) {
+            console.log('[x] Exception in setModelCheckValues');
+            console.log(err);
+          }
         }
       });
     },

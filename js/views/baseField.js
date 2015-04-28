@@ -366,6 +366,9 @@ define([
             }
             break;
 
+          case 'number':
+            break;
+
           default:
             throw 'Not Implement Options.RenderAs for "' + _type + '" yet!';
         }
@@ -570,10 +573,10 @@ define([
           if (field.options.filterbyid) {
             classNameToAdd = 'select2-county-lookup';
           }
-          if (!field.attributes.class) {
-            field.attributes.class = classNameToAdd;
+          if (!field.attributes['class']) {
+            field.attributes['class'] = classNameToAdd;
           } else {
-            field.attributes.class += ' ' + classNameToAdd;
+            field.attributes['class'] += ' ' + classNameToAdd;
           }
           // If there is default data
           if (this.options.formData && this.options.formData.fields && this.options.formData.fields[field.name]) {

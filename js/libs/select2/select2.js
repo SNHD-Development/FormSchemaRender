@@ -324,7 +324,7 @@ the specific language governing permissions and limitations under the Apache Lic
     function syncCssClasses(dest, src, adapter) {
         var classes, replacements = [], adapted;
 
-        classes = dest.attr("class");
+        classes = (dest) ? dest.attr("class"): '';
         if (classes) {
             classes = '' + classes; // for IE which returns object
             $(classes.split(" ")).each2(function() {
@@ -345,7 +345,9 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
             });
         }
-        dest.attr("class", replacements.join(" "));
+        if (dest) {
+          dest.attr("class", replacements.join(" "));
+        }
     }
 
 
@@ -1082,10 +1084,14 @@ the specific language governing permissions and limitations under the Apache Lic
                 this.readonly(readonly);
 
                 syncCssClasses(this.container, this.opts.element, this.opts.adaptContainerCssClass);
-                this.container.addClass(evaluate(this.opts.containerCssClass));
+                if (this.container) {
+                  this.container.addClass(evaluate(this.opts.containerCssClass));
+                }
 
                 syncCssClasses(this.dropdown, this.opts.element, this.opts.adaptDropdownCssClass);
-                this.dropdown.addClass(evaluate(this.opts.dropdownCssClass));
+                if (this.dropdown) {
+                  this.dropdown.addClass(evaluate(this.opts.dropdownCssClass));
+                }
 
             });
 
