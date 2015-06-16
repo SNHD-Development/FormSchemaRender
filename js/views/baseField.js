@@ -1423,7 +1423,16 @@ define([
             // Render as Special Button
             // Can add any other options
             var _tmpInternalViewUrl = Utils.config.internalViewUrl;
-            _html += '<a class="btn btn-primary" title="View FormId = ' + _field_data + '" href="' + _tmpInternalViewUrl + '/' + _field_data + '">View</a>';
+            // This could be more than one
+            var formIdArr = [];
+            if (that.options.formData.fields.MultipleFormRecordId) {
+              formIdArr = that.options.formData.fields.MultipleFormRecordId.split(',');
+            } else {
+              formIdArr.push(_field_data);
+            }
+            _.each(formIdArr, function(v) {
+              _html += '<a class="btn btn-primary" title="View FormId = ' + v + '" href="' + _tmpInternalViewUrl + '/' + v + '" style="margin-right:20px;">View</a>';
+            });
           } else {
             _html += that.inputTemplate['uneditableinput']({
               value: _field_data,

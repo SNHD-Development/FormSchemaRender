@@ -537,7 +537,7 @@
         // minDate validator
         // Validate that the value has to be greater than minDate
         mindate: function(value, attr, minDate, model) {
-          if (!value.length || value === '') {
+          if (!value || !value.length || value === '') {
             value = jQuery('#' + attr).val();
             if (model.has(attr) && model.get(attr) === '') {
               model.set(attr, value);
