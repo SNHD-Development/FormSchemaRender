@@ -95,9 +95,10 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
             }
             break;
           case 'address':
+            var _tmpName = (value.options.showstreetnumber) ? 'Street Name' : 'Street';
             _name = value.name + '_address_street';
             _attrs[_name] = '';
-            setValidationData(_name, attrs, _validation, ' (Street)');
+            setValidationData(_name, attrs, _validation, ' (' + _tmpName + ')');
             if (_addToModelBinder && !value.options.visibleon) {
               model.bindings[_name] = '[name="' + _name + '"]';
             }
@@ -124,6 +125,22 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
             setValidationData(_name, attrs, _validation, ' (Country)');
             if (_addToModelBinder && !value.options.visibleon) {
               model.bindings[_name] = '[name="' + _name + '"]';
+            }
+            if (value.options.showstreetnumber) {
+              _name = value.name + '_address_street_number';
+              _attrs[_name] = '';
+              setValidationData(_name, attrs, _validation, ' (Street Number)');
+              if (_addToModelBinder && !value.options.visibleon) {
+                model.bindings[_name] = '[name="' + _name + '"]';
+              }
+            }
+            if (value.options.showunitnumber) {
+              _name = value.name + '_address_unit_number';
+              _attrs[_name] = '';
+              setValidationData(_name, attrs, _validation, ' (Unit Number)');
+              if (_addToModelBinder && !value.options.visibleon) {
+                model.bindings[_name] = '[name="' + _name + '"]';
+              }
             }
             break;
           case 'fullname':

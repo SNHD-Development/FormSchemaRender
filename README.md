@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.1.8`
+Version `version 0.1.9`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -466,7 +466,19 @@ This will enable ZIP+4 (By default, it will only allowed to have 5 digits)
         "Options": {
             "ZipCodeFormat": "ZIP+4"
         }
-    },
+    }
+
+To show Street Number or Unit Number please set it in Options
+
+    {
+        "Name" : "BusinessAddressShowNumberAndUnit",
+        "Type" : "Address",
+        "Description" : "Business Address",
+        "Options": {
+            "ShowStreetNumber": true,
+            "ShowUnitNumber": true
+        }
+    }
 
 ### County Field
 
@@ -1066,6 +1078,9 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ## Version
+
+* 0.1.9
+    - Adding Street Number and Unit Number to Address Field
 
 * 0.1.8
     - Escape html special character in Textarea

@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Address</title>
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/datepicker.css" />
+    <link rel="stylesheet" href="../../css/lightbox.css" />
+    <link rel="stylesheet" href="../../css/wizard.css">
+    <link rel="stylesheet" href="../../css/form-render.css" />
+
+    <script data-main="../../js/main" src="../../js/libs/require/require.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Initially populated by templates/layout.html -->
+    <div class="container">
+      <div class="row">
+        <div class="span12">
+
+          <!-- Require for Rendering the Form -->
+          <div id="app">
+            <p class="data-loader">
+              <i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">Loading Information ...</span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+    var formSchema = {
+      Name: "TestAddress",
+      Fields: [{
+        "Name": "AddressField",
+        "Type": "Address",
+        "Description": "Your Address"
+      }, {
+        "Name": "AddressFieldRequired",
+        "Type": "Address",
+        "Description": "Your Required Address"
+      }, {
+        "Name": "AddressFieldRequiredStreetNumber",
+        "Type": "Address",
+        "Description": "Your Required Address with Street Number",
+        "Options": {
+          "ShowStreetNumber": true
+        }
+      }, {
+        "Name": "AddressFieldRequiredUnitNumber",
+        "Type": "Address",
+        "Description": "Your Required Address with Unit Number",
+        "Options": {
+          "ShowUnitNumber": true
+        }
+      }, {
+        "Name": "AddressFieldRequiredStreetAndUnitNumber",
+        "Type": "Address",
+        "Description": "Your Required Address with Street and Unit Number",
+        "Options": {
+          "ShowStreetNumber": true,
+          "ShowUnitNumber": true
+        }
+      }, {
+        "Type": "Action"
+      }, {
+        "Name": "ServerSideSubmitBtn",
+        "Type": "Submit",
+        "Description": "Server Side Submit Button",
+        "Url": "/post.php",
+        "Attributes": {
+          "Class": "btn btn-primary"
+        }
+      }],
+      Validation: {
+        "AddressFieldRequired_address_street": {
+          "required": true
+        },
+        "AddressFieldRequired_address_city": {
+          "required": true
+        },
+        "AddressFieldRequired_address_state": {
+          "required": true
+        },
+        "AddressFieldRequired_address_zip": {
+          "required": true
+        }
+      }
+    };
+    </script>
+  </body>
+
+</html>

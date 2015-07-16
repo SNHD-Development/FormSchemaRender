@@ -1,6 +1,6 @@
 <%
 var _id = (typeof attributes.id !== 'undefined') ? attributes.id: name
-, p_st, p_city, p_zip, p_country, p_province;
+, p_st, p_city, p_zip, p_country, p_province, show_street = options.showstreetnumber, show_unit = options.showunitnumber;
 
 switch (lang) {
 	case 'sp':
@@ -26,8 +26,22 @@ switch (lang) {
 		</select>
 	</div>
 	<div class="controls-row">
-		<input id="<%= _id %>_address_street" name="<%= name %>_address_street" type="text" class="span12 tolowercase toucwords" placeholder="<%= p_st %>"<%= _attr %>/>
+        <%
+        var address_street_class = (show_street) ? "span9" : "span12";
+        %>
+        <% 
+        if (show_street) { 
+            p_st = 'Street Name';
+        %>
+        <input id="<%= _id %>_address_street_number" name="<%= name %>_address_street_number" type="text" class="span3" placeholder="Street Number"<%= _attr %>/>
+        <% } %>
+		<input id="<%= _id %>_address_street" name="<%= name %>_address_street" type="text" class="<%= address_street_class %> tolowercase toucwords" placeholder="<%= p_st %>"<%= _attr %>/>
 	</div>
+    <% if (show_unit) { %> 
+    <div class="controls-row">
+        <input id="<%= _id %>_address_unit_number" name="<%= name %>_address_unit_number" type="text" class="span6" placeholder="Unit Number"<%= _attr %>/>
+    </div>
+    <% } %>
 	<div class="controls-row">
 		<input id="<%= _id %>_address_city" name="<%= name %>_address_city" type="text" class="span6 tolowercase toucwords" placeholder="<%= p_city %>"<%= _attr %>/>
 		<select id="<%= _id %>_address_state_select" name="<%= name %>_address_state" class="span6 has-default-val us-state data-clean"<%= _attr %>>

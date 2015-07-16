@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+
+# Run All Tests
+
+system("casperjs test ./tests/*-test.js --baseUrl=http://formschemarender.dev");
+
+exit;

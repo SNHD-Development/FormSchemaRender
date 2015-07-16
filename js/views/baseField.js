@@ -796,6 +796,13 @@ define([
           _name.push(field.name + '_address_zip');
           _name.push(field.name + '_address_country');
 
+          if (field.options.showstreetnumber) {
+            _name.push(field.name + '_address_street_number');
+          }
+          if (field.options.showunitnumber) {
+            _name.push(field.name + '_address_unit_number');
+          }
+
           // Format Data
           if (typeof readMode !== 'undefined' && typeof this.options.formData !== 'undefined') {
             this.options.formData.fields[field.name + '_address_country'] = Vm.getCountry(this.options.formData.fields[field.name + '_address_country']);
@@ -1857,6 +1864,8 @@ define([
           delete this.model.validation[field.name + '_address_state'];
           delete this.model.validation[field.name + '_address_zip'];
           delete this.model.validation[field.name + '_address_country'];
+          delete this.model.validation[field.name + '_address_street_number'];
+          delete this.model.validation[field.name + '_address_unit_number'];
           break;
 
         case 'multifiles':
@@ -2013,6 +2022,18 @@ define([
                 }
                 _addressArray.push(_address_name);
 
+                _address_name = field.name + '_address_street_number';
+                if (that.options.formSchema.validation[_address_name]) {
+                  that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+                }
+                _addressArray.push(_address_name);
+
+                _address_name = field.name + '_address_unit_number';
+                if (that.options.formSchema.validation[_address_name]) {
+                  that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+                }
+                _addressArray.push(_address_name);
+
                 if (field.options.hidecountry) {
                   that.model.set(_address_name, 'US');
                 }
@@ -2122,6 +2143,18 @@ define([
                 delete that.model.validation[_address_name];
               }
               _address_name = field.name + '_address_country';
+              that.model.set(_address_name, '');
+              if (that.options.formSchema.validation[_address_name]) {
+                that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+                delete that.model.validation[_address_name];
+              }
+              _address_name = field.name + '_address_street_number';
+              that.model.set(_address_name, '');
+              if (that.options.formSchema.validation[_address_name]) {
+                that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
+                delete that.model.validation[_address_name];
+              }
+              _address_name = field.name + '_address_unit_number';
               that.model.set(_address_name, '');
               if (that.options.formSchema.validation[_address_name]) {
                 that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];

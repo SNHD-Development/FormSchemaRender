@@ -381,6 +381,16 @@ define([
             return true;
           }
 
+          _name = field.name + '_address_street_number';
+          if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+            return true;
+          }
+
+          _name = field.name + '_address_unit_number';
+          if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
+            return true;
+          }
+
           return false;
 
         case 'fullname':
@@ -1129,6 +1139,8 @@ define([
           _fields.push(name + '_address_state');
           _fields.push(name + '_address_zip');
           _fields.push(name + '_address_country');
+          _fields.push(name + '_address_street_number');
+          _fields.push(name + '_address_unit_number');
           break;
 
         default:
