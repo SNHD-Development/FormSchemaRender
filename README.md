@@ -718,6 +718,9 @@ Select Type (Value of this field will trigger the event of Depend Field)
 		]
 	}
 
+To make it not show on the Values defined, set "NotIn": true
+
+
 VisibleOn Options
 
 	{
@@ -745,10 +748,47 @@ VisibleOn Options
 				"Values": [
 					"Option 2",
 					"Option 4"
-				]
+				],
+                "NotIn": true
 			}
 		}
 	}
+
+In some case, we have more than one logic to compare and decide to show this field or not.
+Please note that these values must be set before calling this field.
+
+    {
+        "Name": "TestMultipleSteps",
+        "Type": "TextBox",
+        "Description": "Multiple Steps",
+        "Options": {
+            "VisibleOn": {
+                "Name": "SelectMe",
+                "Values": [
+                    "Option 2",
+                    "Option 4"
+                ],
+                "Steps": [
+                    {
+                        "Name": "SelectMeSecond",
+                        "Values": [
+                            "Opt 1",
+                            "Opt 2"
+                        ]
+                    },
+                    {
+                        "Name": "SelectMeThird",
+                        "Values": [
+                            "Opt 3",
+                            "Opt 4"
+                        ],
+                        "NotIn": true
+                    }
+                ]
+            }
+        }
+    }
+
 
 Validation FormSchema
 
@@ -1081,6 +1121,9 @@ Sometime there are some fileds that internal should not be able to update these 
 
 * 0.1.9
     - Adding Street Number and Unit Number to Address Field
+    - Support VisibleOn Steps Filter
+    - Implement LimitInputValue for Number Type
+    - In List.js some elements such as "FileRepository" or "Radio" is not loaded to ModelBinder by default
 
 * 0.1.8
     - Escape html special character in Textarea

@@ -16,6 +16,8 @@ define([
   'bootstrap'
 ], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events, subFormLayoutTemplate) {
 
+  var DEBUG = false;
+
   function formatModel(view) {
     _.each(view.options.formSchema.fields, function(element) {
       if (!element.name || !element.type) {
@@ -38,12 +40,19 @@ define([
   }
 
   function reFormatModel(view) {
+    if (DEBUG) {
+      console.log('[*] list.reFormatModel - start');
+      if (view.model && view.model.toJSON) {
+        console.log(view.model.toJSON());
+      }
+    }
     _.each(view.options.formSchema.fields, function(element) {
       if (!element.name || !element.type) {
         return;
       }
       var _type = element.type.toLowerCase(),
         _valModel = view.model.get(element.name);
+
       switch (_type) {
         case 'number':
           _valModel = parseFloat(_valModel);
@@ -56,6 +65,12 @@ define([
           break;
       }
     });
+    if (DEBUG) {
+      console.log('[*] list.reFormatModel - end');
+      if (view.model && view.model.toJSON) {
+        console.log(view.model.toJSON());
+      }
+    }
   }
 
   return Backbone.View.extend({
@@ -85,12 +100,24 @@ define([
       var _tmp;
 
       if (typeof this.options.model === 'undefined') {
+
+        if (DEBUG) {
+          console.log('[*] list.initialize: Insert');
+        }
+
         this.model = new Model(_.extend(this.options.formSchema, {
           is_internal: this.options.internal,
           render_mode: this.options.mode
         }));
         this._btn_title = 'Add';
       } else {
+
+        if (DEBUG) {
+          console.log('[*] list.initialize: Edit');
+          console.log(this.options.model.toJSON());
+          console.log(this.model);
+        }
+
         this._btn_title = 'Done';
       }
 
@@ -112,6 +139,18 @@ define([
             formSchema: that.options.formSchema
           }),
           _options = that.options;
+
+        if (DEBUG) {
+          console.log('[*] list.render');
+          console.log(that.options);
+          if (that.model && that.model.toJSON) {
+            console.log(that.model.toJSON());
+          }
+          if (that.options && that.options.model && that.options.model.toJSON) {
+            console.log(that.options.model.toJSON());
+          }
+        }
+
         _.each(that.options.formSchema.fields, function(value, key, list) {
           // Check for Show On Mode
           if (!BaseField.prototype.checkShowOnMode.call(that, value, _options.options.mode, _options.options.formData.status)) {
@@ -160,10 +199,56 @@ define([
             html: _html
           }, that.options.formSchema)));
         }
+
+        // Found that it could replace the model value
+
         var $inputs = that.$(':input[value!=""]').not(':button');
         $inputs.each(function() {
           var $this = $(this);
-          that.model.set($this.attr('name'), $this.val());
+          var _thisName = $this.attr('name');
+          var _thisVal = $this.val();
+          if (DEBUG) {
+            console.log('    $inputs.each - start');
+            console.log($this);
+            console.log('Name: ' + _thisName);
+            console.log('Value: ' + _thisVal);
+            console.log('Model Current Value: ' + that.model.get($this.attr('name')));
+          }
+
+          if (_thisVal) {
+            that.model.set(_thisName, _thisVal);
+          }
+          var _modelVal = that.model.get(_thisName);
+          if ($this.has('data-field-type') && !!_modelVal) {
+            var _dataFieldType = $this.attr('data-field-type');
+            if (DEBUG) {
+              console.log('    data-field-type = "' + _dataFieldType + '"');
+            }
+            switch (_dataFieldType) {
+              case 'is-buttons-radio':
+                var $btnGrp = $this.closest('.btn-group');
+                if ($btnGrp.length) {
+                  var $targetBtn = $btnGrp.find(':button[value="' + _modelVal + '"]');
+                  if ($targetBtn.length) {
+                    $targetBtn.click();
+                    if (DEBUG) {
+                      console.log($targetBtn);
+                      console.log('    Click Button with Value = "' + _modelVal + '"');
+                    }
+                  }
+                }
+                break;
+              default:
+                if (console && console.warn) {
+                  console.warn('[!] list.render not implement "data-field-type" = "' + _dataFieldType + '" yet');
+                }
+            }
+          }
+
+          if (DEBUG) {
+            console.log($this);
+            console.log('Model After Set Value: ' + _modelVal);
+          }
         });
 
         // Format Values
@@ -174,7 +259,36 @@ define([
         // Bind Model
         try {
           if (that.el) {
+            if (DEBUG) {
+              console.log('    Binding Model in List.js [' + that.options.formSchema.name + ']');
+              console.log(that);
+              console.log(that.model.toJSON());
+              console.log(that.model.bindings);
+            }
             that._modelBinder.bind(that.model, that.el, that.model.bindings);
+            // Some Element
+            var _modelDataJson = (that.model && that.model.toJSON) ? that.model.toJSON() : null;
+            if (!_.isEmpty(_modelDataJson)) {
+              _.each(_modelDataJson, function(_modelVal, _modelKey) {
+
+                if (DEBUG) {
+                  console.log('    Model.' + _modelKey + ' = ' + _modelVal);
+                }
+                var $modelKeyInput = that.$el.find(':input[name="' + _modelKey + '"]');
+                if ($modelKeyInput.length) {
+                  var _mVal = $modelKeyInput.val();
+                  if (DEBUG) {
+                    console.log(_mVal);
+                  }
+                  if (_modelVal && !_mVal || _mVal === '') {
+                    if (DEBUG) {
+                      console.log('    Set :input[name="' + _modelKey + '"] = ' + _modelVal);
+                    }
+                    // $modelKeyInput.val(_modelVal);
+                  }
+                }
+              });
+            }
           }
         } catch (err) {
           if (window.console && window.console.log) {

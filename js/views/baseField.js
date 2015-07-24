@@ -841,7 +841,7 @@ define([
             if (field.options.decimals) {
               field.attributes['data-decimal'] = field.options.decimals;
             }
-          } else if (field.options.numbertype) {
+          } else if (field.options.numbertype && !field.options.limitinputvalue) {
             switch (field.options.numbertype.toLowerCase()) {
               case 'currency':
                 _num_class = 'number';
@@ -854,6 +854,12 @@ define([
             }
           } else {
             _num_class = 'natural';
+          }
+          if (field.options.limitinputvalue) {
+            _num_class = field.options.limitinputvalue;
+          }
+          if (!_num_class || typeof _num_class !== 'string') {
+            throw new Error('Could not be able to find matching class name for "' + field.name + '" for a number input type.');
           }
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], _num_class + ' span12');
           // Check to see how to render this
@@ -1710,6 +1716,16 @@ define([
       if (!e.data) {
         return;
       }
+
+      if (DEBUG) {
+        console.log('[*] baseField.displaySubForm');
+        if (model && model.toJSON) {
+          console.log(model.toJSON());
+        }
+        console.log(hidden);
+        console.log(listView);
+      }
+
       model = model || {};
       hidden = hidden || false;
       listView = listView || false;
@@ -1920,7 +1936,49 @@ define([
             // console.log($currentTarget);
             $container = $currentTarget.closest('.radio-container');
           }
-          if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1) {
+
+          // Added: Steps to Validate Logic
+          var isValidSteps = true;
+          if (field && field.options && field.options.visibleon && field.options.visibleon.steps) {
+            if (!_.isArray(field.options.visibleon.steps) || !field.options.visibleon.steps.length) {
+              throw new Error(field.name + ' must not contain an empty VisibleOn.Steps');
+            }
+            var _steps = field.options.visibleon.steps;
+            if (DEBUG) {
+              console.log('[*] Debug: VisibleOn with Steps');
+              // console.log(that);
+              console.log(_visibleVal);
+              console.log(field.name);
+              console.log(_steps);
+            }
+            for (var i = 0; i < _steps.length; i++) {
+              var _currentStep = _steps[i];
+              var _stepValues = _currentStep.values;
+              if (!_stepValues || !_.isArray(_stepValues)) {
+                var _tempError = (typeof JSON !== 'undefined' && JSON && JSON.stringify) ? JSON.stringify(_currentStep) : null;
+                throw new Error('Expects an array for "Values" in "' + _tempError + '"');
+              }
+              var $stepTargetValue = $(':input[name="' + _currentStep.name + '"]');
+              var _stepVal = $.trim($stepTargetValue.val());
+              var _inArray = _.indexOf(_stepValues, _stepVal);
+              var _stepResult = (_currentStep.notin) ? _inArray < 0 : _inArray > -1;
+              if (DEBUG) {
+                console.log('[*] Step: ' + i);
+                console.log($stepTargetValue);
+                console.log(_currentStep);
+                console.log(_stepVal);
+                console.log(_stepValues);
+                console.log(_inArray);
+                console.log(_stepResult);
+              }
+              if (!_stepResult) {
+                isValidSteps = false;
+                break;
+              }
+            };
+          }
+
+          if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1 && isValidSteps) {
             // console.log('[x] Match Value with VisibleOn, will render [' + field.name + '].');
             // console.log($currentTarget);
             // Insert this into markup

@@ -219,6 +219,12 @@ define([
       Utils.allowNaturalNumber(e);
     },
     /**
+     * Valid Whole Number
+     **/
+    allowWholeNumber: function(e) {
+      Utils.allowWholeNumber(e);
+    },
+    /**
      * Valid Integer Number Only
      **/
     allowZipCode: function(e) {
@@ -256,6 +262,7 @@ define([
       'keydown :input.number': 'allowNumber',
       'keydown :input.rational': 'allowRational',
       'keydown :input.natural': 'allowNaturalNumber',
+      'keydown :input.whole': 'allowWholeNumber',
       'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
       'keydown :input.telephone': 'formatTelephoneNumber',
       'blur :input.telephone': 'formatTelephoneNumber',

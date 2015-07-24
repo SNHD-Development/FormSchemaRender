@@ -13,6 +13,9 @@ define([
   'text!templates/notice/confirmation.html',
   'bootstrap'
 ], function($, _, Backbone, Vm, Utils, Events, BaseField, tableTemplate, popoverTemplate) {
+
+  var DEBUG = false;
+
   var AppView = Backbone.View.extend({
     template: _.template(tableTemplate),
     popTemplate: _.template(popoverTemplate),
@@ -121,6 +124,14 @@ define([
     editModel: function(e) {
       e.preventDefault();
       var _index = $(e.currentTarget, this.el).attr('data-id');
+
+      if (DEBUG) {
+        var _debugCollection = this.collection.toJSON();
+        console.log('[*] Click on editModel with index = "' + _index + '" found [' + _debugCollection.length + ']');
+        console.log(_debugCollection);
+        console.log(this.collection.get(_index).toJSON());
+      }
+
       $('.actions .form-view', this.$el.parent('.subform-container')).trigger('click', this.collection.get(_index));
     },
     popoverConfirm: function(e) {
