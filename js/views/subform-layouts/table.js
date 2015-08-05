@@ -37,9 +37,17 @@ define([
         _labels = [],
         _values = new Array(this.collection.length),
         _models = new Array(this.collection.length),
-        _tableHeader,
-        _options = this.options;
+        _tableHeader;
+      if (this.options && this.options.formSchema && !this.options.formSchema.options) {
+        this.options.formSchema.options = {};
+      }
+      var _options = this.options;
       _.each(this.options.formSchema.fields, function(element) {
+        if (element) {
+          if (!element.options) {
+            element.options = {};
+          }
+        }
         switch (element.type.toLowerCase()) {
           case 'fieldsetstart':
           case 'fieldsetend':
@@ -47,6 +55,10 @@ define([
         }
         // Need to make sure that do we need to render this or not
         if (!BaseField.prototype.checkShowOnMode.call(that, element, _options.options.mode, _options.options.formData.status)) {
+          return;
+        }
+        // If added Options.ShowOnTable = false, will not show
+        if (element.options && element.options.showontable === false) {
           return;
         }
         if (element.options && element.options.tabletitle) {
@@ -105,21 +117,37 @@ define([
           }
         });
       });
+
       $(this.el).html(this.template({
         labels: _labels,
         values: _values,
         modelId: _models,
-        heading: ((typeof this.options.formSchema.options.readmodedescription !== 'undefined') ? this.options.formSchema.options.readmodedescription : this.options.formSchema.name)
+        heading: ((typeof this.options.formSchema.options.readmodedescription !== 'undefined') ? this.options.formSchema.options.readmodedescription : this.options.formSchema.name),
+        showViewBtn: this.options.formSchema.options.showviewbtn
       }));
 
       // Set Up Popover
       Utils.setupPopover(this.$el);
     },
     events: {
+      'click .subform-read-model': 'readModel',
       'click .subform-edit-model': 'editModel',
       'click .subform-remove-model': 'popoverConfirm',
       'click .popover-action .popover-submit': 'removeModel',
       'click .popover-action .popover-cancel': 'removePopover'
+    },
+    readModel: function(e) {
+      e.preventDefault();
+      var _index = $(e.currentTarget, this.el).attr('data-id');
+
+      if (DEBUG) {
+        var _debugCollection = this.collection.toJSON();
+        console.log('[*] Click on readModel with index = "' + _index + '" found [' + _debugCollection.length + ']');
+        console.log(_debugCollection);
+        console.log(this.collection.get(_index).toJSON());
+      }
+
+      $('.actions .form-view', this.$el.parent('.subform-container')).trigger('click', [this.collection.get(_index), undefined, undefined, true]);
     },
     editModel: function(e) {
       e.preventDefault();
@@ -139,7 +167,7 @@ define([
 
       var _opt = {
         html: true,
-        placement: 'bottom',
+        placement: 'top',
         trigger: 'manual',
         title: 'Do you want to remove this data?',
         content: this.popTemplate({

@@ -761,6 +761,7 @@ define([
             if (field.options && field.options.datepickeroptions) {
               // If has the special validation, will add to logic
               this._DatePickerLogicArr[field.name] = field.options.datepickeroptions;
+              field.attributes['data-has-datepicker-options'] = true;
             }
           }
           break;
@@ -1703,7 +1704,7 @@ define([
           _listView.off();
         });
       }
-
+      // Show Subform
       this.displaySubForm({
         data: _options
       }, {}, true, _listView);
@@ -1712,11 +1713,12 @@ define([
      * Show Modal List View
      * This will be called when List View (Sub Form) Render
      */
-    displaySubForm: function(e, model, hidden, listView) {
+    displaySubForm: function(e, model, hidden, listView, read) {
+      read = read || false;
       if (!e.data) {
         return;
       }
-
+      // var DEBUG = true;
       if (DEBUG) {
         console.log('[*] baseField.displaySubForm');
         if (model && model.toJSON) {
@@ -1724,6 +1726,7 @@ define([
         }
         console.log(hidden);
         console.log(listView);
+        console.log(read);
       }
 
       model = model || {};
@@ -1747,7 +1750,7 @@ define([
         if (hidden) {
           $subFormView.hide();
         }
-        subFormView.render(hidden);
+        subFormView.render(hidden, read);
         if (!hidden) {
           $subFormView.show();
           $subFormView.addClass('active');
@@ -1780,6 +1783,11 @@ define([
      * Add model to List
      **/
     addSubformData: function(e, list, models, reset) {
+      // var DEBUG = true;
+      if (DEBUG) {
+        console.log('[*] baseField.addSubformData');
+        console.log(arguments);
+      }
       reset = reset || false;
       models = models || false;
       var _view = (list.options.formSchema.view === '') ? 'table' : list.options.formSchema.view,
@@ -1803,6 +1811,10 @@ define([
       }
       // Render View
       require(['views/subform-layouts/' + _view], function(CollectionView) {
+        if (DEBUG) {
+          console.log('    in "views/subform-layouts/' + _view + '"');
+          console.log(arguments);
+        }
         var _data = {
             el: '#' + list.options.formId + e.data.prefixedName['collectiondisplayid'],
             formSchema: list.options.formSchema,
@@ -2154,6 +2166,11 @@ define([
 
               // If there are DatePicker
               if (that._hasDate) {
+                if (DEBUG) {
+                  console.log('[*] baseField.setupVisibleOn - _hasDate');
+                  console.log(that.el);
+                  console.log(that.$el);
+                }
                 Utils.setupDateInput(that.el, that);
               }
 

@@ -257,6 +257,7 @@ $text_area_min_height: 100px;
      * Popover Form
      **/
     .popover-form, .subform-actions {
+        margin: 10px auto;
         .popover-action {
             text-align: center;
             .popover-submit {
@@ -287,7 +288,7 @@ $text_area_min_height: 100px;
      * SubForm Style
      **/
     .subform-container {
-        padding: 20px;
+        padding: 20px 0;
         margin-bottom: 30px;
         input, select, textarea {
             margin-bottom: 15px;
@@ -324,12 +325,14 @@ $text_area_min_height: 100px;
         }
         .subform-actions {
             text-align: center;
-            .subform-edit-model {
-                margin-right: 30px;
+            .btn {
+                margin: auto 8px;
             }
             // Reduce L R Padding for Popover
             .popover-title {
                 padding: 12px;
+                text-align: center;
+                font-weight: bold;
             }
         }
     }

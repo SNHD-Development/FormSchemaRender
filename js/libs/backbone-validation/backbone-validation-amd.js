@@ -12,6 +12,8 @@
     define(['backbone', 'underscore'], factory);
   }
 }(function(Backbone, _) {
+  var DEBUG = false;
+
   Backbone.Validation = (function(_) {
     'use strict';
 
@@ -537,13 +539,16 @@
         // minDate validator
         // Validate that the value has to be greater than minDate
         mindate: function(value, attr, minDate, model) {
+          if (!value || value === '') {
+            return;
+          }
           if (!value || !value.length || value === '') {
             value = jQuery('#' + attr).val();
             if (model.has(attr) && model.get(attr) === '') {
               model.set(attr, value);
             }
           }
-          var _val = value.split('/');
+          var _val = (value && value.split) ? value.split('/') : [];
           if (_val.length === 3) {
             if (minDate.search(/\//i) < 0) {
               var _minDate = minDate.toLowerCase();
@@ -569,6 +574,14 @@
         // maxDate validator
         // Validate that the value has to be greater than minDate
         maxdate: function(value, attr, minDate, model) {
+          var DEBUG = false;
+          if (DEBUG) {
+            console.log('[*] backbone-validation-amd:maxdate');
+            console.log(arguments);
+          }
+          if (!value || value === '') {
+            return;
+          }
           // Need to check for special char
           if (typeof minDate === 'string') {
             switch (minDate) {
@@ -581,7 +594,7 @@
                 return;
             }
           }
-          var _val = value.split('/');
+          var _val = (value && value.split) ? value.split('/') : [];
           if (_val.length === 3) {
             var valDate = new Date(),
               validateDate = new Date(),

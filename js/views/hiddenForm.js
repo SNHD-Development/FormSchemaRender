@@ -15,8 +15,18 @@ define([
       var that = this,
         template,
         selector;
+      if (typeof data === 'string') {
+        try {
+          data = $.parseJSON(data);
+        } catch (err) {
+          alert('Could not be able to parse the data.');
+          return;
+        }
+      }
       if (data.html) {
-        template = data.html;
+        // Need to convert to the right tag
+        template = $('<textarea />').html(data.html).text();
+        console.log(template);
         selector = '#snhd-payment-form';
       } else {
         template = this.template(data);

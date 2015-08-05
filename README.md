@@ -174,6 +174,9 @@ Or we can add this key to the FormSchema as well.
 		}
 	}
 
+For preValidation event,
+Please add class invalid_prevalidation to the $form for preventing form from submission.
+
 ### Multi-Languages Support
 
 If we define Languages key with [ISO 639-1](http://loc.gov/standards/iso639-2/php/code_list.php), it will render language when you pass in the language parameter. Now we can render different text for each languages.
@@ -1100,6 +1103,57 @@ Example,
         }]
     }
 
+If do now want to show some field(s) in the table view set Options.ShowOnTable to false
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do"
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?",
+            "Options": {
+                "SortBy": "int",
+                "ShowOnTable": false
+            }
+        }]
+    }
+
+Sometime when you have many fields, the layout might not looks good. Simply use Options.ShowOnTable to false and Options.ShowViewBtn to true
+can be helpful
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do",
+            "ShowViewBtn": true
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?",
+            "Options": {
+                "SortBy": "int",
+                "ShowOnTable": false
+            }
+        }]
+    }
+
+
 ## Internal Only Options
 
 These options will be used in internal only mode.
@@ -1124,6 +1178,10 @@ Sometime there are some fileds that internal should not be able to update these 
     - Support VisibleOn Steps Filter
     - Implement LimitInputValue for Number Type
     - In List.js some elements such as "FileRepository" or "Radio" is not loaded to ModelBinder by default
+    - Create a new List layout when the columns are long
+    - In Table View, add Options.ShowOnTable to false will not show that fields in table
+    - Add ShowViewBtn in Options to true, will show the View button
+    - Fix Payment in IE 10 and below (hiddenform.js)
 
 * 0.1.8
     - Escape html special character in Textarea

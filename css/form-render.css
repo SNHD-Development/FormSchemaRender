@@ -248,10 +248,12 @@
     margin-right: 10px; }
     .form-render .birthday-picker select:last-child {
       margin-right: 0; }
-  .form-render .popover-form .popover-action, .form-render .subform-actions .popover-action {
-    text-align: center; }
-    .form-render .popover-form .popover-action .popover-submit, .form-render .subform-actions .popover-action .popover-submit {
-      margin-right: 30px; }
+  .form-render .popover-form, .form-render .subform-actions {
+    margin: 10px auto; }
+    .form-render .popover-form .popover-action, .form-render .subform-actions .popover-action {
+      text-align: center; }
+      .form-render .popover-form .popover-action .popover-submit, .form-render .subform-actions .popover-action .popover-submit {
+        margin-right: 30px; }
   .form-render .controls-row input, .form-render .controls-row select, .form-render .controls-row textarea {
     margin-bottom: 15px; }
   .form-render .controls-row .add-on {
@@ -264,7 +266,7 @@
     width: 90%;
     float: none; }
   .form-render .subform-container {
-    padding: 20px;
+    padding: 20px 0;
     margin-bottom: 30px;
     /**
      * Select 2 Container
@@ -293,10 +295,12 @@
       margin: 20px auto; }
     .form-render .subform-container .subform-actions {
       text-align: center; }
-      .form-render .subform-container .subform-actions .subform-edit-model {
-        margin-right: 30px; }
+      .form-render .subform-container .subform-actions .btn {
+        margin: auto 8px; }
       .form-render .subform-container .subform-actions .popover-title {
-        padding: 12px; }
+        padding: 12px;
+        text-align: center;
+        font-weight: bold; }
   .form-render .form-actions {
     text-align: center;
     padding: 19px 20px 20px; }

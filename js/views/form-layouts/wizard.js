@@ -281,7 +281,9 @@ define([
       } else {
         $form.submit();
       }
-      if (!$form.hasClass('validation_error')) {
+      if ($form.hasClass('invalid_prevalidation')) {
+        // Do nothing
+      } else if (!$form.hasClass('validation_error')) {
         $submitDisplay.attr('disabled', true).popover(_opt).popover('show').next('.popover').addClass('success');
       }
     },

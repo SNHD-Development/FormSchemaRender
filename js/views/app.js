@@ -295,8 +295,13 @@ define([
         }
       });
 
-      $form.trigger($form.attr('id') + '.preValidation', [e, $form, this]);
+      $form.removeClass('invalid_prevalidation').trigger($form.attr('id') + '.preValidation', [e, $form, this]);
+      if ($form.hasClass('invalid_prevalidation')) {
+        e.preventDefault();
+        return false;
+      }
       if ($form.hasClass('form_submitted')) {
+        e.preventDefault();
         return false;
       }
 
@@ -628,8 +633,12 @@ define([
         console.error(arguments);
       }
       // If Error Happen in AJAX
-      var $submitBtn = $('.form-actions button[type="submit"]'),
+      var $submitBtn = $('.form-actions.wizard-actions button.btn_next'),
         errorTxt = errorThrown;
+      if (!$submitBtn.length) {
+        // This could be a normal form
+        $submitBtn = $('.form-actions button[type="submit"]');
+      }
       if ($submitBtn.length) {
         // Remove Popover
         removePopover($submitBtn);

@@ -129,7 +129,7 @@ define([
       }
       this.template = _.template(_tmp);
     },
-    render: function(firstTime) {
+    render: function(firstTime, readMode) {
       var that = this,
         _defaultEmail = '';
       // Render Fields
@@ -150,6 +150,8 @@ define([
             console.log(that.options.model.toJSON());
           }
         }
+
+        // var DEBUG = true;
 
         _.each(that.options.formSchema.fields, function(value, key, list) {
           // Check for Show On Mode
@@ -182,6 +184,14 @@ define([
             }
           }
 
+          if (DEBUG) {
+            console.log('    - Loop: ' + key);
+            console.log(value);
+            if (value.name) {
+              console.log(that.model.get(value.name));
+            }
+          }
+
           _html += formView.render(value);
 
           if (_defaultEmail !== '') {
@@ -189,6 +199,9 @@ define([
           }
 
         });
+
+        // DEBUG = false;
+
         var _btn_opts = _.clone(that.options.formSchema.formoptions);
         _btn_opts.submitbutton = that._btn_title;
         _btn_opts.subForm = true;
@@ -219,8 +232,8 @@ define([
             that.model.set(_thisName, _thisVal);
           }
           var _modelVal = that.model.get(_thisName);
-          if ($this.has('data-field-type') && !!_modelVal) {
-            var _dataFieldType = $this.attr('data-field-type');
+          var _dataFieldType = $this.attr('data-field-type');
+          if (_dataFieldType && !!_modelVal) {
             if (DEBUG) {
               console.log('    data-field-type = "' + _dataFieldType + '"');
             }
@@ -321,6 +334,18 @@ define([
           Utils.setupRadioBtnGroupValue(that.$el);
         }
 
+        // If there are BirthDayPicker
+        // var DEBUG = true;
+        if (DEBUG) {
+          console.log('[*] Check for BirthDayPicker');
+          console.log(that);
+          console.log(that.options);
+          console.log(formView);
+        }
+        if (formView._hasBDate) {
+          Utils.setupBDateInput(that.$el, that.model, true);
+        }
+
         // If there are DatePicker
         if (formView._hasDate) {
           Utils.setupDateInput(that.$el, that);
@@ -336,8 +361,15 @@ define([
           if (value === '') {
             return;
           }
+          // var DEBUG = true;
           var _inputName = that.$el.find(':input[name="' + key + '"]'),
             _val = _inputName.val();
+          if (DEBUG) {
+            console.log('    - ' + key);
+            console.log(_val);
+            console.log(that.model.get(key));
+            console.log(_inputName);
+          }
           if (_val === '') {
             if (_inputName.is('select') && _inputName.attr('data-url')) {
               // When the data comeback from AJAX Call will loaded the value in
@@ -361,6 +393,18 @@ define([
           $('html, body').animate({
             scrollTop: that.$el.offset().top - 30
           }, 1000);
+        }
+
+        // If this is read mode
+        if (readMode) {
+          var $allInput = that.$(':input').not(':button.btn-cancel');
+          $allInput.each(function() {
+            $(this).attr('disabled', true);
+          });
+          var $btnDone = that.$(':button.btn-submit');
+          var $btnCancel = that.$(':button.btn-cancel');
+          $btnDone.hide();
+          $btnCancel.text('Close');
         }
       });
     },
@@ -386,6 +430,11 @@ define([
     },
     preValidate: function(e) {
       e.stopPropagation();
+      // var DEBUG = false;
+      if (DEBUG) {
+        console.log('[*] list.preValidate');
+        console.log(this.model.toJSON());
+      }
       Utils.preValidate(e, this.model);
     },
     /**
@@ -394,6 +443,7 @@ define([
      * @return
      */
     sendForm: function(e) {
+      // var DEBUG = true;
       e.preventDefault();
       var that = this,
         _submitBtn = $('.form-actions .btn-submit', this.$el);
@@ -403,6 +453,32 @@ define([
       _submitBtn.addClass('submitted');
 
       Utils.setHiddenField(this.el);
+
+      // Before anything need to read the birthdate field
+      var $bdayPicker = this.$('.birthdaypicker');
+      if ($bdayPicker && $bdayPicker.length) {
+        if (DEBUG) {
+          console.log('    BdatePicker: ' + $bdayPicker.length);
+          console.log($bdayPicker);
+        }
+        $bdayPicker.each(function() {
+          // Need to trigger the select
+          var $bdayWrapper = $(this);
+          var $bdayPickerMonth = $bdayWrapper.find('.birth-month');
+          if (DEBUG) {
+            console.log($bdayPickerMonth);
+          }
+          $bdayPickerMonth.trigger('change');
+          // Need to make sure it is a valid date
+          var $hiddenInput = $bdayWrapper.find(':input[type="hidden"]');
+          if (DEBUG) {
+            console.log($hiddenInput);
+          }
+          if ($hiddenInput.val().match(/nan/i)) {
+            $hiddenInput.val('');
+          }
+        });
+      }
 
       // Set the Values to Model
       var $inputs = that.$(':input[value!=""]').not(':button');
@@ -421,6 +497,7 @@ define([
         });
         // Add Model to the parent
         _submitBtn.removeClass('submitted');
+        // Trigger Add Event for List
         this.$el.trigger(this.options.formId + '.add', this);
       } else {
 
