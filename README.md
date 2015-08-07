@@ -1182,6 +1182,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - In Table View, add Options.ShowOnTable to false will not show that fields in table
     - Add ShowViewBtn in Options to true, will show the View button
     - Fix Payment in IE 10 and below (hiddenform.js)
+    - If using social security and it is not require, it will make sure the format is corrected
 
 * 0.1.8
     - Escape html special character in Textarea

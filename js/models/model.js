@@ -272,6 +272,17 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
                 _validation[value.name].pattern = /^\d{3}\-\d{2}-\d{4}$/i;
               }
             }
+            if (!_validation[value.name]) {
+              _validation[value.name] = {};
+            }
+            if (_validation && !_validation[value.name].pattern) {
+              // Force to not require, but will not override the value
+              if (typeof _validation[value.name].required === 'undefined') {
+                _validation[value.name].required = false;
+              }
+              _validation[value.name].pattern = /(^$|^\d{3}\-\d{2}-\d{4}$)/i;
+            }
+
             if (_addToModelBinder) {
               model.bindings[value.name] = '[name="' + value.name + '"]';
             }
