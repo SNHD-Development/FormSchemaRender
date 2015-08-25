@@ -123,7 +123,8 @@ define([
         values: _values,
         modelId: _models,
         heading: ((typeof this.options.formSchema.options.readmodedescription !== 'undefined') ? this.options.formSchema.options.readmodedescription : this.options.formSchema.name),
-        showViewBtn: this.options.formSchema.options.showviewbtn
+        showViewBtn: this.options.formSchema.options.showviewbtn,
+        addOnly: this.options.formSchema.options.addonly
       }));
 
       // Set Up Popover

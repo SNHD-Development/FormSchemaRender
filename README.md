@@ -1153,6 +1153,31 @@ Example,
         }]
     }
 
+To allowed add only, set Options.AddOnly = true
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do",
+            "ShowViewBtn": true,
+            "AddOnly": true
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?",
+            "Options": {
+                "SortBy": "int",
+                "ShowOnTable": false
+            }
+        }]
+    }
 
 ## Internal Only Options
 
@@ -1183,6 +1208,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Add ShowViewBtn in Options to true, will show the View button
     - Fix Payment in IE 10 and below (hiddenform.js)
     - If using social security and it is not require, it will make sure the format is corrected
+    - Add AddOnly Options in List
 
 * 0.1.8
     - Escape html special character in Textarea

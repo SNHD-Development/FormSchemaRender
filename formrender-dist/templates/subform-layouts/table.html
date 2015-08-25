@@ -17,7 +17,7 @@ if (heading) {
 			%>
 			<th <%= _sortBy %>><%= element %></th>
 			<% }); %>
-			<% if(_model) { %>
+			<% if(_model && (showViewBtn || !addOnly) ) { %>
 			<th>Action</th>
 			<% } %>
 		</tr>
@@ -29,13 +29,15 @@ if (heading) {
 			<% var _sortByVal = (mode && typeof sortByVal !== 'undefined' && sortByVal[index][index2]) ? sortByVal[index][index2]: '' %>
 			<td <%= _sortByVal %>><%= element2 %></td>
 			<% }); %>
-			<% if(_model) { %>
+			<% if(_model && (showViewBtn || !addOnly) ) { %>
 			<td class="subform-actions">
                 <% if (showViewBtn) { %>
                 <button class="btn btn-primary subform-read-model" data-id="<%= modelId[index] %>"><i class="icon-file"></i> View</button>
                 <% } %>
+                <% if (!addOnly) { %>
 				<button class="btn btn-info subform-edit-model" data-id="<%= modelId[index] %>"><i class="icon-edit"></i> Edit</button>
 				<button class="btn btn-danger subform-remove-model" data-id="<%= modelId[index] %>"><i class="icon-remove"></i> Remove</button>
+                <% } %>
 			</td>
 			<% } %>
 		</tr>
