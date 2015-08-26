@@ -1,6 +1,12 @@
 <%
 var _model = (typeof modelId !== 'undefined') ? true : false,
 	_tableClass = (mode)  ? ' stupidtable': '';
+var _createdUser;
+var currentUserLowerCase;
+
+if (_model && selfOnly) {
+    currentUserLowerCase = currentUser.toLowerCase();
+}
 
 if (heading) {
 %>
@@ -17,7 +23,7 @@ if (heading) {
 			%>
 			<th <%= _sortBy %>><%= element %></th>
 			<% }); %>
-			<% if(_model && (showViewBtn || !addOnly) ) { %>
+			<% if(_model && (showViewBtn || !addOnly || currentUserLowerCase) ) { %>
 			<th>Action</th>
 			<% } %>
 		</tr>
@@ -25,16 +31,23 @@ if (heading) {
 	<tbody>
 		<% _.each( values, function(element1, index) { %>
 		<tr>
-			<% _.each( element1, function(element2, index2) { %>
+			<%
+            /* Find Matching Username */
+            var _match = false;
+            _.each( element1, function(element2, index2) {
+                if (_model && selfOnly && userIndex === index2) {
+                    _match = (currentUserLowerCase === jQuery.trim(element2.toLowerCase()));
+                }
+            %>
 			<% var _sortByVal = (mode && typeof sortByVal !== 'undefined' && sortByVal[index][index2]) ? sortByVal[index][index2]: '' %>
 			<td <%= _sortByVal %>><%= element2 %></td>
 			<% }); %>
-			<% if(_model && (showViewBtn || !addOnly) ) { %>
+			<% if(_model && (showViewBtn || !addOnly || currentUserLowerCase) ) { %>
 			<td class="subform-actions">
                 <% if (showViewBtn) { %>
                 <button class="btn btn-primary subform-read-model" data-id="<%= modelId[index] %>"><i class="icon-file"></i> View</button>
                 <% } %>
-                <% if (!addOnly) { %>
+                <% if (!addOnly && !selfOnly || selfOnly && _match) { %>
 				<button class="btn btn-info subform-edit-model" data-id="<%= modelId[index] %>"><i class="icon-edit"></i> Edit</button>
 				<button class="btn btn-danger subform-remove-model" data-id="<%= modelId[index] %>"><i class="icon-remove"></i> Remove</button>
                 <% } %>

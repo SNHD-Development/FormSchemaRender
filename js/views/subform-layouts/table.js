@@ -42,6 +42,7 @@ define([
         this.options.formSchema.options = {};
       }
       var _options = this.options;
+      var _userIndex;
       _.each(this.options.formSchema.fields, function(element) {
         if (element) {
           if (!element.options) {
@@ -84,7 +85,8 @@ define([
               break;
 
             case 'useraccount':
-              _labels[_labels.length - 1] = 'User';
+              _userIndex = _labels.length - 1;
+              _labels[_userIndex] = 'User';
               _values[index].push(model[element.name]);
               break;
 
@@ -124,7 +126,10 @@ define([
         modelId: _models,
         heading: ((typeof this.options.formSchema.options.readmodedescription !== 'undefined') ? this.options.formSchema.options.readmodedescription : this.options.formSchema.name),
         showViewBtn: this.options.formSchema.options.showviewbtn,
-        addOnly: this.options.formSchema.options.addonly
+        addOnly: this.options.formSchema.options.addonly,
+        selfOnly: (this.options.formSchema.options.addonly) ? false : this.options.formSchema.options.selfonly,
+        currentUser: Utils.getUserIdFormHtml(),
+        userIndex: _userIndex
       }));
 
       // Set Up Popover

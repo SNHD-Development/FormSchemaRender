@@ -1179,6 +1179,32 @@ Example,
         }]
     }
 
+To allowed edit and delete for created user, set Options.SelfOnly = true
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do",
+            "ShowViewBtn": true,
+            "SelfOnly": true
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?",
+            "Options": {
+                "SortBy": "int",
+                "ShowOnTable": false
+            }
+        }]
+    }
+
 ## Internal Only Options
 
 These options will be used in internal only mode.
