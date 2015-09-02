@@ -2057,6 +2057,15 @@ define([
         // console.log(_url);
         // Detect the {{}} Template, then this will be look up dynamic
         var _tokens = that.parseTemplateString(_url);
+
+        // Select2 does not work on select element for Ajax Call
+        if (model) {
+          var _modelValue = model.get($this.attr('name'));
+          if (_modelValue && _modelValue !== '') {
+            $this.attr('data-select-value', _modelValue);
+          }
+        }
+
         if (_tokens) {
           var _tokensStatic = that.parseTemplateStringGet(_url);
           if (_tokensStatic) {
@@ -2073,13 +2082,6 @@ define([
           // Then we will be using select2 (Dynamic Lookup)
           if (!$this.select2) {
             throw 'Error: select2 is not yet loaded. Please refresh this page again! (Setup "' + $this.attr('id') + '"")';
-          }
-          // Select2 does not work on select element for Ajax Call
-          if (model) {
-            var _modelValue = model.get($this.attr('name'));
-            if (_modelValue && _modelValue !== '') {
-              $this.attr('data-select-value', _modelValue);
-            }
           }
           var _domStr = '<input type="hidden" name="' + $this.attr('name') + '" id="' + $this.attr('id') + '" class="' + $this.attr('class') + ' has-select2-dynamic" />',
             _value = $this.attr('data-select-key-value'),
