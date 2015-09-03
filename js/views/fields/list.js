@@ -387,6 +387,16 @@ define([
         // Set Up Ajax Call
         Utils.setupUrlAjaxCall(that.$el, null, that.model);
 
+        // Set Up Select2
+        try {
+          // console.log(that);
+          Utils.setupSelect2(that);
+        } catch (err) {
+          if (console && console.error) {
+            console.error(err);
+          }
+        }
+
         // Find the first input in the form
         var $fInput = that.$(':input').not(':hidden').first().focus();
         if ($fInput.length && that.$el.length) {

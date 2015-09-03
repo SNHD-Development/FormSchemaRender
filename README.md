@@ -1236,6 +1236,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - If using social security and it is not require, it will make sure the format is corrected
     - Add AddOnly Options in List
     - List Field Type can render Select with Options.Url properly
+    - List Field Type can render Select with Options.Tags
 
 * 0.1.8
     - Escape html special character in Textarea

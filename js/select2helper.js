@@ -166,7 +166,7 @@ define([
        */
       var $hidden = cloneInputToHiddenInput($element),
         elementName = $hidden.attr('name');
-      if (form._elementData[elementName] && form._elementData[elementName].value) {
+      if (form._elementData && form._elementData[elementName] && form._elementData[elementName].value) {
         // Set Up Values for edit mode
         var _val = JSON.stringify(form._elementData[elementName].value).replace(/\[|\]|\"/ig, '');
         $hidden.val(_val);
@@ -175,7 +175,7 @@ define([
         tags: []
       };
       $hidden.select2(_options);
-      if (form._elementData[elementName] && form._elementData[elementName].events) {
+      if (form._elementData && form._elementData[elementName] && form._elementData[elementName].events) {
         setupEvents($hidden, form._elementData[elementName].events);
       }
     },

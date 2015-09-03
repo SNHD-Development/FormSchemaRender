@@ -2334,6 +2334,10 @@ define([
      * @return
      */
     setupSelect2: function(form) {
+      if (!form) {
+        return;
+      }
+
       function setup(el, _form) {
         if (el.hasClass('tags')) {
           Select2Helper.renderTags(el, _form);
@@ -2343,11 +2347,19 @@ define([
         }
       }
       if (form.el) {
-        $(form.el + ' .selecttwo-render').each(function() {
+        var _id = form.el;
+        if (!_.isString(_id)) {
+          _id = $(_id).attr('id');
+          if (_id) {
+            _id = '#' + _id;
+          }
+        }
+        $(_id + ' .selecttwo-render').each(function() {
           var $this = $(this);
           setup($this, form);
         });
-      } else {
+      } else if (form.find) {
+        // console.log(form);
         var $el = form.find('.selecttwo-render');
         if ($el.length) {
           setup($el, form);

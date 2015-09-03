@@ -153,6 +153,7 @@ define([
             Utils.setupUrlAjaxCall($('form.form-render'));
 
             // Set Up Select2 when having class .
+            // console.log(that.formView);
             Utils.setupSelect2(that.formView);
 
             // Bind Model Here
