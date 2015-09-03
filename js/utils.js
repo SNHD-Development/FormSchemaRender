@@ -2043,6 +2043,13 @@ define([
      * @return
      */
     setupUrlAjaxCall: function($form, $scope, model) {
+      var DEBUG = false;
+
+      if (DEBUG) {
+        console.log('[*] setupUrlAjaxCall');
+        console.log(arguments);
+      }
+
       $scope = $scope || null;
       model = model || null;
       var $urlEndPoint = ($scope) ? $scope : $(':input[data-url]'),
@@ -2054,6 +2061,15 @@ define([
       $urlEndPoint.each(function() {
         var $this = $(this),
           _url = $this.attr('data-url');
+        // This select could have Tags
+        if ($this.hasClass('tags')) {
+          return;
+        }
+        if (DEBUG) {
+          console.log('- Element');
+          console.log($this);
+          console.log(_url);
+        }
         // console.log(_url);
         // Detect the {{}} Template, then this will be look up dynamic
         var _tokens = that.parseTemplateString(_url);
@@ -2334,6 +2350,7 @@ define([
      * @return
      */
     setupSelect2: function(form) {
+      var DEBUG = false;
       if (!form) {
         return;
       }
@@ -2346,6 +2363,13 @@ define([
           Select2Helper.render(el, _form);
         }
       }
+
+      if (DEBUG) {
+        console.log('[*] setupSelect2');
+        console.log(arguments);
+      }
+
+      // Logic
       if (form.el) {
         var _id = form.el;
         if (!_.isString(_id)) {
@@ -2356,6 +2380,9 @@ define([
         }
         $(_id + ' .selecttwo-render').each(function() {
           var $this = $(this);
+          if (DEBUG) {
+            console.log($this);
+          }
           setup($this, form);
         });
       } else if (form.find) {

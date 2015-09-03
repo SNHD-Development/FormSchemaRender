@@ -5,15 +5,16 @@
 define([
   'jquery',
   'underscore',
+  'utils',
   'jquery.select2'
-], function($, _) {
+], function($, _, Utils) {
 
   if (!$().select2) {
     throw 'Could not be abel to find select2';
   }
 
   function cloneInputToHiddenInput($element) {
-    var attrArray = ['name', 'class', 'id', 'style', 'data-events'],
+    var attrArray = ['name', 'class', 'id', 'style', 'data-events', 'data-url'],
       str = '';
     _.each(attrArray, function(element) {
       var _attr = $element.attr(element);
@@ -160,23 +161,71 @@ define([
 
   return {
     renderTags: function($element, form) {
+
+      var _setUpSelectTwoTag = function(data) {
+        data = data || null;
+        if (form._elementData && form._elementData[elementName] && form._elementData[elementName].value) {
+          // Set Up Values for edit mode
+          var _val = JSON.stringify(form._elementData[elementName].value).replace(/\[|\]|\"/ig, '');
+          $hidden.val(_val);
+        }
+        var _options = {
+          tags: (data) ? data : []
+        };
+        $hidden.select2(_options);
+        if (form._elementData && form._elementData[elementName] && form._elementData[elementName].events) {
+          setupEvents($hidden, form._elementData[elementName].events);
+        }
+      };
+
       form = form || null;
       /**
        * Example, $("#e12").select2({tags:["red", "green", "blue"]});
        */
       var $hidden = cloneInputToHiddenInput($element),
         elementName = $hidden.attr('name');
-      if (form._elementData && form._elementData[elementName] && form._elementData[elementName].value) {
-        // Set Up Values for edit mode
-        var _val = JSON.stringify(form._elementData[elementName].value).replace(/\[|\]|\"/ig, '');
-        $hidden.val(_val);
-      }
-      var _options = {
-        tags: []
-      };
-      $hidden.select2(_options);
-      if (form._elementData && form._elementData[elementName] && form._elementData[elementName].events) {
-        setupEvents($hidden, form._elementData[elementName].events);
+      // If this has Options.Url
+      var _url = $hidden.attr('data-url');
+      if (_url) {
+        $.ajax({
+          url: _url,
+          type: 'GET',
+          cache: false,
+          success: function(data, textStatus, jqXHR) {
+            // console.log(arguments);
+            // console.log($element);
+
+            /*_.each(data, function(v, k) {
+              var option;
+              if (_.isObject(v)) {
+                if (v.id && v.text) {
+                  option = $('<option/>', {
+                    value: v.id
+                  }).text(v.text);
+                } else {
+                  throw new Error('Not implement This Data!');
+                }
+              } else {
+                option = $('<option/>', {
+                  value: v
+                }).text(v)
+              }
+              $element.append(option);
+            });
+            $element.attr('multiple', true);*/
+            // console.log($element);
+            _setUpSelectTwoTag(data);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            if (console && console.error) {
+              console.error('Could not be able to Send Request to ' + _url);
+              console.error(arguments);
+            }
+            throw new Error('Error when send Ajax Request!');
+          }
+        });
+      } else {
+        _setUpSelectTwoTag();
       }
     },
     render: function($element, form) {
