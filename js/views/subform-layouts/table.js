@@ -31,8 +31,12 @@ define([
       this.collection.on('reset', this.resetCollection, this);
     },
     render: function() {
+      var DEBUG = false;
       //console.log('=== Render List View ===');
       //console.log(this.collection.toJSON());
+      if (DEBUG) {
+        console.log('[*] render table.js in subform-layouts -');
+      }
       var that = this,
         _labels = [],
         _values = new Array(this.collection.length),
@@ -112,6 +116,18 @@ define([
                 _number = model[element.name];
               }
               _values[index].push(_number);
+              break;
+
+            case 'date':
+              var _tempDate = model[element.name];
+              if (_tempDate && _tempDate.$date) {
+                _tempDate = moment(_tempDate.$date);
+                if (!_tempDate.isValid()) {
+                  throw new Error('Invalid Date in "' + element.name + '" with "' + JSON.stringify(model[element.name]) + '"');
+                }
+                _tempDate = _tempDate.format('MM/DD/YYYY');
+              }
+              _values[index].push(_tempDate);
               break;
 
             default:

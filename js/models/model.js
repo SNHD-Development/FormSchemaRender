@@ -425,22 +425,38 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
      * Parse nested JSON data, case Model -> Collection and append to the form input
      **/
     appendSubFormInput: function(formId, internalField, listSchema) {
+      // debugger;
       listSchema = listSchema || null;
       var _data = _.clone(this.toJSON()),
         _postfix,
         $form = $('#' + formId);
       $('input.subform_before_submit', $form).remove();
       _.each(_data, function(value, key) {
+        /*if (key && key === 'AddAPublicPOD') {
+          debugger;
+        }*/
         _postfix = (internalField.indexOf(key) > -1) ? '_internal' : '';
-        if (typeof value !== 'undefined' && typeof value.toJSON === 'function') {
+        if (typeof value !== 'undefined' && value && typeof value.toJSON === 'function') {
           // Need to Check FormSchema and Parse the correct Data into input
           if (listSchema && listSchema[key].fields) {
             _.each(listSchema[key].fields, function(fieldsSchema) {
               if (!fieldsSchema || !fieldsSchema.name || !fieldsSchema.type) {
                 return;
               }
+              // Set keys
+              if (fieldsSchema) {
+                if (!fieldsSchema.options) {
+                  fieldsSchema.options = {};
+                }
+                if (!fieldsSchema.attributes) {
+                  fieldsSchema.attributes = {};
+                }
+              }
               var _listFieldType = fieldsSchema.type.toLowerCase();
               _.each(value.models, function(modelValue) {
+                var _tmpVal;
+                // console.log(_listFieldType);
+                // Where to format the value
                 switch (_listFieldType) {
                   case 'number':
                     var _tmpNum = parseFloat(modelValue.get(fieldsSchema.name));
@@ -451,10 +467,51 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
                       modelValue.set(fieldsSchema.name, _tmpNum);
                     }
                     break;
+                  case 'select':
+                    _tmpVal = $.trim(modelValue.get(fieldsSchema.name));
+                    if (fieldsSchema.options && fieldsSchema.options.tags || fieldsSchema.attributes && fieldsSchema.attributes.multiple) {
+                      if (_.isString(_tmpVal)) {
+                        _tmpVal = _tmpVal.split(',');
+                      }
+                      if (_tmpVal && _tmpVal.length && _tmpVal[0] === '') {
+                        _tmpVal = [];
+                      }
+                      if (_tmpVal.sort) {
+                        // By default sort by number
+                        _tmpVal = _tmpVal.sort(Utils.sortNumber);
+                      }
+                      modelValue.set(fieldsSchema.name, _tmpVal);
+                      // console.log(modelValue.get(fieldsSchema.name));
+                    }
+                    // console.log(_tmpVal);
+                    break;
+                  case 'date':
+                    _tmpVal = modelValue.get(fieldsSchema.name);
+                    _tmpVal = (_.isString(_tmpVal)) ? $.trim(_tmpVal) : _tmpVal;
+                    // console.log(_tmpVal);
+                    if (_tmpVal === '') {
+                      _tmpVal = null;
+                    } else if (_.isNull(_tmpVal)) {} else {
+                      if (_tmpVal && _tmpVal.$date) {
+                        // console.log(_tmpVal.$date);
+                        _tmpVal = moment(_tmpVal.$date);
+                      } else {
+                        _tmpVal = moment(_tmpVal, 'MM/DD/YYYY');
+                      }
+                      if (!_tmpVal.isValid()) {
+                        alert('Could not be able to parse this date value for "' + fieldsSchema.name + '" with "' + $.trim(modelValue.get(fieldsSchema.name)) + '"');
+                        throw new Error();
+                      }
+                    }
+                    modelValue.set(fieldsSchema.name, _tmpVal);
+                    break;
                 }
               });
             });
           }
+          /*if (key && key === 'AddAPublicPOD') {
+            debugger;
+          }*/
           var _tmpJsonTxt = JSON.stringify(value.toJSON());
           $form.prepend('<input type="hidden" name="' + key + _postfix + '" value="" class="subform_before_submit">');
           $form.find(':input[name="' + key + _postfix + '"]').val(_tmpJsonTxt);

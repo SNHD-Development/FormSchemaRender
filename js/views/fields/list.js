@@ -128,6 +128,9 @@ define([
         break;
       }
       this.template = _.template(_tmp);
+
+      // this is a list
+      this._isListFieldType = true;
     },
     render: function(firstTime, readMode) {
       var that = this,
@@ -355,29 +358,35 @@ define([
         if (firstTime) {
           that.$('.form-actions button.btn-cancel').click();
         }
-
+        // var DEBUG = true;
         // Will need to loop through the value and trigger change
         _.each(that.model.toJSON(), function(value, key) {
           if (value === '') {
             return;
           }
-          // var DEBUG = true;
           var _inputName = that.$el.find(':input[name="' + key + '"]'),
-            _val = _inputName.val();
+            _val = _inputName.val(),
+            _modelVal = that.model.get(key);
           if (DEBUG) {
             console.log('    - ' + key);
             console.log(_val);
-            console.log(that.model.get(key));
+            console.log(_modelVal);
             console.log(_inputName);
           }
-          if (_val === '') {
-            if (_inputName.is('select') && _inputName.attr('data-url')) {
-              // When the data comeback from AJAX Call will loaded the value in
-              _inputName.one('dataloaded', function() {
-                _inputName.find('option').filter(function() {
-                  return $(this).text() === value;
-                }).attr('selected', true).trigger('change');
-              });
+          if (_val === '' || _.isNull(_val)) {
+            // console.log(_inputName.is('select'));
+            if (_inputName.is('select')) {
+              if (_inputName.attr('data-url')) {
+                // When the data comeback from AJAX Call will loaded the value in
+                _inputName.one('dataloaded', function() {
+                  _inputName.find('option').filter(function() {
+                    return $(this).text() === value;
+                  }).attr('selected', true).trigger('change');
+                });
+              } else if (_modelVal) {
+                // console.log(_inputName);
+                _inputName.attr('data-select-value', _modelVal);
+              }
             } else {
               _inputName.val(value);
             }
@@ -390,7 +399,9 @@ define([
         // Set Up Select2
         try {
           // console.log(that);
+          // console.log(that.model.toJSON());
           Utils.setupSelect2(that);
+          // console.log(that.model.toJSON());
         } catch (err) {
           if (console && console.error) {
             console.error(err);
@@ -494,7 +505,20 @@ define([
       var $inputs = that.$(':input[value!=""]').not(':button');
       $inputs.each(function() {
         var $this = $(this);
+        // console.log($this.attr('name'));
+        // console.log($this.val());
         that.model.set($this.attr('name'), $this.val());
+      });
+
+      // If this is select could be different
+      that.$(':input.tags').each(function() {
+        var $this = $(this);
+        var _v = $this.val();
+        var _n = $this.attr('name');
+        if (_v === '') {
+          _v = null;
+        }
+        that.model.set(_n, _v);
       });
 
       // Need to format the value

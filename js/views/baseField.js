@@ -1352,6 +1352,18 @@ define([
                     _values[index].push((modelData[element.name] ? 'Yes' : 'No'));
                     break;
 
+                  case 'date':
+                    var _tempDate = modelData[element.name];
+                    if (_tempDate && _tempDate.$date) {
+                      _tempDate = moment(_tempDate.$date);
+                      if (!_tempDate.isValid()) {
+                        throw new Error('Invalid Date Value for "' + element.name + '" with "' + modelData[element.name] + '"');
+                      }
+                      _tempDate = _tempDate.format('MM/DD/YYYY');
+                    }
+                    _values[index].push(_tempDate);
+                    break;
+
                   case 'number':
                     if (element.options && element.options.decimals && modelData[element.name]) {
                       modelData[element.name] = (modelData[element.name] / Math.pow(10, element.options.decimals)).toFixed(element.options.decimals);

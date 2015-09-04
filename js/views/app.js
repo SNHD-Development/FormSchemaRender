@@ -280,7 +280,7 @@ define([
      * Submit Form
      **/
     submitForm: function(e) {
-
+      // debugger;
       var $form = $('#' + this.options.formSchema.name, this.el),
         $submitBtn = $('.form-actions button[type="submit"]', this.el),
         _opt, _options,
@@ -327,6 +327,27 @@ define([
       Utils.setModelRadioValues($form, this.formView);
       Utils.setModelCheckValues($form, this.formView);
       var _isCheckBoxGood = Utils.validateCheckBox($form);
+
+      // Check for the Select that has empty value and then not select it.
+      // console.log(this);
+      var $selectInput = this.$(':selected');
+      // console.log($selectInput);
+      Utils.resetSelectsOption($selectInput);
+
+      // Sometime the Select not get clear properly
+      // Since HTML will not send any info if the select is not select
+      var $selectInputNull = this.$('select');
+      if ($selectInputNull.length) {
+        $selectInputNull.each(function() {
+          var $this = $(this);
+          var _val = $this.val();
+          // console.log($this.val());
+          if (_.isNull(_val)) {
+            $this.val('');
+          }
+          // console.log($this.val());
+        });
+      }
 
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid() && _isCheckBoxGood) {
 

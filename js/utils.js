@@ -721,6 +721,7 @@ define([
      * Setup Date Input
      **/
     setupDateInput: function(el, view) {
+      var DEBUG = false;
       var fViewArr, firstTime = false;
       // Logic for Validation
       if (view) {
@@ -739,8 +740,16 @@ define([
         console.log(fViewArr);
       }
 
+      var _model;
+      if (view && view.model) {
+        _model = view.model;
+      }
+
       var $allDatepicker = $('.datepicker', el);
       if (DEBUG) {
+        if (_model && _model.toJSON) {
+          console.log(_model.toJSON());
+        }
         console.log('    Found: ' + $allDatepicker.length);
         console.log($allDatepicker);
       }
@@ -749,6 +758,16 @@ define([
           maxDate, nowTemp, $this = $(this);
         var _id = $this.attr('name');
         var hasDatepickerOptions = $this.has('data-has-datepicker-options');
+        if (_model && _model.get) {
+          var _tmpVal = _model.get(_id);
+          if (_tmpVal && _tmpVal.$date) {
+            _tmpVal = moment(_tmpVal.$date);
+            if (!_tmpVal.isValid()) {
+              throw new Error('Could not be able to parse this date data "' + _id + '".');
+            }
+            $this.val(_tmpVal.format('MM/DD/YYYY'));
+          }
+        }
         if (DEBUG) {
           console.log('   Loop: .datepicker');
           console.log(_id);
@@ -2074,6 +2093,10 @@ define([
         // Detect the {{}} Template, then this will be look up dynamic
         var _tokens = that.parseTemplateString(_url);
 
+        if (DEBUG) {
+          console.log(_tokens);
+        }
+
         // Select2 does not work on select element for Ajax Call
         if (model) {
           var _modelValue = model.get($this.attr('name'));
@@ -2211,10 +2234,17 @@ define([
           // Static Lookup
           // $.support.cors = true;
           if (!$this.hasClass('send-ajax-request')) {
+            if (DEBUG) {
+              console.log('- about to send ajax.');
+            }
+
             $this.addClass('send-ajax-request');
             var tmpOptionsHtml = $this.find('option').html();
             $this.find('option').remove();
             $this.append('<option value="">--- Loading Data ---</option>');
+
+            // DEBUG = true;
+
             $.ajax({
               // crossDomain: true,
               url: _url,
@@ -2225,7 +2255,12 @@ define([
                     _type = $urlEndPoint.prop('type'),
                     _dataArray = [],
                     dataSelectValue = $this.attr('data-select-value');
+                  if (DEBUG) {
+                    console.log('- response: ' + _url);
+                    console.log(_type);
+                  }
                   switch (_type) {
+                    case 'select-multiple':
                     case 'select-one':
                       $this.find('option').remove();
                       break;
@@ -2233,6 +2268,7 @@ define([
                   _.each(data, function(element) {
                     var _tmpSelect;
                     switch (_type) {
+                      case 'select-multiple':
                       case 'select-one':
                         if (_.isObject(element) && element.id && element.text) {
                           _tmpSelect = (dataSelectValue && dataSelectValue === element.id) ? ' selected ' : '';
@@ -2246,6 +2282,9 @@ define([
                         _dataArray.push(element[$this.attr('id')]);
                     }
                   });
+                  if (DEBUG) {
+                    console.log(_dataArray);
+                  }
                   if (_dataArray.length) {
                     $this.attr({
                       "autocomplete": "off"
@@ -2325,10 +2364,33 @@ define([
                       $this.one('change', _dataCallback);
                     }
                   } else {
+                    if (DEBUG) {
+                      console.log($this);
+                      // console.log(_opts);
+                    }
                     $this.append(_opts);
-                    $this.select2({
+
+                    var _select2Opt = {
                       containerCssClass: 'span12'
-                    });
+                    };
+                    var _select2Data = $this.attr('data-select-value');
+                    var isMultiple = $this.attr('multiple');
+                    if (_select2Data && isMultiple) {
+                      // console.log($this);
+                      // console.log(_select2Data);
+                      // console.log($this.val());
+                      // console.log(_select2Data);
+                      $this.val(_select2Data.split(','));
+                    }
+                    if (isMultiple) {
+                      if (model) {
+                        if (model.toJSON) {
+                          // console.log(model.toJSON());
+                        }
+                      }
+                      $this.attr('name', $this.attr('name') + '[]');
+                    }
+                    $this.select2(_select2Opt);
                     $('#s2id_' + $this.attr('id') + ' .select2-drop', $form).hide();
                   }
                   // Trigger dataloaded event
@@ -2390,6 +2452,10 @@ define([
         var $el = form.find('.selecttwo-render');
         if ($el.length) {
           setup($el, form);
+        }
+      } else {
+        if (console && console.warn) {
+          console.warn('Not set up Select2.');
         }
       }
     },
@@ -3004,6 +3070,29 @@ define([
       return valid;
     },
 
+    /**
+     * Pass in options that is select, then check value and if it null or empty string.
+     * Will de-select it
+     * @param  object $options
+     */
+    resetSelectsOption: function($options) {
+      var DEBUG = false;
+      if (!$options || !$options.length) {
+        return;
+      }
+      if (DEBUG) {
+        console.log('[*] resetSelectsOption -');
+        console.log(arguments);
+      }
+      $options.each(function() {
+        var $opt = $(this);
+        var _val = $opt.val();
+        if (_.isNull(_val) || _val === '') {
+          $opt.removeAttr('selected');
+        }
+      });
+    },
+
     formatUriSegment: function(url, formData) {
       var DEBUG = false;
       formData = formData || null;
@@ -3249,6 +3338,13 @@ define([
         default:
           throw 'Not Implement ' + format + ' yet in "formatDateAsString"!';
       }
+    },
+
+    /**
+     * numerical sort
+     */
+    sortNumber: function(a, b) {
+      return a - b;
     }
 
   };

@@ -14,7 +14,7 @@ define([
   }
 
   function cloneInputToHiddenInput($element) {
-    var attrArray = ['name', 'class', 'id', 'style', 'data-events', 'data-url'],
+    var attrArray = ['name', 'class', 'id', 'style', 'data-events', 'data-url', 'data-select-value'],
       str = '';
     _.each(attrArray, function(element) {
       var _attr = $element.attr(element);
@@ -31,6 +31,10 @@ define([
       $hidden.css('width', '98%');
     } else {
       $hidden.css('width', _width);
+    }
+    var _selectVal = $hidden.attr('data-select-value');
+    if (_selectVal) {
+      $hidden.val(_selectVal);
     }
     return $hidden;
   }
@@ -163,6 +167,10 @@ define([
     renderTags: function($element, form) {
 
       var _setUpSelectTwoTag = function(data) {
+
+        // console.log($element);
+        // console.log($hidden);
+
         data = data || null;
         if (form._elementData && form._elementData[elementName] && form._elementData[elementName].value) {
           // Set Up Values for edit mode
@@ -172,6 +180,17 @@ define([
         var _options = {
           tags: (data) ? data : []
         };
+        // console.log($hidden.attr('name'));
+        /*if (form) {
+          console.log(form);
+          if (form.model && form.model.toJSON) {
+            console.log(form.model.toJSON());
+          }
+        }*/
+        // Only added [] to the select input when it is not a List Fields Type
+        if (!form || !form._isListFieldType) {
+          $hidden.attr('name', $hidden.attr('name') + '[]');
+        }
         $hidden.select2(_options);
         if (form._elementData && form._elementData[elementName] && form._elementData[elementName].events) {
           setupEvents($hidden, form._elementData[elementName].events);
