@@ -1239,6 +1239,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - List Field Type can render Select with Options.Tags
     - Select with Options.Tag can work with Options.Url
     - Select Multiple with Url
+    - Select be able to populate data from target element
 
 * 0.1.8
     - Escape html special character in Textarea

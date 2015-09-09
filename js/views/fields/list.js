@@ -524,6 +524,12 @@ define([
       // Need to format the value
       formatModel(this);
 
+      /*if (this.model) {
+        if (this.model.toJSON) {
+          console.log(this.model.toJSON());
+        }
+      }*/
+
       if (this.model.isValid(true)) {
         var $not_sending = $('.not_sending', this.el).trigger('change').attr('disabled', true);
         $not_sending.each(function() {

@@ -248,8 +248,109 @@ define([
       }
     },
     render: function($element, form) {
+      var DEBUG = false;
+      if (DEBUG) {
+        console.log('[*] select2helper.js:render');
+        console.log(arguments);
+      }
+
+      var getValueFromTarget = function(lkVal) {
+        var $tmpTarget = jQuery(lkVal);
+        if (!$tmpTarget.length) {
+          throw new Error('Could not be able to find "' + lkVal + '"');
+        } else if ($tmpTarget.length > 1) {
+          throw new Error('Found more than one element for "' + lkVal + '" [' + $tmpTarget.length + ']');
+        }
+        var _dataVal = $tmpTarget.val();
+        if (DEBUG) {
+          console.log('- Query:');
+          console.log(arguments);
+          console.log($tmpTarget);
+          console.log(_dataVal);
+        }
+        if (_.isString(_dataVal)) {
+          _dataVal = _dataVal.split(',');
+        }
+        return _dataVal;
+      };
+
       if ($element.is('select')) {
-        $element.select2();
+        // DEBUG = true;
+        var opt = {};
+        var renderAsHidden = false;
+        var _name = $element.attr('name');
+        var _defaultValue = $element.attr('data-select-value');
+        if (form && form.children) {
+          // List Field Type
+          if (form.children.BaseField) {
+            var _lookUpVal = form.children.BaseField._getValueFrom;
+            // console.log(_lookUpVal);
+            // console.log(_name);
+            if (_lookUpVal && _lookUpVal[_name]) {
+              renderAsHidden = true;
+              opt.query = function(q) {
+                var data = {
+                  results: []
+                };
+
+                var _dataVal = getValueFromTarget(_lookUpVal[_name]);
+
+                _.each(_dataVal, function(val, key) {
+                  if (DEBUG) {
+                    console.log(arguments);
+                  }
+                  data.results.push({
+                    id: val,
+                    text: val
+                  });
+                });
+                q.callback(data);
+              }
+              opt.allowClear = true;
+              opt.placeholder = 'Please select a value';
+              if (_defaultValue) {
+                opt.initSelection = function(el, cb) {
+                  if (DEBUG) {
+                    console.log('- initSelection for "' + _name + '"');
+                    console.log(arguments);
+                  }
+                  cb({
+                    id: _defaultValue,
+                    text: _defaultValue
+                  });
+                };
+              }
+            }
+          }
+        }
+        if (renderAsHidden) {
+          // console.log($element);
+          var $hidden = cloneInputToHiddenInput($element);
+          $hidden.select2(opt);
+
+          $hidden.on('change', function(e) {
+            var DEBUG = false;
+            if (DEBUG) {
+              console.log('- Select 2: change "' + _name + '"');
+            }
+            if (form) {
+              var model = form.model;
+              if (DEBUG) {
+                console.log(model.get(_name));
+              }
+              if (model && model.has && model.has(_name)) {
+                model.set(_name, e.val);
+              }
+              if (DEBUG) {
+                console.log(model.get(_name));
+              }
+            }
+          });
+        } else {
+          $element.select2(opt);
+        }
+        // console.log($hidden);
+        // console.log($element);
       }
     }
   };

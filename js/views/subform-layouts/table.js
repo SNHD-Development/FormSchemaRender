@@ -81,6 +81,7 @@ define([
             _values[index] = [];
             _models[index] = modelObj.cid;
           }
+          // console.log(model);
           switch (element.type.toLowerCase()) {
             case 'timestamp':
               _labels[_labels.length - 1] = 'Timestamps';

@@ -215,6 +215,7 @@ define([
       this._radioFieldName = []; // List of Field that is a radio field.
       this._lookupValues = {}; // Hold the new value mapping to use with VisibleOn
       this._listSchema = {};
+      this._getValueFrom = {}; // Hash for getValueFrom
 
       // Wizard View Counters
       this._stepDiv = 0; // Count number of open div for step (wizard view)
@@ -535,6 +536,13 @@ define([
             // If there is an Options.OrderBy will need to sort Values
             if (field.options.orderby) {
               this.sortOrderBy(field);
+            }
+
+            // Set "GetValueFrom"
+            if (field.options.getvaluefrom && field.name) {
+              if (!this._getValueFrom[field.options.getvaluefrom]) {
+                this._getValueFrom[field.name] = field.options.getvaluefrom;
+              }
             }
           }
           if (field.options.url) {
