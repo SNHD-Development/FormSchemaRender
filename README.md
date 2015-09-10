@@ -1240,6 +1240,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Select with Options.Tag can work with Options.Url
     - Select Multiple with Url
     - Select be able to populate data from target element
+    - Adding QRCode Module to Show Any Value
 
 * 0.1.8
     - Escape html special character in Textarea

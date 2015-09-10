@@ -551,6 +551,12 @@
       font-size: 24px;
       font-weight: bold; }
 
+.qrcode-wrapper {
+  margin: 10px;
+  text-align: center; }
+  .qrcode-wrapper img {
+    max-height: 100px; }
+
 /**
  * IE8 Style Only
  **/

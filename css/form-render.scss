@@ -773,6 +773,14 @@ $text_area_min_height: 100px;
     }
 }
 
+.qrcode-wrapper {
+    margin: 10px;
+    text-align: center;
+    img {
+        max-height: 100px;
+    }
+}
+
 /**
  * IE8 Style Only
  **/

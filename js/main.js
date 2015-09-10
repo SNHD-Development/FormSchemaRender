@@ -273,7 +273,8 @@ require([
               var moduleView = Vm.create(appView, module + 'View', ModuleView, {
                 el: appView.el,
                 collection: new _collection(),
-                options: appView.options
+                options: appView.options,
+                _params: (enable) ? enable : null
               });
               $('div#app').on(_opts.formSchema.name + '.renderCompleted', function() {
                 moduleView.render();

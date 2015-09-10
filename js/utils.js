@@ -266,6 +266,17 @@ define([
     },
 
     /**
+     * Replace String with {{key}} with val
+     * @param  string str
+     * @param  string key
+     * @param  string val
+     * @return string
+     */
+    replaceTemplateStringCurlyBrace: function(str, key, val) {
+      return str.replace('{{' + key + '}}', val);
+    },
+
+    /**
      * Looking for {{words}} will return an array if founded, otherwise return null
      * @param  string str
      * @return mixed
