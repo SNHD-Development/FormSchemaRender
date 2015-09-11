@@ -314,6 +314,13 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
             if (_typeLowerCase !== 'buttondecision' && _addToModelBinder) {
               model.bindings[value.name] = '[name="' + value.name + '"]';
             }
+            if (_typeLowerCase === 'select') {
+              if (value.options.tags) {
+                // console.log(model.bindings[value.name]);
+                model.bindings[value.name] = '#' + value.name;
+                // console.log(model.bindings[value.name]);
+              }
+            }
         }
         // If there is an option for VisibleOn, need to remove the binding
         if (value.options && value.options.visibleon && model.bindings[value.name]) {

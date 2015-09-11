@@ -195,6 +195,7 @@ define([
         if (form._elementData && form._elementData[elementName] && form._elementData[elementName].events) {
           setupEvents($hidden, form._elementData[elementName].events);
         }
+        // console.log($hidden);
       };
 
       form = form || null;
