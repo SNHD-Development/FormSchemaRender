@@ -1300,7 +1300,15 @@ define([
 
             _.each(field.fields, function(element, index) {
               element.options = element.options || {};
-              _labels.push(element.description);
+              // Make sure about "Options"."TableTitle"
+              var _currentLabel;
+              if (element.options.tabletitle) {
+                _currentLabel = element.options.tabletitle;
+                _currentLabel = '<a data-content="' + $('<p>' + element.description + '</p>').text() + '" data-original-title="' + _currentLabel + '" data-placement="top" data-toggle="popover" data-trigger="hover" data-html="true">' + _currentLabel + '</a>';
+              } else {
+                _currentLabel = element.description;
+              }
+              _labels.push(_currentLabel);
               if (element.options.sortby && element.options.sortby.toLowerCase() === 'date') {
                 _sortBy.push('data-sort="int"');
               } else {

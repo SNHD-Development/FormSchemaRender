@@ -322,6 +322,15 @@ $text_area_min_height: 100px;
         }
         .subform-collection {
             margin: 20px auto;
+            .table {
+                th {
+                    a {
+                        display: inline-block;
+                        padding-left: 8px;
+                        padding-right: 8px;
+                    }
+                }
+            }
         }
         .subform-actions {
             text-align: center;
@@ -478,6 +487,14 @@ $text_area_min_height: 100px;
                 &:hover {
                     cursor: pointer;
                     text-decoration: underline;
+                    .dir-icon, .dir-icon:before {
+                        text-decoration: none;
+                    }
+                }
+                a {
+                    display: inline-block;
+                    padding-left: 8px;
+                    padding-right: 8px;
                 }
             }
         }

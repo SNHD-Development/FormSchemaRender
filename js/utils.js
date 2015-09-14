@@ -1846,6 +1846,10 @@ define([
 
       // Setup FileRepository Events
       this.setupFileRepositoryEvent($form);
+
+      // Set Up Popover
+      // console.log($form);
+      this.setupPopover($form);
     },
     /**
      * Setup Read Mode

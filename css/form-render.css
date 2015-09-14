@@ -293,6 +293,10 @@
         color: inherit; }
     .form-render .subform-container .subform-collection {
       margin: 20px auto; }
+      .form-render .subform-container .subform-collection .table th a {
+        display: inline-block;
+        padding-left: 8px;
+        padding-right: 8px; }
     .form-render .subform-container .subform-actions {
       text-align: center; }
       .form-render .subform-container .subform-actions .btn {
@@ -384,6 +388,12 @@
     .form-render.read-mode .stupidtable th:hover {
       cursor: pointer;
       text-decoration: underline; }
+      .form-render.read-mode .stupidtable th:hover .dir-icon, .form-render.read-mode .stupidtable th:hover .dir-icon:before {
+        text-decoration: none; }
+    .form-render.read-mode .stupidtable th a {
+      display: inline-block;
+      padding-left: 8px;
+      padding-right: 8px; }
     .form-render.read-mode .update-on-read-mode {
       position: relative; }
       .form-render.read-mode .update-on-read-mode:hover {
