@@ -2,6 +2,14 @@
 var _yes = (options.text && options.text.yes) ? options.text.yes: 'Yes',
 	_no = (options.text && options.text.no) ? options.text.no: 'No',
 	_id = (attributes.id)? attributes.id: name;
+
+switch(_lang) {
+    case 'sp':
+        if (_yes === 'Yes') {
+            _yes = 'S&iacute;';
+        }
+        break;
+}
 %>
 <div class="form-render_booleaninput_wrapper">
 	<div class="btn-group form-render_booleaninput" data-toggle="buttons-radio" id="<%= _id %>_booleaninput">

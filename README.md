@@ -1242,6 +1242,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Select be able to populate data from target element
     - Adding QRCode Module to Show Any Value
     - Implement Options.TableTitle in List Field Type: List Mode
+    - Fix Some Fields not render Language properly
 
 * 0.1.8
     - Escape html special character in Textarea

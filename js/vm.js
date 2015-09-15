@@ -326,6 +326,7 @@ define([
 
     // Change Language
     changeLanguage = function(obj, language) {
+      var self = this;
       _.each(obj, function(element) {
         if (element.description && element.languages && element.languages[language]) {
           element.description = element.languages[language];
@@ -341,6 +342,12 @@ define([
               element.description = element.options.defaulttext[language];
             } else if (element.options && element.options.defaulttext) {
               element.description = element.options.defaulttext;
+            }
+            break;
+
+          case 'list':
+            if (element.fields) {
+              self.changeLanguage(element.fields, language);
             }
             break;
         }

@@ -37,14 +37,37 @@ define([
       if (DEBUG) {
         console.log('[*] render table.js in subform-layouts -');
       }
+
+      if (!this.options) {
+        this.options = {};
+      }
+      if (!this.options.options) {
+        this.options.options = {};
+      }
+      // console.log(this);
+
       var that = this,
         _labels = [],
         _values = new Array(this.collection.length),
         _models = new Array(this.collection.length),
-        _tableHeader;
+        _tableHeader,
+        _lang = this.options.options.lang,
+        _formSchema = this.options.formSchema;
       if (this.options && this.options.formSchema && !this.options.formSchema.options) {
         this.options.formSchema.options = {};
       }
+
+      var _fieldsMap = {};
+      if (_formSchema) {
+        _.each(_formSchema.fields, function(el) {
+          if (!el || !el.name || !el.type || !el.values) {
+            return;
+          }
+          var langKey = 'values-' + _lang;
+          _fieldsMap[el.name] = (el[langKey]) ? el[langKey] : el.values;
+        });
+      }
+
       var _options = this.options;
       var _userIndex;
       _.each(this.options.formSchema.fields, function(element) {
@@ -73,6 +96,7 @@ define([
         } else {
           _tableHeader = element.description;
         }
+        // console.log(_lang);
         _labels.push(_tableHeader);
         _.each(that.collection.models, function(modelObj, index) {
           var model = modelObj.toJSON(),
@@ -82,6 +106,8 @@ define([
             _models[index] = modelObj.cid;
           }
           // console.log(model);
+          // console.log(that);
+
           switch (element.type.toLowerCase()) {
             case 'timestamp':
               _labels[_labels.length - 1] = 'Timestamps';
@@ -132,7 +158,11 @@ define([
               break;
 
             default:
-              _values[index].push(model[element.name]);
+              var _defVal = model[element.name];
+              if (_fieldsMap && _fieldsMap[element.name] && typeof _fieldsMap[element.name][_defVal] !== 'undefined') {
+                _defVal = _fieldsMap[element.name][_defVal];
+              }
+              _values[index].push(_defVal);
           }
         });
       });

@@ -2578,7 +2578,10 @@ define([
           $container = $this.closest('.radio-container'),
           $input = $container.find('input[type="hidden"]');
         $input.val(_val).trigger('change');
-        $container.find('.radio-value-render').html(_val).show('slow');
+        var $targetBtn = $container.find(':button[value="' + _val + '"]');
+        // console.log($targetBtn);
+        // console.log($targetBtn.html());
+        $container.find('.radio-value-render').html($targetBtn.html()).show('slow');
       });
       //If this is edit, will need to render this as well.
       var $radioContainer = $form.find('.radio-container');

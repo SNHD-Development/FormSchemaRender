@@ -99,6 +99,14 @@ define([
 
       var _tmp;
 
+      if (!this.options) {
+        this.options = {};
+      }
+      if (!this.options.options) {
+        this.options.options = {};
+      }
+      var _lang = this.options.options.lang;
+
       if (typeof this.options.model === 'undefined') {
 
         if (DEBUG) {
@@ -109,7 +117,16 @@ define([
           is_internal: this.options.internal,
           render_mode: this.options.mode
         }));
-        this._btn_title = 'Add';
+        // console.log(this.options);
+
+        switch (_lang) {
+          case 'sp':
+            this._btn_title = 'Agregar';
+            break;
+          default:
+            this._btn_title = 'Add';
+        }
+
       } else {
 
         if (DEBUG) {
@@ -118,7 +135,13 @@ define([
           console.log(this.model);
         }
 
-        this._btn_title = 'Done';
+        switch (_lang) {
+          case 'sp':
+            this._btn_title = 'Hecho';
+            break;
+          default:
+            this._btn_title = 'Done';
+        }
       }
 
       this.options.formSchema.view = this.options.formSchema.view || '';
@@ -135,11 +158,19 @@ define([
     render: function(firstTime, readMode) {
       var that = this,
         _defaultEmail = '';
+      if (!this.options) {
+        this.options = {};
+      }
+      if (!this.options.options) {
+        this.options.options = {};
+      }
       // Render Fields
       require(['views/baseField'], function(BaseField) {
+        // console.log(that.options);
         var _html = '',
           _required, formView = Vm.create(that, 'BaseField', BaseField, {
-            formSchema: that.options.formSchema
+            formSchema: that.options.formSchema,
+            lang: that.options.options.lang
           }),
           _options = that.options;
 
@@ -195,6 +226,8 @@ define([
             }
           }
 
+          // console.log(value);
+
           _html += formView.render(value);
 
           if (_defaultEmail !== '') {
@@ -208,6 +241,13 @@ define([
         var _btn_opts = _.clone(that.options.formSchema.formoptions);
         _btn_opts.submitbutton = that._btn_title;
         _btn_opts.subForm = true;
+        // console.log(that.options.options.lang);
+        switch (that.options.options.lang) {
+          case 'sp':
+            _btn_opts.resetbutton = 'Cancelar';
+            break;
+        }
+        // console.log(_btn_opts);
         _html += formView.renderButton(_btn_opts);
 
         if (that.el) {
