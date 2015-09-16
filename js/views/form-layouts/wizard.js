@@ -112,9 +112,11 @@ define([
      * Render Wizard Navigation Bar
      **/
     renderWizardNavBar: function() {
+      var DEBUG = false;
       var _html = '',
-        _icon, $steps, _stepWidth, _offset, $li
-      _maxHeight = 0;
+        _icon, $steps, _stepWidth, _offset,
+        $li,
+        _maxHeight = 0;
       _.each(this._steps, function(element, index) {
         element['class'] = element['class'] || '';
         if (index === 0) {
@@ -124,13 +126,40 @@ define([
         _icon = (typeof element.icon === 'undefined') ? '' : '<i class="icon ' + element.icon + ' icon-3x"></i>';
         _html += '<li data-target="#wizard_step' + (index + 1) + '" class="' + element['class'] + '">' + _icon + '<span class="badge badge-info">' + (index + 1) + '</span>' + element.description + '</li>';
       });
-      $steps = $('.wizard-view ul.steps', this.el).html(_html);
 
-      // Calculated the Step Width
-      _stepWidth = Math.floor(($steps.width() - this._steps.length) / this._steps.length);
-      _offset = $steps.width() - (_stepWidth * this._steps.length) - 4;
-      $li = $('li', $steps).css('width', _stepWidth);
-      $li.last().css('width', _stepWidth + _offset);
+      $steps = $('.wizard-view ul.steps', this.el).html(_html);
+      var _width = $steps.width();
+
+      if (DEBUG) {
+        console.log('[*] wizard.js: renderWizardNavBar()');
+        console.log('    this._steps: ' + this._steps);
+        console.log($steps);
+        console.log('    _width: ' + _width);
+        console.log('    this._steps.length: ' + this._steps.length);
+      }
+
+      $li = $('li', $steps);
+
+      if (_width) {
+        // Calculated the Step Width
+        _stepWidth = Math.floor((_width - this._steps.length) / this._steps.length);
+        _offset = _width - (_stepWidth * this._steps.length) - 4;
+        $li.css('width', _stepWidth);
+        $li.last().css('width', _stepWidth + _offset);
+      } else {
+        var _units = 100 / this._steps.length;
+        if (DEBUG) {
+          console.log('    _units: ' + _units);
+        }
+        $li.css('width', _units + '%');
+        $li.last().css('width', (_units - 0.5) + '%');
+      }
+
+      if (DEBUG) {
+        console.log('    _stepWidth: ' + _stepWidth);
+        console.log('    _offset: ' + _offset);
+        console.log('    _stepWidth + _offset: ' + (_stepWidth + _offset));
+      }
       $li.each(function() {
         _maxHeight = Math.max(_maxHeight, $(this).height());
       }).height(_maxHeight);
@@ -264,6 +293,9 @@ define([
       }
       return !_error;
     },
+    /**
+     * Submit the Form
+     */
     submittingForm: function(e) {
       // Check to see if this form has submit button
       var $submitBtn = $(':submit[type="submit"]', e.data.el),
@@ -276,6 +308,12 @@ define([
         },
         $submitDisplay = $(this).nextUntil('', '.wizard-actions').find('.btn_next'),
         $form = $('form.form-render');
+
+      if ($submitBtn.length > 1) {
+        // Fix IE 8
+        $submitBtn = $(':submit#SubmitBtn', e.data.el);
+      }
+
       if ($submitBtn.length > 0) {
         $submitBtn.trigger('click');
       } else {

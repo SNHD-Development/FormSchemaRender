@@ -2570,17 +2570,26 @@ define([
      * @param  object $form
      * @return
      */
-    setupRadioBtnGroup: function($form) {
+    setupRadioBtnGroup: function($form, model) {
+      model = model || null;
+      var DEBUG = false;
+      if (DEBUG) {
+        console.log('[*] utils.js: setupRadioBtnGroup');
+        console.log(arguments);
+      }
       $form.on('click', '.radio-container button', function(e) {
         e.preventDefault();
         var $this = $(e.target),
           _val = $this.attr('value'),
           $container = $this.closest('.radio-container'),
           $input = $container.find('input[type="hidden"]');
+        var _inputName = $input.attr('name');
         $input.val(_val).trigger('change');
+
+        if (model && model.has && model.has(_inputName)) {
+          model.set(_inputName, $input.val());
+        }
         var $targetBtn = $container.find(':button[value="' + _val + '"]');
-        // console.log($targetBtn);
-        // console.log($targetBtn.html());
         $container.find('.radio-value-render').html($targetBtn.html()).show('slow');
       });
       //If this is edit, will need to render this as well.
@@ -2594,6 +2603,27 @@ define([
         }
         $this.find('button[value="' + _val + '"]').trigger('click');
       });
+
+      if (model && model.toJSON) {
+        var modelValue = model.toJSON();
+        _.each(modelValue, function(v, k) {
+          if (typeof k !== 'string' || !v) {
+            return;
+          }
+          // console.log(k);
+          var $currentInput = $form.find('.radio-container #' + k);
+          if ($currentInput.length) {
+            if ($currentInput.val()) {
+              return;
+            }
+            var $currentInputParent = $currentInput.closest('.btn-group')
+            var $targetBtn = $currentInputParent.find('button[value="' + v + '"]');
+            if ($targetBtn.length) {
+              $targetBtn.click();
+            }
+          }
+        });
+      }
     },
 
     /**

@@ -366,6 +366,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
       this.bindings = {}; // To be used in ModelBinder
       this.notBinding = []; // will be used to check what field will not need to render.
       this.escapeHtmlInputs = []; // Inputs that need to escape the HTML.
+      this._listFieldType = {}; // Save the reference for _listFieldType
       var _attrs = parseFields(this, this.attributes, this.attributes.is_internal);
       this.clear();
       this.set(_attrs);
@@ -407,6 +408,16 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
           });
         });
       }
+
+      // Save the Reference of Collection for List
+      _.each(this.subFormLists, function(keyName) {
+        if (self && self.has && self.has(keyName)) {
+          var _collection = self.get(keyName);
+          if (_collection && _collection.add) {
+            self._listFieldType[keyName] = _collection;
+          }
+        }
+      });
     },
     /**
      * Trim the value before setting the value
@@ -558,7 +569,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
           // console.log(_subFormData);
           switch (key) {
             case 'required':
-              if (_subFormData === '[]') {
+              if (_subFormData === '[]' || !_subFormData) {
                 _result = false;
               }
               break;

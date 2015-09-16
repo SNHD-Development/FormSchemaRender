@@ -311,8 +311,7 @@ define([
       this.getBDateinput(this.el, this.formView.model);
       Utils.getUserId(this.el, this.formView.model);
       // Remove Not needed input from submitting data
-      $('.not_sending', $form)
-        .attr('disabled', true);
+      $('.not_sending', $form).attr('disabled', true);
 
       // Attached the subform input
       this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields, this.formView._listSchema);
@@ -348,6 +347,9 @@ define([
           // console.log($this.val());
         });
       }
+
+      // console.log(this.formView.model.isValid(true));
+      // console.log(this.formView.model.isSubformValid());
 
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid() && _isCheckBoxGood) {
 

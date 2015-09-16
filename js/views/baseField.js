@@ -10,6 +10,7 @@ define([
   'vm',
   'utils',
   'models/model',
+  'collections/collections',
   'modelbinder',
   'validation',
   'views/fields/list',
@@ -73,6 +74,7 @@ define([
   Vm,
   Utils,
   Model,
+  Collections,
   Modelbinder,
   Validation,
   listView,
@@ -1821,21 +1823,25 @@ define([
       var _view = (list.options.formSchema.view === '') ? 'table' : list.options.formSchema.view,
         _key = list.options.formSchema.name;
 
+      if (typeof e.data.model.get(_key) !== 'object') {
+        // console.log(arguments);
+        if (e.data.model._listFieldType[_key]) {
+          e.data.model.set(_key, e.data.model._listFieldType[_key]);
+        }
+      }
+
       if (reset) {
-        e.data.model.get(_key)
-          .reset();
+        e.data.model.get(_key).reset();
       }
       if (models) {
         var _model = Backbone.Model.extend({});
         _.each(models, function(element) {
           var _element = new _model();
           _element.set(element);
-          e.data.model.get(_key)
-            .add(_element);
+          e.data.model.get(_key).add(_element);
         });
       } else {
-        e.data.model.get(_key)
-          .add(list.model);
+        e.data.model.get(_key).add(list.model);
       }
       // Render View
       require(['views/subform-layouts/' + _view], function(CollectionView) {

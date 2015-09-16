@@ -373,7 +373,7 @@ define([
 
         // Setup Radio Button Group
         if (formView._hasRadioBtnGroup) {
-          Utils.setupRadioBtnGroup(that.$el);
+          Utils.setupRadioBtnGroup(that.$el, that.model);
           Utils.setupRadioBtnGroupValue(that.$el);
         }
 

@@ -1243,6 +1243,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Adding QRCode Module to Show Any Value
     - Implement Options.TableTitle in List Field Type: List Mode
     - Fix Some Fields not render Language properly
+    - IE 8 Validation Error for List Field Type with Radio
 
 * 0.1.8
     - Escape html special character in Textarea
