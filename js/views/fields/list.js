@@ -575,6 +575,7 @@ define([
         $not_sending.each(function() {
           that.model.unset($(this).attr('name'));
         });
+        this.removeAttachedEvents();
         // Add Model to the parent
         _submitBtn.removeClass('submitted');
         // Trigger Add Event for List
@@ -602,6 +603,7 @@ define([
       }
     },
     clickCancel: function(e) {
+      this.removeAttachedEvents();
       e.preventDefault();
       // Format Values
       if (this.options.model) {
@@ -616,6 +618,23 @@ define([
      **/
     setupEmailInput: function() {
       Utils.setupEmailInput(this.el);
+    },
+
+    removeAttachedEvents: function() {
+      var DEBUG = false;
+      var $el = this.$el;
+      if (DEBUG) {
+        console.log('[*] removeAttachedEvents');
+        console.log($el.hasClass('attached-e-radio-container'));
+        console.log($el);
+      }
+      if ($el.hasClass('attached-e-radio-container')) {
+        $el.off('click', '.radio-container button');
+        $el.removeClass('attached-e-radio-container')
+      }
+      if (DEBUG) {
+        console.log($el.hasClass('attached-e-radio-container'));
+      }
     }
   });
 });

@@ -1801,6 +1801,10 @@ define([
      * Closed Sub Form
      **/
     closeSubForm: function(e, list) {
+      var DEBUG = false;
+      if (DEBUG) {
+        console.log('[*] closeSubForm');
+      }
       list.$el.fadeOut();
       // Close mask bg
       $.mask.close();
@@ -1813,7 +1817,7 @@ define([
      * Add model to List
      **/
     addSubformData: function(e, list, models, reset) {
-      // var DEBUG = true;
+      var DEBUG = false;
       if (DEBUG) {
         console.log('[*] baseField.addSubformData');
         console.log(arguments);
@@ -1823,7 +1827,14 @@ define([
       var _view = (list.options.formSchema.view === '') ? 'table' : list.options.formSchema.view,
         _key = list.options.formSchema.name;
 
-      if (typeof e.data.model.get(_key) !== 'object') {
+      var currentModel = e.data.model.get(_key);
+
+      if (DEBUG) {
+        console.log(currentModel);
+        console.log(currentModel.toJSON());
+      }
+
+      if (typeof currentModel !== 'object') {
         // console.log(arguments);
         if (e.data.model._listFieldType[_key]) {
           e.data.model.set(_key, e.data.model._listFieldType[_key]);
@@ -1831,28 +1842,32 @@ define([
       }
 
       if (reset) {
-        e.data.model.get(_key).reset();
+        currentModel.reset();
       }
       if (models) {
         var _model = Backbone.Model.extend({});
         _.each(models, function(element) {
           var _element = new _model();
           _element.set(element);
-          e.data.model.get(_key).add(_element);
+          currentModel.add(_element);
         });
       } else {
-        e.data.model.get(_key).add(list.model);
+        if (DEBUG) {
+          console.log(list.model.toJSON());
+        }
+        currentModel.add(list.model);
       }
       // Render View
       require(['views/subform-layouts/' + _view], function(CollectionView) {
         if (DEBUG) {
           console.log('    in "views/subform-layouts/' + _view + '"');
-          console.log(arguments);
+          // console.log(arguments);
+          console.log(currentModel.toJSON());
         }
         var _data = {
             el: '#' + list.options.formId + e.data.prefixedName['collectiondisplayid'],
             formSchema: list.options.formSchema,
-            collection: e.data.model.get(_key),
+            collection: currentModel,
             options: list.options.options
           },
           collectionView = Vm.create(this, 'CollectionView' + e.data.formId, CollectionView, _data);

@@ -2576,22 +2576,42 @@ define([
       if (DEBUG) {
         console.log('[*] utils.js: setupRadioBtnGroup');
         console.log(arguments);
-      }
-      $form.on('click', '.radio-container button', function(e) {
-        e.preventDefault();
-        var $this = $(e.target),
-          _val = $this.attr('value'),
-          $container = $this.closest('.radio-container'),
-          $input = $container.find('input[type="hidden"]');
-        var _inputName = $input.attr('name');
-        $input.val(_val).trigger('change');
-
-        if (model && model.has && model.has(_inputName)) {
-          model.set(_inputName, $input.val());
+        if (model && model.toJSON()) {
+          console.log(model.toJSON());
         }
-        var $targetBtn = $container.find(':button[value="' + _val + '"]');
-        $container.find('.radio-value-render').html($targetBtn.html()).show('slow');
-      });
+        console.log($form.hasClass('attached-e-radio-container'));
+      }
+      if (!$form.hasClass('attached-e-radio-container')) {
+        if (DEBUG) {
+          console.log('    Attached: "attached-e-radio-container"');
+        }
+        $form.on('click', '.radio-container button', function(e) {
+          e.preventDefault();
+          var $this = $(e.target),
+            _val = $this.attr('value'),
+            $container = $this.closest('.radio-container'),
+            $input = $container.find('input[type="hidden"]');
+          var _inputName = $input.attr('name');
+          $input.val(_val).trigger('change');
+
+          if (DEBUG) {
+            console.log('[*] Click On ".radio-container button"');
+            console.log($this);
+            console.log(_val);
+          }
+
+          if (model && model.has && model.has(_inputName)) {
+            model.set(_inputName, $input.val());
+          }
+          var $targetBtn = $container.find(':button[value="' + _val + '"]');
+          $container.find('.radio-value-render').html($targetBtn.html()).show('slow');
+        });
+        $form.addClass('attached-e-radio-container');
+        if (DEBUG) {
+          console.log($form.hasClass('attached-e-radio-container'));
+          console.log($form);
+        }
+      }
       //If this is edit, will need to render this as well.
       var $radioContainer = $form.find('.radio-container');
       $radioContainer.each(function() {
