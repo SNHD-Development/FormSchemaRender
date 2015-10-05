@@ -81,6 +81,8 @@ define([
             }
             Utils.renderError($(readView.el), err);
           }
+          // Will make sure to start on top of the page
+          Utils.scrollToTop();
         });
       } else {
         // Will render Form
@@ -168,6 +170,12 @@ define([
             }
             Utils.renderError($(that.formView.el), err);
           }
+
+          // Will focus on the first input
+          Utils.focusOnFirstInput(that);
+
+          // Will make sure to start on top of the page
+          Utils.scrollToTop();
         });
       }
     },

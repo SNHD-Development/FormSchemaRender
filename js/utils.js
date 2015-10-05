@@ -3294,6 +3294,7 @@ define([
           $this.select2('open');
           $this.select2('close');
           $this.attr('data-state', val);
+          // This cause the form to focus at this point.
         });
         var $checkTarget = $('#' + idLookUp, $markup),
           _v = $checkTarget.val();
@@ -3413,6 +3414,36 @@ define([
      */
     sortNumber: function(a, b) {
       return a - b;
+    },
+
+    /**
+     * Focus on First Input
+     */
+    focusOnFirstInput: function(view) {
+      var DEBUG = false;
+      view = view || null;
+      if (DEBUG) {
+        console.log('[*] notFocus');
+        console.log(arguments);
+      }
+      var q = 'input:visible:enabled:first';
+      var $inputFirst;
+      if (view.$el) {
+        $inputFirst = view.$el.find('form:first').find(q);
+      }
+      if ($inputFirst && $inputFirst.length) {
+        $inputFirst.focus().blur();
+        if ($inputFirst.hasClass('datepicker')) {
+          $inputFirst.datepicker('hide');
+        }
+      }
+    },
+
+    /**
+     * Scroll to Top of the Page
+     */
+    scrollToTop: function() {
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
 
   };

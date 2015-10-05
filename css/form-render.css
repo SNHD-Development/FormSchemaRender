@@ -265,6 +265,8 @@
     margin-bottom: 15px;
     width: 90%;
     float: none; }
+    .form-render .select2-container.span12 {
+      margin-left: 0; }
   .form-render .subform-container {
     padding: 20px 0;
     margin-bottom: 30px;

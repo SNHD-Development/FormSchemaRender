@@ -1245,6 +1245,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Fix Some Fields not render Language properly
     - IE 8 Validation Error for List Field Type with Radio
     - Fix Bug when SubForm get the last values
+    - When form loaded, will not focus on the input
 
 * 0.1.8
     - Escape html special character in Textarea
