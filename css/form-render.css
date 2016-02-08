@@ -7,6 +7,7 @@
 @import url(./humane-themes/libnotify.css);
 @import url(./humane-themes/original.css);
 @import url(./humane-themes/flatty.css);
+@import url(./jquery.loadmask.spin.css);
 .show-ex-icon {
   position: relative;
   background-repeat: no-repeat;
@@ -71,78 +72,78 @@
  **/
 .form-render {
   /**
-   * Show File Input
-   **/
+     * Show File Input
+     **/
   /**
-   * IE 8 Utilities Class
-   **/
+     * IE 8 Utilities Class
+     **/
   /**
-   * Placeholder
-   */
+     * Placeholder
+     */
   margin: 25px 20px;
   /**
-   * Fraction
-   */
+     * Fraction
+     */
   /**
-   * Select
-   **/
+     * Select
+     **/
   /**
-   * Radio
-   */
+     * Radio
+     */
   /**
-   * CheckBox
-   */
+     * CheckBox
+     */
   /**
-   * Telephone
-   */
+     * Telephone
+     */
   /**
-   * Yes Or No (BooleanInput Field Type)
-   */
+     * Yes Or No (BooleanInput Field Type)
+     */
   /**
-   * Override Text Area
-   **/
+     * Override Text Area
+     **/
   /**
-   * Birthday Picker
-   **/
+     * Birthday Picker
+     **/
   /**
-   * Popover Form
-   **/
+     * Popover Form
+     **/
   /**
-   * Select 2
-   */
+     * Select 2
+     */
   /**
-   * SubForm Style
-   **/
+     * SubForm Style
+     **/
   /**
-   * Actions Container
-   **/
+     * Actions Container
+     **/
   /**
-   * Error Styles
-   **/
+     * Error Styles
+     **/
   /**
-   * Read Mode Styles
-   **/
+     * Read Mode Styles
+     **/
   /**
-   * Fields Style
-   **/
+     * Fields Style
+     **/
   /**
-   * CopyValuesFrom Options
-   **/
+     * CopyValuesFrom Options
+     **/
   /**
-   * For btn-group in Wizard View
-   **/
+     * For btn-group in Wizard View
+     **/
   /**
-   * For MultiFiles Field Type
-   **/
+     * For MultiFiles Field Type
+     **/
   /**
-   * For Modal
-   */
+     * For Modal
+     */
   /**
-   * File Repository
-   */
+     * File Repository
+     */
   /**
-   * Field UI Helper
-   */ }
+     * Field UI Helper
+     */ }
   .form-render label:hover {
     cursor: pointer; }
   .form-render input::-webkit-calendar-picker-indicator {
@@ -248,16 +249,21 @@
     margin-right: 10px; }
     .form-render .birthday-picker select:last-child {
       margin-right: 0; }
-  .form-render .popover-form, .form-render .subform-actions {
+  .form-render .popover-form,
+  .form-render .subform-actions {
     margin: 10px auto; }
-    .form-render .popover-form .popover-action, .form-render .subform-actions .popover-action {
+    .form-render .popover-form .popover-action,
+    .form-render .subform-actions .popover-action {
       text-align: center; }
-      .form-render .popover-form .popover-action .popover-submit, .form-render .subform-actions .popover-action .popover-submit {
+      .form-render .popover-form .popover-action .popover-submit,
+      .form-render .subform-actions .popover-action .popover-submit {
         margin-right: 30px; }
-  .form-render .controls-row input, .form-render .controls-row select, .form-render .controls-row textarea {
+  .form-render .controls-row input,
+  .form-render .controls-row select,
+  .form-render .controls-row textarea {
     margin-bottom: 15px; }
   .form-render .controls-row .add-on {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-left: 3px;
     margin-right: 3px;
     font-size: 18px; }
@@ -271,9 +277,11 @@
     padding: 20px 0;
     margin-bottom: 30px;
     /**
-     * Select 2 Container
-     */ }
-    .form-render .subform-container input, .form-render .subform-container select, .form-render .subform-container textarea {
+         * Select 2 Container
+         */ }
+    .form-render .subform-container input,
+    .form-render .subform-container select,
+    .form-render .subform-container textarea {
       margin-bottom: 15px; }
     .form-render .subform-container .select2-container {
       margin-left: 0;
@@ -317,9 +325,11 @@
         margin-right: 0; }
     .form-render .form-actions .sub-button .btn {
       margin: 10px auto; }
-    .form-render .form-actions .popover-title, .form-render .form-actions .popover-inner {
+    .form-render .form-actions .popover-title,
+    .form-render .form-actions .popover-inner {
       color: #b94a48; }
-    .form-render .form-actions .popover.success .popover-title, .form-render .form-actions .popover.success .popover-inner {
+    .form-render .form-actions .popover.success .popover-title,
+    .form-render .form-actions .popover.success .popover-inner {
       color: #468847; }
     .form-render .form-actions .popover-title {
       text-align: left;
@@ -342,13 +352,21 @@
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
-  .form-render input, .form-render select, .form-render textarea {
+  .form-render input,
+  .form-render select,
+  .form-render textarea {
     margin-bottom: 10px; }
-    .form-render input[type="file"].invalid, .form-render select[type="file"].invalid, .form-render textarea[type="file"].invalid {
+    .form-render input[type="file"].invalid,
+    .form-render select[type="file"].invalid,
+    .form-render textarea[type="file"].invalid {
       border: solid 1px #b94a48; }
-    .form-render input[type="radio"].invalid, .form-render select[type="radio"].invalid, .form-render textarea[type="radio"].invalid {
+    .form-render input[type="radio"].invalid,
+    .form-render select[type="radio"].invalid,
+    .form-render textarea[type="radio"].invalid {
       outline: 1px solid #b94a48; }
-    .form-render input.invalid, .form-render select.invalid, .form-render textarea.invalid {
+    .form-render input.invalid,
+    .form-render select.invalid,
+    .form-render textarea.invalid {
       border-color: #b94a48;
       -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
       -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -357,8 +375,8 @@
     /** Tags **/
     /** Table Sorter **/
     /**
-     * For Update on Read Mode
-     */ }
+         * For Update on Read Mode
+         */ }
     .form-render.read-mode fieldset.table-view {
       margin-bottom: 30px; }
     .form-render.read-mode .read-checkbox {
@@ -390,7 +408,8 @@
     .form-render.read-mode .stupidtable th:hover {
       cursor: pointer;
       text-decoration: underline; }
-      .form-render.read-mode .stupidtable th:hover .dir-icon, .form-render.read-mode .stupidtable th:hover .dir-icon:before {
+      .form-render.read-mode .stupidtable th:hover .dir-icon,
+      .form-render.read-mode .stupidtable th:hover .dir-icon:before {
         text-decoration: none; }
     .form-render.read-mode .stupidtable th a {
       display: inline-block;
@@ -400,8 +419,8 @@
       position: relative; }
       .form-render.read-mode .update-on-read-mode:hover {
         /**
-         * Show Edit Icon
-         */ }
+                 * Show Edit Icon
+                 */ }
         .form-render.read-mode .update-on-read-mode:hover:after {
           position: absolute;
           color: #08c;
@@ -414,7 +433,8 @@
           font-size: 16px;
           top: 5px;
           right: 3%; }
-      .form-render.read-mode .update-on-read-mode [class*='input-'], .form-render.read-mode .update-on-read-mode .radio-container {
+      .form-render.read-mode .update-on-read-mode [class*='input-'],
+      .form-render.read-mode .update-on-read-mode .radio-container {
         width: 80%;
         margin-bottom: 0; }
       .form-render.read-mode .update-on-read-mode .uneditable-input:hover {
@@ -444,7 +464,7 @@
   .form-render .control-group .uneditable-input.input-col2 {
     width: 34%; }
   .form-render .emailpicker .add-on {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     position: relative;
     top: -3px;
     font-size: 16px; }
@@ -498,9 +518,21 @@
       float: right; }
     .form-render #module-approval-modal .modal-footer .btn {
       margin-bottom: 0; }
+  .form-render .append-comment-modal .modal-body {
+    padding: 15px 25px; }
+    .form-render .append-comment-modal .modal-body form label,
+    .form-render .append-comment-modal .modal-body form textarea {
+      width: 95%; }
+  .form-render .append-comment-modal .modal-footer {
+    text-align: center; }
+    .form-render .append-comment-modal .modal-footer .btn {
+      margin-bottom: 10px;
+      padding: 6px 18px; }
   .form-render form.render-default {
     margin: auto; }
-    .form-render form.render-default label, .form-render form.render-default input, .form-render form.render-default textarea {
+    .form-render form.render-default label,
+    .form-render form.render-default input,
+    .form-render form.render-default textarea {
       float: none;
       text-align: left;
       display: block;
@@ -522,12 +554,15 @@
     margin-bottom: 20px; }
     .form-render .filerepository-wrapper .filerepository-form {
       padding: 0 20px 10px; }
-      .form-render .filerepository-wrapper .filerepository-form label, .form-render .filerepository-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form textarea {
+      .form-render .filerepository-wrapper .filerepository-form label,
+      .form-render .filerepository-wrapper .filerepository-form input,
+      .form-render .filerepository-wrapper .filerepository-form textarea {
         width: 98%;
         margin: 8px auto; }
       .form-render .filerepository-wrapper .filerepository-form label {
         font-weight: bold; }
-      .form-render .filerepository-wrapper .filerepository-form input, .form-render .filerepository-wrapper .filerepository-form textarea {
+      .form-render .filerepository-wrapper .filerepository-form input,
+      .form-render .filerepository-wrapper .filerepository-form textarea {
         margin-bottom: 12px; }
     .form-render .filerepository-wrapper .filerepository-form-wrapper .icon-spinner {
       margin: auto 20px; }
@@ -578,7 +613,8 @@ body.ie8 .form-render .controls-row {
     min-height: 20px !important; }
   body.ie8 .form-render .controls-row .span6 {
     width: 43%; }
-body.ie8 .form-render input[class*="span"], body.ie8 .form-render select[class*="span"] {
+body.ie8 .form-render input[class*="span"],
+body.ie8 .form-render select[class*="span"] {
   min-height: 20px; }
 
 /**

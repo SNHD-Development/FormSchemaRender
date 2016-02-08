@@ -269,6 +269,9 @@ define([
       // View clean up isn't actually implemented yet but will simply call .clean, .remove and .unbind
       remove(name);
 
+      if (!View) {
+        return null;
+      }
       var view = new View(options);
       views[name] = view;
 

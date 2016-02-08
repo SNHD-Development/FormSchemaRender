@@ -26,6 +26,7 @@ require.config({
 
     // xhr
     xdr: 'libs/xhr/jquery.xdomainrequest.min',
+    Spinner: 'libs/spin.min',
 
     // Java Loader
     jloader: 'libs/javaloader/deployJava',
@@ -44,6 +45,7 @@ require.config({
     "jquery.select2": 'libs/select2/select2.min',
     "jquery.stupidtable": 'libs/jquery/stupidtable.min',
     "jquery.purl": "libs/purl",
+    "jquery.mask": 'libs/jquery-form-plugin/jquery.loadmask.spin',
 
     // FileUpload
     //'blueimp-helper': 'libs/file-upload/dependency/load-image.min',
@@ -125,6 +127,10 @@ require.config({
     "jquery.purl": {
       deps: ['jquery'],
       exports: 'jQuery.purl'
+    },
+    "jquery.mask": {
+      deps: ['Spinner', 'jquery'],
+      exports: 'jQuery.mask'
     },
     "jquery.select2": ['jquery'],
     "xdr": ['jquery']
@@ -286,7 +292,10 @@ require([
         });
       }
 
-      appView.render();
+      // Wait for the Module to attached
+      setTimeout(function() {
+        appView.render();
+      }, 800);
 
     } catch (err) {
       Utils.renderError(appView.$el, err);

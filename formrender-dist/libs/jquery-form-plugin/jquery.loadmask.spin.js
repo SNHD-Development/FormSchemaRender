@@ -1,0 +1,13 @@
+/**
+ * Copyright (c) 2009 Sergiy Kovalchuk (serg472@gmail.com)
+ *
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+ *
+ * Following code is based on Element.mask() implementation from ExtJS framework (http://extjs.com/)
+ *
+ * https://github.com/iloveitaly/jquery.loadmask.spin/blob/master/jquery.loadmask.spin.js
+ *
+ */
+
+(function(e){e.fn.mask=function(t){return t=e.extend({spinner:{lines:10,length:4,width:2,radius:5},spinnerPadding:5,label:"",delay:0,overlayOpacity:.75,overlaySize:!1},t),e(this).each(function(){var n=e(this);t.delay>0?n.data("_mask_timeout",setTimeout(function(){e.maskElement(n,t)},t.delay)):e.maskElement(n,t)})},e.fn.unmask=function(){return e(this).each(function(){e.unmaskElement(e(this))})},e.fn.isMasked=function(){return this.hasClass("masked")},e.maskElement=function(t,n){t.data("_mask_timeout")!==undefined&&(clearTimeout(t.data("_mask_timeout")),t.removeData("_mask_timeout")),t.isMasked()&&e.unmaskElement(t),t.css("position")=="static"&&t.addClass("masked-relative"),t.addClass("masked");var r=e('<div class="loadmask"></div>').css({opacity:0});n.overlaySize!==!1&&(n.overlaySize.height!==undefined&&r.height(n.overlaySize.height),n.overlaySize.width!==undefined&&r.width(n.overlaySize.width)),navigator.userAgent.toLowerCase().indexOf("msie")>-1&&(r.height(t.height()+parseInt(t.css("padding-top"))+parseInt(t.css("padding-bottom"))),r.width(t.width()+parseInt(t.css("padding-left"))+parseInt(t.css("padding-right")))),navigator.userAgent.toLowerCase().indexOf("msie 6")>-1&&t.find("select").addClass("masked-hidden"),t.append(r);if(n.label.length>0||n.spinner!==!1){var i=e('<div class="loadmask-msg" style="display:none;"></div>').css({opacity:0});n.spinner!==!1&&i.append((new Spinner(n.spinner)).spin().el);if(n.label.length>0){var s=e('<div class="loadmask-label">'+n.label+"</div>");i.append(s)}t.append(i),i.css("top",Math.round(r.height()/2-(i.height()-parseInt(i.css("padding-top"))-parseInt(i.css("padding-bottom")))/2)+"px"),i.css("left",Math.round(r.width()/2-(i.width()-parseInt(i.css("padding-left"))-parseInt(i.css("padding-right")))/2)+"px"),i.show();if(n.spinner!==!1&&n.label.length>0){var o=n.spinner.radius*2+(n.spinner.width+n.spinner.length)*2;s.css({"margin-left":o/2+n.spinnerPadding,"margin-top":-s.height()/2})}i.fadeTo("slow",1)}r.fadeTo("slow",n.overlayOpacity)},e.unmaskElement=function(e){e.data("_mask_timeout")!==undefined&&(clearTimeout(e.data("_mask_timeout")),e.removeData("_mask_timeout")),e.find(".loadmask-msg,.loadmask").remove(),e.removeClass("masked"),e.removeClass("masked-relative"),e.find("select").removeClass("masked-hidden")}})(jQuery);
