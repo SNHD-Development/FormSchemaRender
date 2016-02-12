@@ -245,6 +245,10 @@ define([
             }
 
             var targetFields = (isInternal) ? currentForm.InternalFields : currentForm.Fields;
+            // If there are no "InternalFields" Keys
+            if (!targetFields && isInternal) {
+              targetFields = {};
+            }
             var keyName = (isInternal) ? 'Comments_internal' : 'Comments';
             if (!targetFields.Comments || !_.isArray(targetFields.Comments)) {
               targetFields.Comments = [];

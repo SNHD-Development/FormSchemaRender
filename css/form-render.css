@@ -207,7 +207,7 @@
     margin-bottom: 10px; }
     .form-render .radio-container label.radio {
       margin-left: 30px;
-      width: 95%; }
+      width: auto; }
       .form-render .radio-container label.radio input[type="radio"] {
         margin-left: -25px; }
     .form-render .radio-container .radio-value-render {

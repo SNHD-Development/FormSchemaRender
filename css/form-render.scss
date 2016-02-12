@@ -174,7 +174,7 @@ $text_area_min_height: 100px;
     label {
       &.radio {
         margin-left: 30px;
-        width: 95%;
+        width: auto;
         input {
           &[type="radio"] {
             margin-left: -25px;

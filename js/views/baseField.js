@@ -219,6 +219,9 @@ define([
       this._listSchema = {};
       this._getValueFrom = {}; // Hash for getValueFrom
 
+      // If the visibleOn already Attached, will no longer do it
+      this._visibleonEventAttached = {};
+
       // Wizard View Counters
       this._stepDiv = 0; // Count number of open div for step (wizard view)
       this._currentStep = 1; // Current Step
@@ -1954,8 +1957,21 @@ define([
       }
 
       // Attched Event to these input.
-      $(this.el)
-        .on('change', ':input[name="' + field.options.visibleon.name + '"]', function(e) {
+      var DEBUG = false;
+      var _vsbName = field.options.visibleon.name,
+        _shouldAttachedTheVSB = true;
+      // if (!this._visibleonEventAttached[_vsbName]) {
+      //   _shouldAttachedTheVSB = true;
+      //   this._visibleonEventAttached[_vsbName] = true;
+      // }
+      // If should attached Event?
+      if (_shouldAttachedTheVSB) {
+        if (DEBUG) {
+          console.log('- Attached "' + field.options.visibleon.name + '"');
+        }
+        $(this.el).on('change', ':input[name="' + _vsbName + '"]', function(e) {
+          var DEBUG_VISIBLE_ON_ONLY = false;
+
           // console.log('*** Input [' + field.options.visibleon.name + '] changed ***');
           var $currentTarget = $(e.currentTarget),
             $container = (parentContainer) ? $currentTarget.parents(parentContainer) : $currentTarget,
@@ -2045,6 +2061,7 @@ define([
             // Insert this into markup
             if ($('.options-visible-on-' + field.name, that.el).length < 1) {
               $container.after(htmlTmpl);
+              // console.log(htmlTmpl);
               // if (debug) {
               //   console.log($container);
               // }
@@ -2187,21 +2204,44 @@ define([
                     // console.log($inputTmp);
                   }
                 });
-              } else if (that.options.mode === 'update' && that.options.formData.fields[field.name]) {
-                var $inputTmp = $(':input[name="' + field.name + '"]', $containerOptions);
-                // console.log('*** Checked [' + field.name + '] ***');
-                // console.log(that.options.formData.fields[field.name]);
-                if ($inputTmp.is(':radio') || $inputTmp.is(':checkbox')) {
-                  // console.log($inputTmp);
-                  // console.log(that.model.get(field.name));
-                  // if (!_.isObject(that.options.formData.fields[field.name])) {
-                  //   $inputTmp.filter('[value="' + that.options.formData.fields[field.name] + '"]').prop('checked', true);
-                  // }
-                } else {
-                  $inputTmp.val(that.options.formData.fields[field.name]);
-                  that.model.set(field.name, that.options.formData.fields[field.name]);
+              } else if (that.options.mode === 'update') {
+                var DEBUG = false;
+                if (DEBUG) {
+                  console.log('- Check for Field. ' + field.name);
+                  console.log(field.name);
+                  console.log(that.options.formData.fields);
                 }
-                // console.log($inputTmp);
+                if (DEBUG) {
+                  console.log('Current Type: ', _typeLowerCase);
+                }
+                switch (_typeLowerCase) {
+                  case 'fullname':
+                    _.each(['_fullname_first_name', '_fullname_middle_name', '_fullname_last_name'], function(append) {
+                      var tKey = field.name + append;
+                      var $inputTmp = $(':input[name="' + tKey + '"]', $containerOptions);
+                      if ($inputTmp.length && that.options.formData.fields[tKey]) {
+                        $inputTmp.val(that.options.formData.fields[tKey]);
+                      }
+                    });
+                    break;
+                  default:
+                    if (that.options.formData.fields[field.name]) {
+                      var $inputTmp = $(':input[name="' + field.name + '"]', $containerOptions);
+                      // console.log('*** Checked [' + field.name + '] ***');
+                      // console.log(that.options.formData.fields[field.name]);
+                      if ($inputTmp.is(':radio') || $inputTmp.is(':checkbox')) {
+                        // console.log($inputTmp);
+                        // console.log(that.model.get(field.name));
+                        // if (!_.isObject(that.options.formData.fields[field.name])) {
+                        //   $inputTmp.filter('[value="' + that.options.formData.fields[field.name] + '"]').prop('checked', true);
+                        // }
+                      } else {
+                        $inputTmp.val(that.options.formData.fields[field.name]);
+                        that.model.set(field.name, that.options.formData.fields[field.name]);
+                      }
+                      // console.log($inputTmp);
+                    }
+                }
               }
 
               // Check to see if this has UserId Field Type
@@ -2214,6 +2254,8 @@ define([
               Utils.setupUrlAjaxCall($('form.form-render'), $('#' + field.name));
 
               // If there are DatePicker
+              // var DEBUG = true;
+
               if (that._hasDate) {
                 if (DEBUG) {
                   console.log('[*] baseField.setupVisibleOn - _hasDate');
@@ -2221,6 +2263,28 @@ define([
                   console.log(that.$el);
                 }
                 Utils.setupDateInput(that.el, that);
+              }
+              // Adding Birth Date Binder
+              if (that._hasBDate && field && field.type && field.options && field.options.render) {
+                if (field.type.toLowerCase() === 'date') {
+                  var _dateRenderVisibleOn = field.options.render;
+                  try {
+                    _dateRenderVisibleOn = _dateRenderVisibleOn.toLowerCase();
+                    var currentBDateClass = '.options-visible-on-' + field.name;
+                    if (typeof that.el === 'string') {
+                      currentBDateClass = that.el + ' ' + currentBDateClass;
+                    }
+                    switch (_dateRenderVisibleOn) {
+                      case 'select':
+                        Utils.setupBDateInput(currentBDateClass, that.model);
+                        break;
+                    }
+                  } catch (err) {
+                    if (console && console.error) {
+                      console.error(err);
+                    }
+                  }
+                }
               }
 
               // If this is Radio, will need to do magic work by set the value that match with Model
@@ -2241,7 +2305,49 @@ define([
             // Remove this out of the markup
             $('.options-visible-on-' + field.name, that.el).remove();
 
-            if (_typeLowerCase === 'address') {
+            // console.log(_typeLowerCase);
+
+            if (_typeLowerCase === 'date' && field.options && field.options.render) {
+              var _dateRenderNotVisibleOn = field.options.render;
+              try {
+                _dateRenderNotVisibleOn = _dateRenderNotVisibleOn.toLowerCase();
+                switch (_dateRenderNotVisibleOn) {
+                  case 'select':
+                    var _bdate_select_remove_name = field.name + '_birth';
+                    if (typeof _ === 'undefined' || !_) {
+                      if (console && console.error) {
+                        console.error('Could not be able to locate "_".');
+                      }
+                    } else {
+                      // console.log(_bdate_select_remove_name);
+                      // console.log(that.model.validation);
+                      _.map(['day', 'month', 'year'], function(_val) {
+                        var _currentKey = _bdate_select_remove_name + '[' + _val + ']';
+                        if (that.model.validation[_currentKey]) {
+                          delete that.model.validation[_currentKey];
+                        }
+                      });
+                      if (that.model.validation[field.name]) {
+                        delete that.model.validation[field.name];
+                      }
+                    }
+                    break;
+                  default:
+                    throw new Error('Not implement delete for "' + _dateRenderNotVisibleOn + '"');
+                }
+              } catch (err) {
+                if (console && console.error) {
+                  console.error(err);
+                }
+              }
+            } else if (_typeLowerCase === 'fullname') {
+              _.map(['_fullname_first_name', '_fullname_last_name'], function(_val) {
+                var _currentKey = field.name + _val;
+                if (that.model.validation[_currentKey]) {
+                  delete that.model.validation[_currentKey];
+                }
+              });
+            } else if (_typeLowerCase === 'address') {
               var _address_name = field.name + '_address_street';
               that.model.set(_address_name, '');
               if (that.options.formSchema.validation[_address_name]) {
@@ -2326,8 +2432,15 @@ define([
                 $currentTarget.prop('checked', true);
               }
             }
+
+            // Check for Validation
+            if (DEBUG_VISIBLE_ON_ONLY) {
+              console.log('[*] Check for Validation');
+              console.log(that.model.validation);
+            }
           }
         });
+      }
     },
     /**
      * Setup Copy Values From Options
