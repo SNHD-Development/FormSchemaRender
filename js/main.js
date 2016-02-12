@@ -5,7 +5,7 @@
  * Copyright (c) 2013 SNHD
  * Licensed under the MIT license.
  *
- * Version 0.1.9
+ * Version 0.2.0
  **/
 
 require.config({

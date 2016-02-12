@@ -1224,6 +1224,11 @@ Sometime there are some fileds that internal should not be able to update these 
 
 ## Version
 
+* 0.2.0
+    - Adding ReadModeAppendComment Module
+    - Adding All Common Email List
+    - Enhance VisibleOn with FullName and BirthDate Fields
+
 * 0.1.9
     - Adding Street Number and Unit Number to Address Field
     - Support VisibleOn Steps Filter
