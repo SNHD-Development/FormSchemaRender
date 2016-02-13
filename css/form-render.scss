@@ -175,6 +175,7 @@ $text_area_min_height: 100px;
       &.radio {
         margin-left: 30px;
         width: auto;
+        display: block;
         input {
           &[type="radio"] {
             margin-left: -25px;
