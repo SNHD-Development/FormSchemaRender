@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.1.9`
+Version `version 0.2.0`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -578,6 +578,17 @@ If we want to change the key, simply Set LookUp Object as,
 			"Text": "YourTextKey"
 		}
 	}
+
+To Load All Values from Remote URL simply pass, `Options.Url` to the correct URL for data to load
+
+    {
+        "Name" : "Your",
+        "Type" : "Select",
+        "Description" : "Your Name",
+        "Options" : {
+            "Url" : "/searchforuser"
+        }
+    }
 
 To Create Tag, simply set Options.Tags = true
 
@@ -1223,6 +1234,9 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ## Version
+
+* 0.2.1
+    - When Button has BtnMarkAsUnacceptable, it will ask to put in the "Unacceptable Reason" (In Read Mode)
 
 * 0.2.0
     - Adding ReadModeAppendComment Module

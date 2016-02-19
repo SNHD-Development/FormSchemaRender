@@ -329,9 +329,17 @@
     .form-render .form-actions .popover-title,
     .form-render .form-actions .popover-inner {
       color: #b94a48; }
+    .form-render .form-actions .popover p {
+      margin-bottom: 0; }
     .form-render .form-actions .popover.success .popover-title,
     .form-render .form-actions .popover.success .popover-inner {
       color: #468847; }
+    .form-render .form-actions .popover .popover-content {
+      text-align: center;
+      padding-top: 12px;
+      padding-bottom: 12px; }
+      .form-render .form-actions .popover .popover-content .btn {
+        margin-bottom: 5px; }
     .form-render .form-actions .popover-title {
       text-align: left;
       font-weight: bold; }
@@ -587,6 +595,19 @@
  */
 .datepicker.dropdown-menu {
   z-index: 2000; }
+
+/**
+ * Override Remodal
+ */
+.remodal-unacceptable-modal .custom-html {
+  padding: 0 20px; }
+  .remodal-unacceptable-modal .custom-html textarea {
+    width: 90%;
+    min-height: 60px; }
+  .remodal-unacceptable-modal .custom-html .radio {
+    text-align: left;
+    width: auto;
+    padding-left: 20%; }
 
 /**
  * Modules

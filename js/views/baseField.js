@@ -986,6 +986,60 @@ define([
             field.url = Utils.changeURLGetTemplateString(field.url);
           }
 
+          if (this.options.internal && this.options.mode === 'read' && field.name === 'BtnMarkAsUnacceptable' && $.fn.remodal) {
+            // Need to find the Fields Name "UnacceptableReason"
+
+            // console.log(this.options);
+            var _unacceptableReasonSchema = _.find(this.options.formSchema.fields, function(val) {
+              if (!val || !val.name || !val.type) {
+                return;
+              }
+              if (val.name === 'UnacceptableReason') {
+                return val;
+              }
+            });
+            if (_unacceptableReasonSchema) {
+              // If there are formData
+
+              var _currentReasonVal = (this.options.formData && this.options.formData.fields && this.options.formData.fields['UnacceptableReason']) ? this.options.formData.fields['UnacceptableReason'] : null;
+
+              // If there are ' in the value, it will need to escape
+              if (_currentReasonVal && _currentReasonVal.replace) {
+                _currentReasonVal = _currentReasonVal.replace(/'/ig, '\\\'');
+              }
+
+              // Adding the alert to ask for remodal
+              var currentTimestamp = new Date().getTime();
+              field.options['data-remodal-target'] = 'btnmarkasunacceptable_' + currentTimestamp;
+              field.options['data-remodal-current-value'] = _currentReasonVal;
+              field.options['data-current-form-id'] = this.options.formData._id.$oid;
+              field.options['data-url-mark-as-unacceptable'] = field.url;
+              // Generate HTML Mark Up for remodal
+              switch (_unacceptableReasonSchema.type.toLowerCase()) {
+                case 'radio':
+                  if (!_unacceptableReasonSchema.values) {
+                    throw new Error('Expected a values key!');
+                  }
+                  field._customHtml = _.reduce(_unacceptableReasonSchema.values, function(str, v, index, list) {
+                    var _id = 'UnacceptableReason_' + index;
+                    var _k = (_.isArray(list)) ? v : index;
+                    var _checked = (_currentReasonVal && _currentReasonVal === _k) ? 'checked="true"' : '';
+                    if (_k && _k.replace) {
+                      _k = _k.replace(/"/ig, '&quot;');
+                    }
+                    var lab = '<label class="radio"><input ' + _checked + ' name="UnacceptableReason" id="' + _id + '" value="' + _k + '" type="radio">' + v + '</label>';
+                    return str + lab;
+                  }, '');
+                  break;
+                case 'textarea':
+                  field._customHtml = '<textarea autocomplete="off" name="UnacceptableReason" id="UnacceptableReason"></textarea>';
+                  break;
+                default:
+                  throw new Error('Not implement ' + _unacceptableReasonSchema.type + ' yet!');
+              }
+              field.options.confirmed = null;
+            }
+          }
           // Adding the Confirmation Popover
           if (field.options.confirmed) {
             // If there is ConfirmedText then will override the standard text.
