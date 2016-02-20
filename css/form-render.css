@@ -607,7 +607,8 @@
   .remodal-unacceptable-modal .custom-html .radio {
     text-align: left;
     width: auto;
-    padding-left: 20%; }
+    padding-left: 20%;
+    display: block; }
 
 /**
  * Modules
