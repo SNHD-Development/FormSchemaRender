@@ -239,9 +239,12 @@
     margin-left: 30px;
     margin-bottom: 20px;
     float: left; }
+    .form-render .form-render_booleaninput .btn.active {
+      text-decoration: underline; }
   .form-render .booleaninput-value-render {
     float: left;
-    margin-left: 30px !important; }
+    margin-left: 12px !important;
+    margin-top: 5px; }
   .form-render textarea {
     min-height: 100px; }
   .form-render .row-fluid [class*="span"] textarea {

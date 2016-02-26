@@ -2550,12 +2550,14 @@ define([
           return;
         }
         switch (_val) {
+          case true:
           case 'true':
             $this.parent()
               .find('button.btn-yes')
               .click();
             break;
 
+          case false:
           case 'false':
             $this.parent()
               .find('button.btn-no')

@@ -64,7 +64,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
             }
             model.on('change:' + value.name, function(modelObj, changedVal) {
               var _data = {};
-              _data[value.name] = (changedVal === 'true') ? true : ((changedVal === 'false') ? false : "");
+              _data[value.name] = (changedVal === 'true' || changedVal === true) ? true : ((changedVal === 'false' || changedVal === false) ? false : "");
               modelObj.set(_data, {
                 silent: true
               });
