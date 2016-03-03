@@ -2463,7 +2463,37 @@ define([
               _.each(_checkBindingArray, function(_suffix) {
                 if (that.model.bindings[_bindingName + _suffix]) {
                   that.model.unbindModelBinder(_bindingName + _suffix, field.type);
-                  that._modelBinder.bind(that.model, that.el, that.model.bindings);
+
+                  var _vsNotGood = true;
+                  while (_vsNotGood) {
+                    try {
+                      that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                      _vsNotGood = false;
+                    } catch (err) {
+                      _vsNotGood = false;
+                      // Need to parse the name
+                      // Bad binding found. No elements returned for binding selector [name="SpecialAccommodationRequest"]
+                      var _needToRemove = err.match(/name="(\w+)"/i);
+                      if (!_needToRemove) {
+                        if (console && console.error) {
+                          console.error(err);
+                        }
+                      }
+                      if (_needToRemove.length === 2) {
+                        var _targetName = _needToRemove[1];
+                        _.each(_checkBindingArray, function(_s) {
+                          if (that.model.bindings[_targetName + _s]) {
+                            that.model.unbindModelBinder(_targetName + _s, field.type);
+                            if (that.model.validation[_targetName + _s]) {
+                              delete that.model.validation[_targetName + _s];
+                            }
+                            _vsNotGood = true;
+                          }
+                        });
+                      }
+                    }
+                  }
+
                   // For Checkbox, this caused the value to be set to empty string.
                   if (!$currentTarget.is(':checkbox')) {
                     var _currentTargetName = $currentTarget.attr('name');
