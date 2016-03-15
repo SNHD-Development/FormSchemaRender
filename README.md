@@ -1238,6 +1238,8 @@ Sometime there are some fileds that internal should not be able to update these 
 * 0.2.1
     - When Button has BtnMarkAsUnacceptable, it will ask to put in the "Unacceptable Reason" (In Read Mode)
     - Fix ModelBinder in VisibleOn with BooleanInput
+    - Fix the BooleanInput glitch when combine with VisibleOn
+    - Fix the BooleanInput glitch when combine with VisibleOn in Read Mode
 
 * 0.2.0
     - Adding ReadModeAppendComment Module

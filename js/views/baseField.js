@@ -2034,6 +2034,7 @@ define([
             _visibleVal = $currentTarget.val(),
             _checkBindingArray = ['', '[]'],
             debug = false;
+
           if (!$container.length && parentContainer === field.options.visibleon.parentcontainer) {
             $container = $currentTarget.parents('.form-render').find(parentContainer);
           }
@@ -2352,14 +2353,16 @@ define([
 
             }
           } else {
-            // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '"');
             // Trigger Event to let other objects know that this fields will go out of markup
+
+            // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '"');
+
             $('#' + field.name, that.el).trigger('removeVisibleOn');
 
             // Remove this out of the markup
             $('.options-visible-on-' + field.name, that.el).remove();
-
-            // console.log(_typeLowerCase);
+            // Need to remove the "visible-parent-{name}"
+            $('.visible-parent-' + field.name, that.el).remove();
 
             if (_typeLowerCase === 'date' && field.options && field.options.render) {
               var _dateRenderNotVisibleOn = field.options.render;
