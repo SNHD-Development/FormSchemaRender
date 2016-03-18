@@ -1240,6 +1240,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Fix ModelBinder in VisibleOn with BooleanInput
     - Fix the BooleanInput glitch when combine with VisibleOn
     - Fix the BooleanInput glitch when combine with VisibleOn in Read Mode
+    - Fix the Read Mode checking for false value into check for undefined
 
 * 0.2.0
     - Adding ReadModeAppendComment Module

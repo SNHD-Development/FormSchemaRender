@@ -338,6 +338,11 @@ define([
      **/
     render: function(field, readMode) {
 
+      // if (field && field.name) {
+      //   console.log(field.name);
+      //   console.log('');
+      // }
+
       var that = this,
         _html = '',
         _name = [field.name],
@@ -1691,7 +1696,16 @@ define([
      * Show On Mode
      **/
     checkShowOnMode: function(value, readMode, status) {
+      var DEBUG = false;
+      var DEBUG_NAME = 'BillAnotherDept';
+      var locationCnt = 0;
+
       var _type = value.type.toLowerCase();
+
+      if (DEBUG && value && value.name) {
+        console.log('checkShowOnMode: ', value.name);
+        console.log('');
+      }
 
       // First Check to see if rendering for internal or external
       if (value.options.internal != undefined && (value.options.internal !== this.options.internal)) {
@@ -1713,25 +1727,64 @@ define([
         this._internalFields.push(_internalName);
       }
 
+      if (DEBUG && value.name === DEBUG_NAME) {
+        locationCnt++;
+        console.log('Location: ' + locationCnt);
+      }
+
       if (this.options.hideButtons && (_type === 'button' || _type === 'submit' || _type === 'reset' || _type === 'action')) {
         return false;
       }
 
+      if (DEBUG && value.name === DEBUG_NAME) {
+        locationCnt++;
+        console.log('Location: ' + locationCnt);
+      }
+
       // If this is type VisibleOn and in Read Mode will not render if does not have data
-      if (this.options.mode === 'read' && !$.isEmptyObject(value.options.visibleon) && !this.options.formData.fields[value.name] && !(_type === 'fullname' || _type === 'address' || _type === 'buttonclipboard')) {
-        return false;
+      if (this.options.mode === 'read') {
+        if (!$.isEmptyObject(value.options.visibleon)) {
+          if (typeof this.options.formData.fields[value.name] === 'undefined' && !(_type === 'fullname' || _type === 'address' || _type === 'buttonclipboard')) {
+            if (DEBUG && value.name === DEBUG_NAME) {
+              locationCnt++;
+              console.log('Location: ' + locationCnt, ' : ', this.options.formData.fields[value.name]);
+            }
+            return false;
+          }
+        }
+      }
+
+      if (DEBUG && value.name === DEBUG_NAME) {
+        locationCnt++;
+        console.log('Location: ' + locationCnt);
       }
 
       readMode = readMode || false;
       status = status || false;
 
       if (readMode !== 'read' && value.type.toLowerCase() === 'buttonclipboard') {
+        if (DEBUG && value.name === DEBUG_NAME) {
+          locationCnt++;
+          console.log('Location: ' + locationCnt);
+        }
         return false;
       } else if (readMode === 'read' && !this.options.internal && value.options.hideonexternalread) {
+        if (DEBUG && value.name === DEBUG_NAME) {
+          locationCnt++;
+          console.log('Location: ' + locationCnt);
+        }
         return false;
       } else if (typeof value.options.showonmode !== 'undefined' && value.options.showonmode.indexOf(readMode) === -1) {
+        if (DEBUG && value.name === DEBUG_NAME) {
+          locationCnt++;
+          console.log('Location: ' + locationCnt);
+        }
         return false;
       } else if (typeof value.options.showonstatus !== 'undefined') {
+        if (DEBUG && value.name === DEBUG_NAME) {
+          locationCnt++;
+          console.log('Location: ' + locationCnt);
+        }
         var _showOnStatus = _.map(value.options.showonstatus, function(element) {
           return element.toLowerCase();
         });
