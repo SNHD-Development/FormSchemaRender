@@ -7,7 +7,9 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
    * @param  boolean mode either this will be internal or not
    * @return
    */
+  var DEBUG = false;
   var parseFields = function(model, attrs, mode) {
+      var DEBUG = false;
       var _attrs = {},
         _validation = {},
         _name, _internal = (attrs.is_internal) ? true : false,
@@ -72,13 +74,26 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
             model.hasBooleanInput = true;
             break;
           case 'multifiles':
+            // DEBUG = true;
             _name = value.name + '[]';
             _attrs[_name] = '';
+            if (DEBUG) {
+              console.log('model.parseFields setting ', _typeLowerCase, 'name', _name);
+            }
             if (typeof attrs.validation[value.name] !== 'undefined') {
               attrs.validation[_name] = _.clone(attrs.validation[value.name]);
               delete attrs.validation[value.name];
             }
             setValidationData(_name, attrs, _validation, '');
+            if (DEBUG) {
+              console.log('- multiFilesDefaultValue', model.multiFilesDefaultValue);
+              // console.log('- _attrs', model.attributes[_name]);
+              // console.log('- value', value);
+            }
+            if (!model.multiFilesDefaultValue[_name]) {
+              model.multiFilesDefaultValue[_name] = true;
+            }
+            // DEBUG = false;
             break;
           case 'fraction':
             _name = value.name + '_numerator';
@@ -362,11 +377,14 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
   return Backbone.Model.extend({
     initialize: function() {
       var self = this;
+      this.multiFilesDefaultValue = {};
       this.subFormLists = [];
       this.bindings = {}; // To be used in ModelBinder
       this.notBinding = []; // will be used to check what field will not need to render.
       this.escapeHtmlInputs = []; // Inputs that need to escape the HTML.
       this._listFieldType = {}; // Save the reference for _listFieldType
+
+      // Important Function to Parse FormData
       var _attrs = parseFields(this, this.attributes, this.attributes.is_internal);
       this.clear();
       this.set(_attrs);
@@ -374,18 +392,38 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
        * Add Invalid Event
        **/
       this.on('validated:invalid', function(model, errors) {
+        // var DEBUG = true;
+        if (console && console.log) {
+          console.log('Invalid Fields', errors);
+        }
+        if (DEBUG) {
+          console.log('Check Model Values', model.toJSON());
+          console.log('Check Model Validation', model.validation);
+          console.log('Check Model MultiFilesDefaultValue', model.multiFilesDefaultValue);
+        }
         _.each(errors, function(value, key) {
           $(':input[name="' + key + '"]').addClass('invalid');
+          if (DEBUG) {
+            console.log('- Invalid Value for ', key);
+            console.log(model.get(key));
+            console.log('- Validation', model.validation[key]);
+            console.log('- MultiFilesDefaultValue', model.multiFilesDefaultValue[key]);
+          }
         });
       });
       // Debug
-      // this.on('change', function() {
-      //     console.log('=== Check Model Change ===');
-      //     console.log('[x] Values');
-      //     console.log(this.toJSON());
-      //     console.log('[x] Binding');
-      //     console.log(this.bindings);
-      // });
+      /*this.on('change', function() {
+        var DEBUG = true;
+        if (DEBUG) {
+          console.log('=== Check Model Change ===');
+          console.log('[x] Values');
+          console.log(this.toJSON());
+          console.log('[x] Binding');
+          console.log(this.bindings);
+          console.log('[x] MultiFilesDefaultValue');
+          console.log(this.multiFilesDefaultValue);
+        }
+      });*/
 
       // HTML Entities
       if (this.escapeHtmlInputs.length) {
@@ -551,7 +589,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
       }
     },
     /**
-     * [isSubformValid description]
+     * Checking for Form Validation
      * @return {Boolean}
      */
     isSubformValid: function() {

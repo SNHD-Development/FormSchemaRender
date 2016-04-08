@@ -3042,6 +3042,35 @@ define([
       });
     },
 
+    setDefaultMultiFile: function(el, view) {
+      // console.log('setDefaultMultiFile', 'el:', el, 'view:', view);
+      // console.log('setDefaultMultiFile mode', view.options.mode);
+      if (!view || !view.options || view.options.mode !== 'update') {
+        return;
+      }
+      // Ready to check for model
+      var model = view.model;
+      // console.log('model', model.toJSON());
+
+      if (!model || !model.multiFilesDefaultValue || _.isEmpty(model.multiFilesDefaultValue)) {
+        return;
+      }
+      var defaultValue = model.multiFilesDefaultValue;
+      // console.log('defaultValue', defaultValue);
+      _.each(defaultValue, function(value, key) {
+        // console.log('L3060', 'value:', value, 'key:', key);
+        // var $multiFile = el.find(':input[name="' + key + '"]');
+        // console.log('$multiFile', $multiFile);
+        if (model.has(key)) {
+          var mutiFileValue = model.get(key);
+          // console.log('mutiFileValue', mutiFileValue)
+          if (!mutiFileValue) {
+            model.set(key, value);
+          }
+        }
+      });
+    },
+
     /**
      * Function to format Date Object to return time
      * @param  object date

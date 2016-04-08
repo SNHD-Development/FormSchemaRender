@@ -12,6 +12,12 @@ var _ie8 = $('body').hasClass('ie8')
 
 		<div class="span10">
 
+			<% if (typeof _renderMode === 'string' && _renderMode === 'update') { %> 
+				<div class="alert alert-info">
+					<i class="icon-info-sign"></i> If you added any file(s) in this field, it will replace the previous one!
+				</div>
+			<% } %>
+
 			<% if ( ! _ie7) { %>
 			<label for="<%= name %>_multifiles" style="display:inline;" id="<%= name %>_multifiles_label">
 				<span class="btn btn-success fileinput-button">

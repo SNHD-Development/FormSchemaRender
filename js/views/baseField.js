@@ -237,6 +237,23 @@ define([
         render_mode: this.options.mode,
         status: (this.options.mode === 'update' && this.options.formData && this.options.formData.status) ? this.options.formData.status : null
       }));
+      if (this.options.formData && !_.isEmpty(this.options.formData) && this.model.multiFilesDefaultValue && !_.isEmpty(this.model.multiFilesDefaultValue)) {
+        // console.log('FormData', this.options.formData);
+        // console.log('Before: this.model.multiFilesDefaultValue', this.model.multiFilesDefaultValue);
+        this.model.multiFilesDefaultValue = _.reduce(this.model.multiFilesDefaultValue, function(carry, el, index) {
+          // console.log('L244', 'el:', el, 'index:', index);
+          var _newName = index.replace(/[\[\]]/ig, '');
+          // console.log('index', index);
+          // console.log('_newName', _newName);
+          if (that.options.formData && that.options.formData.fields && that.options.formData.fields[_newName]) {
+            // console.log('that.options.formData.fields[_newName]', that.options.formData.fields[_newName]);
+            carry[index] = that.options.formData.fields[_newName];
+          }
+          return carry;
+        }, {});
+        // console.log('After: this.model.multiFilesDefaultValue', this.model.multiFilesDefaultValue);
+      }
+
       // If user pass in formData
       if (!$.isEmptyObject(this.options.formData)) {
         _.each(this.model.attributes, function(element, index) {
@@ -1613,7 +1630,8 @@ define([
         }
         _html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({
           _attr: _attr,
-          _lang: this.options.lang
+          _lang: this.options.lang,
+          _renderMode: this.options.mode
         }, field)) : '';
       }
 

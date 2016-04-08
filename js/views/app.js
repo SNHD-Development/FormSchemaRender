@@ -158,8 +158,14 @@ define([
             // console.log(that.formView);
             Utils.setupSelect2(that.formView);
 
+            // console.log('Validation:', that.formView.model.validation);
+            // console.log('Model, Before Bind ModelBinder:', that.formView.model.toJSON());
+
             // Bind Model Here
             that.formView._modelBinder.bind(that.formView.model, that.formView.el, that.formView.model.bindings);
+
+            // console.log('Model, After Bind:', that.formView.model.toJSON());
+
             Backbone.Validation.bind(that.formView, {
               forceUpdate: true
             });
@@ -176,6 +182,8 @@ define([
 
           // Will make sure to start on top of the page
           Utils.scrollToTop();
+
+          // console.log('Model, Render End', that.formView.model.toJSON());
         });
       }
     },
@@ -331,6 +339,11 @@ define([
         var $this = $(this);
         that.formView.model.set($this.attr('name'), $this.val());
       });
+      // Adding ability to skip the multifile in update mode
+      // console.log('Model, before calling Utils.setDefaultMultiFile', this.formView.model.toJSON());
+
+      Utils.setDefaultMultiFile($form, this.formView);
+
       Utils.setModelRadioValues($form, this.formView);
       Utils.setModelCheckValues($form, this.formView);
       var _isCheckBoxGood = Utils.validateCheckBox($form);
@@ -356,8 +369,9 @@ define([
         });
       }
 
-      // console.log(this.formView.model.isValid(true));
-      // console.log(this.formView.model.isSubformValid());
+      // console.log('Is model valid?', this.formView.model.isValid(true));
+      // console.log('Is sub-form model valid?', this.formView.model.isSubformValid());
+      // console.log('Model, value before submitted', this.formView.model.toJSON());
 
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid() && _isCheckBoxGood) {
 
