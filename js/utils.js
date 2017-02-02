@@ -2,40 +2,11 @@
  * Utilities Functions
  * Events
  **/
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'vm',
-  'humane',
-  'models/form',
-  'select2helper',
-  'text!data/county.json',
-  'bootstrap',
-  'jquery.select2',
-  'jquery.spinner',
-  'jquery.birthdaypicker',
-  'jquery.placeholder',
-  'jquery.expose',
-  'jquery.zclip',
-  'jquery.stupidtable',
-  'xdr'
-], function($,
-  _,
-  Backbone,
-  Vm,
-  humane,
-  FormModel,
-  Select2Helper,
-  countyData
-) {
-
+define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'select2helper', 'text!data/county.json', 'bootstrap', 'jquery.select2', 'jquery.spinner', 'jquery.birthdaypicker', 'jquery.placeholder', 'jquery.expose', 'jquery.zclip', 'jquery.stupidtable', 'xdr'], function($, _, Backbone, Vm, humane, FormModel, Select2Helper, countyData) {
   var DEBUG = false;
-
   /**
    * Setup DependOn Options (Values)
    **/
-
   function setValueDependOn(el, visibleOnObj, formData) {
     _.each(visibleOnObj, function(value) {
       if (formData.fields[value.name]) {
@@ -50,18 +21,15 @@ define([
           }
         });
         // Need to trigger the value
-        $(':input[name="' + value.options.visibleon.name + '"]')
-          .trigger('change');
+        $(':input[name="' + value.options.visibleon.name + '"]').trigger('change');
       }
     });
   }
-
   return {
     config: {
       fileUrl: '/form/getFile',
       internalViewUrl: '/Form/SingleView'
     },
-
     renderError: function($container, err) {
       $container.html('<div class="alert alert-danger"><i class="icon-wrench"></i> <strong>Error: Please refresh this page and try again.</strong> <br> ' + err + '</div>');
     },
@@ -74,8 +42,7 @@ define([
         if (ieversion < 7) {
           ieversion = 7;
         }
-        $('body')
-          .addClass('ie' + ieversion);
+        $('body').addClass('ie' + ieversion);
       }
     },
     /**
@@ -87,8 +54,7 @@ define([
         var result = [],
           name;
         for (name in o) {
-          if (o.hasOwnProperty(name))
-            result.push(name);
+          if (o.hasOwnProperty(name)) result.push(name);
         }
         return result;
       };
@@ -106,8 +72,7 @@ define([
       if (!Array.prototype.forEach) {
         Array.prototype.forEach = function(action, that) {
           for (var i = 0, n = this.length; i < n; i++)
-            if (i in this)
-              action.call(that, this[i], i, this);
+            if (i in this) action.call(that, this[i], i, this);
         };
       }
     },
@@ -123,12 +88,10 @@ define([
     // *     example 2: ucwords('HELLO WORLD');
     // *     returns 2: 'HELLO WORLD'
     ucwords: function(str) {
-      return (str + '')
-        .replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function($1) {
-          return $1.toUpperCase();
-        });
+      return (str + '').replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function($1) {
+        return $1.toUpperCase();
+      });
     },
-
     htmlspecialchars: function(string, quote_style, charset, double_encode) {
       //       discuss at: http://phpjs.org/functions/htmlspecialchars/
       //      original by: Mirek Slugen
@@ -149,7 +112,6 @@ define([
       //        returns 2: 'ab"c&#039;d'
       //        example 3: htmlspecialchars('my "&entity;" is still here', null, null, false);
       //        returns 3: 'my &quot;&entity;&quot; is still here'
-
       var optTemp = 0,
         i = 0,
         noquotes = false;
@@ -161,9 +123,7 @@ define([
         // Put this first to avoid double-encoding
         string = string.replace(/&/g, '&amp;');
       }
-      string = string.replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-
+      string = string.replace(/</g, '&lt;').replace(/>/g, '&gt;');
       var OPTS = {
         'ENT_NOQUOTES': 0,
         'ENT_HTML_QUOTE_SINGLE': 1,
@@ -194,10 +154,8 @@ define([
       if (!noquotes) {
         string = string.replace(/"/g, '&quot;');
       }
-
       return string;
     },
-
     htmlspecialchars_decode: function(string, quote_style) {
       //       discuss at: http://phpjs.org/functions/htmlspecialchars_decode/
       //      original by: Mirek Slugen
@@ -218,16 +176,13 @@ define([
       //        returns 1: '<p>this -> &quot;</p>'
       //        example 2: htmlspecialchars_decode("&amp;quot;");
       //        returns 2: '&quot;'
-
       var optTemp = 0,
         i = 0,
         noquotes = false;
       if (typeof quote_style === 'undefined') {
         quote_style = 2;
       }
-      string = string.toString()
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>');
+      string = string.toString().replace(/&lt;/g, '<').replace(/&gt;/g, '>');
       var OPTS = {
         'ENT_NOQUOTES': 0,
         'ENT_HTML_QUOTE_SINGLE': 1,
@@ -261,10 +216,8 @@ define([
       }
       // Put this in last place to avoid escape being double-decoded
       string = string.replace(/&amp;/g, '&');
-
       return string;
     },
-
     /**
      * Replace String with {{key}} with val
      * @param  string str
@@ -275,7 +228,6 @@ define([
     replaceTemplateStringCurlyBrace: function(str, key, val) {
       return str.replace('{{' + key + '}}', val);
     },
-
     /**
      * Looking for {{words}} will return an array if founded, otherwise return null
      * @param  string str
@@ -285,12 +237,10 @@ define([
       var _reg = /\w+=\{\{(\w|\.)+\}\}/ig;
       return str.match(_reg);
     },
-
     parseTemplateStringGet: function(str) {
       var _reg = /\w+=(\w|\.)+/ig;
       return str.match(_reg);
     },
-
     /**
      * Will return only word in {{}}
      * @param  string str
@@ -309,7 +259,6 @@ define([
       }
       return match;
     },
-
     /**
      * Looking for {{template}} and replace with the correct values
      * @param  string str
@@ -354,7 +303,6 @@ define([
       }
       return newStr;
     },
-
     /**
      * Need to find the required field for label
      **/
@@ -367,61 +315,49 @@ define([
             return true;
           }
           return false;
-
         case 'address':
           _name = field.name + '_address_street';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_address_city';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_address_state';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_address_zip';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_address_country';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_address_street_number';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_address_unit_number';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           return false;
-
         case 'fullname':
           _name = field.name + '_fullname_middle_name';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_fullname_first_name';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           _name = field.name + '_fullname_last_name';
           if (typeof validation[_name] !== 'undefined' && validation[_name].required) {
             return true;
           }
-
           return false;
       }
       return (typeof validation[field.name] !== 'undefined' && validation[field.name].required) ? true : false;
@@ -434,14 +370,11 @@ define([
         _name = $e.attr('name'),
         _isFile = $e.is(':file'),
         _val;
-
       if ($e.closest('.subform-button-wrapper').length) {
         // Should not be in .subform-button-wrapper
         return;
       }
-
       _val = (_isFile) ? $e.val() : $.trim($e.val());
-
       if (!_isFile) {
         // Convert to lowercase
         if ($e.hasClass('tolowercase')) {
@@ -461,16 +394,12 @@ define([
         else if ($e.hasClass('touppercase') && _val.toUpperCase) {
           _val = _val.toUpperCase();
         }
-
         // Need to check for only allowed one space
         if ($e.hasClass('allowedonespace') && _val.replace) {
           _val = _val.replace(/ +(?= )/g, '');
         }
-
-        $e.val(_val)
-          .trigger('change');
+        $e.val(_val).trigger('change');
       }
-
       model.set(_name, _val);
       if (model.isValid(_name, _val)) {
         $e.removeClass('invalid');
@@ -482,167 +411,141 @@ define([
      * Setup Placeholder in older browser
      **/
     setupPlaceHolder: function(el) {
-      $('input, textarea', el)
-        .placeholder();
+      $('input, textarea', el).placeholder();
     },
     /**
      * Setup FileInput default value
      **/
     setupFileInput: function(el) {
-      $(':file', el)
-        .trigger('change');
+      $(':file', el).trigger('change');
     },
     /**
      * Setup Email Events
      **/
     setupEmailInput: function(el) {
-      $('.emailpicker', el)
-        .each(function() {
-          var $server = $('.emailpicker_server', this),
-            $username = $('.emailpicker_username', this),
-            $hidden = $(':input[type="hidden"]', this),
-            $notsending = $('.not_sending', this);
-          if (typeof $server.attr('data-value') !== 'undefined' && $server.attr('data-value')) {
-            $server.val($server.attr('data-value'))
-              .trigger('change');
+      $('.emailpicker', el).each(function() {
+        var $server = $('.emailpicker_server', this),
+          $username = $('.emailpicker_username', this),
+          $hidden = $(':input[type="hidden"]', this),
+          $notsending = $('.not_sending', this);
+        if (typeof $server.attr('data-value') !== 'undefined' && $server.attr('data-value')) {
+          $server.val($server.attr('data-value')).trigger('change');
+        }
+        if ($hidden.val() !== '') {
+          var _token = $hidden.val().split("@");
+          if (_token.length === 2) {
+            $username.val(_token[0]).trigger('change');
+            $server.val(_token[1]).trigger('change');
           }
-          if ($hidden.val() !== '') {
-            var _token = $hidden.val()
-              .split("@");
-            if (_token.length === 2) {
-              $username.val(_token[0])
-                .trigger('change');
-              $server.val(_token[1])
-                .trigger('change');
-            }
+        }
+        $('.emailpicker_server, .emailpicker_username', this).on('change', this, function(e) {
+          if ($username.val() !== '' && $server.val() !== '') {
+            $hidden.val($.trim($username.val() + '@' + $server.val())).trigger('change');
+          } else {
+            $hidden.val('').trigger('change');
           }
-          $('.emailpicker_server, .emailpicker_username', this)
-            .on('change', this, function(e) {
-              if ($username.val() !== '' && $server.val() !== '') {
-                $hidden.val($.trim($username.val() + '@' + $server.val()))
-                  .trigger('change');
-              } else {
-                $hidden.val('')
-                  .trigger('change');
-              }
-            })
-            .on('keydown', function(e) {
-              if (e.keyCode === 32) {
-                e.preventDefault();
-                return false;
-              }
-            });
+        }).on('keydown', function(e) {
+          if (e.keyCode === 32) {
+            e.preventDefault();
+            return false;
+          }
         });
+      });
     },
     /**
      * Init BDate
      **/
     setupBDateInput: function(el, model, override) {
       override = override || false;
-      $('.birthdaypicker', el)
-        .each(function() {
-          // Set up BirthDate MarkUp here
-          var _options = $(this).attr('data-options');
-          if (override && _options) {
-            if (_options && typeof _options === 'string') {
-              _options = $.parseJSON(_options);
-            }
-            if (_options && _options.id && model.get(_options.id)) {
-              _options.defaultdate = model.get(_options.id);
-            }
+      $('.birthdaypicker', el).each(function() {
+        // Set up BirthDate MarkUp here
+        var _options = $(this).attr('data-options');
+        if (override && _options) {
+          if (_options && typeof _options === 'string') {
+            _options = $.parseJSON(_options);
           }
-          $(this).birthdaypicker(_options);
-          var $hidden = $(':input[type="hidden"]', this);
-          var _token, $month, $day, $year;
-          var _value = $hidden.val();
-          if (_value !== '' && model.get($hidden.attr('name')) !== '') {
-            _token = _value.split("/");
-            if (_token.length === 3) {
-              if (_token[0][0] === '0') {
-                _token[0] = _token[0].substr(1);
-              }
-              if (_token[1][0] === '0') {
-                _token[1] = _token[1].substr(1);
-              }
-
-              $month = $('.birth-month', this)
-                .val(_token[0]);
-              $day = $('.birth-day', this)
-                .val(_token[1]);
-              $year = $('.birth-year', this)
-                .val(_token[2]);
-
-              model.set($month.attr('name'), _token[0]);
-              model.set($day.attr('name'), _token[1]);
-              model.set($year.attr('name'), _token[2]);
-              // if (model.get($hidden.attr('name')) === '') {
-              // model.set($hidden.attr('name'), _value);
-              // }
-            }
+          if (_options && _options.id && model.get(_options.id)) {
+            _options.defaultdate = model.get(_options.id);
           }
-        });
+        }
+        $(this).birthdaypicker(_options);
+        var $hidden = $(':input[type="hidden"]', this);
+        var _token, $month, $day, $year;
+        var _value = $hidden.val();
+        if (_value !== '' && model.get($hidden.attr('name')) !== '') {
+          _token = _value.split("/");
+          if (_token.length === 3) {
+            if (_token[0][0] === '0') {
+              _token[0] = _token[0].substr(1);
+            }
+            if (_token[1][0] === '0') {
+              _token[1] = _token[1].substr(1);
+            }
+            $month = $('.birth-month', this).val(_token[0]);
+            $day = $('.birth-day', this).val(_token[1]);
+            $year = $('.birth-year', this).val(_token[2]);
+            model.set($month.attr('name'), _token[0]);
+            model.set($day.attr('name'), _token[1]);
+            model.set($year.attr('name'), _token[2]);
+            // if (model.get($hidden.attr('name')) === '') {
+            // model.set($hidden.attr('name'), _value);
+            // }
+          }
+        }
+      });
     },
     /**
      * Set the value of hidden field that contain data-value
      **/
     setHiddenField: function(el) {
-      $(':hidden[data-value!=""]', el)
-        .each(function() {
-          var $this = $(this);
-          if (typeof $this.attr('data-value') !== 'undefined' && $this.attr('data-value')) {
-            $this.val($this.attr('data-value'))
-              .trigger('change');
-          }
-        });
+      $(':hidden[data-value!=""]', el).each(function() {
+        var $this = $(this);
+        if (typeof $this.attr('data-value') !== 'undefined' && $this.attr('data-value')) {
+          $this.val($this.attr('data-value')).trigger('change');
+        }
+      });
     },
     /**
      * Get BDate Values
      **/
     getBDateinput: function(el, model) {
-      $('fieldset.birthday-picker', el)
-        .each(function() {
-          var _nan = /NaN/i,
-            $bdateInput = $(':input[type="hidden"]', this),
-            $day = $('.not_sending.birth-day', this),
-            $month = $('.not_sending.birth-month', this),
-            $year = $('.not_sending.birth-year', this),
-            _day = parseInt($day.val()),
-            _month = parseInt($month.val()),
-            _year = parseInt($year.val()),
-            _error = false,
-            _val;
-
-          if (String(_day)
-            .match(_nan)) {
-            $day.val('');
-            _error = true;
+      $('fieldset.birthday-picker', el).each(function() {
+        var _nan = /NaN/i,
+          $bdateInput = $(':input[type="hidden"]', this),
+          $day = $('.not_sending.birth-day', this),
+          $month = $('.not_sending.birth-month', this),
+          $year = $('.not_sending.birth-year', this),
+          _day = parseInt($day.val()),
+          _month = parseInt($month.val()),
+          _year = parseInt($year.val()),
+          _error = false,
+          _val;
+        if (String(_day).match(_nan)) {
+          $day.val('');
+          _error = true;
+        }
+        if (String(_month).match(_nan)) {
+          $month.val('');
+          _error = true;
+        }
+        if (String(_year).match(_nan)) {
+          $year.val('');
+          _error = true;
+        }
+        if (_error) {
+          $bdateInput.val('');
+        } else {
+          if (_month < 10) {
+            _month += 0 + _month;
           }
-          if (String(_month)
-            .match(_nan)) {
-            $month.val('');
-            _error = true;
+          if (_day < 10) {
+            _day += 0 + _day;
           }
-          if (String(_year)
-            .match(_nan)) {
-            $year.val('');
-            _error = true;
-          }
-
-          if (_error) {
-            $bdateInput.val('');
-          } else {
-            if (_month < 10) {
-              _month += 0 + _month;
-            }
-            if (_day < 10) {
-              _day += 0 + _day;
-            }
-            _val = _month + '/' + _day + '/' + _year;
-            $bdateInput.val();
-          }
-
-          model.set($bdateInput.attr('name'), $bdateInput.val());
-        });
+          _val = _month + '/' + _day + '/' + _year;
+          $bdateInput.val();
+        }
+        model.set($bdateInput.attr('name'), $bdateInput.val());
+      });
     },
     /**
      * If this is Select2 need to work on the model.
@@ -651,8 +554,7 @@ define([
       var $select2 = $('.select2-offscreen', el);
       $select2.each(function() {
         var $this = $(this);
-        model.set($this.attr('name'), $this.val())
-          .trigger('change');
+        model.set($this.attr('name'), $this.val()).trigger('change');
       });
     },
     /**
@@ -669,28 +571,25 @@ define([
         // console.log(model.toJSON());
         // console.log(model.get('Result'));
       }
-      $('.has-default-val', el)
-        .each(function() {
-          var $this = $(this);
-          if (DEBUG) {
-            console.log($this);
-          }
-          if ($this.is(':disabled')) {
-            return;
-          }
-          if ($this.val() === '') {
-            $this.trigger('change');
-          } else if ($this.hasClass('data-clean')) {
-            $this.trigger('change')
-              .removeClass('data-clean');
-          }
-        });
+      $('.has-default-val', el).each(function() {
+        var $this = $(this);
+        if (DEBUG) {
+          console.log($this);
+        }
+        if ($this.is(':disabled')) {
+          return;
+        }
+        if ($this.val() === '') {
+          $this.trigger('change');
+        } else if ($this.hasClass('data-clean')) {
+          $this.trigger('change').removeClass('data-clean');
+        }
+      });
       if (DEBUG && model) {
         console.log('    After: .has-default-val');
         // console.log(model.toJSON());
         // console.log(model.get('Result'));
       }
-
       // Looking for All Hidden Input
       if (DEBUG && model) {
         console.log('    Before: :hidden');
@@ -743,19 +642,16 @@ define([
           fViewArr = view._DatePickerLogicArr;
         }
       }
-
       if (DEBUG) {
         console.log('[*] utils.setupDateInput');
         console.log(el);
         console.log(view);
         console.log(fViewArr);
       }
-
       var _model;
       if (view && view.model) {
         _model = view.model;
       }
-
       var $allDatepicker = $('.datepicker', el);
       if (DEBUG) {
         if (_model && _model.toJSON) {
@@ -846,9 +742,7 @@ define([
           };
         } else {
           if ($this.attr('data-maxdate')) {
-            switch ($this
-              .attr('data-maxdate')
-              .toLowerCase()) {
+            switch ($this.attr('data-maxdate').toLowerCase()) {
               case 'today':
                 nowTemp = new Date();
                 maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -859,9 +753,7 @@ define([
             }
           }
           if ($this.attr('data-mindate')) {
-            switch ($this
-              .attr('data-mindate')
-              .toLowerCase()) {
+            switch ($this.attr('data-mindate').toLowerCase()) {
               case 'today':
                 nowTemp = new Date();
                 maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -872,31 +764,27 @@ define([
             }
           }
         }
-
-        var $dpicker = $this.datepicker(_options)
-          .on('changeDate', function(e) {
-            var _dateInput = $(e.currentTarget);
-            // This could have special Event
-            var dateId = _dateInput.attr('id');
-            if (fViewArr && fViewArr[dateId] && fViewArr[dateId].changeDate) {
-              if (typeof fViewArr[dateId].changeDate === 'function') {
-                fViewArr[dateId].changeDate(e);
-              }
+        var $dpicker = $this.datepicker(_options).on('changeDate', function(e) {
+          var _dateInput = $(e.currentTarget);
+          // This could have special Event
+          var dateId = _dateInput.attr('id');
+          if (fViewArr && fViewArr[dateId] && fViewArr[dateId].changeDate) {
+            if (typeof fViewArr[dateId].changeDate === 'function') {
+              fViewArr[dateId].changeDate(e);
             }
-            _dateInput.removeClass('invalid').trigger('change');
-            _dateInput.datepicker('hide');
-          })
-          .on('click', function(e) {
-            var logicDate = $this.attr('logic-date'),
-              currentVal = $this.val(),
-              $currentTarget = $(e.currentTarget);
-            if (logicDate && logicDate !== '' && !currentVal && currentVal === '') {
-              $currentTarget.datepicker('setValue', logicDate);
-            }
-            $('div.datepicker.dropdown-menu')
-              .css('display', 'none');
-            $currentTarget.datepicker('show');
-          });
+          }
+          _dateInput.removeClass('invalid').trigger('change');
+          _dateInput.datepicker('hide');
+        }).on('click', function(e) {
+          var logicDate = $this.attr('logic-date'),
+            currentVal = $this.val(),
+            $currentTarget = $(e.currentTarget);
+          if (logicDate && logicDate !== '' && !currentVal && currentVal === '') {
+            $currentTarget.datepicker('setValue', logicDate);
+          }
+          $('div.datepicker.dropdown-menu').css('display', 'none');
+          $currentTarget.datepicker('show');
+        });
         $dpicker = $dpicker.data('datepicker');
         if (fViewArr) {
           if (!fViewArr[_id]) {
@@ -907,7 +795,6 @@ define([
           fViewArr[_id].element = $dpicker;
         }
       });
-
       if (DEBUG) {
         console.log('    SetUp .datepicker');
         console.log(fViewArr);
@@ -918,33 +805,29 @@ define([
      **/
     setupSpinner: function(el, mode) {
       mode = mode || null;
-      $('.spinner', el)
-        .each(function() {
-          // Be Default, will render as 1
-          // Unless has data-default-value set up
-          var $spinnerInput = $(':input.spinner-input', this),
-            _dataDefaultValue = ($spinnerInput.attr('data-default-value') !== undefined) ? $spinnerInput.attr('data-default-value') : 1,
-            _number = ($spinnerInput.val() !== '') ?
-            $spinnerInput.val() :
-            _dataDefaultValue;
-          if (mode && mode === 'create' && _number === '0') {
-            var _dataDefaultValueNum = parseFloat(_dataDefaultValue);
-            if (isNaN(_dataDefaultValueNum)) {
-              _dataDefaultValueNum = 1;
-            }
-            if (_dataDefaultValue && _dataDefaultValue !== '' && !isNaN(_dataDefaultValueNum)) {
-              _number = _dataDefaultValueNum.toString();
-            } else {
-              _number = '1';
-            }
+      $('.spinner', el).each(function() {
+        // Be Default, will render as 1
+        // Unless has data-default-value set up
+        var $spinnerInput = $(':input.spinner-input', this),
+          _dataDefaultValue = ($spinnerInput.attr('data-default-value') !== undefined) ? $spinnerInput.attr('data-default-value') : 1,
+          _number = ($spinnerInput.val() !== '') ? $spinnerInput.val() : _dataDefaultValue;
+        if (mode && mode === 'create' && _number === '0') {
+          var _dataDefaultValueNum = parseFloat(_dataDefaultValue);
+          if (isNaN(_dataDefaultValueNum)) {
+            _dataDefaultValueNum = 1;
           }
-          var _opt = {
-            value: parseInt(_number, 10),
-            min: _dataDefaultValue
-          };
-          $(this)
-            .spinner(_opt);
-        });
+          if (_dataDefaultValue && _dataDefaultValue !== '' && !isNaN(_dataDefaultValueNum)) {
+            _number = _dataDefaultValueNum.toString();
+          } else {
+            _number = '1';
+          }
+        }
+        var _opt = {
+          value: parseInt(_number, 10),
+          min: _dataDefaultValue
+        };
+        $(this).spinner(_opt);
+      });
     },
     /**
      * Prevent Space in Keypress Event
@@ -962,8 +845,7 @@ define([
       var val = $(e.currentTarget).val();
       if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46 || e.keyCode === 9) {
         return true;
-      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 190 || e.keyCode === 110) ||
-          val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
+      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 190 || e.keyCode === 110) || val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
         e.preventDefault();
       }
     },
@@ -976,8 +858,7 @@ define([
         return true;
       } else if ((e.keyCode === 45 || e.keyCode === 109 || e.keyCode === 189) && val === '') {
         // Ignore Filter
-      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 190 || e.keyCode === 110) ||
-          val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
+      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 190 || e.keyCode === 110) || val.indexOf('.') !== -1) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105)) {
         e.preventDefault();
       }
     },
@@ -987,9 +868,7 @@ define([
     allowNaturalNumber: function(e) {
       if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46 || e.keyCode === 9) {
         return true;
-      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 110)) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105) || (e.keyCode === 48 && $(e.currentTarget)
-          .val()
-          .length === 0)) {
+      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 110)) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105) || (e.keyCode === 48 && $(e.currentTarget).val().length === 0)) {
         e.preventDefault();
       }
     },
@@ -1009,9 +888,7 @@ define([
       }
       if (e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 46 || e.keyCode === 9) {
         return true;
-      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 110)) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105) || (e.keyCode === 48 && $(e.currentTarget)
-          .val()
-          .length === 0)) {
+      } else if (e.shiftKey || (!(e.keyCode === 46 || e.keyCode === 110)) && (e.keyCode < 48 || (e.keyCode > 57 && e.keyCode < 96) || e.keyCode > 105) || (e.keyCode === 48 && $(e.currentTarget).val().length === 0)) {
         e.preventDefault();
       }
     },
@@ -1052,11 +929,9 @@ define([
             }
             $currentTarget.val('(' + _val);
             break;
-
           case 4:
             $currentTarget.val(_val + ') ');
             break;
-
           case 9:
             $currentTarget.val(_val + '-');
         }
@@ -1153,9 +1028,7 @@ define([
       var $currentTarget = $(e.target),
         _val = $currentTarget.val(),
         _tmp = '';
-
       if (e.type === 'keydown' && (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
-
         switch (_val.length) {
           case 0:
             if (e.keyCode === 48 || e.keyCode === 105) {
@@ -1163,7 +1036,6 @@ define([
               return;
             }
             break;
-
           case 5:
             $currentTarget.val(_val + '-');
         }
@@ -1203,7 +1075,6 @@ define([
         min = time.getMinutes(),
         sec = time.getSeconds(),
         format = 'AM';
-
       if (hour >= 12) {
         hour = hour - 12;
         if (hour === 0) {
@@ -1211,19 +1082,15 @@ define([
         }
         format = "PM";
       }
-
       if (hour < 10) {
         hour = '0' + hour;
       }
-
       if (min < 10) {
         min = '0' + min;
       }
-
       if (sec < 10) {
         sec = '0' + sec;
       }
-
       return month + ' ' + date + ', ' + year + ' ' + hour + ':' + min + ':' + sec + ' ' + format;
     },
     /**
@@ -1237,7 +1104,6 @@ define([
           _fields.push(name + '_fullname_middle_name');
           _fields.push(name + '_fullname_last_name');
           break;
-
         case 'address':
           _fields.push(name + '_address_street');
           _fields.push(name + '_address_city');
@@ -1247,7 +1113,6 @@ define([
           _fields.push(name + '_address_street_number');
           _fields.push(name + '_address_unit_number');
           break;
-
         default:
           _fields.push(name);
       }
@@ -1260,9 +1125,7 @@ define([
       values = values || false;
       _.each(names, function(element, index) {
         var _val = (values && values[index]) ? values[index] : '',
-          $input = $(':input[name="' + element + '"]', el)
-          .val(_val)
-          .trigger('change');
+          $input = $(':input[name="' + element + '"]', el).val(_val).trigger('change');
         model.set(element, _val);
         if (model.isValid(element)) {
           $input.removeClass('invalid');
@@ -1301,27 +1164,20 @@ define([
       if (view.options.mode === 'update' && view._visibleOn.length > 0 && view.options.formData) {
         setValueDependOn(view.el, view._visibleOn, view.options.formData);
       }
-
       if (view.options.mode === 'create' && $select.length > 0) {
         $select.each(function() {
           var $option = $('option[selected=""],option[selected="selected"]', this);
           if ($option.length > 0 && $option.val() !== '') {
-            $(this)
-              .val($option.val());
+            $(this).val($option.val());
           } else {
-            if ($(this)
-              .hasClass('us-state')) {
-              $(this)
-                .val('NV');
-            } else if ($(this)
-              .hasClass('us-country')) {
-              $(this)
-                .val('US');
+            if ($(this).hasClass('us-state')) {
+              $(this).val('NV');
+            } else if ($(this).hasClass('us-country')) {
+              $(this).val('US');
             }
           }
         });
       }
-
       if (view._multiFiles.length > 0) {
         _.each(view._multiFiles, function(value) {
           require(['views/file-upload/multifiles'], function(MultifilesView) {
@@ -1335,56 +1191,46 @@ define([
           });
         });
       }
-
       // If there is any lightbox markup, will need to check if this a valid photo or not
-      $('a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]')
-        .each(function() {
-          var $this = $(this);
-          $("<img>", {
-            src: $this.attr('href'),
-            error: function() {
-              $this.hide();
-              $this.next('.lightbox-fallback').show();
-            }
-          });
+      $('a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]').each(function() {
+        var $this = $(this);
+        $("<img>", {
+          src: $this.attr('href'),
+          error: function() {
+            $this.hide();
+            $this.next('.lightbox-fallback').show();
+          }
         });
-
+      });
       // Setup Ajax Call for fields
       if (view._ajaxDataCall.length > 0) {
         this.setupAjaxCall(view, $form);
       }
-
       // Setup UserId Field
       if (view._hasUserId) {
         this.setupUserIdAjaxCall($form);
       }
-
       // Setup BooleanInput Type
       if (view._hasBooleanInput) {
         this.setupBooleanInput($form, view);
       }
-
       // Setup Radio Button Group
       if (view._hasRadioBtnGroup) {
         this.setupRadioBtnGroup($form);
         this.setupRadioBtnGroupValue($form);
       }
-
       // Setup SelectAll and ClearAll for CheckBox
       if (view._hasSelectAllCheckBox || view._hasClearAllCheckBox) {
         this.setupCheckBoxSelectAndClear($form);
       }
-
       // Setup Other Textbox for Checkbox
       if (view._hasOtherTextBox) {
         this.setupCheckBoxOtherTextBox($form);
       }
-
       // If there are radio buttons.
       if (view._radioFieldName.length) {
         this.setupRadioButtonsValue(view);
       }
-
       // Setup ButtonCondition
       // By Default, will require all data to be valid
       // Default Success Call Back must return JSON with key = "value"
@@ -1397,12 +1243,9 @@ define([
           } else if (view.options.mode === 'update') {
             $btn_decision.after(_html_tmp);
             if (view.options.formData.fields[element.name]) {
-              $btn_decision.next('input[type="hidden"]')
-                .val(view.options.formData.fields[element.name])
-                .trigger('change');
+              $btn_decision.next('input[type="hidden"]').val(view.options.formData.fields[element.name]).trigger('change');
             }
           }
-
           // If this is internal, will not render the button. Will render only hidden input.
           if (view.options.internal === true) {
             var $btnContainer = $btn_decision.parents('.control-group');
@@ -1413,7 +1256,6 @@ define([
             }
             return true;
           }
-
           $btn_decision.click(function(e) {
             e.preventDefault();
             var $currentTarget = $(e.currentTarget);
@@ -1429,11 +1271,8 @@ define([
                 var $hiddenInput = $('#' + element.name + '_btn_condition', $form);
                 // If there is an error
                 if (e.status && e.status === 'error') {
-                  $currentTarget.attr('disabled', false)
-                    .popover('destroy');
-                  $currentTarget.next('.popover')
-                    .remove();
-
+                  $currentTarget.attr('disabled', false).popover('destroy');
+                  $currentTarget.next('.popover').remove();
                   _opt = {
                     html: true,
                     placement: 'top',
@@ -1441,18 +1280,11 @@ define([
                     title: '<i class="icon-edit"></i> Error',
                     content: e.error_message
                   };
-                  $currentTarget.attr('disabled', true)
-                    .popover(_opt)
-                    .popover('show');
-
-                  window.setTimeout(
-                    function() {
-                      $currentTarget.attr('disabled', false)
-                        .popover('destroy');
-                      $currentTarget.next('.popover')
-                        .remove();
-                    }, 3000);
-
+                  $currentTarget.attr('disabled', true).popover(_opt).popover('show');
+                  window.setTimeout(function() {
+                    $currentTarget.attr('disabled', false).popover('destroy');
+                    $currentTarget.next('.popover').remove();
+                  }, 3000);
                   return false;
                 }
                 if (!e.value) {
@@ -1475,20 +1307,14 @@ define([
                   });
                 } else {
                   // If this field has options renderresult we might need to remove that markup as well.
-                  $currentTarget.parent()
-                    .find('div.btn-decision-data-wrapper')
-                    .remove();
+                  $currentTarget.parent().find('div.btn-decision-data-wrapper').remove();
                   view.model.set(element.name, e.value);
                 }
-                window.setTimeout(
-                  function() {
-                    $currentTarget.attr('disabled', false)
-                      .popover('destroy');
-                    $currentTarget.next('.popover')
-                      .remove();
-                  }, 1000);
+                window.setTimeout(function() {
+                  $currentTarget.attr('disabled', false).popover('destroy');
+                  $currentTarget.next('.popover').remove();
+                }, 1000);
               };
-
             _.each(element.data, function(el, key) {
               if (typeof el !== 'string') {
                 if (typeof _error === 'boolean') {
@@ -1503,11 +1329,9 @@ define([
                 _error = that.setUpButtonDecision(el, key, _data, view.el, _canEmpty);
               }
             });
-
             if (typeof _error !== 'boolean' && _error.indexOf(false) > -1) {
               _error = false;
             }
-
             if (_error) {
               _opt = {
                 html: true,
@@ -1516,28 +1340,18 @@ define([
                 title: '<i class="icon-edit"></i> Error',
                 content: 'Please complete the required fields'
               };
-              $currentTarget.attr('disabled', true)
-                .popover(_opt)
-                .popover('show');
-
-              window.setTimeout(
-                function() {
-                  $currentTarget.attr('disabled', false)
-                    .popover('destroy');
-                  $currentTarget.next('.popover')
-                    .remove();
-                }, 2000);
-
+              $currentTarget.attr('disabled', true).popover(_opt).popover('show');
+              window.setTimeout(function() {
+                $currentTarget.attr('disabled', false).popover('destroy');
+                $currentTarget.next('.popover').remove();
+              }, 2000);
               return false;
             }
-
             _.each($invalidObj, function($el) {
               $el.removeClass('invalid');
             });
-
             // Get the query object, will send to the url
             _url += $.param(_data);
-
             // Languages
             var _t_1, _t_2;
             switch (view.options.lang) {
@@ -1549,7 +1363,6 @@ define([
                 _t_1 = 'Please wait';
                 _t_2 = 'Loading data';
             }
-
             _opt = {
               html: true,
               placement: 'top',
@@ -1557,16 +1370,12 @@ define([
               title: '<i class="icon-time"></i> ' + _t_1 + '.',
               content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...'
             };
-            $currentTarget.attr('disabled', true)
-              .popover(_opt)
-              .popover('show');
-
+            $currentTarget.attr('disabled', true).popover(_opt).popover('show');
             $.getJSON(_url, _success);
           });
         });
       }
     },
-
     isRenderVisibleOn: function(view, value, typeLowerCase) {
       if (value.options.visibleon && typeLowerCase !== 'html') {
         var _visibleOnName = value.options.visibleon.name;
@@ -1603,7 +1412,6 @@ define([
      **/
     finalReadSetup: function(view) {
       var $form = $(view.el);
-
       if (!$form.length) {
         throw '[x] finalReadSetup: could not be able to find form.';
       }
@@ -1621,7 +1429,6 @@ define([
       bigbox.error = bigbox.spawn({
         addnCls: 'humane-bigbox-error'
       });
-
       // Attched Event for Update on Read Mode
       // Set Up for Update On Read Mode
       $form.on('click', '.update-on-read-mode', function(e) {
@@ -1642,7 +1449,6 @@ define([
         }
         e.preventDefault();
         $currentTarget.addClass('ajax');
-
         // Load Form Model.
         var formModel = new FormModel({
           id: formId
@@ -1742,37 +1548,32 @@ define([
         });
         return false;
       });
-
       // Attach Click Event to Copy to the Clipboard
       if (view._buttonClipboards.length > 0) {
         _.each(view._buttonClipboards, function(element) {
-          $('button#' + element.name)
-            .zclip({
-              path: '//public.southernnevadahealthdistrict.org/assets/js/apps/formrender/libs/copy/ZeroClipboard.swf',
-              copy: function() {
-                var _txt = '';
-                _.each(element.values, function(elementValue) {
-                  _txt += $('#' + elementValue)
-                    .text() + "\r\n";
-                });
-                return _txt;
-              }
-            });
-        });
-      }
-      // If there is any lightbox markup, will need to check if this a valid photo or not
-      $('a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]')
-        .each(function() {
-          var $this = $(this);
-          $("<img>", {
-            src: $this.attr('href'),
-            error: function() {
-              $this.hide();
-              $this.next('.lightbox-fallback').show();
+          $('button#' + element.name).zclip({
+            path: '//public.southernnevadahealthdistrict.org/assets/js/apps/formrender/libs/copy/ZeroClipboard.swf',
+            copy: function() {
+              var _txt = '';
+              _.each(element.values, function(elementValue) {
+                _txt += $('#' + elementValue).text() + "\r\n";
+              });
+              return _txt;
             }
           });
         });
-
+      }
+      // If there is any lightbox markup, will need to check if this a valid photo or not
+      $('a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]').each(function() {
+        var $this = $(this);
+        $("<img>", {
+          src: $this.attr('href'),
+          error: function() {
+            $this.hide();
+            $this.next('.lightbox-fallback').show();
+          }
+        });
+      });
       // Setup Confirm Button
       var $btnConfirmed = $('[data-popover-confirm^="{"]', view.el);
       if ($btnConfirmed.length) {
@@ -1782,44 +1583,37 @@ define([
           var _yes = $this.attr('data-href') || false;
           if (!_yes) {
             $btnConfirmed.each(function(_index) {
-              $(this)
-                .popover('hide');
+              $(this).popover('hide');
             });
             return;
           }
           $btnConfirmed.each(function(_index) {
-            $(this)
-              .popover('destroy');
+            $(this).popover('destroy');
           });
           window.location = _yes;
         });
         $btnConfirmed.each(function(index) {
           var $this = $(this),
             _opts = $.parseJSON($this.attr('data-popover-confirm'));
-          $this.popover(_opts)
-            .click(function(e) {
-              e.preventDefault();
-              $btnConfirmed.each(function(_index) {
-                if (_index === index) {
-                  return;
-                }
-                $(this)
-                  .popover('hide');
-              });
+          $this.popover(_opts).click(function(e) {
+            e.preventDefault();
+            $btnConfirmed.each(function(_index) {
+              if (_index === index) {
+                return;
+              }
+              $(this).popover('hide');
             });
+          });
         });
       }
-
       // Look for .btn-auto-refresh
       $form.on('click', '.btn-auto-refresh', function(e) {
-        var _delay = $(e.target)
-          .attr('data-refresh-delay');
+        var _delay = $(e.target).attr('data-refresh-delay');
         e.stopPropagation();
         setTimeout(function() {
           location.reload();
         }, _delay);
       });
-
       // Make the subform be able to sort by column
       var stupidtable = $('table.stupidtable').stupidtable();
       if (stupidtable.length) {
@@ -1830,7 +1624,6 @@ define([
           th.eq(data.column).append('<i class="dir-icon ' + arrow + '" style="position:relative; left: 10px; top: -3px;"></i>');
         });
       }
-
       // Make the Tags List has the same width
       $('.select-tags').each(function() {
         var $selectTag = $(this);
@@ -1843,10 +1636,8 @@ define([
           }
         }).width(maxWidth);
       });
-
       // Setup FileRepository Events
       this.setupFileRepositoryEvent($form);
-
       // Set Up Popover
       // console.log($form);
       this.setupPopover($form);
@@ -1856,12 +1647,8 @@ define([
      * Check for valid data to be rendered
      **/
     isRenderReadMode: function(view, value) {
-      var alwaysAllow = [
-        'buttonclipboard',
-        'filerepository'
-      ];
+      var alwaysAllow = ['buttonclipboard', 'filerepository'];
       var _type = value.type.toLowerCase();
-
       if (value.options.internal && (value.options.internal !== view.options.internal)) {
         return false;
       } else if (_.indexOf(alwaysAllow, _type) > -1) {
@@ -1887,15 +1674,12 @@ define([
           case 'clear':
           case 'address':
             break;
-
           case 'button':
             var _btnName = value.description.toLowerCase();
             if (view.options.internal && view.options.mode === 'read' && _btnName === 'delete' && view.options.formSchema.deleteenabled) {
-
               if (!view.options.formData.createddate.$date) {
                 throw 'In order to used "DeleteEnabled", form data must have "CreatedDate".';
               }
-
               // If this has FieldExists
               if (view.options.formSchema.deleteenabled.fieldexists) {
                 var _fieldToCheck = view.options.formSchema.deleteenabled.fieldexists;
@@ -1904,27 +1688,22 @@ define([
                   return false;
                 }
               }
-
               // If this has AfterXDays
               if (view.options.formSchema.deleteenabled.afterxdays) {
                 var _currentDate = new Date(),
                   _createdDate = new Date(view.options.formData.createddate.$date),
                   _dateDiff = this.calculateDateDiffByDays(_currentDate, _createdDate);
-
                 // If current date is less than the required date, will not render.
                 if (_dateDiff < view.options.formSchema.deleteenabled.afterxdays) {
                   return false;
                 }
               }
-
             }
             break;
-
           default:
             return false;
         }
       }
-
       return true;
     },
     /**
@@ -1956,17 +1735,14 @@ define([
         var _type = element.type.toLowerCase(),
           _input = [],
           _request = {};
-
         if (typeof element.options.data === 'undefined') {
           throw 'In order to use ajax call, we need Options.Data.';
         }
-
         _.each(element.options.data, function(dataObj) {
           _.each(dataObj, function(dataVal) {
             _request[dataVal] = '';
           });
         });
-
         switch (_type) {
           case 'fullname':
             _input.push(element.name + '_fullname_first_name');
@@ -1976,23 +1752,19 @@ define([
           default:
             _input.push(element.name);
         }
-
         _.each(_input, function(elementName) {
           $form.on('change', ':input[name="' + elementName + '"]', function(e) {
             var $thisInput = $(this),
               _val = $thisInput.val(),
               _error = false;
-
             if (_val !== '') {
               _request[elementName] = _val;
             }
-
             _.each(_request, function(dataVal, dataKey) {
               if (dataVal === '') {
                 _error = true;
               }
             });
-
             if (!_error) {
               var _param = {},
                 _url = element.options.url + '?';
@@ -2005,19 +1777,15 @@ define([
                 if (respond.data) {
                   _.each(respond.data, function(respVal, respKey) {
                     if (typeof _request[respKey] === 'undefined') {
-                      var $_input = $(':input[name="' + respKey + '"]')
-                        .val(respVal)
-                        .trigger('change'),
+                      var $_input = $(':input[name="' + respKey + '"]').val(respVal).trigger('change'),
                         $_parent;
                       if ($_input.attr('type') === 'hidden') {
                         $_parent = $_input.parent('.emailpicker');
                         if ($_parent.length > 0) {
                           var _email = respVal.split('@');
-                          $(':input.not_sending', $_parent)
-                            .each(function(index, ele) {
-                              $(ele)
-                                .val(_email[index]);
-                            });
+                          $(':input.not_sending', $_parent).each(function(index, ele) {
+                            $(ele).val(_email[index]);
+                          });
                         }
                       }
                     }
@@ -2027,7 +1795,6 @@ define([
             }
           });
         });
-
       });
     },
     /**
@@ -2041,16 +1808,14 @@ define([
         $bDateSelect, error = false,
         $input;
       if ($bDate.length > 0) {
-        $bDateSelect = $('.not_sending', $bDate)
-          .trigger('change');
+        $bDateSelect = $('.not_sending', $bDate).trigger('change');
       }
       var _val = $currentElement.val();
       if ((_val !== '' && _val.search(/NaN/) === -1) || canEmpty.indexOf(key) > -1) {
         data[key] = _val;
       } else {
         error = true;
-        $input = $(':input[name="' + el + '"]', form)
-          .addClass('invalid');
+        $input = $(':input[name="' + el + '"]', form).addClass('invalid');
         if (invalidObj) {
           invalidObj.push($input);
         }
@@ -2058,8 +1823,7 @@ define([
           var _index = _val.split('/');
           _.each(_index, function(date, index) {
             if (date === 'NaN') {
-              $input = $($bDateSelect[index])
-                .addClass('invalid');
+              $input = $($bDateSelect[index]).addClass('invalid');
               if (invalidObj) {
                 invalidObj.push($input);
               }
@@ -2069,7 +1833,6 @@ define([
       }
       return error;
     },
-
     /**
      * Setup Ajax Call if the form has URL in options
      * For Dynamic AJAX look up
@@ -2078,12 +1841,10 @@ define([
      */
     setupUrlAjaxCall: function($form, $scope, model) {
       var DEBUG = false;
-
       if (DEBUG) {
         console.log('[*] setupUrlAjaxCall');
         console.log(arguments);
       }
-
       $scope = $scope || null;
       model = model || null;
       var $urlEndPoint = ($scope) ? $scope : $(':input[data-url]'),
@@ -2091,7 +1852,6 @@ define([
       if ($urlEndPoint.length === 0 || !$urlEndPoint.attr('data-url')) {
         return;
       }
-
       $urlEndPoint.each(function() {
         var $this = $(this),
           _url = $this.attr('data-url');
@@ -2107,11 +1867,9 @@ define([
         // console.log(_url);
         // Detect the {{}} Template, then this will be look up dynamic
         var _tokens = that.parseTemplateString(_url);
-
         if (DEBUG) {
           console.log(_tokens);
         }
-
         // Select2 does not work on select element for Ajax Call
         if (model) {
           var _modelValue = model.get($this.attr('name'));
@@ -2119,7 +1877,6 @@ define([
             $this.attr('data-select-value', _modelValue);
           }
         }
-
         if (_tokens) {
           var _tokensStatic = that.parseTemplateStringGet(_url);
           if (_tokensStatic) {
@@ -2146,7 +1903,6 @@ define([
           if (_fieldValue) {
             $this.val(_fieldValue);
           }
-
           // Default Parameters for Select2
           var _ajaxObj = {
               url: _url.match(/^(\w|\.|\/|:)+\(?/ig).shift(),
@@ -2191,7 +1947,6 @@ define([
                       }
                       _tmp.push(_tmpObj);
                     }
-
                   });
                   data = _tmp;
                 }
@@ -2252,14 +2007,11 @@ define([
             if (DEBUG) {
               console.log('- about to send ajax.');
             }
-
             $this.addClass('send-ajax-request');
             var tmpOptionsHtml = $this.find('option').html();
             $this.find('option').remove();
             $this.append('<option value="">--- Loading Data ---</option>');
-
             // DEBUG = true;
-
             $.ajax({
               // crossDomain: true,
               url: _url,
@@ -2324,22 +2076,17 @@ define([
                             return;
                           } else if (typeof value === 'object') {
                             // If there is the View and Data in them means we need to render the view for user to select
-
                             var _listName;
                             if (value.length) {
                               _.some(value[0], function(listValue, listKey) {
-                                _listName = listKey.split('_')
-                                  .shift();
+                                _listName = listKey.split('_').shift();
                                 return true;
                               });
-
                               // This will trigger the List to add the data
                               $('#subform_' + _listName, $form).trigger('subform_' + _listName + '.ajaxUpdate', [value]);
-
                             } else if (value.data && value.view && value.title) {
                               _.some(value.data[0], function(listValue, listKey) {
-                                _listName = listKey.split('_')
-                                  .shift();
+                                _listName = listKey.split('_').shift();
                                 return true;
                               });
                               _attachEvent = false;
@@ -2358,12 +2105,10 @@ define([
                                 ajaxView.render();
                               });
                             }
-
                           } else {
                             var $targetInput = $(':input[name="' + key + '"]', $form);
                             if ($targetInput) {
-                              $targetInput.val(value)
-                                .trigger('change');
+                              $targetInput.val(value).trigger('change');
                             }
                           }
                         });
@@ -2384,7 +2129,6 @@ define([
                       // console.log(_opts);
                     }
                     $this.append(_opts);
-
                     var _select2Opt = {
                       containerCssClass: 'span12'
                     };
@@ -2420,7 +2164,6 @@ define([
         }
       });
     },
-
     /**
      * Set up select2 for select type
      * @param  object $container
@@ -2440,12 +2183,10 @@ define([
           Select2Helper.render(el, _form);
         }
       }
-
       if (DEBUG) {
         console.log('[*] setupSelect2');
         console.log(arguments);
       }
-
       // Logic
       if (form.el) {
         var _id = form.el;
@@ -2474,7 +2215,6 @@ define([
         }
       }
     },
-
     /**
      * Setup Select and Clear Button for Check Box
      * @param  object $form
@@ -2488,18 +2228,13 @@ define([
           $checkboxs = $parent.find('input:checkbox');
         if ($this.hasClass('btn-primary')) {
           $checkboxs.prop('checked', true);
-          $checkboxs.filter('.checkbox-other')
-            .click()
-            .prop('checked', true);
+          $checkboxs.filter('.checkbox-other').click().prop('checked', true);
         } else {
           $checkboxs.prop('checked', false);
-          $checkboxs.filter('.checkbox-other')
-            .click()
-            .prop('checked', false);
+          $checkboxs.filter('.checkbox-other').click().prop('checked', false);
         }
       });
     },
-
     /**
      * Setup Checkbox Other Options
      * @param  object $form
@@ -2508,18 +2243,14 @@ define([
     setupCheckBoxOtherTextBox: function($form) {
       $form.on('click', '.checkbox-container input[type="checkbox"].checkbox-other', function(e) {
         var $this = $(e.target),
-          $textarea = $this.parent()
-          .next('.other-textbox');
+          $textarea = $this.parent().next('.other-textbox');
         if ($this.is(':checked')) {
-          $textarea.removeClass('not_sending')
-            .show('slow');
+          $textarea.removeClass('not_sending').show('slow');
         } else {
-          $textarea.addClass('not_sending')
-            .hide('slow');
+          $textarea.addClass('not_sending').hide('slow');
         }
       });
     },
-
     /**
      * Function to Setup BooleanInput
      */
@@ -2529,18 +2260,10 @@ define([
           _val = $this.attr('data-value'),
           _id = $this.attr('data-id'),
           _txt;
-
-        $('#' + _id, $this.parent())
-          .removeClass('invalid')
-          .val(_val)
-          .trigger('change');
+        $('#' + _id, $this.parent()).removeClass('invalid').val(_val).trigger('change');
         _txt = '<span class="text-' + ((_val === 'true') ? 'success' : 'error') + '">' + $this.html() + '<span>';
-        $this.parent()
-          .next()
-          .html(_txt)
-          .show('slow');
+        $this.parent().next().html(_txt).show('slow');
       });
-
       // If there is a default value in the input
       var $booleanInput = $('.form-render_booleaninput input[type="hidden"]', $form);
       $booleanInput.each(function() {
@@ -2552,21 +2275,15 @@ define([
         switch (_val) {
           case true:
           case 'true':
-            $this.parent()
-              .find('button.btn-yes')
-              .click();
+            $this.parent().find('button.btn-yes').click();
             break;
-
           case false:
           case 'false':
-            $this.parent()
-              .find('button.btn-no')
-              .click();
+            $this.parent().find('button.btn-no').click();
             break;
         }
       });
     },
-
     /**
      * Function to set up Radio Button Group
      * @param  object $form
@@ -2595,13 +2312,11 @@ define([
             $input = $container.find('input[type="hidden"]');
           var _inputName = $input.attr('name');
           $input.val(_val).trigger('change');
-
           if (DEBUG) {
             console.log('[*] Click On ".radio-container button"');
             console.log($this);
             console.log(_val);
           }
-
           if (model && model.has && model.has(_inputName)) {
             model.set(_inputName, $input.val());
           }
@@ -2625,7 +2340,6 @@ define([
         }
         $this.find('button[value="' + _val + '"]').trigger('click');
       });
-
       if (model && model.toJSON) {
         var modelValue = model.toJSON();
         _.each(modelValue, function(v, k) {
@@ -2647,7 +2361,6 @@ define([
         });
       }
     },
-
     /**
      * Function to set up Radio Button Group default values
      * @param  object $form
@@ -2657,8 +2370,7 @@ define([
       var $hidden = $('.radio-container input.has-default-val', $form);
       $hidden.each(function() {
         var $this = $(this),
-          $target = $this.closest('.radio-container')
-          .find('button[value="' + $this.val() + '"]');
+          $target = $this.closest('.radio-container').find('button[value="' + $this.val() + '"]');
         if ($target) {
           $target.addClass('active');
         } else {
@@ -2667,7 +2379,6 @@ define([
         $this.removeClass('has-default-val');
       });
     },
-
     /**
      * Function to setup UserId Look Up from Ajax
      */
@@ -2689,13 +2400,12 @@ define([
                 });
                 $input.append(_opts);
                 $input.select2({
-                    containerCssClass: 'span12'
-                  })
-                  .on('change', function(e) {
-                    if (e.val && e.val !== '') {
-                      $input.removeClass('invalid');
-                    }
-                  });
+                  containerCssClass: 'span12'
+                }).on('change', function(e) {
+                  if (e.val && e.val !== '') {
+                    $input.removeClass('invalid');
+                  }
+                });
               } else {
                 that.setUpErrorNotice($input, 'Please refresh this page!', 10000);
               }
@@ -2707,66 +2417,57 @@ define([
             });
           }
         } else {
-          $(this)
-            .change(function(e) {
-              var $this = $(this),
-                _val = $this.val(),
-                tmp_endpoint = $this.attr('data-url') || endpoint,
-                _opt = {
-                  dataType: "json",
-                  complete: function(jqXHR, textStatus) {
-                    $this.removeAttr('data-send');
-                    if ($this.hasClass('invalid')) {
-                      return;
-                    }
-                    if (textStatus === 'success') {
-                      var result = $.parseJSON(jqXHR.responseText);
-                      switch (typeof result) {
-                        case 'boolean':
-                          if (result) {
-                            $this.addClass('invalid')
-                              .val('');
-                            that.setUpErrorNotice($this, 'Username "' + $this.val() + '" is already existed!');
-                          }
-                          break;
-                      }
-                    } else {
-                      that.setUpErrorNotice($this, 'Could not get information!');
-                    }
+          $(this).change(function(e) {
+            var $this = $(this),
+              _val = $this.val(),
+              tmp_endpoint = $this.attr('data-url') || endpoint,
+              _opt = {
+                dataType: "json",
+                complete: function(jqXHR, textStatus) {
+                  $this.removeAttr('data-send');
+                  if ($this.hasClass('invalid')) {
+                    return;
                   }
-                };
-
-              if (_val === '') {
-                return;
-              }
-
-              if (tmp_endpoint.search(/\?/) === -1) {
-                tmp_endpoint += '?';
-              }
-
-              if (typeof username !== 'undefined') {
-                _opt.username = username;
-                _opt.password = password;
-              }
-
-              if ($this.is('[data-url-data]')) {
-                var _data = '',
-                  _lookup = $.parseJSON($this.attr('data-url-data'));
-                _.each(_lookup, function(value, key) {
-                  _data += key + '=' + $(':input[name="' + value + '"]')
-                    .val() + '&';
-                });
-                _data = encodeURI(_data.substr(0, _data.length - 1));
-                tmp_endpoint += _data;
-              }
-
-              _opt.url = tmp_endpoint;
-
-              if (!$this.is('[data-send]')) {
-                $this.attr('data-send', true);
-                $.ajax(_opt);
-              }
-            });
+                  if (textStatus === 'success') {
+                    var result = $.parseJSON(jqXHR.responseText);
+                    switch (typeof result) {
+                      case 'boolean':
+                        if (result) {
+                          $this.addClass('invalid').val('');
+                          that.setUpErrorNotice($this, 'Username "' + $this.val() + '" is already existed!');
+                        }
+                        break;
+                    }
+                  } else {
+                    that.setUpErrorNotice($this, 'Could not get information!');
+                  }
+                }
+              };
+            if (_val === '') {
+              return;
+            }
+            if (tmp_endpoint.search(/\?/) === -1) {
+              tmp_endpoint += '?';
+            }
+            if (typeof username !== 'undefined') {
+              _opt.username = username;
+              _opt.password = password;
+            }
+            if ($this.is('[data-url-data]')) {
+              var _data = '',
+                _lookup = $.parseJSON($this.attr('data-url-data'));
+              _.each(_lookup, function(value, key) {
+                _data += key + '=' + $(':input[name="' + value + '"]').val() + '&';
+              });
+              _data = encodeURI(_data.substr(0, _data.length - 1));
+              tmp_endpoint += _data;
+            }
+            _opt.url = tmp_endpoint;
+            if (!$this.is('[data-send]')) {
+              $this.attr('data-send', true);
+              $.ajax(_opt);
+            }
+          });
         }
       });
     },
@@ -2791,41 +2492,32 @@ define([
           case '':
           case 'US':
             if ($select.is(':hidden')) {
-              $input.attr('disabled', true)
-                .hide('slow', function() {
-                  $select.attr('disabled', false)
-                    .show('slow');
-                });
+              $input.attr('disabled', true).hide('slow', function() {
+                $select.attr('disabled', false).show('slow');
+              });
             }
             // If this Zip Code doesnot have class allowzipcodeplusfour
             if (!$zip.hasClass('allowzipcodeplusfour')) {
-              $zip.addClass('allowzipcode')
-                .attr('maxlength', 5);
+              $zip.addClass('allowzipcode').attr('maxlength', 5);
             }
             break;
           default:
             if ($input.is(':hidden')) {
-              $select.attr('disabled', true)
-                .hide('slow', function() {
-                  $input.attr('disabled', false)
-                    .val('')
-                    .show('slow');
-                  if ($input.is("[data-default-value]")) {
-                    $input.val($input.attr('data-default-value'))
-                      .removeAttr('data-default-value');
-                  }
-                });
+              $select.attr('disabled', true).hide('slow', function() {
+                $input.attr('disabled', false).val('').show('slow');
+                if ($input.is("[data-default-value]")) {
+                  $input.val($input.attr('data-default-value')).removeAttr('data-default-value');
+                }
+              });
             }
-            $zip.removeClass('allowzipcode')
-              .removeAttr('maxlength');
+            $zip.removeClass('allowzipcode').removeAttr('maxlength');
         }
       });
       if (view.options.mode === 'update') {
         var $addresses = $('div.address-fieldset', $form);
         $addresses.each(function() {
           var $this = $(this);
-          $('.country', this)
-            .trigger('change');
+          $('.country', this).trigger('change');
         });
       }
     },
@@ -2847,7 +2539,6 @@ define([
           _t_1 = 'Error';
           _t_2 = 'Please try again.';
       }
-
       var _opt = {
         html: true,
         placement: 'top',
@@ -2855,18 +2546,11 @@ define([
         title: '<i class="icon-edit"></i> ' + _t_1 + '.',
         content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...' + ((text !== '') ? '<br>' + text : '')
       };
-
-      $currentTarget.attr('disabled', true)
-        .popover(_opt)
-        .popover('show');
-
-      window.setTimeout(
-        function() {
-          $currentTarget.attr('disabled', false)
-            .popover('destroy');
-          $currentTarget.next('.popover')
-            .remove();
-        }, duration);
+      $currentTarget.attr('disabled', true).popover(_opt).popover('show');
+      window.setTimeout(function() {
+        $currentTarget.attr('disabled', false).popover('destroy');
+        $currentTarget.next('.popover').remove();
+      }, duration);
     },
     /**
      * Check Internal Fields and append _internal to field name
@@ -2894,17 +2578,14 @@ define([
         $input.attr('name', _nameTxt);
       });
     },
-
     setupPopover: function($context) {
       var $popover = $('[data-toggle="popover"]', $context);
       $popover.popover();
     },
-
     destroyPopover: function($context) {
       var $popover = $('[data-toggle="popover"]', $context);
       $popover.popover('destroy');
     },
-
     /**
      * Calculate Date Diff
      * http://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates-using-javascript
@@ -2913,18 +2594,14 @@ define([
     calculateDateDiffByDays: function(date1, date2) {
       // The number of milliseconds in one day
       var ONE_DAY = 1000 * 60 * 60 * 24;
-
       // Convert both dates to milliseconds
       var date1_ms = date1.getTime(),
         date2_ms = date2.getTime();
-
       // Calculate the difference in milliseconds
       var difference_ms = Math.abs(date1_ms - date2_ms);
-
       // Convert back to days and return
       return Math.round(difference_ms / ONE_DAY);
     },
-
     /**
      * Convert field value to array str "[value1, value2]"
      * @param  {[type]} formId [description]
@@ -2947,7 +2624,6 @@ define([
         });
       });
     },
-
     convertNumberToDecimal: function($form) {
       $form.find(':input[data-decimal]').each(function() {
         var $this = $(this),
@@ -2957,7 +2633,6 @@ define([
         $this.val(parseInt(_val, 10));
       });
     },
-
     /**
      * Setup Radio Value in Update Mode
      * @param  object view
@@ -2975,9 +2650,22 @@ define([
         $targetRadio.attr('checked', true).trigger('change');
       });
     },
-
-    setModelRadioValues: function(el, view) {
-      var DEBUG = false;
+    setupRadioButtonsValueWithModel(view, radioFieldName) {
+      var model = view.model;
+      // console.log('- model:', JSON.stringify(model.toJSON()));
+      if (!model) {
+        return;
+      }
+      _.each(radioFieldName, function(value, key) {
+        // console.log('- value:', value, ', key:', key);
+        var currentValue = model.get(value);
+        var $targetRadio = $(':radio[name="' + value + '"]').filter('[value="' + currentValue + '"]');
+        // console.log('  - $targetRadio:', $targetRadio);
+        $targetRadio.attr('checked', true).trigger('change');
+      });
+    },
+    setModelRadioValues: function(el, view, debug) {
+      var DEBUG = debug || false;
       view = view || null;
       var $radios = el.find(':radio:checked');
       if (!$radios.length) {
@@ -2995,6 +2683,7 @@ define([
           var $this = $(this);
           if (DEBUG) {
             console.log($this);
+            console.log('- before update model values:', view.model.toJSON());
           }
           $this.attr('checked', true).trigger('change');
           if (view && view.model) {
@@ -3015,7 +2704,6 @@ define([
         }
       });
     },
-
     setModelCheckValues: function(el, view) {
       view = view || null;
       var $checks = el.find(':checkbox:checked');
@@ -3041,7 +2729,6 @@ define([
         }
       });
     },
-
     setDefaultMultiFile: function(el, view) {
       // console.log('setDefaultMultiFile', 'el:', el, 'view:', view);
       // console.log('setDefaultMultiFile mode', view.options.mode);
@@ -3051,7 +2738,6 @@ define([
       // Ready to check for model
       var model = view.model;
       // console.log('model', model.toJSON());
-
       if (!model || !model.multiFilesDefaultValue || _.isEmpty(model.multiFilesDefaultValue)) {
         return;
       }
@@ -3070,7 +2756,6 @@ define([
         }
       });
     },
-
     /**
      * Function to format Date Object to return time
      * @param  object date
@@ -3086,7 +2771,6 @@ define([
       var strTime = hours + ':' + minutes + ' ' + ampm;
       return strTime;
     },
-
     addFormSubmittedData: function(field, view) {
       // If this is log, will auto added the create date and time
       if (field.name && field.name === 'LogEntries') {
@@ -3103,7 +2787,6 @@ define([
         }
       }
     },
-
     getUserIdFormHtml: function(id) {
       id = id || null;
       if (!id) {
@@ -3111,7 +2794,6 @@ define([
         //return $('#snhd_user_network_login').text().replace(/\s*\w+\\/ig, '').toLowerCase();
       }
     },
-
     shouldRenderWithShowOnStatusOrShowOnMode: function(field, status, mode) {
       // Check ShowOnStatus
       if (field.options.showonstatus && _.indexOf(field.options.showonstatus, status) < 0) {
@@ -3121,10 +2803,8 @@ define([
       if (field.options.showonmode && _.indexOf(field.options.showonmode, mode) < 0) {
         return false;
       }
-
       return true;
     },
-
     shouldRenderShowOnUser: function(field) {
       if (!(field.options && field.options.showonuser)) {
         return true;
@@ -3145,7 +2825,6 @@ define([
       }
       return false;
     },
-
     validateCheckBox: function($form) {
       var valid = true;
       try {
@@ -3168,7 +2847,6 @@ define([
       }
       return valid;
     },
-
     /**
      * Pass in options that is select, then check value and if it null or empty string.
      * Will de-select it
@@ -3191,7 +2869,6 @@ define([
         }
       });
     },
-
     formatUriSegment: function(url, formData) {
       var DEBUG = false;
       formData = formData || null;
@@ -3228,7 +2905,6 @@ define([
       }
       return url;
     },
-
     /**
      * Setup FileRepo Event
      */
@@ -3282,7 +2958,6 @@ define([
         return false;
       });
     },
-
     /**
      * Set Up US County
      */
@@ -3341,7 +3016,6 @@ define([
         }
       });
     },
-
     /**
      * Utilities for Buildding the Form by $inputs
      * @param  object $input
@@ -3356,7 +3030,6 @@ define([
       form.appendTo('body');
       form.submit();
     },
-
     /**
      * Perform Final Setup for All modes, happened after renderCompleted event
      */
@@ -3376,7 +3049,6 @@ define([
       //   }
       // });
     },
-
     /**
      * Show Success Box
      * @param  {string}   txt text to show
@@ -3392,7 +3064,6 @@ define([
       });
       jacked.log(txt, cb);
     },
-
     showHumaneErrorBox: function(txt, cb) {
       var bigbox = humane.create({
         baseCls: 'humane-bigbox',
@@ -3405,7 +3076,6 @@ define([
       });
       bigbox.error(txt, cb);
     },
-
     /**
      * Return as Date Value
      * @param  integer date
@@ -3414,7 +3084,6 @@ define([
      */
     formatDateAsString: function(date, format) {
       format = format || null;
-
       var _tmpDate = new Date(date);
       if (!format) {
         // return _tmpDate.getTime() / 1000;
@@ -3430,7 +3099,6 @@ define([
       if (_date < 10) {
         _date = '0' + _date;
       }
-
       switch (format) {
         case 'm/d/Y':
           return _month + '/' + _date + '/' + _tmpDate.getFullYear()
@@ -3439,14 +3107,12 @@ define([
           throw 'Not Implement ' + format + ' yet in "formatDateAsString"!';
       }
     },
-
     /**
      * numerical sort
      */
     sortNumber: function(a, b) {
       return a - b;
     },
-
     /**
      * Focus on First Input
      */
@@ -3469,13 +3135,11 @@ define([
         }
       }
     },
-
     /**
      * Scroll to Top of the Page
      */
     scrollToTop: function() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
-
   };
 });

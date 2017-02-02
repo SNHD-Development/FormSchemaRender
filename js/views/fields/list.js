@@ -1,21 +1,7 @@
 /**
  * SubForm Layout
  **/
-define([
-  'jquery',
-  'lodash',
-  'backbone',
-  'models/model',
-  'modelbinder',
-  'validation',
-  'vm',
-  'utils',
-  'events',
-  'text!templates/subform-layouts/default.html',
-  'jquery.expose',
-  'bootstrap'
-], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events, subFormLayoutTemplate) {
-
+define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validation', 'vm', 'utils', 'events', 'text!templates/subform-layouts/default.html', 'jquery.expose', 'bootstrap'], function($, _, Backbone, Model, Modelbinder, Validation, Vm, Utils, Events, subFormLayoutTemplate) {
   var DEBUG = false;
 
   function formatModel(view) {
@@ -52,7 +38,6 @@ define([
       }
       var _type = element.type.toLowerCase(),
         _valModel = view.model.get(element.name);
-
       switch (_type) {
         case 'number':
           _valModel = parseFloat(_valModel);
@@ -72,18 +57,15 @@ define([
       }
     }
   }
-
   return Backbone.View.extend({
     _modelBinder: undefined,
     // Clean Data Binding
     clean: function() {
       // Unbind Validation
       Backbone.Validation.unbind(this);
-
       if (typeof this._modelBinder !== 'undefined') {
         this._modelBinder.unbind();
       }
-
       // Destroy Popover
       Utils.destroyPopover(this.$el);
     },
@@ -96,9 +78,7 @@ define([
     initialize: function() {
       // Setup BB Binder
       this._modelBinder = new Modelbinder();
-
       var _tmp;
-
       if (!this.options) {
         this.options = {};
       }
@@ -106,19 +86,15 @@ define([
         this.options.options = {};
       }
       var _lang = this.options.options.lang;
-
       if (typeof this.options.model === 'undefined') {
-
         if (DEBUG) {
           console.log('[*] list.initialize: Insert');
         }
-
         this.model = new Model(_.extend(this.options.formSchema, {
           is_internal: this.options.internal,
           render_mode: this.options.mode
         }));
         // console.log(this.options);
-
         switch (_lang) {
           case 'sp':
             this._btn_title = 'Agregar';
@@ -126,15 +102,12 @@ define([
           default:
             this._btn_title = 'Add';
         }
-
       } else {
-
         if (DEBUG) {
           console.log('[*] list.initialize: Edit');
           console.log(this.options.model.toJSON());
           console.log(this.model);
         }
-
         switch (_lang) {
           case 'sp':
             this._btn_title = 'Hecho';
@@ -143,7 +116,6 @@ define([
             this._btn_title = 'Done';
         }
       }
-
       this.options.formSchema.view = this.options.formSchema.view || '';
       // Load Correct SubView Render
       switch (this.options.formSchema.view.toLowerCase()) {
@@ -151,7 +123,6 @@ define([
         break;
       }
       this.template = _.template(_tmp);
-
       // this is a list
       this._isListFieldType = true;
     },
@@ -173,7 +144,7 @@ define([
             lang: that.options.options.lang
           }),
           _options = that.options;
-
+        // var DEBUG = true;
         if (DEBUG) {
           console.log('[*] list.render');
           console.log(that.options);
@@ -184,9 +155,7 @@ define([
             console.log(that.options.model.toJSON());
           }
         }
-
         // var DEBUG = true;
-
         _.each(that.options.formSchema.fields, function(value, key, list) {
           // Check for Show On Mode
           if (!BaseField.prototype.checkShowOnMode.call(that, value, _options.options.mode, _options.options.formData.status)) {
@@ -203,7 +172,6 @@ define([
             _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
             _html += formView.renderLabel(value, _required);
           }
-
           if (value.type.toLowerCase() === 'email' && value.options.autocomplete) {
             if (that.model.get(value.name) !== '') {
               var _strArray = that.model.get(value.name).split('@');
@@ -217,7 +185,6 @@ define([
               }
             }
           }
-
           if (DEBUG) {
             console.log('    - Loop: ' + key);
             console.log(value);
@@ -225,19 +192,13 @@ define([
               console.log(that.model.get(value.name));
             }
           }
-
           // console.log(value);
-
           _html += formView.render(value);
-
           if (_defaultEmail !== '') {
             value.options['default'] = _defaultEmail;
           }
-
         });
-
         // DEBUG = false;
-
         var _btn_opts = _.clone(that.options.formSchema.formoptions);
         _btn_opts.submitbutton = that._btn_title;
         _btn_opts.subForm = true;
@@ -249,15 +210,18 @@ define([
         }
         // console.log(_btn_opts);
         _html += formView.renderButton(_btn_opts);
-
         if (that.el) {
           $(that.el).html(that.template(_.extend({
             html: _html
           }, that.options.formSchema)));
         }
-
+        // If there are radio buttons.
+        if (formView._radioFieldName.length) {
+          // console.log('- Setup : setupRadioButtonsValue');
+          // Utils.setupRadioButtonsValue(that, that.model, true);
+          Utils.setupRadioButtonsValueWithModel(that, formView._radioFieldName);
+        }
         // Found that it could replace the model value
-
         var $inputs = that.$(':input[value!=""]').not(':button');
         $inputs.each(function() {
           var $this = $(this);
@@ -270,7 +234,6 @@ define([
             console.log('Value: ' + _thisVal);
             console.log('Model Current Value: ' + that.model.get($this.attr('name')));
           }
-
           if (_thisVal) {
             that.model.set(_thisName, _thisVal);
           }
@@ -300,18 +263,15 @@ define([
                 }
             }
           }
-
           if (DEBUG) {
             console.log($this);
             console.log('Model After Set Value: ' + _modelVal);
           }
         });
-
         // Format Values
         if (that.options.model) {
           reFormatModel(that);
         }
-
         // Bind Model
         try {
           if (that.el) {
@@ -326,7 +286,6 @@ define([
             var _modelDataJson = (that.model && that.model.toJSON) ? that.model.toJSON() : null;
             if (!_.isEmpty(_modelDataJson)) {
               _.each(_modelDataJson, function(_modelVal, _modelKey) {
-
                 if (DEBUG) {
                   console.log('    Model.' + _modelKey + ' = ' + _modelVal);
                 }
@@ -354,29 +313,23 @@ define([
         Backbone.Validation.bind(that, {
           forceUpdate: true
         });
-
         // Attached Events
         if (formView._hasEmailPicker) {
           that.setupEmailInput();
         }
-
         // Placeholder Setup for Older Browser
         Utils.setupPlaceHolder(that.el);
-
         // Set Up Popover
         Utils.setupPopover(that.$el);
-
         // Set up the BooleanButton
         if (formView._hasBooleanInput) {
           Utils.setupBooleanInput(that.$el, formView);
         }
-
         // Setup Radio Button Group
         if (formView._hasRadioBtnGroup) {
           Utils.setupRadioBtnGroup(that.$el, that.model);
           Utils.setupRadioBtnGroupValue(that.$el);
         }
-
         // If there are BirthDayPicker
         // var DEBUG = true;
         if (DEBUG) {
@@ -388,12 +341,10 @@ define([
         if (formView._hasBDate) {
           Utils.setupBDateInput(that.$el, that.model, true);
         }
-
         // If there are DatePicker
         if (formView._hasDate) {
           Utils.setupDateInput(that.$el, that);
         }
-
         // If this is the first time need to click cancel button
         if (firstTime) {
           that.$('.form-actions button.btn-cancel').click();
@@ -432,10 +383,8 @@ define([
             }
           }
         });
-
         // Set Up Ajax Call
         Utils.setupUrlAjaxCall(that.$el, null, that.model);
-
         // Set Up Select2
         try {
           // console.log(that);
@@ -447,7 +396,6 @@ define([
             console.error(err);
           }
         }
-
         // Find the first input in the form
         var $fInput = that.$(':input').not(':hidden').first().focus();
         if ($fInput.length && that.$el.length) {
@@ -455,7 +403,6 @@ define([
             scrollTop: that.$el.offset().top - 30
           }, 1000);
         }
-
         // If this is read mode
         if (readMode) {
           var $allInput = that.$(':input').not(':button.btn-cancel');
@@ -512,9 +459,7 @@ define([
         return;
       }
       _submitBtn.addClass('submitted');
-
       Utils.setHiddenField(this.el);
-
       // Before anything need to read the birthdate field
       var $bdayPicker = this.$('.birthdaypicker');
       if ($bdayPicker && $bdayPicker.length) {
@@ -540,7 +485,6 @@ define([
           }
         });
       }
-
       // Set the Values to Model
       var $inputs = that.$(':input[value!=""]').not(':button');
       $inputs.each(function() {
@@ -549,7 +493,6 @@ define([
         // console.log($this.val());
         that.model.set($this.attr('name'), $this.val());
       });
-
       // If this is select could be different
       that.$(':input.tags').each(function() {
         var $this = $(this);
@@ -560,17 +503,17 @@ define([
         }
         that.model.set(_n, _v);
       });
-
+      // Set Radio Values
+      Utils.setModelRadioValues(this.$el, this, false);
       // Need to format the value
       formatModel(this);
-
       /*if (this.model) {
         if (this.model.toJSON) {
           console.log(this.model.toJSON());
         }
       }*/
-
       if (this.model.isValid(true)) {
+        // var DEBUG = true;
         var $not_sending = $('.not_sending', this.el).trigger('change').attr('disabled', true);
         $not_sending.each(function() {
           that.model.unset($(this).attr('name'));
@@ -579,12 +522,13 @@ define([
         // Add Model to the parent
         _submitBtn.removeClass('submitted');
         // Trigger Add Event for List
+        if (DEBUG) {
+          console.log('- this.model:', JSON.stringify(this.model.toJSON()));
+        }
         this.$el.trigger(this.options.formId + '.add', this);
       } else {
-
         // If this is the Boolean Input need to inform user
         this.model.triggerError(this);
-
         // Error Message
         var _opt = {
           html: true,
@@ -594,12 +538,10 @@ define([
           content: 'Please complete the required fields'
         };
         _submitBtn.popover(_opt).popover('show');
-
-        window.setTimeout(
-          function() {
-            _submitBtn.removeClass('submitted').popover('destroy');
-            _submitBtn.next('.popover').remove();
-          }, 2000);
+        window.setTimeout(function() {
+          _submitBtn.removeClass('submitted').popover('destroy');
+          _submitBtn.next('.popover').remove();
+        }, 2000);
       }
     },
     clickCancel: function(e) {
@@ -619,7 +561,6 @@ define([
     setupEmailInput: function() {
       Utils.setupEmailInput(this.el);
     },
-
     removeAttachedEvents: function() {
       var DEBUG = false;
       var $el = this.$el;
