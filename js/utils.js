@@ -2650,6 +2650,20 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
         $targetRadio.attr('checked', true).trigger('change');
       });
     },
+    setupRadioButtonsValueWithModel(view, radioFieldName) {
+      var model = view.model;
+      // console.log('- model:', JSON.stringify(model.toJSON()));
+      if (!model) {
+        return;
+      }
+      _.each(radioFieldName, function(value, key) {
+        // console.log('- value:', value, ', key:', key);
+        var currentValue = model.get(value);
+        var $targetRadio = $(':radio[name="' + value + '"]').filter('[value="' + currentValue + '"]');
+        // console.log('  - $targetRadio:', $targetRadio);
+        $targetRadio.attr('checked', true).trigger('change');
+      });
+    },
     setModelRadioValues: function(el, view, debug) {
       var DEBUG = debug || false;
       view = view || null;

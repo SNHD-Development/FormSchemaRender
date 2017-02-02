@@ -219,6 +219,7 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
         if (formView._radioFieldName.length) {
           // console.log('- Setup : setupRadioButtonsValue');
           // Utils.setupRadioButtonsValue(that, that.model, true);
+          Utils.setupRadioButtonsValueWithModel(that, formView._radioFieldName);
         }
         // Found that it could replace the model value
         var $inputs = that.$(':input[value!=""]').not(':button');
