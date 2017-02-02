@@ -2,35 +2,11 @@
  * Main View Controller
  **/
 'use strict';
-
-define([
-  'jquery',
-  'lodash',
-  'backbone',
-  'vm',
-  'utils',
-  'events',
-  'text!templates/layout.html',
-  'jquery.ajaxsubmit',
-  'jquery.datepicker',
-  'jquery.placeholder',
-  'jquery.lightbox',
-  'jquery.expose',
-  'bootstrap',
-  'jquery.select2',
-  'jloader'
-], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
-
+define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates/layout.html', 'jquery.ajaxsubmit', 'jquery.datepicker', 'jquery.placeholder', 'jquery.lightbox', 'jquery.expose', 'bootstrap', 'jquery.select2', 'jloader'], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
   // Default Config
-
   function removePopover($ele) {
-    $ele.attr('disabled', false)
-      .popover('destroy')
-      .next('.popover')
-      .removeClass('success')
-      .remove();
+    $ele.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
   }
-
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),
     el: '#app',
@@ -50,14 +26,11 @@ define([
           hideButtons: that.options.hideButtons,
           lang: that.options.lang
         };
-
       this.$el.html(this.template(this.options.formSchema));
-
       // Generic Setup
       $('#' + this.options.formSchema.name, this.el).on(this.options.formSchema.name + '.renderCompleted', function() {
         Utils.genericSetup(that);
       });
-
       if (typeof this.options.mode !== 'undefined' && this.options.mode === 'read') {
         $('#' + that.options.formSchema.name, that.el).addClass('read-mode');
         // Async Call
@@ -65,13 +38,10 @@ define([
           try {
             var readView = Vm.create(that, 'ReadView', ReadView, _opts);
             readView.render();
-
             Utils.finalReadSetup(readView);
             // Render Form Complete
             // Send view at second parameter
-            $('#' + that.options.formSchema.name, that.el)
-              .trigger(that.options.formSchema.name + '.renderCompleted', that);
-
+            $('#' + that.options.formSchema.name, that.el).trigger(that.options.formSchema.name + '.renderCompleted', that);
             // Final Setup for All Mode
             Utils.finalSetupAllMode(readView);
           } catch (err) {
@@ -100,7 +70,6 @@ define([
             Utils.renderError(that.$el, err);
             return;
           }
-
           try {
             if (that.formView._hasDate) {
               that.setupDateInput(null, that);
@@ -111,61 +80,46 @@ define([
             if (that.formView._hasEmailPicker) {
               that.setupEmailInput();
             }
-
             // Attached Address Event
             Utils.setupAddressEvent(that.el, that);
-
             // Setup Spinner
             Utils.setupSpinner(that.el, that.formView.options.mode);
-
             // Placeholder Setup for Older Browser
             Utils.setupPlaceHolder(that.el);
-
             // Setup Files Input
             Utils.setupFileInput(that.el);
-
+            // Set Up Popover
+            // console.log($form);
+            Utils.setupPopover(that.el);
             // Final Setup
             Utils.finalSetup(that.formView);
-
             // Render Form Complete
             // Send view at second parameter
-            $('#' + that.options.formSchema.name, that.el)
-              .trigger(that.options.formSchema.name + '.renderCompleted', that);
-
+            $('#' + that.options.formSchema.name, that.el).trigger(that.options.formSchema.name + '.renderCompleted', that);
             // Final Setup for All Mode
             Utils.finalSetupAllMode(that.formView);
-
             // Set the Action if has one
-            var $form = $(that.el)
-              .find('form.form-render');
+            var $form = $(that.el).find('form.form-render');
             if (that.options.formActionUrl) {
               $form.attr('action', that.options.formActionUrl);
             }
-
             // Render the buttons
             // Check for the .form-actions class
             var $formButtons = $('div.form-actions', $form);
-
             // If we have JavaUpload Need to Start it here
             if (that.formView._javaUpload.length > 0) {
               that.setupJavaUpload(that.formView._javaUpload);
             }
-
             // Set Up Ajax Call
             Utils.setupUrlAjaxCall($('form.form-render'));
-
             // Set Up Select2 when having class .
             // console.log(that.formView);
             Utils.setupSelect2(that.formView);
-
             // console.log('Validation:', that.formView.model.validation);
             // console.log('Model, Before Bind ModelBinder:', that.formView.model.toJSON());
-
             // Bind Model Here
             that.formView._modelBinder.bind(that.formView.model, that.formView.el, that.formView.model.bindings);
-
             // console.log('Model, After Bind:', that.formView.model.toJSON());
-
             Backbone.Validation.bind(that.formView, {
               forceUpdate: true
             });
@@ -176,13 +130,10 @@ define([
             }
             Utils.renderError($(that.formView.el), err);
           }
-
           // Will focus on the first input
           Utils.focusOnFirstInput(that);
-
           // Will make sure to start on top of the page
           Utils.scrollToTop();
-
           // console.log('Model, Render End', that.formView.model.toJSON());
         });
       }
@@ -301,7 +252,6 @@ define([
         $submitBtn = $('.form-actions button[type="submit"]', this.el),
         _opt, _options,
         that = this;
-
       // DatePicker
       var $datepickers = $form.find('.datepicker');
       $datepickers.each(function() {
@@ -311,7 +261,6 @@ define([
           that.formView.model.set($this.attr('name'), _val);
         }
       });
-
       $form.removeClass('invalid_prevalidation').trigger($form.attr('id') + '.preValidation', [e, $form, this]);
       if ($form.hasClass('invalid_prevalidation')) {
         e.preventDefault();
@@ -321,17 +270,13 @@ define([
         e.preventDefault();
         return false;
       }
-
-      $form.addClass('form_submitted')
-        .removeClass('validation_pass validation_error not_sending_data_yet');
+      $form.addClass('form_submitted').removeClass('validation_pass validation_error not_sending_data_yet');
       this.getBDateinput(this.el, this.formView.model);
       Utils.getUserId(this.el, this.formView.model);
       // Remove Not needed input from submitting data
       $('.not_sending', $form).attr('disabled', true);
-
       // Attached the subform input
       this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields, this.formView._listSchema);
-
       // Check Data
       Utils.getDefaultValues(this.formView.el, that.formView.model); // Make sure to get default value for each type.
       // Select2 Dynamic Validation
@@ -341,19 +286,15 @@ define([
       });
       // Adding ability to skip the multifile in update mode
       // console.log('Model, before calling Utils.setDefaultMultiFile', this.formView.model.toJSON());
-
       Utils.setDefaultMultiFile($form, this.formView);
-
       Utils.setModelRadioValues($form, this.formView);
       Utils.setModelCheckValues($form, this.formView);
       var _isCheckBoxGood = Utils.validateCheckBox($form);
-
       // Check for the Select that has empty value and then not select it.
       // console.log(this);
       var $selectInput = this.$(':selected');
       // console.log($selectInput);
       Utils.resetSelectsOption($selectInput);
-
       // Sometime the Select not get clear properly
       // Since HTML will not send any info if the select is not select
       var $selectInputNull = this.$('select');
@@ -368,22 +309,17 @@ define([
           // console.log($this.val());
         });
       }
-
       // console.log('Is model valid?', this.formView.model.isValid(true));
       // console.log('Is sub-form model valid?', this.formView.model.isSubformValid());
       // console.log('Model, value before submitted', this.formView.model.toJSON());
-
       if (this.formView.model.isValid(true) && this.formView.model.isSubformValid() && _isCheckBoxGood) {
-
         // If there is an hidden type that has data-value, then will need to send this as well
-        $form.find(':input:hidden[data-value]')
-          .each(function() {
-            var $this = $(this);
-            if ($this.val() === '') {
-              $this.val($this.attr('data-value'));
-            }
-          });
-
+        $form.find(':input:hidden[data-value]').each(function() {
+          var $this = $(this);
+          if ($this.val() === '') {
+            $this.val($this.attr('data-value'));
+          }
+        });
         $form.addClass('validation_pass');
         if (this.options.token !== '') {
           $form.prepend('<input type="hidden" name="token" value="' + this.options.token + '"/>');
@@ -392,67 +328,50 @@ define([
         if (this.options.mode === 'create' && _action.search(/name=\w/ig) === -1) {
           $form.prepend('<input type="hidden" name="form_name" value="' + this.options.formSchema.name + '"/>');
         }
-
         _options = {
           beforeSubmit: this.showRequest,
           success: this.showResponse,
           error: this.processError
         };
-
         // Some Browser Does not support placeholder, will need to check for it.
         Utils.resetPlaceHolderValue(this.el);
-
         // Some Data Clean Up
         Utils.convertDataToArrayString($form);
-
         // Need to check for the Number default (integer)
         Utils.convertNumberToDecimal($form);
-
         // If this form has Java Pow Upload need to send those in as well
         if (this.formView._javaUpload.length) {
           var _javaPowSubmit = false,
             _error = false;
-
           _.each(this.formView._javaUpload, function(element) {
             var $container = $('#' + element.id + '_java-upload');
             if ($container.hasClass('in')) {
               _javaPowSubmit = true;
               var JavaPowUpload = document.getElementById(element.id);
-
-              if ($('#' + element.id + '_java-upload-applet', $container)
-                .hasClass('required')) {
-                if (!JavaPowUpload.getFiles()
-                  .size()) {
+              if ($('#' + element.id + '_java-upload-applet', $container).hasClass('required')) {
+                if (!JavaPowUpload.getFiles().size()) {
                   _error = true;
                   return;
                 }
               }
-              $(':input[name="' + element.id + '"]')
-                .remove();
+              $(':input[name="' + element.id + '"]').remove();
               JavaPowUpload.startUpload();
             }
           });
-
           if (_javaPowSubmit) {
             if (_error) {
-              $form.addClass('validation_error')
-                .removeClass('validation_pass');
+              $form.addClass('validation_error').removeClass('validation_pass');
               $form.removeClass('form_submitted');
-              $('.not_sending', $form)
-                .attr('disabled', false);
-              $(':input[name="form_name"]', $form)
-                .remove();
-              $(':input[name="token"]', $form)
-                .remove();
+              $('.not_sending', $form).attr('disabled', false);
+              $(':input[name="form_name"]', $form).remove();
+              $(':input[name="token"]', $form).remove();
             }
             e.preventDefault();
             return;
           }
         }
-
         // Check for Internal Fields and make sure to append _internal at the end
         Utils.parseInternalFieldsBeforeSubmit($form, this.formView._internalFields);
-
         if (this.formView._ajaxSubmit) {
           e.preventDefault();
           $form.ajaxSubmit(_options);
@@ -460,7 +379,6 @@ define([
           // This is not using AJAX to send POST
           $form.trigger($form.attr('id') + '.preSubmit', [e, $form, this]);
         }
-
         if (this.formView.options.formSchema.view !== 'wizard' && !$form.hasClass('not_sending_data_yet')) {
           var _t_1, _t_2;
           switch (this.formView.options.lang) {
@@ -479,13 +397,8 @@ define([
             title: _t_1,
             content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...'
           };
-          $submitBtn.attr('disabled', true)
-            .popover(_opt)
-            .popover('show')
-            .next('.popover')
-            .addClass('success');
+          $submitBtn.attr('disabled', true).popover(_opt).popover('show').next('.popover').addClass('success');
         }
-
         // Debugger Point if not using AJAX Post
         // console.log(this);
         // console.log('===== Debug Post Data =====');
@@ -501,15 +414,12 @@ define([
         $form.addClass('validation_error');
         $form.removeClass('form_submitted');
         // Error Message
-        $('.not_sending', $form)
-          .attr('disabled', false);
-
+        $('.not_sending', $form).attr('disabled', false);
         // Debug: Validation
         // if (console && console.log) {
         //     console.log(this.formView.model.toJSON());
         //     console.log($('.not_sending', $form));
         // }
-
         if (this.formView.options.formSchema.view !== 'wizard') {
           _opt = {
             html: true,
@@ -518,21 +428,15 @@ define([
             title: '<i class="icon-edit"></i> Validation Error',
             content: 'Please correct the form'
           };
-          $submitBtn.attr('disabled', true)
-            .popover(_opt)
-            .popover('show');
-
-          window.setTimeout(
-            function() {
-              var $firstError = $('.invalid:first', $form);
-              if (!($firstError.is(':checkbox') || $firstError.is(':radio'))) {
-                $firstError.focus();
-              }
-              $submitBtn.attr('disabled', false)
-                .popover('destroy');
-              $submitBtn.next('.popover')
-                .remove();
-            }, 2000);
+          $submitBtn.attr('disabled', true).popover(_opt).popover('show');
+          window.setTimeout(function() {
+            var $firstError = $('.invalid:first', $form);
+            if (!($firstError.is(':checkbox') || $firstError.is(':radio'))) {
+              $firstError.focus();
+            }
+            $submitBtn.attr('disabled', false).popover('destroy');
+            $submitBtn.next('.popover').remove();
+          }, 2000);
         }
       }
       $form.trigger(this.options.formSchema.name + '.validated');
@@ -630,10 +534,7 @@ define([
           title: 'Application Error',
           content: '<b>Error Message:</b> <br>' + _errorMsg + '<br> <hr> Please fill all the required fields completely. We will reload this form in <span id="count_time">20</span> seconds.'
         };
-        $submitBtn.attr('disabled', true)
-          .popover(_opt)
-          .popover('show')
-          .next('.popover');
+        $submitBtn.attr('disabled', true).popover(_opt).popover('show').next('.popover');
         window.setTimeout(function() {
           var $timer = $('#count_time');
           setTimeout(function() {
@@ -652,19 +553,11 @@ define([
       }
       $(':hidden[name="token"], :hidden[name="form_name"]', $form).remove();
       $form.removeClass('form_submitted');
-      $('.not_sending', $form)
-        .attr('disabled', false);
+      $('.not_sending', $form).attr('disabled', false);
       $form.trigger($form.attr('id') + '.postSubmit', [responseText, _jsonText, statusText, xhr, $form]);
-      window.setTimeout(
-        function() {
-          $submitBtn.attr('disabled', false)
-            .popover('destroy')
-            .next('.popover')
-            .removeClass('success')
-            .remove();
-        },
-        3000
-      );
+      window.setTimeout(function() {
+        $submitBtn.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+      }, 3000);
     },
     /**
      * Ajax Request Error
@@ -688,7 +581,6 @@ define([
       if ($submitBtn.length) {
         // Remove Popover
         removePopover($submitBtn);
-
         // Generate New Popover Error Message
         if (jqXHR.responseText) {
           // Try to parse JSON
@@ -711,10 +603,7 @@ define([
           title: 'Application Error',
           content: errorTxt
         };
-        $submitBtn.attr('disabled', true)
-          .popover(_opt)
-          .popover('show')
-          .next('.popover');
+        $submitBtn.attr('disabled', true).popover(_opt).popover('show').next('.popover');
       } else {
         alert(errorTxt + ', please try again later.');
         if (console && console.log && jqXHR.responseText) {
@@ -766,7 +655,6 @@ define([
       var that = this,
         $target = $(e.currentTarget);
       e.preventDefault();
-
       $.getJSON($target.attr('href'), {}, function(data, status) {
         if (status === 'success') {
           require(['views/hiddenForm'], function(HiddenFormView) {
@@ -777,17 +665,14 @@ define([
           location.refresh();
         }
       });
-
       return false;
     },
-
     /**
      * Setup Java Upload
      * @return
      */
     setupJavaUpload: function(jArray) {
-      var $view = $(this)
-        .get(0),
+      var $view = $(this).get(0),
         jSerialNumber = (this.formView.options.formSchema.jserialnumber) ? this.formView.options.formSchema.jserialnumber : window.jSerialNumber;
       if (jSerialNumber == undefined) {
         throw 'Please set jSerialNumber to match with your purchase number.';
@@ -801,8 +686,7 @@ define([
           "Common.ProgressArea.DownloadButton.Visible": "false",
           "Common.SkinLF.ThemepackURL": "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip",
           "Common.Language.AutoDetect": "true",
-          "Upload.UploadUrl": $(this.formView.el)
-            .attr('action'),
+          "Upload.UploadUrl": $(this.formView.el).attr('action'),
           "Upload.Compress.Enabled": "true",
           "Upload.Compress.ArchiveFileName": "#UNIQUEID#",
           "Upload.Compress.Format": "ZIP",
@@ -816,65 +700,47 @@ define([
           "Upload.HttpUpload.SendBrowserCookie": "true"
         },
         version = '1.5.1';
-
       // console.log(parameters["Upload.UploadUrl"]);
-
       // Since deplyJava will override your body
-
       var oldwrite = document.write,
         content = '';
       document.write = function(text) {
         content += text;
       };
-
       _.each(jArray, function(value) {
         content = '';
-
         parameters["Upload.HttpUpload.FieldName.FileBody"] = value.id;
-
         deployJava.runApplet(value, parameters, version);
-        var $appletParent = $('#' + value.id + '_java-upload-applet')
-          .html(content);
-
+        var $appletParent = $('#' + value.id + '_java-upload-applet').html(content);
         if ($view.options.formSchema && $view.options.formSchema.validation && $view.options.formSchema.validation[value.id]) {
           if ($view.formView.model.validation[value.id].required) {
             $appletParent.addClass('required');
           }
           $view.formView.model.validation[value.id] = {};
         }
-
-        $('#' + value.id + '_accordion')
-          .on('click', '.accordion-heading', function() {
-            var $this = $(this),
-              $container = $this.next(),
-              $parent = $this.closest('.accordion-group');
-
-            // console.log($view.formView);
-            if ($container.find('applet')
-              .length) {
-              $view.formView.model.validation[value.id] = {};
-              $parent.next()
-                .find('input')
-                .attr('disabled', true);
-            } else {
-              $container.find('input')
-                .attr('disabled', false);
-              if ($view.options.formSchema && $view.options.formSchema.validation && $view.options.formSchema.validation[value.id]) {
-                $view.formView.model.validation[value.id] = $view.options.formSchema.validation[value.id];
-              }
+        $('#' + value.id + '_accordion').on('click', '.accordion-heading', function() {
+          var $this = $(this),
+            $container = $this.next(),
+            $parent = $this.closest('.accordion-group');
+          // console.log($view.formView);
+          if ($container.find('applet').length) {
+            $view.formView.model.validation[value.id] = {};
+            $parent.next().find('input').attr('disabled', true);
+          } else {
+            $container.find('input').attr('disabled', false);
+            if ($view.options.formSchema && $view.options.formSchema.validation && $view.options.formSchema.validation[value.id]) {
+              $view.formView.model.validation[value.id] = $view.options.formSchema.validation[value.id];
             }
-          });
+          }
+        });
       });
-
       document.write = oldwrite;
-
       // Attached the OnCompleted Event
       window.JavaPowUpload_onUploadFinish = function() {
         // Will Refresh the page
         (window.jRedirect) ? location.replace(window.jRedirect): location.reload(true);
       };
     },
-
     /**
      * Global Form Event for Capturing the Keyboard event for field
      * @return {[type]} [description]
@@ -885,7 +751,6 @@ define([
       var isInternal = this.options.internal;
       var tmpUrl = (isInternal) ? '/form/edit?id=' + this.options.formData._id.$oid : null;
       var $this = $(e.target);
-
       // Function to switch to read view
       var switchToReadField = function(updateSpan) {
         var $container = $this.closest('.update-on-read-mode');
@@ -910,7 +775,6 @@ define([
           });
         });
       }
-
       // Function to send POST Request
       var sendPostRequest = function(targetUrl, data) {
         if ($this.hasClass('ajax-submitted')) {
@@ -941,7 +805,6 @@ define([
           }
         });
       }
-
       if (DEBUG) {
         console.log('[*] ajaxCommandByKeyBoard: Key=' + keyCode);
         console.log(arguments);
@@ -969,7 +832,6 @@ define([
           break;
       }
     },
-
     clickUpdateCancelBtn: function(e) {
       if (this.options.mode !== 'read') {
         return;
@@ -989,7 +851,6 @@ define([
         });
       });
     },
-
     clickUpdateSubmitBtn: function(e) {
       if (this.options.mode !== 'read') {
         return;
@@ -1006,7 +867,6 @@ define([
         _html;
       var isInternal = this.options.internal;
       var tmpUrl = (isInternal) ? '/form/edit?id=' + this.options.formData._id.$oid : null;
-
       var sendPostRequest = function(targetUrl, data, htmlToUpdate) {
         // Start Sending AJAX
         $this.addClass('ajax-submitted');
@@ -1035,7 +895,6 @@ define([
           }
         });
       }
-
       var $wrapper = $this.closest('.field-container');
       if ($wrapper.hasClass('radio-container')) {
         // This is Radio Container
@@ -1051,7 +910,6 @@ define([
         sendPostRequest(tmpUrl, _d, _val);
       }
     }
-
   });
   return AppView;
 });

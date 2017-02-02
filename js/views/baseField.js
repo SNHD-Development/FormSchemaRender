@@ -1,134 +1,8 @@
 // Field Base Class
 'use strict';
-
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'bootstrap',
-  'events',
-  'vm',
-  'utils',
-  'models/model',
-  'collections/collections',
-  'modelbinder',
-  'validation',
-  'views/fields/list',
-  'text!data/email.json',
-  'text!data/schooles.json',
-  'text!data/county.json',
-  'text!templates/fields/html.html',
-  'text!templates/fields/label.html',
-  'text!templates/fields/text.html',
-  'text!templates/fields/password.html',
-  'text!templates/fields/telephone.html',
-  'text!templates/fields/socialsecurity.html',
-  'text!templates/fields/hidden.html',
-  'text!templates/fields/timestamp.html',
-  'text!templates/fields/useraccount.html',
-  'text!templates/fields/fraction.html',
-  'text!templates/fields/booleaninput.html',
-  'text!templates/fields/radio.html',
-  'text!templates/fields/file.html',
-  'text!templates/fields/multifiles.html',
-  'text!templates/fields/filerepository.html',
-  'text!templates/fields/read-filerepository.html',
-  'text!templates/fields/state.html',
-  'text!templates/fields/county.html',
-  'text!templates/fields/zipcode.html',
-  'text!templates/fields/country.html',
-  'text!templates/fields/fullname.html',
-  'text!templates/fields/address.html',
-  'text!templates/fields/textarea.html',
-  'text!templates/fields/number.html',
-  'text!templates/fields/email.html',
-  'text!templates/fields/date.html',
-  'text!templates/fields/select.html',
-  'text!templates/fields/check.html',
-  'text!templates/fields/birthdate.html',
-  'text!templates/fields/button.html',
-  'text!templates/fields/buttongroup.html',
-  'text!templates/fields/list.html',
-  'text!templates/fields/uneditableinput.html',
-  'text!templates/fields/uneditablecheck.html',
-  'text!templates/fields/uneditabletag.html',
-  'text!templates/fields/uneditabletel.html',
-  'text!templates/fields/uneditablefile.html',
-  'text!templates/fields/uneditableimage.html',
-  'text!templates/fields/buttonclipboard.html',
-  'text!templates/subform-layouts/table.html',
-  'text!templates/update-on-read/default-input.html',
-  'text!templates/update-on-read/default-input-radio.html',
-  'text!templates/update-on-read/default-input-textarea.html',
-  'text!templates/update-on-read/default-input-date.html',
-  'jquery.expose',
-  'jquery.datepicker',
-  'jquery.birthdaypicker',
-  'bootstrap'
-], function(
-  $,
-  _,
-  Backbone,
-  Bootstrap,
-  Events,
-  Vm,
-  Utils,
-  Model,
-  Collections,
-  Modelbinder,
-  Validation,
-  listView,
-  emailData,
-  schoolesData,
-  countyData,
-  htmlTemplate,
-  labelTemplate,
-  textTemplate,
-  passwordTemplate,
-  telephoneTemplate,
-  socialsecurityTemplate,
-  hiddenTemplate,
-  timestampTemplate,
-  useraccountTemplate,
-  fractionTemplate,
-  booleanInputTemplate,
-  radioTemplate,
-  fileTemplate,
-  multifilesTemplate,
-  filerepositoryTemplate,
-  readFilerepositoryTemplate,
-  stateTemplate,
-  countyTemplate,
-  zipcodeTemplate,
-  countryTemplate,
-  fullnameTemplate,
-  addressTemplate,
-  textareaTemplate,
-  numberTemplate,
-  emailTemplate,
-  dateTemplate,
-  selectTemplate,
-  checkTemplate,
-  bdateTemplate,
-  buttonTemplate,
-  buttongroupTemplate,
-  listTemplate,
-  uneditableinputTemplate,
-  uneditablecheckTemplate,
-  uneditabletagTemplate,
-  uneditabletelTemplate,
-  uneditablefileTemplate,
-  uneditableimageTemplate,
-  buttonclipboardTemplate,
-  tableTemplate,
-  readModeUpdatedefaultInputTemplate,
-  readModeUpdatedefaultInputRadioTemplate,
-  readModeUpdatedefaultInputTextAreaTemplate,
-  readModeUpdatedefaultInputDateTemplate
-) {
+define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils', 'models/model', 'collections/collections', 'modelbinder', 'validation', 'views/fields/list', 'text!data/email.json', 'text!data/schooles.json', 'text!data/county.json', 'text!templates/fields/html.html', 'text!templates/fields/label.html', 'text!templates/fields/text.html', 'text!templates/fields/password.html', 'text!templates/fields/telephone.html', 'text!templates/fields/socialsecurity.html', 'text!templates/fields/hidden.html', 'text!templates/fields/timestamp.html', 'text!templates/fields/useraccount.html', 'text!templates/fields/fraction.html', 'text!templates/fields/booleaninput.html', 'text!templates/fields/radio.html', 'text!templates/fields/file.html', 'text!templates/fields/multifiles.html', 'text!templates/fields/filerepository.html', 'text!templates/fields/read-filerepository.html', 'text!templates/fields/state.html', 'text!templates/fields/county.html', 'text!templates/fields/zipcode.html', 'text!templates/fields/country.html', 'text!templates/fields/fullname.html', 'text!templates/fields/address.html', 'text!templates/fields/textarea.html', 'text!templates/fields/number.html', 'text!templates/fields/email.html', 'text!templates/fields/date.html', 'text!templates/fields/select.html', 'text!templates/fields/check.html', 'text!templates/fields/birthdate.html', 'text!templates/fields/button.html', 'text!templates/fields/buttongroup.html', 'text!templates/fields/list.html', 'text!templates/fields/uneditableinput.html', 'text!templates/fields/uneditablecheck.html', 'text!templates/fields/uneditabletag.html', 'text!templates/fields/uneditabletel.html', 'text!templates/fields/uneditablefile.html', 'text!templates/fields/uneditableimage.html', 'text!templates/fields/buttonclipboard.html', 'text!templates/subform-layouts/table.html', 'text!templates/update-on-read/default-input.html', 'text!templates/update-on-read/default-input-radio.html', 'text!templates/update-on-read/default-input-textarea.html', 'text!templates/update-on-read/default-input-date.html', 'jquery.expose', 'jquery.datepicker', 'jquery.birthdaypicker', 'bootstrap'], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Collections, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, socialsecurityTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, filerepositoryTemplate, readFilerepositoryTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate, readModeUpdatedefaultInputTemplate, readModeUpdatedefaultInputRadioTemplate, readModeUpdatedefaultInputTextAreaTemplate, readModeUpdatedefaultInputDateTemplate) {
   // Debug Flag
   var DEBUG = false;
-
   // Cache Template
   var UPDATE_ON_READ_TEMPLATE = {
     'default-input': _.template(readModeUpdatedefaultInputTemplate),
@@ -136,7 +10,6 @@ define([
     'default-input-textarea': _.template(readModeUpdatedefaultInputTextAreaTemplate),
     'default-input-date': _.template(readModeUpdatedefaultInputDateTemplate),
   };
-
   // Function to build simple HTML form markup
   function buildHtmlBasicFormMarkup(field) {
     var html,
@@ -180,14 +53,12 @@ define([
     // Wrap in Div
     return '<div class="form-markup-field">' + html + '</div>';
   }
-
   return Backbone.View.extend({
     _modelBinder: undefined,
     // Clean Data Binding
     clean: function() {
       // Unbind Validation
       Backbone.Validation.unbind(this);
-
       if (typeof this._modelBinder !== 'undefined') {
         this._modelBinder.unbind();
       }
@@ -218,17 +89,13 @@ define([
       this._lookupValues = {}; // Hold the new value mapping to use with VisibleOn
       this._listSchema = {};
       this._getValueFrom = {}; // Hash for getValueFrom
-
       // If the visibleOn already Attached, will no longer do it
       this._visibleonEventAttached = {};
-
       // Wizard View Counters
       this._stepDiv = 0; // Count number of open div for step (wizard view)
       this._currentStep = 1; // Current Step
       this._stepValidated = []; // Hold the field names for each validation step
-
       this._modelBinder = new Modelbinder();
-
       // Setup Keys
       this.options.formSchema.validation = this.options.formSchema.validation || {};
       // Setup Model
@@ -253,7 +120,6 @@ define([
         }, {});
         // console.log('After: this.model.multiFilesDefaultValue', this.model.multiFilesDefaultValue);
       }
-
       // If user pass in formData
       if (!$.isEmptyObject(this.options.formData)) {
         _.each(this.model.attributes, function(element, index) {
@@ -271,13 +137,9 @@ define([
         'collectiondisplayid': '_form_collection'
       };
       // Not render label
-      this.notRenderLabel = [
-        'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox', 'timestamp', 'hidden'
-      ];
+      this.notRenderLabel = ['html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox', 'timestamp', 'hidden'];
       // Not render label for read
-      this.notRenderLabelRead = [
-        'html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox'
-      ];
+      this.notRenderLabelRead = ['html', 'list', 'button', 'submit', 'clear', 'fieldset', 'fieldsetstart', 'fieldsetend', 'step', 'check', 'checkbox'];
       // Set up the input template
       this.inputTemplate = {
         'html': _.template(htmlTemplate),
@@ -321,7 +183,6 @@ define([
         'buttonclipboard': _.template(buttonclipboardTemplate),
         'subform-table': _.template(tableTemplate)
       };
-
       // Init Form Options
       var formOptions = {
         submitbutton: 'Submit',
@@ -354,12 +215,10 @@ define([
      * Render HTML
      **/
     render: function(field, readMode) {
-
       // if (field && field.name) {
       //   console.log(field.name);
       //   console.log('');
       // }
-
       var that = this,
         _html = '',
         _name = [field.name],
@@ -374,7 +233,6 @@ define([
       field.options = field.options || {};
       this.options.formSchema.validation = this.options.formSchema.validation || {};
       this.options.formData = this.options.formData || {};
-
       // Check to see if this is render internal, external and match with the current display mode or not
       // In options keys: internal
       if (!this.options.internal && field.options.internal) {
@@ -382,7 +240,6 @@ define([
       } else if ((_type === 'button' || _type === 'submit') && !field.options.internal && this.options.internal) {
         return '';
       }
-
       // Check for Options.RenderAs
       if (field.options.renderas) {
         switch (_type) {
@@ -393,10 +250,8 @@ define([
               }
             }
             break;
-
           case 'number':
             break;
-
           default:
             throw 'Not Implement Options.RenderAs for "' + _type + '" yet!';
         }
@@ -404,13 +259,10 @@ define([
         // console.log('[*] Options.RenderAs for ' + field.name);
         // console.log(_type);
       }
-
       switch (_type) {
-
         case 'booleaninput':
           this._hasBooleanInput = true;
           break;
-
         case 'radio':
           this._radioFieldName.push(field.name);
           if (!this._hasRadioBtnGroup && field.options.render) {
@@ -435,36 +287,30 @@ define([
             this.sortOrderBy(field);
           }
           break;
-
         case 'multifiles':
           if (!(this.options.internal && typeof field.options.internalcanupdate !== 'undefined' && !field.options.internalcanupdate)) {
-            $('form' + this.el)
-              .attr('enctype', 'multipart/form-data');
+            $('form' + this.el).attr('enctype', 'multipart/form-data');
           }
           this._multiFiles.push(field);
           var _validation_tmp = this.getFormValidationData(field.name + '[]');
           if (typeof this._stepValidated[(this._currentStep) - 2] !== 'undefined' && !$.isEmptyObject(_validation_tmp)) {
             this._stepValidated[(this._currentStep) - 2].push(field.name + '[]');
           }
-
           if (this.options.mode === 'read') {
             _type = 'file';
           }
           break;
-
         case 'filerepository':
           // Need URL Parameter
           if (!field.options.url) {
             throw 'Expected Url parameter in Options Key for "' + field.name + '".';
           }
           break;
-
         case 'image':
           field.attributes.accept = 'image/*';
         case 'file':
           if (!(this.options.internal && typeof field.options.internalcanupdate !== 'undefined' && !field.options.internalcanupdate)) {
-            $('form' + this.el)
-              .attr('enctype', 'multipart/form-data');
+            $('form' + this.el).attr('enctype', 'multipart/form-data');
           }
           var _validation_tmp = this.getFormValidationData(field.name);
           if (_validation_tmp.accept) {
@@ -495,7 +341,6 @@ define([
             }
           }
           break;
-
         case 'userid':
           this._hasUserId = true;
           // Make this compatible with LookUp Key
@@ -516,11 +361,8 @@ define([
           }
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
           break;
-
         case 'fraction':
-
           break;
-
         case 'textbox':
           _type = 'text';
         case 'selectsingle':
@@ -559,12 +401,10 @@ define([
               // Field Name, Key, Value
               this.addDataToElementData(field.name, 'events', field.options.events);
             }
-
             // If there is an Options.OrderBy will need to sort Values
             if (field.options.orderby) {
               this.sortOrderBy(field);
             }
-
             // Set "GetValueFrom"
             if (field.options.getvaluefrom && field.name) {
               if (!this._getValueFrom[field.options.getvaluefrom]) {
@@ -593,7 +433,6 @@ define([
             this.addDataToElementData(field.name, 'value', this.options.formData.fields[field.name]);
           }
           break;
-
         case 'county':
           // Normal Case
           if (typeof countyData === 'string') {
@@ -618,7 +457,6 @@ define([
             field.attributes['data-countyvalue'] = this.options.formData.fields[field.name];
           }
           break;
-
         case 'checkbox':
         case 'check':
           if (field.options.numcolumns) {
@@ -680,46 +518,36 @@ define([
             throw 'In order to use CheckBox, please set Values.';
           }
           break;
-
         case 'password':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
           break;
-
         case 'telephone':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer telephone span12');
           if (this.options.formData.fields && this.options.formData.fields[field.name + '_provider']) {
             field['_providerValue'] = this.options.formData.fields[field.name + '_provider'];
           }
           break;
-
         case 'socialsecurity':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'integer socialsecurity span12');
           break;
-
         case 'textarea':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
           break;
-
         case 'action':
           this._div++;
           return '<div class="form-actions">';
-
         case 'fieldsetstart':
           return '<fieldset><legend>' + field.description + '</legend>';
-
         case 'fieldsetend':
           return '</fieldset>';
-
         case 'hr':
           return '<hr>';
-
         case 'dateinput':
           _type = 'date';
         case 'date':
           // Check for $date
           if (this.options.formData && this.options.formData.fields) {
             if (typeof this.options.formData.fields[field.name] === 'object') {
-
               var _tmpDate = new Date(this.options.formData.fields[field.name].$date);
               var _month = _tmpDate.getMonth() + 1;
               if (_month < 10) {
@@ -731,7 +559,6 @@ define([
                 _date = '0' + _date;
               }
               _date += '/';
-
               this.options.formData.fields[field.name] = _month + _date + _tmpDate.getFullYear();
               if (field.options.render && this.options.mode === 'read') {
                 switch (field.options.render.toLowerCase()) {
@@ -741,13 +568,11 @@ define([
                 }
               }
               field.attributes['value'] = this.options.formData.fields[field.name];
-
             } else if (this.options.mode === 'create' && typeof this.options.formData.fields[field.name] === 'undefined') {
               // Fix auto set date to current day if value is not existed
               field._noDefaultValue = true;
             }
           }
-
           if (field.attributes && !field.attributes.placeholder) {
             field.attributes.placeholder = 'mm/dd/yyyy';
           }
@@ -771,7 +596,6 @@ define([
               _options['nodefaultvalue'] = true;
             }
             field.attributes['data-options'] = JSON.stringify(_.extend(_options, _validation_tmp));
-
             // For Wizard View
             if (typeof this._stepValidated[(this._currentStep) - 2] !== 'undefined' && !$.isEmptyObject(_validation_tmp)) {
               this._stepValidated[(this._currentStep) - 2].push(field.name + '_birth[month]');
@@ -800,7 +624,6 @@ define([
             }
           }
           break;
-
         case 'email':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'tolowercase span12');
           if (typeof field.options.autocomplete !== 'undefined' && field.options.autocomplete) {
@@ -810,39 +633,32 @@ define([
             field.attributes['autocomplete'] = 'off';
             field.attributes['style'] = 'width:45%;';
             field.attributes['class'] = 'not_sending emailpicker_server tolowercase';
-            field.attributes['data-source'] = emailData.replace(/\n/g, '')
-              .replace(/'/g, "&#39");
+            field.attributes['data-source'] = emailData.replace(/\n/g, '').replace(/'/g, "&#39");
             if (typeof field.options['default'] !== 'undefined') {
               field.attributes['data-value'] = field.options['default'];
             }
-
             _name.push(field.name + '_username');
             _name.push(field.name + '_server');
           }
           break;
-
         case 'address':
           delete field.attributes['class'];
           delete field.attributes['placeholder'];
-
           _name = [];
           _name.push(field.name + '_address_street');
           _name.push(field.name + '_address_city');
           _name.push(field.name + '_address_state');
           _name.push(field.name + '_address_zip');
           _name.push(field.name + '_address_country');
-
           if (field.options.showstreetnumber) {
             _name.push(field.name + '_address_street_number');
           }
           if (field.options.showunitnumber) {
             _name.push(field.name + '_address_unit_number');
           }
-
           // Format Data
           if (typeof readMode !== 'undefined' && typeof this.options.formData !== 'undefined') {
             this.options.formData.fields[field.name + '_address_country'] = Vm.getCountry(this.options.formData.fields[field.name + '_address_country']);
-
             if (this.options.formData.fields[field.name + '_address_street'] && this.options.formData.fields[field.name + '_address_street'].charAt(this.options.formData.fields[field.name + '_address_street'].length - 1) !== '.') {
               this.options.formData.fields[field.name + '_address_street'] += '.';
             }
@@ -857,7 +673,6 @@ define([
             this.model.set(field.name + '_address_state', 'NV'); // Default to NV for create mode
             this.model.set(field.name + '_address_country', 'US'); // Default to USA for create mode
           }
-
           // If there is "Options.ZipCodeFormat" option
           if (field.options.zipcodeformat) {
             var _zipcodeformat = field.options.zipcodeformat.toLowerCase();
@@ -867,9 +682,7 @@ define([
                 break;
             }
           }
-
           break;
-
         case 'number':
           var _num_class;
           if (!field.options.numbertype || field.options.decimals) {
@@ -917,7 +730,6 @@ define([
             }
           }
           break;
-
         case 'fullname':
           delete field.attributes['class'];
           delete field.attributes['placeholder'];
@@ -927,7 +739,6 @@ define([
             _name.push(field.name + '_fullname_middle_name');
           }
           _name.push(field.name + '_fullname_last_name');
-
           if (field.options.url) {
             this._ajaxDataCall.push(field);
           }
@@ -942,12 +753,10 @@ define([
             });
           }
           break;
-
         case 'clear':
           _type = 'button';
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-clear-form');
           break;
-
         case 'submit':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
           _type = 'button';
@@ -961,16 +770,12 @@ define([
           if (field.options.appendid && this.options.formData._id && this.options.formData._id['$oid']) {
             field.url = ((field.url) ? field.url : '') + ((field.url.indexOf('?') > -1) ? '&id=' : '/') + this.options.formData._id['$oid'];
           }
-          $(this.el)
-            .attr('action', field.url);
-
+          $(this.el).attr('action', field.url);
           // Check for Ajax Submit
           if (typeof field.options.ajaxsubmit !== 'undefined') {
             this._ajaxSubmit = field.options.ajaxsubmit;
           }
-
           break;
-
         case 'buttonclipboard':
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
           this._buttonClipboards.push({
@@ -978,7 +783,6 @@ define([
             values: field.values
           });
           break;
-
         case 'buttondecision':
           if (!readMode) {
             field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn btn-primary');
@@ -986,14 +790,11 @@ define([
             this._buttonDecision.push(field);
           }
           break;
-
         case 'button':
-
           // Before Render will check for Options.ShowOnUser First
           if (!Utils.shouldRenderShowOnUser(field)) {
             return '';
           }
-
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'btn');
           // AppendId
           if (this.options && this.options.formData && this.options.formData._id && this.options.formData._id['$oid']) {
@@ -1007,10 +808,8 @@ define([
           if (field.url) {
             field.url = Utils.changeURLGetTemplateString(field.url);
           }
-
           if (this.options.internal && this.options.mode === 'read' && field.name === 'BtnMarkAsUnacceptable' && $.fn.remodal) {
             // Need to find the Fields Name "UnacceptableReason"
-
             // console.log(this.options);
             var _unacceptableReasonSchema = _.find(this.options.formSchema.fields, function(val) {
               if (!val || !val.name || !val.type) {
@@ -1022,14 +821,11 @@ define([
             });
             if (_unacceptableReasonSchema) {
               // If there are formData
-
               var _currentReasonVal = (this.options.formData && this.options.formData.fields && this.options.formData.fields['UnacceptableReason']) ? this.options.formData.fields['UnacceptableReason'] : null;
-
               // If there are ' in the value, it will need to escape
               if (_currentReasonVal && _currentReasonVal.replace) {
                 _currentReasonVal = _currentReasonVal.replace(/'/ig, '\\\'');
               }
-
               // Adding the alert to ask for remodal
               var currentTimestamp = new Date().getTime();
               field.options['data-remodal-target'] = 'btnmarkasunacceptable_' + currentTimestamp;
@@ -1074,14 +870,12 @@ define([
               };
             field.attributes['data-popover-confirm'] = JSON.stringify(_popoverOptions);
           } else if (field.options.subbuttons) {
-
             if (!field.name) {
               field.name = 'subbuttons_' + field.description.replace(/ /g, '').toLowerCase();
               if (!field.attributes.id) {
                 field.attributes.id = field.name;
               }
             }
-
             // Since this will have the SubButtons in the options, will need to build this UI
             require(['views/subform-layouts/subbuttons'], function(SubButtonsView) {
               var _subBtnId = (field.attributes.id) ? field.attributes.id : field.name;
@@ -1097,7 +891,6 @@ define([
             });
           } else if (field.options.subform) {
             // Working on SubForm inside Button (Simple Form)
-
             // If this is read mode, we need to have the current form ID as well.
             if (this.options.mode !== 'read') {
               // Only have this option in read mode!
@@ -1207,6 +1000,7 @@ define([
                   }
                   // Validate Pass
                   $('body').append('<form id="' + currentFormId + '" action="' + currentAction + '" method="POST">' + _hidden + '</form>');
+                  // console.log('- $currentBtn:', $currentBtn);
                   $currentBtn.removeClass('shown').popover('destroy');
                   // Show Loader UI
                   $currentBtn.popover({
@@ -1226,16 +1020,13 @@ define([
             });
           }
           break;
-
         case 'schooles':
           _type = 'text';
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
           field.attributes['data-provide'] = 'typeahead';
           field.attributes['autocomplete'] = 'off';
-          field.attributes['data-source'] = schoolesData.replace(/\n/g, '')
-            .replace(/'/g, "&#39");
+          field.attributes['data-source'] = schoolesData.replace(/\n/g, '').replace(/'/g, "&#39");
           break;
-
           // Step Field Type only render for wizard view
         case 'step':
           if ('view' in this.options.formSchema && this.options.formSchema.view === 'wizard') {
@@ -1254,28 +1045,22 @@ define([
             return '';
           }
           break;
-
         case 'useraccount':
           field['data_value'] = '';
           if (field.options.getvaluefromid) {
-            field['data_value'] = $('#' + field.options.getvaluefromid)
-              .text();
+            field['data_value'] = $('#' + field.options.getvaluefromid).text();
           }
           break;
-
           // Sub Form, will need to render new view to handle the event
         case 'list':
           field.attributes.id = this.prefixedName['list'] + ((typeof field.attributes.id !== 'undefined') ? field.attributes.id : field.name);
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'subform-container');
           // Attached Event
-
           var _validation = (typeof this.options.formSchema.validation[field.name] !== 'undefined') ? this.options.formSchema.validation[field.name] : {};
           this.attachSubFormEvent(field.attributes.id, field, _validation);
-
           // Save the Schema to be used later.
           this._listSchema[field.name] = field;
           break;
-
         case 'hidden':
           var _hiddenAllowMode = ['update', 'create'];
           // console.log('===');
@@ -1289,32 +1074,24 @@ define([
           }
           break
       }
-
       // Check to see if this is button or submit
       if (_type === 'button' && field.options.visibleon) {
         var _btnVisibleOnChanged = function(e) {
-          if (e.type === 'change' && field.options.visibleon.values.indexOf($(this)
-              .val()) > -1) {
-            $('#' + field.name, that.el)
-              .show('slow');
+          if (e.type === 'change' && field.options.visibleon.values.indexOf($(this).val()) > -1) {
+            $('#' + field.name, that.el).show('slow');
           } else {
-            $('#' + field.name, that.el)
-              .hide('slow');
+            $('#' + field.name, that.el).hide('slow');
           }
         };
         // Listen to changed event and update the display
-        $(this.el)
-          .on('change', ':input[name="' + field.options.visibleon.name + '"]', _btnVisibleOnChanged)
-          .on('removeVisibleOn', ':input[name="' + field.options.visibleon.name + '"]', _btnVisibleOnChanged);
+        $(this.el).on('change', ':input[name="' + field.options.visibleon.name + '"]', _btnVisibleOnChanged).on('removeVisibleOn', ':input[name="' + field.options.visibleon.name + '"]', _btnVisibleOnChanged);
       }
-
       // Check to see if step validation has been init (wizard view)
       if (typeof this._stepValidated[(this._currentStep) - 2] !== 'undefined' && !(_type === 'step' || _type === 'list') && Utils.checkRequireFields(field, this.options.formSchema.validation)) {
         _.each(_name, function(element) {
           that._stepValidated[(that._currentStep) - 2].push(element);
         });
       }
-
       //=============== READ MODE ===============//
       // If this is read mode will need to render read template
       if (typeof readMode !== 'undefined' && readMode && typeof _name[0] !== 'undefined' && !(_type === 'button' || _type === 'buttonclipboard')) {
@@ -1378,7 +1155,6 @@ define([
               _keys = {},
               _cnt = 0,
               _values = new Array(this.options.formData.fields[field.name].length || _.size(this.options.formData.fields[field.name]));
-
             _.each(field.fields, function(element, index) {
               element.options = element.options || {};
               // Make sure about "Options"."TableTitle"
@@ -1430,12 +1206,10 @@ define([
                     // Convert to Human Readable Time
                     _values[index].push(Utils.getHumanTime(modelData[element.name]));
                     break;
-
                   case 'useraccount':
                     _labels[_labels.length - 1] = 'User';
                     _values[index].push(modelData[element.name]);
                     break;
-
                   case 'fullname':
                     _fullName = modelData[element.name + '_fullname_first_name'];
                     if (typeof modelData[element.name + '_fullname_middle_name'] !== 'undefined') {
@@ -1444,11 +1218,9 @@ define([
                     _fullName += ' ' + modelData[element.name + '_fullname_last_name'];
                     _values[index].push(_fullName);
                     break;
-
                   case 'booleaninput':
                     _values[index].push((modelData[element.name] ? 'Yes' : 'No'));
                     break;
-
                   case 'date':
                     var _tempDate = modelData[element.name];
                     if (_tempDate && _tempDate.$date) {
@@ -1460,7 +1232,6 @@ define([
                     }
                     _values[index].push(_tempDate);
                     break;
-
                   case 'number':
                     if (element.options && element.options.decimals && modelData[element.name]) {
                       modelData[element.name] = (modelData[element.name] / Math.pow(10, element.options.decimals)).toFixed(element.options.decimals);
@@ -1601,7 +1372,6 @@ define([
         });
       } else {
         //*** Create and Update Mode ***//
-
         // Check if this is internal and has InternalCanUpdate Options
         if (this.options.internal && typeof field.options.internalcanupdate !== 'undefined' && !field.options.internalcanupdate) {
           _type = 'hidden';
@@ -1611,12 +1381,10 @@ define([
             _attr += ' ' + key + '=\'' + value + '\'';
           });
         }
-
         // Convert to file type
         if (_type === 'image') {
           _type = 'file';
         }
-
         // Save HTML Mark UP Here!
         if (DEBUG) {
           console.log('');
@@ -1634,7 +1402,6 @@ define([
           _renderMode: this.options.mode
         }, field)) : '';
       }
-
       // Checking for the VisibleOn options, if it is existed will need to check for the depend value
       if (field.options.visibleon) {
         if (!field.options.visibleon.name || !$.isArray(field.options.visibleon.values)) {
@@ -1642,20 +1409,16 @@ define([
         }
         this._visibleOn.push(field);
       }
-
       // Just Show Warning
       if (field && field.type && !this.inputTemplate[_type] && console && console.warn) {
         console.warn('[x] Template for "' + field.type + '" does not existed.');
       }
-
       // Return HTML Here.
-
       // Check to see if we allow to render update on read mode.
       if (field.options.updateonreadmode) {
         // Will add this class and attach event to the form, looking for .update-on-read-mode
         _html = '<div class="update-on-read-mode" data-field-name="' + field.name + '">' + _html + this.generateMarkUpForUpdateOnReadMode(field) + '</div>';
       }
-
       return _html;
     },
     /**
@@ -1693,21 +1456,17 @@ define([
       if (formOptions.submitbutton || formOptions.resetbutton) {
         _html += '<div class="form-actions">';
       }
-
       if (formOptions.submitbutton && !formOptions.subForm) {
         _html += '<button type="submit" class="btn btn-primary btn-submit">' + formOptions.submitbutton + '</button>';
       } else {
         _html += '<button type="button" class="btn btn-primary btn-submit">' + formOptions.submitbutton + '</button>';
       }
-
       if (formOptions.resetbutton) {
         _html += '<button type="button" class="btn btn-cancel">' + formOptions.resetbutton + '</button>';
       }
-
       if (_html.length > 0) {
         _html += '</div>';
       }
-
       return _html;
     },
     /**
@@ -1717,19 +1476,15 @@ define([
       var DEBUG = false;
       var DEBUG_NAME = 'BillAnotherDept';
       var locationCnt = 0;
-
       var _type = value.type.toLowerCase();
-
       if (DEBUG && value && value.name) {
         console.log('checkShowOnMode: ', value.name);
         console.log('');
       }
-
       // First Check to see if rendering for internal or external
       if (value.options.internal != undefined && (value.options.internal !== this.options.internal)) {
         return false;
       }
-
       // If this is internal fields, we need to push to _internalFields array
       if (value.options.internal === true && value.name && _type !== 'buttonclipboard') {
         var _internalName;
@@ -1738,27 +1493,22 @@ define([
           case 'checkbox':
             _internalName = value.name + '[]';
             break;
-
           default:
             _internalName = value.name;
         }
         this._internalFields.push(_internalName);
       }
-
       if (DEBUG && value.name === DEBUG_NAME) {
         locationCnt++;
         console.log('Location: ' + locationCnt);
       }
-
       if (this.options.hideButtons && (_type === 'button' || _type === 'submit' || _type === 'reset' || _type === 'action')) {
         return false;
       }
-
       if (DEBUG && value.name === DEBUG_NAME) {
         locationCnt++;
         console.log('Location: ' + locationCnt);
       }
-
       // If this is type VisibleOn and in Read Mode will not render if does not have data
       if (this.options.mode === 'read') {
         if (!$.isEmptyObject(value.options.visibleon)) {
@@ -1771,15 +1521,12 @@ define([
           }
         }
       }
-
       if (DEBUG && value.name === DEBUG_NAME) {
         locationCnt++;
         console.log('Location: ' + locationCnt);
       }
-
       readMode = readMode || false;
       status = status || false;
-
       if (readMode !== 'read' && value.type.toLowerCase() === 'buttonclipboard') {
         if (DEBUG && value.name === DEBUG_NAME) {
           locationCnt++;
@@ -1815,7 +1562,6 @@ define([
           return false;
         }
       }
-
       return true;
     },
     /**
@@ -1834,23 +1580,19 @@ define([
           options: this.options
         },
         _listView = _.extend({}, Backbone.Events);
-      $(this.el)
-        .on('click', '#' + id + '_add_btn', _options, this.displaySubForm)
+      $(this.el).on('click', '#' + id + '_add_btn', _options, this.displaySubForm)
         // User click cancel button
         .on(id + '.close', this.closeSubForm)
         // User added a model
         .on(id + '.add', _.extend({
           formId: id
         }, this), this.addSubformData);
-
       // If there are subform data
       if (this.options.mode === 'update' && typeof this.options.formData.fields[field.name] !== 'undefined' && this.options.formData.fields[field.name].length > 0) {
         _listView.on(_options.formId + '.listViewCreated', function(list) {
-          $(that.el)
-            .trigger(id + '.add', [list, that.options.formData.fields[field.name]]);
+          $(that.el).trigger(id + '.add', [list, that.options.formData.fields[field.name]]);
           _listView.off();
         });
-
       } else {
         _listView.on(_options.formId + '.listViewCreated', function(list) {
           var $subFormList = $('#' + _options.formId, that.el),
@@ -1886,7 +1628,6 @@ define([
         console.log(listView);
         console.log(read);
       }
-
       model = model || {};
       hidden = hidden || false;
       listView = listView || false;
@@ -1898,10 +1639,7 @@ define([
         _data.model = model;
         _id = 'SubFormViewEdit' + e.data.formId;
       }
-      $(this)
-        .parents('div.actions')
-        .fadeOut();
-
+      $(this).parents('div.actions').fadeOut();
       require(['views/fields/list'], function(SubFormView) {
         var subFormView = Vm.create(this, _id, SubFormView, _data),
           $subFormView = $(subFormView.el);
@@ -1936,8 +1674,7 @@ define([
       list.$el.fadeOut();
       // Close mask bg
       $.mask.close();
-      $('.actions', list.$el.parent('.subform-container'))
-        .fadeIn('slow');
+      $('.actions', list.$el.parent('.subform-container')).fadeIn('slow');
       Vm.remove('SubFormView' + list.options.formId, true);
       Vm.remove('SubFormViewEdit' + list.options.formId, true);
     },
@@ -1954,21 +1691,18 @@ define([
       models = models || false;
       var _view = (list.options.formSchema.view === '') ? 'table' : list.options.formSchema.view,
         _key = list.options.formSchema.name;
-
       var currentModel = e.data.model.get(_key);
-
       if (DEBUG) {
+        console.log('- addSubformData:currentModel');
         console.log(currentModel);
         console.log(currentModel.toJSON());
       }
-
       if (typeof currentModel !== 'object') {
         // console.log(arguments);
         if (e.data.model._listFieldType[_key]) {
           e.data.model.set(_key, e.data.model._listFieldType[_key]);
         }
       }
-
       if (reset) {
         currentModel.reset();
       }
@@ -1979,8 +1713,13 @@ define([
           _element.set(element);
           currentModel.add(_element);
         });
+        if (DEBUG) {
+          console.log('- addSubformData:_model');
+          console.log(_model.toJSON())
+        }
       } else {
         if (DEBUG) {
+          console.log('- addSubformData:list.model.toJSON()');
           console.log(list.model.toJSON());
         }
         currentModel.add(list.model);
@@ -2000,10 +1739,8 @@ define([
           },
           collectionView = Vm.create(this, 'CollectionView' + e.data.formId, CollectionView, _data);
         collectionView.render();
-
         // Closed Subform
         e.data.closeSubForm(e, list);
-
         // Render Table View for Sub Form
         if (list.options.formSchema.options && list.options.formSchema.options.permission) {
           var _currentUserId = Utils.getUserIdFormHtml().replace('\\', '\\\\'),
@@ -2054,14 +1791,12 @@ define([
           }
         }
       }
-
       // Overwrite the parentcontainer key.
       if (parentContainer && field.options && field.options.visibleon && field.options.visibleon.parentcontainer) {
         if (field.options.visibleon.parentcontainer !== parentContainer) {
           parentContainer = field.options.visibleon.parentcontainer;
         }
       }
-
       switch (_typeLowerCase) {
         case 'address':
           delete this.model.validation[field.name + '_address_street'];
@@ -2072,15 +1807,12 @@ define([
           delete this.model.validation[field.name + '_address_street_number'];
           delete this.model.validation[field.name + '_address_unit_number'];
           break;
-
         case 'multifiles':
           delete this.model.validation[field.name + '[]'];
           break;
-
         default:
           delete this.model.validation[field.name];
       }
-
       // Attched Event to these input.
       var DEBUG = false;
       var _vsbName = field.options.visibleon.name,
@@ -2096,7 +1828,6 @@ define([
         }
         $(this.el).on('change', ':input[name="' + _vsbName + '"]', function(e) {
           var DEBUG_VISIBLE_ON_ONLY = false;
-
           // console.log('*** Input [' + field.options.visibleon.name + '] changed ***');
           var $currentTarget = $(e.currentTarget),
             $container = (parentContainer) ? $currentTarget.parents(parentContainer) : $currentTarget,
@@ -2105,7 +1836,6 @@ define([
             _visibleVal = $currentTarget.val(),
             _checkBindingArray = ['', '[]'],
             debug = false;
-
           if (!$container.length && parentContainer === field.options.visibleon.parentcontainer) {
             $container = $currentTarget.parents('.form-render').find(parentContainer);
           }
@@ -2124,14 +1854,12 @@ define([
             $container = $container.closest('.checkbox-container');
             if ($currentTarget.is(':checkbox')) {
               _visibleVal = '';
-              $container.find(':checkbox:checked')
-                .each(function() {
-                  var _checkedVal = $(this)
-                    .val();
-                  if (_.indexOf(field.options.visibleon.values, _checkedVal) > -1) {
-                    _visibleVal = _checkedVal;
-                  }
-                });
+              $container.find(':checkbox:checked').each(function() {
+                var _checkedVal = $(this).val();
+                if (_.indexOf(field.options.visibleon.values, _checkedVal) > -1) {
+                  _visibleVal = _checkedVal;
+                }
+              });
             }
           } else if ($currentTarget.is(':radio') && !parentContainer) {
             // console.log('[x] Radio Found in VisibleOn.');
@@ -2139,7 +1867,6 @@ define([
             // console.log($currentTarget);
             $container = $currentTarget.closest('.radio-container');
           }
-
           // Added: Steps to Validate Logic
           var isValidSteps = true;
           if (field && field.options && field.options.visibleon && field.options.visibleon.steps) {
@@ -2180,7 +1907,6 @@ define([
               }
             };
           }
-
           if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1 && isValidSteps) {
             // console.log('[x] Match Value with VisibleOn, will render [' + field.name + '].');
             // console.log($currentTarget);
@@ -2191,67 +1917,49 @@ define([
               // if (debug) {
               //   console.log($container);
               // }
-              $containerOptions = $container.next('.options-visible-on-' + field.name)
-                .fadeIn('slow', function() {
-                  // console.log('[x] Render VisibleOn for "' + field.name + '"');
-                  var $_element = $(this)
-                    .addClass('visible-parent-' + _visibleOnName)
-                    .attr('data-parent', _visibleOnName);
-
-                  // If this is select might have select2
-                  Utils.setupSelect2($_element);
-
-                  // Remove the class that not belong to this visibleOn
-                  var $parent = $('.options-visible-on-' + _visibleOnName, that.el);
-
-                  // Caution: this can cause the previous markup to disappear.
-                  // Fix in Release 0.1.0
-                  $('[class*="visible-parent-' + _visibleOnName + '"]', that.el)
-                    .not('.visible-parent-' + _visibleOnName + ',.options-visible-on-' + _visibleOnName + ',.visible-parent-' + $parent.attr('data-parent'))
-                    .remove();
-
-                  if (_typeLowerCase === 'multifiles') {
-                    $('#' + field.name + '_multifiles_wrapper', this)
-                      .trigger('visibleOnRenderComplete');
-                  } else {
-                    $(':input[name="' + field.name + '"]', this)
-                      .trigger('visibleOnRenderComplete');
-                  }
-
-                  // Need to rebind the ModelBinder
-                  if (!that.model.bindings[field.name] && _.indexOf(that.model.notBinding, field.name) < 0) {
-                    var _bindingName = field.name;
-
-                    _.each(_checkBindingArray, function(_suffix) {
-                      if (_bindingName !== field.name) {
-                        return;
-                      }
-                      if ($(':input[name="' + _bindingName + _suffix + '"]').length) {
-                        _bindingName = field.name + _suffix;
-                      }
-                    });
-
-                    if ($(':input[name="' + _bindingName + '"]').length && _typeLowerCase !== 'checkbox') {
-                      // console.log('[x] Binding Values');
-                      // console.log(that.model.bindings);
-                      that.model.bindModelBinder(_bindingName, field.type);
-                      // console.log('*** Before Binding for ' + _bindingName + ', Type: ' + field.type + ' Lowercase: ' + _typeLowerCase + ' ***');
-                      that._modelBinder.bind(that.model, that.el, that.model.bindings);
-                      // console.log(that.model.bindings);
-                      // console.log('***');
+              $containerOptions = $container.next('.options-visible-on-' + field.name).fadeIn('slow', function() {
+                // console.log('[x] Render VisibleOn for "' + field.name + '"');
+                var $_element = $(this).addClass('visible-parent-' + _visibleOnName).attr('data-parent', _visibleOnName);
+                // If this is select might have select2
+                Utils.setupSelect2($_element);
+                // Remove the class that not belong to this visibleOn
+                var $parent = $('.options-visible-on-' + _visibleOnName, that.el);
+                // Caution: this can cause the previous markup to disappear.
+                // Fix in Release 0.1.0
+                $('[class*="visible-parent-' + _visibleOnName + '"]', that.el).not('.visible-parent-' + _visibleOnName + ',.options-visible-on-' + _visibleOnName + ',.visible-parent-' + $parent.attr('data-parent')).remove();
+                if (_typeLowerCase === 'multifiles') {
+                  $('#' + field.name + '_multifiles_wrapper', this).trigger('visibleOnRenderComplete');
+                } else {
+                  $(':input[name="' + field.name + '"]', this).trigger('visibleOnRenderComplete');
+                }
+                // Need to rebind the ModelBinder
+                if (!that.model.bindings[field.name] && _.indexOf(that.model.notBinding, field.name) < 0) {
+                  var _bindingName = field.name;
+                  _.each(_checkBindingArray, function(_suffix) {
+                    if (_bindingName !== field.name) {
+                      return;
                     }
+                    if ($(':input[name="' + _bindingName + _suffix + '"]').length) {
+                      _bindingName = field.name + _suffix;
+                    }
+                  });
+                  if ($(':input[name="' + _bindingName + '"]').length && _typeLowerCase !== 'checkbox') {
+                    // console.log('[x] Binding Values');
+                    // console.log(that.model.bindings);
+                    that.model.bindModelBinder(_bindingName, field.type);
+                    // console.log('*** Before Binding for ' + _bindingName + ', Type: ' + field.type + ' Lowercase: ' + _typeLowerCase + ' ***');
+                    that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                    // console.log(that.model.bindings);
+                    // console.log('***');
                   }
-                });
-
+                }
+              });
               // Some browser that still not support the placeholder
               $nextContainer = $container.next('div');
               if ($nextContainer.length === 0) {
                 $nextContainer = $container.parent();
               }
-              $nextContainer.find(':input')
-                .not('input[type="hidden"]')
-                .placeholder();
-
+              $nextContainer.find(':input').not('input[type="hidden"]').placeholder();
               // Adding Validation Scheme, if has one
               if (_typeLowerCase === 'address') {
                 var _address_name = field.name + '_address_street';
@@ -2259,47 +1967,39 @@ define([
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
                 }
                 _addressArray.push(_address_name);
-
                 _address_name = field.name + '_address_city';
                 if (that.options.formSchema.validation[_address_name]) {
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
                 }
                 _addressArray.push(_address_name);
-
                 _address_name = field.name + '_address_state';
                 if (that.options.formSchema.validation[_address_name]) {
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
                 }
                 _addressArray.push(_address_name);
-
                 _address_name = field.name + '_address_zip';
                 if (that.options.formSchema.validation[_address_name]) {
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
                 }
                 _addressArray.push(_address_name);
-
                 _address_name = field.name + '_address_country';
                 if (that.options.formSchema.validation[_address_name]) {
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
                 }
                 _addressArray.push(_address_name);
-
                 _address_name = field.name + '_address_street_number';
                 if (that.options.formSchema.validation[_address_name]) {
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
                 }
                 _addressArray.push(_address_name);
-
                 _address_name = field.name + '_address_unit_number';
                 if (that.options.formSchema.validation[_address_name]) {
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
                 }
                 _addressArray.push(_address_name);
-
                 if (field.options.hidecountry) {
                   that.model.set(_address_name, 'US');
                 }
-
               } else if (that.options.formSchema.validation[field.name] && _typeLowerCase !== 'html') {
                 that.model.validation[field.name] = that.options.formSchema.validation[field.name];
                 _addressArray.push(field.name);
@@ -2307,7 +2007,6 @@ define([
                 that.model.validation[field.name + '[]'] = that.options.formSchema.validation[field.name + '[]'];
                 _addressArray.push(field.name + '[]');
               }
-
               if (that.options.mode === 'update' && _addressArray.length > 0) {
                 _.each(_addressArray, function(element) {
                   if (that.options.formData.fields[element]) {
@@ -2369,7 +2068,6 @@ define([
                     }
                 }
               }
-
               // Check to see if this has UserId Field Type
               if (_typeLowerCase === 'userid') {
                 Utils.setupUserIdAjaxCall($('form.form-render'));
@@ -2378,10 +2076,8 @@ define([
                 }
               }
               Utils.setupUrlAjaxCall($('form.form-render'), $('#' + field.name));
-
               // If there are DatePicker
               // var DEBUG = true;
-
               if (that._hasDate) {
                 if (DEBUG) {
                   console.log('[*] baseField.setupVisibleOn - _hasDate');
@@ -2412,7 +2108,6 @@ define([
                   }
                 }
               }
-
               // If this is Radio, will need to do magic work by set the value that match with Model
               // var modelVal = that.model.get(field.name);
               // if (_typeLowerCase === 'radio' && that.options.mode === 'update' && modelVal) {
@@ -2421,20 +2116,15 @@ define([
               //   var currentRadios = $(':input[name="' + field.name + '"]', $containerOptions);
               //   console.log(currentRadios);
               // }
-
             }
           } else {
             // Trigger Event to let other objects know that this fields will go out of markup
-
             // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '"');
-
             $('#' + field.name, that.el).trigger('removeVisibleOn');
-
             // Remove this out of the markup
             $('.options-visible-on-' + field.name, that.el).remove();
             // Need to remove the "visible-parent-{name}"
             $('.visible-parent-' + field.name, that.el).remove();
-
             if (_typeLowerCase === 'date' && field.options && field.options.render) {
               var _dateRenderNotVisibleOn = field.options.render;
               try {
@@ -2531,13 +2221,10 @@ define([
                 delete that.model.validation[field.name + '[]'];
               }
               // Need to unbind the ModelBinder
-
               var _bindingName = field.name;
-
               _.each(_checkBindingArray, function(_suffix) {
                 if (that.model.bindings[_bindingName + _suffix]) {
                   that.model.unbindModelBinder(_bindingName + _suffix, field.type);
-
                   var _vsNotGood = true;
                   while (_vsNotGood) {
                     try {
@@ -2567,7 +2254,6 @@ define([
                       }
                     }
                   }
-
                   // For Checkbox, this caused the value to be set to empty string.
                   if (!$currentTarget.is(':checkbox')) {
                     var _currentTargetName = $currentTarget.attr('name');
@@ -2585,12 +2271,10 @@ define([
                   }
                 }
               });
-
               if ($currentTarget.is(':radio')) {
                 $currentTarget.prop('checked', true);
               }
             }
-
             // Check for Validation
             if (DEBUG_VISIBLE_ON_ONLY) {
               console.log('[*] Check for Validation');
@@ -2609,33 +2293,27 @@ define([
       }
       var that = this,
         _html = '';
-
       _html += '<div class="copy-values-from ' + field.options.copyvaluesfrom.name + '">' + this.inputTemplate['buttongroup']({
         description: field.options.copyvaluesfrom.description
       }) + '</div>';
-
-      $(this.el)
-        .on('click', '.copy-values-from.' + field.options.copyvaluesfrom.name + ' .btn-group button', function(e) {
-          var $currentTarget = $(e.currentTarget),
-            _fields, _currentFields, _values = [];
-          if ($currentTarget.hasClass('btn-yes')) {
-            _fields = Utils.getSpecialFieldsName(field.options.copyvaluesfrom.name, field.type);
-            _.each(_fields, function(element) {
-              _values.push($(':input[name="' + element + '"]', that.el)
-                .val());
-            });
-            _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
-            Utils.setFieldsValues(that.el, that.model, _currentFields, _values);
-          } else {
-            // If user click "No", will do nothing
-            // _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
-            // Utils.setFieldsValues(that.el, that.model, _currentFields);
-          }
-        });
-
+      $(this.el).on('click', '.copy-values-from.' + field.options.copyvaluesfrom.name + ' .btn-group button', function(e) {
+        var $currentTarget = $(e.currentTarget),
+          _fields, _currentFields, _values = [];
+        if ($currentTarget.hasClass('btn-yes')) {
+          _fields = Utils.getSpecialFieldsName(field.options.copyvaluesfrom.name, field.type);
+          _.each(_fields, function(element) {
+            _values.push($(':input[name="' + element + '"]', that.el).val());
+          });
+          _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
+          Utils.setFieldsValues(that.el, that.model, _currentFields, _values);
+        } else {
+          // If user click "No", will do nothing
+          // _currentFields = Utils.getSpecialFieldsName(field.name, field.type);
+          // Utils.setFieldsValues(that.el, that.model, _currentFields);
+        }
+      });
       return _html;
     },
-
     /**
      * Function to take care Select and Checkbox order by
      * @param  object field
@@ -2649,7 +2327,6 @@ define([
       }
       _orderBy = _orderBy.toLowerCase();
       switch (_orderBy) {
-
         // Always alphabetical
         default: _func = function(a, b) {
           return a.localeCompare(b);
@@ -2659,7 +2336,6 @@ define([
         field.values.sort(_func);
       }
     },
-
     /**
      * Append Data to _elementData
      * @param string fieldName
@@ -2672,7 +2348,6 @@ define([
       }
       this._elementData[fieldName][dataKey] = dataValue;
     },
-
     /**
      * Generate HTML Mark Up for Update on Read Mode
      * @param  object field
@@ -2689,7 +2364,6 @@ define([
         _type = field.type.trim().toLowerCase(),
         _data = this.options.formData.fields[field.name],
         _html, _typeHtml;
-
       if (DEBUG) {
         console.debug('[*] UpdateOnReadMode');
         console.debug('     Name: ' + field.name);
@@ -2699,7 +2373,6 @@ define([
       switch (_type) {
         case 'file':
           throw 'Not yet support!';
-
         default:
           _typeHtml = 'text';
       }
@@ -2710,19 +2383,16 @@ define([
             data: _data
           }, field));
           break;
-
         case 'textarea':
           _html = UPDATE_ON_READ_TEMPLATE['default-input-textarea'](_.extend({
             data: _data
           }, field));
           break;
-
         case 'date':
           _html = UPDATE_ON_READ_TEMPLATE['default-input-date'](_.extend({
             data: _data
           }, field));
           break;
-
         default:
           _html = UPDATE_ON_READ_TEMPLATE['default-input'](_.extend({
             inputType: _typeHtml,
