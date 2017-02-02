@@ -1,1 +1,0 @@
-define([],function(){var e='<button type="button" id="<%= (typeof attributes.id !== \'undefined\') ? attributes.id: name %>"<%= _attr %>>Copy to Clipboard</button>';return e});

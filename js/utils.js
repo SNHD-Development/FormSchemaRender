@@ -1514,7 +1514,7 @@ define([
                 placement: 'top',
                 trigger: 'manual',
                 title: '<i class="icon-edit"></i> Error',
-                content: 'Please correct the form'
+                content: 'Please complete the required fields'
               };
               $currentTarget.attr('disabled', true)
                 .popover(_opt)

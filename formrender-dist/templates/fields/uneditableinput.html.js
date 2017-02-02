@@ -1,1 +1,0 @@
-define([],function(){var e='<span class="input-xlarge uneditable-input<%= css_class %>" id="<%= id %>"><%= value %></span>';return e});

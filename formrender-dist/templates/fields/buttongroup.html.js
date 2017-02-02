@@ -1,1 +1,0 @@
-define([],function(){var e='<label><%= description %></label><div class="btn-group" data-toggle="buttons-radio"><button type="button" class="btn btn-primary btn-yes">Yes</button><button type="button" class="btn btn-primary btn-no">No</button></div>';return e});

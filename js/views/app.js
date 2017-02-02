@@ -516,7 +516,7 @@ define([
             placement: 'top',
             trigger: 'manual',
             title: '<i class="icon-edit"></i> Validation Error',
-            content: 'Please correct the form'
+            content: 'Please complete the required fields'
           };
           $submitBtn.attr('disabled', true)
             .popover(_opt)

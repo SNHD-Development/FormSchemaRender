@@ -282,7 +282,7 @@ define([
             placement: 'top',
             trigger: 'manual',
             title: '<i class="icon-edit"></i> Validation Error',
-            content: 'Please correct the form'
+            content: 'Please complete the required fields'
           };
           if (this.options.lang === 'sp') {
             _opt.title = '<i class="icon-edit"></i> Error de validaci&oacute;n';
