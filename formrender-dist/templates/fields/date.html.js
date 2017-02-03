@@ -1,1 +1,1 @@
-define([],function(){var e='<input id="<%= (typeof attributes.id !== \'undefined\') ? attributes.id: name %>" name="<%= name %>" type="text"<%= _attr %>/>';return e});
+define([],function(){var t='<input id="<%= (typeof attributes.id !== \'undefined\') ? attributes.id: name %>" name="<%= name %>" type="text"<%= _attr %>/>';return t});

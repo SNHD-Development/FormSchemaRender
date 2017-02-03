@@ -1060,6 +1060,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           this.attachSubFormEvent(field.attributes.id, field, _validation);
           // Save the Schema to be used later.
           this._listSchema[field.name] = field;
+          // this.setupSubFormListenValueEvent(field);
           break;
         case 'hidden':
           var _hiddenAllowMode = ['update', 'create'];
@@ -1580,6 +1581,9 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           options: this.options
         },
         _listView = _.extend({}, Backbone.Events);
+      // console.log('- this:', this);
+      // var _listOptions = _options.options;
+      // console.log('- _listOptions:', _listOptions);
       $(this.el).on('click', '#' + id + '_add_btn', _options, this.displaySubForm)
         // User click cancel button
         .on(id + '.close', this.closeSubForm)
@@ -1588,8 +1592,17 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           formId: id
         }, this), this.addSubformData);
       // If there are subform data
+      // console.log('- that:', that);
+      // console.log('- that._listSchema:', that._listSchema);
+      // console.log('- that.el:', that.el);
+      // console.log('- id:', id);
       if (this.options.mode === 'update' && typeof this.options.formData.fields[field.name] !== 'undefined' && this.options.formData.fields[field.name].length > 0) {
         _listView.on(_options.formId + '.listViewCreated', function(list) {
+          console.log('- ' + _options.formId + '.listViewCreated')
+          console.log(' - that.el:', that.el);
+          console.log(' - id:', id);
+          console.log(' - list:', list);
+          console.log(' - that.options.formData.fields[field.name]:', that.options.formData.fields[field.name]);
           $(that.el).trigger(id + '.add', [list, that.options.formData.fields[field.name]]);
           _listView.off();
         });
@@ -1597,14 +1610,31 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
         _listView.on(_options.formId + '.listViewCreated', function(list) {
           var $subFormList = $('#' + _options.formId, that.el),
             _callback = function(e, data) {
+              // console.log('- that.el:', that.el);
+              // console.log('- id:', id);
+              // console.log('- list:', list);
+              // console.log('- data:', data);
               $(that.el).trigger(id + '.add', [list, data, true]);
               $subFormList.one(_options.formId + '.ajaxUpdate', _callback);
             };
+          // console.log('- _options.formId:', _options.formId);
           $subFormList.one(_options.formId + '.ajaxUpdate', _callback);
           _listView.off();
         });
       }
       // Show Subform
+      // console.log('- _options:', _options);
+      // console.log('- _listView:', _listView);
+      _listView.on(_options.formId + '.listViewCreated', function(list) {
+        // console.log(' - Fired : ' + _options.formId + '.listViewCreated!');
+        if (_.isEmpty(that._listSchema)) {
+          return;
+        }
+        // console.log(that._listSchema);
+        _.each(that._listSchema, function(value, key) {
+          that.setupSubFormListenValueEvent(that, value, key, _options, _listView, id, list);
+        });
+      });
       this.displaySubForm({
         data: _options
       }, {}, true, _listView);
@@ -1641,6 +1671,12 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
       }
       $(this).parents('div.actions').fadeOut();
       require(['views/fields/list'], function(SubFormView) {
+        if (DEBUG) {
+          console.log('- displaySubForm: Render List!');
+          if (_data.model) {
+            console.log(JSON.stringify(_data.model))
+          }
+        }
         var subFormView = Vm.create(this, _id, SubFormView, _data),
           $subFormView = $(subFormView.el);
         if (hidden) {
@@ -1664,6 +1700,92 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
       });
     },
     /**
+     * Set Up SubForm events when contain
+     */
+    setupSubFormListenValueEvent: function(view, field, key, options, listEvent, id, list) {
+      var DEBUG = false;
+      if (field.options) {
+        if (field.options.copyvaluesfrom) {
+          // Need to listen for the model change event form the parent form
+          var fieldsToListen = field.options.copyvaluesfrom;
+          if (fieldsToListen && fieldsToListen.length) {
+            if (DEBUG) {
+              console.log('- Set Up setupSubFormListenValueEvent');
+              console.log(field);
+              console.log(fieldsToListen);
+            }
+            var $app = $('div#app');
+            _.each(fieldsToListen, function(value, index) {
+              if (DEBUG) {
+                console.log(' - ', arguments);
+              }
+              /*$('div#app').on(_opts.formSchema.name + '.renderCompleted', function() {
+                moduleView.render();
+              });*/
+              _.each(value, function(parentKey, listKey) {
+                var _name = ':input[name="' + parentKey + '"]';
+                if (DEBUG) {
+                  console.log('- attached event _name:', _name, ' listKey:', listKey);
+                }
+                $app.on('change', _name, function(e) {
+                  var $e = $(e.target),
+                    _val = $e.val();
+                  if (_val) {
+                    _val = $.trim(_val);
+                  }
+                  // var DEBUG = true;
+                  if (DEBUG) {
+                    console.log('- on change fired! ' + _name);
+                    // console.log(arguments);
+                    // console.log('  - $e:', $e);
+                    // console.log('  - Value:', _val);
+                    // console.log('  - view:', view);
+                    // console.log('  - view.model:', view.model.toJSON());
+                    // console.log('  - options:', options);
+                  }
+                  if (!view.model.has(key)) {
+                    return;
+                  }
+                  var currentListModel = view.model.get(key);
+                  if (DEBUG) {
+                    console.log('  - currentListModel.length:', currentListModel.length);
+                  }
+                  // Empty List
+                  var _model = Backbone.Model.extend({});
+                  var _element;
+                  if (!currentListModel.length) {
+                    _element = new _model();
+                    _element.set(listKey, _val);
+                    currentListModel.push(_element);
+                  } else {
+                    // console.log('- index:',index);
+                    _element = currentListModel.at(index);
+                    if (!_element) {
+                      throw new Error('Please look at List CopyValuesFrom logic!');
+                    }
+                    if (_element.get(listKey) === _val) {
+                      return;
+                    }
+                    _element.set(listKey, _val);
+                  }
+                  if (DEBUG) {
+                    console.log('  - currentListModel.length:', currentListModel.length);
+                    console.log('  - Fired: add event!')
+                  }
+                  $(view.el).trigger(id + '.add', [list, currentListModel.toJSON(), true]);
+                  // Values Change Update Table
+                  /*view.displaySubForm({
+                    data: options
+                  }, _element, true);*/
+                  // $(view.el).trigger(id + '.add', [list, that.options.formData.fields[field.name]]);
+                });
+              });
+            });
+          }
+        }
+      }
+    },
+    /**
      * Closed Sub Form
      **/
     closeSubForm: function(e, list) {
@@ -1682,18 +1804,22 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
      * Add model to List
      **/
     addSubformData: function(e, list, models, reset) {
-      var DEBUG = false;
+      // var DEBUG = false;
       if (DEBUG) {
         console.log('[*] baseField.addSubformData');
         console.log(arguments);
       }
+      // console.log(list)
+      // console.log(arguments);
+      // console.log(this);
       reset = reset || false;
       models = models || false;
-      var _view = (list.options.formSchema.view === '') ? 'table' : list.options.formSchema.view,
+      var _view = (!list.options.formSchema.view) ? 'table' : list.options.formSchema.view,
         _key = list.options.formSchema.name;
       var currentModel = e.data.model.get(_key);
       if (DEBUG) {
         console.log('- addSubformData:currentModel');
+        console.log(_key);
         console.log(currentModel);
         console.log(currentModel.toJSON());
       }
@@ -1714,8 +1840,8 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           currentModel.add(_element);
         });
         if (DEBUG) {
-          console.log('- addSubformData:_model');
-          console.log(_model.toJSON())
+          console.log('- addSubformData:');
+          console.log(currentModel.toJSON())
         }
       } else {
         if (DEBUG) {
@@ -1724,6 +1850,69 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
         }
         currentModel.add(list.model);
       }
+      // console.log('- models:',models)
+      var subFormOptions = list.options.formSchema.options || {};
+      if (subFormOptions.copyvaluesfrom && !models) {
+        var _listModelCid = list.model.cid;
+        // var DEBUG = true;
+        if (_.isArray(subFormOptions.copyvaluesfrom)) {
+          var targetModelIndex, targetModel;
+          for (var i = 0; i < currentModel.length; i++) {
+            var temp = currentModel.at(i);
+            if (DEBUG) {
+              console.log(' - cid:', temp.cid, ' = _listModelCid:', _listModelCid);
+            }
+            if (temp.cid === _listModelCid) {
+              targetModelIndex = i;
+              targetModel = temp;
+              break;
+            }
+          }
+          if ((typeof targetModelIndex !== 'undefined' && typeof targetModelIndex !== 'null') && subFormOptions.copyvaluesfrom[targetModelIndex]) {
+            // console.log('- subFormOptions.copyvaluesfrom[targetModelIndex]:', subFormOptions.copyvaluesfrom[targetModelIndex]);
+            // Update Value!
+            if (!_.isEmpty(subFormOptions.copyvaluesfrom[targetModelIndex])) {
+              var $parentForm = $('#' + list.options.options.formSchema.name);
+              // console.log('- $parentForm:', $parentForm);
+              _.each(subFormOptions.copyvaluesfrom[targetModelIndex], function(parentKey, listKey) {
+                var $currentInput = $parentForm.find(':input[name="' + parentKey + '"]'),
+                  value, modelValue = targetModel.get(listKey);
+                // console.log('- $currentInput:', $currentInput);
+                if ($currentInput.length > 1) {
+                  // console.log('- $currentInput:', $currentInput);
+                  $($currentInput).each(function(el) {
+                    var $el = $(this);
+                    // console.log(' - el:', el);
+                    // console.log(' - $el:', $el);
+                    var value = $el.val();
+                    // console.log(' - value:', value);
+                    if (value === modelValue) {
+                      if ($el.is(':radio')) {
+                        $el.attr('checked', true);
+                      } else {
+                        throw new Error('Not implement Radio in List - CopyValuesFrom yet!');
+                      }
+                    } else {
+                      if ($el.is(':radio')) {
+                        // $el.removeAttr('checked');
+                      } else {
+                        throw new Error('Not implement Radio in List - CopyValuesFrom yet!');
+                      }
+                    }
+                  });
+                } else {
+                  value = $currentInput.val();
+                  // console.log('- modelValue:', modelValue, ' value:', value);
+                  if (modelValue !== value) {
+                    $currentInput.val(modelValue).trigger('change');
+                  }
+                }
+              });
+            }
+          }
+        }
+      }
+      // console.log('- subFormOptions:', subFormOptions);
       // Render View
       require(['views/subform-layouts/' + _view], function(CollectionView) {
         if (DEBUG) {
@@ -1814,7 +2003,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           delete this.model.validation[field.name];
       }
       // Attched Event to these input.
-      var DEBUG = false;
+      // var DEBUG = true;
       var _vsbName = field.options.visibleon.name,
         _shouldAttachedTheVSB = true;
       // if (!this._visibleonEventAttached[_vsbName]) {
@@ -1827,8 +2016,11 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           console.log('- Attached "' + field.options.visibleon.name + '"');
         }
         $(this.el).on('change', ':input[name="' + _vsbName + '"]', function(e) {
+          var DEBUG_VS_ON = false;
           var DEBUG_VISIBLE_ON_ONLY = false;
-          // console.log('*** Input [' + field.options.visibleon.name + '] changed ***');
+          if (DEBUG_VS_ON) {
+            console.log('*** Input [' + field.options.visibleon.name + '] changed ***');
+          }
           var $currentTarget = $(e.currentTarget),
             $container = (parentContainer) ? $currentTarget.parents(parentContainer) : $currentTarget,
             $containerOptions, $nextContainer, _addressArray = [],
@@ -1846,6 +2038,9 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           // if (debug) {
           //   console.log($container);
           // }
+          if (DEBUG_VS_ON) {
+            console.log('- _visibleOnName:', _visibleOnName);
+          }
           if (_visibleOnName.match(/\[\]$/ig)) {
             if (!$container.length) {
               $container = $currentTarget.closest('.checkbox-container');
@@ -1867,12 +2062,18 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
             // console.log($currentTarget);
             $container = $currentTarget.closest('.radio-container');
           }
+          if (DEBUG_VS_ON) {
+            console.log('- $container:', $container);
+            console.log('- field.options.visibleon:', field.options.visibleon);
+            console.log('- _visibleVal:', _visibleVal);
+          }
           // Added: Steps to Validate Logic
           var isValidSteps = true;
           if (field && field.options && field.options.visibleon && field.options.visibleon.steps) {
             if (!_.isArray(field.options.visibleon.steps) || !field.options.visibleon.steps.length) {
               throw new Error(field.name + ' must not contain an empty VisibleOn.Steps');
             }
+            // var DEBUG = true;
             var _steps = field.options.visibleon.steps;
             if (DEBUG) {
               console.log('[*] Debug: VisibleOn with Steps');
@@ -1908,15 +2109,26 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
             };
           }
           if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1 && isValidSteps) {
-            // console.log('[x] Match Value with VisibleOn, will render [' + field.name + '].');
-            // console.log($currentTarget);
+            if (DEBUG_VS_ON) {
+              console.log('[x] Match Value with VisibleOn, will render [' + field.name + '].');
+              console.log($currentTarget);
+              console.log('- htmlTmpl');
+              console.log(htmlTmpl);
+              console.log('- length:', $('.options-visible-on-' + field.name, that.el).length);
+            }
             // Insert this into markup
             if ($('.options-visible-on-' + field.name, that.el).length < 1) {
+              if (DEBUG_VS_ON) {
+                console.log('- $container:', $container);
+              }
               $container.after(htmlTmpl);
               // console.log(htmlTmpl);
               // if (debug) {
               //   console.log($container);
               // }
+              if (DEBUG_VS_ON) {
+                console.log($container);
+              }
               $containerOptions = $container.next('.options-visible-on-' + field.name).fadeIn('slow', function() {
                 // console.log('[x] Render VisibleOn for "' + field.name + '"');
                 var $_element = $(this).addClass('visible-parent-' + _visibleOnName).attr('data-parent', _visibleOnName);
@@ -2030,7 +2242,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
                   }
                 });
               } else if (that.options.mode === 'update') {
-                var DEBUG = false;
+                // var DEBUG = false;
                 if (DEBUG) {
                   console.log('- Check for Field. ' + field.name);
                   console.log(field.name);
@@ -2288,6 +2500,10 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
      * Setup Copy Values From Options
      **/
     setupCopyValuesFrom: function(field) {
+      if (field.type.toLowerCase() === 'list') {
+        // Not support for List Type
+        return;
+      }
       if (!field.options.copyvaluesfrom.name || !field.options.copyvaluesfrom.description) {
         throw 'In order to use CopyValuesFrom options, need to have Name and Description';
       }

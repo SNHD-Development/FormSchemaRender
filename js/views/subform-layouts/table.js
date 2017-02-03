@@ -1,30 +1,15 @@
 /**
  * Table Collection View Layout
  **/
-define([
-  'jquery',
-  'lodash',
-  'backbone',
-  'vm',
-  'utils',
-  'events',
-  'views/baseField',
-  'text!templates/subform-layouts/table.html',
-  'text!templates/notice/confirmation.html',
-  'bootstrap'
-], function($, _, Backbone, Vm, Utils, Events, BaseField, tableTemplate, popoverTemplate) {
-
+define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseField', 'text!templates/subform-layouts/table.html', 'text!templates/notice/confirmation.html', 'bootstrap'], function($, _, Backbone, Vm, Utils, Events, BaseField, tableTemplate, popoverTemplate) {
   var DEBUG = false;
-
   var AppView = Backbone.View.extend({
     template: _.template(tableTemplate),
     popTemplate: _.template(popoverTemplate),
-
     clean: function() {
       // Destroy Popover
       Utils.destroyPopover(this.$el);
     },
-
     initialize: function() {
       //console.log('=== Display List View ===');
       //console.log(this);
@@ -37,7 +22,6 @@ define([
       if (DEBUG) {
         console.log('[*] render table.js in subform-layouts -');
       }
-
       if (!this.options) {
         this.options = {};
       }
@@ -45,7 +29,6 @@ define([
         this.options.options = {};
       }
       // console.log(this);
-
       var that = this,
         _labels = [],
         _values = new Array(this.collection.length),
@@ -56,7 +39,6 @@ define([
       if (this.options && this.options.formSchema && !this.options.formSchema.options) {
         this.options.formSchema.options = {};
       }
-
       var _fieldsMap = {};
       if (_formSchema) {
         _.each(_formSchema.fields, function(el) {
@@ -67,7 +49,6 @@ define([
           _fieldsMap[el.name] = (el[langKey]) ? el[langKey] : el.values;
         });
       }
-
       var _options = this.options;
       var _userIndex;
       _.each(this.options.formSchema.fields, function(element) {
@@ -107,34 +88,32 @@ define([
           }
           // console.log(model);
           // console.log(that);
-
           switch (element.type.toLowerCase()) {
             case 'timestamp':
               _labels[_labels.length - 1] = 'Timestamps';
               // Convert to Human Readable Time
               _values[index].push(Utils.getHumanTime(model[element.name]));
               break;
-
             case 'useraccount':
               _userIndex = _labels.length - 1;
               _labels[_userIndex] = 'User';
               _values[index].push(model[element.name]);
               break;
-
             case 'fullname':
-              _fullName = model[element.name + '_fullname_first_name'];
+              _fullName = (model[element.name + '_fullname_first_name']) ? model[element.name + '_fullname_first_name'] : '';
               if (typeof model[element.name + '_fullname_middle_name'] !== 'undefined') {
                 _fullName += ' ' + model[element.name + '_fullname_middle_name'];
               }
-              _fullName += ' ' + model[element.name + '_fullname_last_name'];
+              if (_fullName) {
+                _fullName += ' ';
+              }
+              _fullName += (model[element.name + '_fullname_last_name']) ? model[element.name + '_fullname_last_name'] : '';
               _values[index].push(_fullName);
               break;
-
             case 'booleaninput':
               var _booleanVal = (model[element.name] === true) ? 'Yes' : ((model[element.name] === false) ? 'No' : '');
               _values[index].push(_booleanVal);
               break;
-
             case 'number':
               var _number;
               if (element.options && element.options.decimals && model[element.name]) {
@@ -144,7 +123,6 @@ define([
               }
               _values[index].push(_number);
               break;
-
             case 'date':
               var _tempDate = model[element.name];
               if (_tempDate && _tempDate.$date) {
@@ -156,7 +134,6 @@ define([
               }
               _values[index].push(_tempDate);
               break;
-
             default:
               var _defVal = model[element.name];
               if (_fieldsMap && _fieldsMap[element.name] && typeof _fieldsMap[element.name][_defVal] !== 'undefined') {
@@ -166,7 +143,7 @@ define([
           }
         });
       });
-
+      // console.log('- _values:', _values);
       $(this.el).html(this.template({
         labels: _labels,
         values: _values,
@@ -178,7 +155,6 @@ define([
         currentUser: Utils.getUserIdFormHtml(),
         userIndex: _userIndex
       }));
-
       // Set Up Popover
       Utils.setupPopover(this.$el);
     },
@@ -192,32 +168,28 @@ define([
     readModel: function(e) {
       e.preventDefault();
       var _index = $(e.currentTarget, this.el).attr('data-id');
-
       if (DEBUG) {
         var _debugCollection = this.collection.toJSON();
         console.log('[*] Click on readModel with index = "' + _index + '" found [' + _debugCollection.length + ']');
         console.log(_debugCollection);
         console.log(this.collection.get(_index).toJSON());
       }
-
       $('.actions .form-view', this.$el.parent('.subform-container')).trigger('click', [this.collection.get(_index), undefined, undefined, true]);
     },
     editModel: function(e) {
+      // var DEBUG = true;
       e.preventDefault();
       var _index = $(e.currentTarget, this.el).attr('data-id');
-
       if (DEBUG) {
         var _debugCollection = this.collection.toJSON();
         console.log('[*] Click on editModel with index = "' + _index + '" found [' + _debugCollection.length + ']');
         console.log(_debugCollection);
         console.log(this.collection.get(_index).toJSON());
       }
-
       $('.actions .form-view', this.$el.parent('.subform-container')).trigger('click', this.collection.get(_index));
     },
     popoverConfirm: function(e) {
       e.preventDefault();
-
       var _opt = {
         html: true,
         placement: 'top',

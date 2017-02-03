@@ -35,7 +35,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
         }
         _temp += _parentRender.call(that, value);
         // If this field has CopyValuesFrom
-        if (that.options.mode === 'create' && value.options.copyvaluesfrom) {
+        if (that.options.mode === 'create' && value.options.copyvaluesfrom && _typeLowerCase !== 'list') {
           _html += BaseFieldView.prototype.setupCopyValuesFrom.call(that, value);
         }
         // If this has VisibleOn in options

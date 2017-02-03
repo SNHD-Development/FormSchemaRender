@@ -1,1 +1,1 @@
-"XDomainRequest"in window&&window.XDomainRequest!==null&&(jQuery.ajaxSettings.xhr=function(){try{return new XDomainRequest}catch(e){}},jQuery.support.cors=!0);
+"XDomainRequest"in window&&null!==window.XDomainRequest&&(jQuery.ajaxSettings.xhr=function(){try{return new XDomainRequest}catch(n){}},jQuery.support.cors=!0);

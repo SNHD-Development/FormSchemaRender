@@ -2,29 +2,9 @@
  * Utilities Functions
  * Events
  **/
+"use strict";
 define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'select2helper', 'text!data/county.json', 'bootstrap', 'jquery.select2', 'jquery.spinner', 'jquery.birthdaypicker', 'jquery.placeholder', 'jquery.expose', 'jquery.zclip', 'jquery.stupidtable', 'xdr'], function($, _, Backbone, Vm, humane, FormModel, Select2Helper, countyData) {
   var DEBUG = false;
-  /**
-   * Setup DependOn Options (Values)
-   **/
-  function setValueDependOn(el, visibleOnObj, formData) {
-    _.each(visibleOnObj, function(value) {
-      if (formData.fields[value.name]) {
-        $(el).on('visibleOnRenderComplete', ':input[name="' + value.name + '"]', function() {
-          var $this = $(this);
-          if (!($this.is(':radio') || $this.is(':checkbox'))) {
-            $this.val(formData.fields[value.name]).trigger('change');
-          } else {
-            if ($this.val() === formData.fields[value.name]) {
-              $this.prop('checked', true);
-            }
-          }
-        });
-        // Need to trigger the value
-        $(':input[name="' + value.options.visibleon.name + '"]').trigger('change');
-      }
-    });
-  }
   return {
     config: {
       fileUrl: '/form/getFile',
@@ -2650,7 +2630,7 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
         $targetRadio.attr('checked', true).trigger('change');
       });
     },
-    setupRadioButtonsValueWithModel(view, radioFieldName) {
+    setupRadioButtonsValueWithModel: function(view, radioFieldName) {
       var model = view.model;
       // console.log('- model:', JSON.stringify(model.toJSON()));
       if (!model) {
@@ -3142,4 +3122,25 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
   };
+  /**
+   * Setup DependOn Options
+   **/
+  function setValueDependOn(el, visibleOnObj, formData) {
+    _.each(visibleOnObj, function(value) {
+      if (formData.fields[value.name]) {
+        $(el).on('visibleOnRenderComplete', ':input[name="' + value.name + '"]', function() {
+          var $this = $(this);
+          if (!($this.is(':radio') || $this.is(':checkbox'))) {
+            $this.val(formData.fields[value.name]).trigger('change');
+          } else {
+            if ($this.val() === formData.fields[value.name]) {
+              $this.prop('checked', true);
+            }
+          }
+        });
+        // Need to trigger the value
+        $(':input[name="' + value.options.visibleon.name + '"]').trigger('change');
+      }
+    });
+  }
 });

@@ -1,1 +1,1 @@
-define([],function(){var e='<%var _id = (options.id) ? options.id: name;%><input id="<%= _id %>" name="<%= name %>" type="text"<%= _attr %> maxlength="11" minlength="11" placeholder="xxx-xx-xxxx"/>';return e});
+define([],function(){var n='<%var _id = (options.id) ? options.id: name;%><input id="<%= _id %>" name="<%= name %>" type="text"<%= _attr %> maxlength="11" minlength="11" placeholder="xxx-xx-xxxx"/>';return n});

@@ -1,1 +1,1 @@
-define([],function(){var e="<%= description %>";return e});
+define([],function(){var n="<%= description %>";return n});

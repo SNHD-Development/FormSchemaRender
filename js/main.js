@@ -7,7 +7,6 @@
  *
  * Version 0.2.0
  **/
-
 require.config({
   paths: {
     // Major libraries
@@ -19,18 +18,14 @@ require.config({
     json: 'libs/json/json3.min',
     moment: 'libs/moment',
     humane: 'libs/humane.min',
-
     // Backbone Plugin
     modelbinder: 'libs/backbone-binder/Backbone.ModelBinder.min',
     validation: 'libs/backbone-validation/backbone-validation-amd',
-
     // xhr
     xdr: 'libs/xhr/jquery.xdomainrequest.min',
     Spinner: 'libs/spin.min',
-
     // Java Loader
     jloader: 'libs/javaloader/deployJava',
-
     // jQuery Plugin
     "jquery.expose": 'libs/jquery-tools/toolbox.expose',
     "jquery.overlay": 'libs/jquery-tools/jquery.tools.overlay.min',
@@ -46,7 +41,6 @@ require.config({
     "jquery.stupidtable": 'libs/jquery/stupidtable.min',
     "jquery.purl": "libs/purl",
     "jquery.mask": 'libs/jquery-form-plugin/jquery.loadmask.spin',
-
     // FileUpload
     //'blueimp-helper': 'libs/file-upload/dependency/load-image.min',
     //'load-image': 'libs/file-upload/dependency/load-image.min',
@@ -60,13 +54,10 @@ require.config({
     //'jquery.fileupload-validate': 'libs/file-upload/jquery.fileupload-validate',
     //'jquery.fileupload': 'libs/file-upload/jquery.fileupload',
     //'jquery.fileupload-ui': 'libs/file-upload/jquery.fileupload-ui',
-
     // Bootstrap Plugin
     "jquery.datepicker": 'libs/bootstrap-datepicker/bootstrap-datepicker',
-
     // Require.js plugins
     text: 'libs/require/text',
-
     // Just a short cut so we can put our html outside the js dir
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: 'templates',
@@ -136,40 +127,25 @@ require.config({
     "xdr": ['jquery']
   }
 });
-
 // Let's kick off the application
-
-require([
-  'jquery',
-  'views/app',
-  'vm',
-  'utils',
-  'libs/date',
-  'moment'
-], function($, AppView, Vm, Utils) {
-
+require(['jquery', 'views/app', 'vm', 'utils', 'libs/date', 'moment'], function($, AppView, Vm, Utils) {
   // Prevent IE 9 and Below for console object
   if (!window.console) window.console = {};
   if (!window.console.log) window.console.log = function() {};
-
   $(function() {
     Utils.setupOldBrowser();
-
     var _mode, _view, _token, _opts, appView, config = {
         mode: ["read", "update", "create"],
         view: ["default", "horizontal", "wizard"]
       },
       lang = (typeof language === 'undefined') ? 'en' : language;
-
     if (typeof formSchema === 'undefined') {
       throw 'formSchema is undefined';
     }
     // Cast to lowercase
     Vm.toLower(formSchema);
-
     // Set the View Property
     _view = (typeof view !== 'undefined') ? view.toLowerCase() : 'horizontal';
-
     // Change the Languages
     if (lang && lang !== 'en') {
       Vm.changeLanguage(formSchema.fields, lang);
@@ -187,9 +163,7 @@ require([
     } else {
       _mode = (typeof mode !== 'undefined' && config.view.indexOf(_view) > -1) ? mode.toLowerCase() : 'create';
     }
-
     _token = (typeof token !== 'undefined' && _mode !== 'read') ? token : '';
-
     // Merge formEvents with the Key if Existed
     // formEvents from global scope take precedent
     if (formSchema.events) {
@@ -202,17 +176,14 @@ require([
         }
       });
     }
-
     // Render Custom Script Here
     if (typeof formEvents !== 'undefined') {
       _.each(formEvents, function(value, key) {
-        $('div#app')
-          .on(formSchema.name + '.' + key, {
-            Utils: Utils
-          }, value);
+        $('div#app').on(formSchema.name + '.' + key, {
+          Utils: Utils
+        }, value);
       });
     }
-
     // Set Up Parameters
     _opts = {
       formSchema: formSchema,
@@ -223,14 +194,11 @@ require([
       hideButtons: ((typeof hideButtons === 'undefined') ? false : hideButtons),
       lang: lang
     };
-
     if (typeof formActionUrl !== 'undefined') {
       _opts.formActionUrl = formActionUrl;
     }
-
     // Send beforeRender Event
     $('div#app').trigger(_opts.formSchema.name + '.init', _opts);
-
     // Clean Up Global Object
     formSchema = null;
     formData = null;
@@ -241,17 +209,12 @@ require([
     formEvents = null;
     hideButtons = null;
     formActionUrl = null;
-
     // Setup View
     _opts.formSchema.view = _view;
-
     // Check Browser
     Utils.checkBrowser();
-
     try {
-
       appView = Vm.create({}, 'AppView', AppView, _opts);
-
       var _loadingText;
       switch (lang) {
         case 'sp':
@@ -260,10 +223,7 @@ require([
         default:
           _loadingText = 'Loading Form Information';
       }
-
-      $(appView.el)
-        .html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
-
+      $(appView.el).html('<p class="data-loader" style="text-align:center;margin: 20px;"><i class="icon-spinner icon-spin icon-large"></i> <span class="text-info">' + _loadingText + ' ...</span></p>');
       // Render Modules
       // Pending Modules
       if (_opts.formSchema.modules) {
@@ -291,12 +251,10 @@ require([
           }
         });
       }
-
       // Wait for the Module to attached
       setTimeout(function() {
         appView.render();
       }, 800);
-
     } catch (err) {
       Utils.renderError(appView.$el, err);
     }

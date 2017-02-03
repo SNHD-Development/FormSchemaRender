@@ -1,1 +1,1 @@
-define(["jquery","underscore","backbone"],function(e,t,n){var r=t.extend({},n.Events);return r});
+define(["jquery","underscore","backbone"],function(e,n,r){var t=n.extend({},r.Events);return t});

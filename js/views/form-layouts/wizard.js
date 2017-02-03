@@ -1,30 +1,14 @@
 /**
  * Wizard Form Layout
  **/
-define([
-  'jquery',
-  'lodash',
-  'backbone',
-  'vm',
-  'utils',
-  'events',
-  'modelbinder',
-  'validation',
-  'views/baseField',
-  'text!templates/form-layouts/wizard.html',
-  'jquery.wizard',
-  'bootstrap',
-  'jquery.birthdaypicker'
-], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate) {
+define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 'validation', 'views/baseField', 'text!templates/form-layouts/wizard.html', 'jquery.wizard', 'bootstrap', 'jquery.birthdaypicker'], function($, _, Backbone, Vm, Utils, Events, Modelbinder, Validation, BaseFieldView, formLayoutTemplate) {
   var _lang;
   var AppView = BaseFieldView.extend({
     _modelBinder: undefined,
     template: _.template(formLayoutTemplate),
     initialize: function() {
       BaseFieldView.prototype.initialize.call(this);
-
       this._steps = []; // Steps Array that will need to render after
-
       if (typeof this.options.formSchema === 'undefined') {
         throw 'formSchema is not in the options parameters';
       }
@@ -43,7 +27,6 @@ define([
         if (!BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status)) {
           return '';
         }
-
         if (that.options.internal && typeof value.options.internalcanupdate !== 'undefined' && !value.options.internalcanupdate) {
           if (_typeLowerCase === 'image') {
             _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
@@ -56,15 +39,14 @@ define([
           that._steps.push(value);
         }
         _temp += _parentRender.call(that, value);
-
         // If this field has CopyValuesFrom
-        if (that.options.mode === 'create' && value.options.copyvaluesfrom) {
+        if (that.options.mode === 'create' && value.options.copyvaluesfrom && _typeLowerCase !== 'list') {
           _html += BaseFieldView.prototype.setupCopyValuesFrom.call(that, value);
         }
-
         // If this has VisibleOn in options
         if (value.options.visibleon && !(_typeLowerCase === 'button' || _typeLowerCase === 'submit')) {
           _temp = '<div class="options-visible-on-' + value.name + '" style="display:none">' + _temp + '</div>';
+          // console.log(' - _temp:',_temp);
           visibleOnArray.unshift({
             value: value,
             html: _temp
@@ -74,12 +56,11 @@ define([
           _html += _temp;
         }
       });
-
+      // console.log('- visibleOnArray:',visibleOnArray)
       // Make VisibleOn from Top Down
       _.each(visibleOnArray, function(ele) {
         BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html);
       });
-
       // Closed open div
       _html += BaseFieldView.prototype.closeOpenDiv.call(this);
       _html += BaseFieldView.prototype.closeOpenDiv.call(this, '_stepDiv');
@@ -87,14 +68,11 @@ define([
         html: _html,
         lang: this.options.lang
       }, this.options.formSchema)));
-
       this.renderWizardNavBar();
       // Bind Model
       that._modelBinder.bind(that.model, that.el, that.model.bindings);
-
       //Debug:: Model Binder for Wizard View
       // console.log(that.model.bindings);
-
       Backbone.Validation.bind(that, {
         forceUpdate: true
       });
@@ -102,7 +80,6 @@ define([
       this.$formWizard = $('.wizard-view .wizard', this.el);
       this.$prevBtn = $('.wizard-view .wizard-actions .btn_prev', this.el);
       this.$nextBtn = $('.wizard-view .wizard-actions .btn_next', this.el);
-
       // hide original actions div
       $('.step-content .step-pane .form-actions', this.el).hide();
       // Attched Wizard View Events
@@ -126,10 +103,8 @@ define([
         _icon = (typeof element.icon === 'undefined') ? '' : '<i class="icon ' + element.icon + ' icon-3x"></i>';
         _html += '<li data-target="#wizard_step' + (index + 1) + '" class="' + element['class'] + '">' + _icon + '<span class="badge badge-info">' + (index + 1) + '</span>' + element.description + '</li>';
       });
-
       $steps = $('.wizard-view ul.steps', this.el).html(_html);
       var _width = $steps.width();
-
       if (DEBUG) {
         console.log('[*] wizard.js: renderWizardNavBar()');
         console.log('    this._steps: ' + this._steps);
@@ -137,9 +112,7 @@ define([
         console.log('    _width: ' + _width);
         console.log('    this._steps.length: ' + this._steps.length);
       }
-
       $li = $('li', $steps);
-
       if (_width) {
         // Calculated the Step Width
         _stepWidth = Math.floor((_width - this._steps.length) / this._steps.length);
@@ -154,7 +127,6 @@ define([
         $li.css('width', _units + '%');
         $li.last().css('width', (_units - 0.5) + '%');
       }
-
       if (DEBUG) {
         console.log('    _stepWidth: ' + _stepWidth);
         console.log('    _offset: ' + _offset);
@@ -214,7 +186,6 @@ define([
               if (_numSteps !== 2) {
                 break;
               }
-
             case (_numSteps - 1):
               var btnSubmit;
               switch (_lang) {
@@ -243,7 +214,6 @@ define([
               if (_numSteps !== 2) {
                 break;
               }
-
             case _numSteps:
               e.data.$nextBtn.removeClass('btn-info').addClass('btn-primary').html('Next <i class="icon-arrow-right"></i>');
               break;
@@ -308,12 +278,10 @@ define([
         },
         $submitDisplay = $(this).nextUntil('', '.wizard-actions').find('.btn_next'),
         $form = $('form.form-render');
-
       if ($submitBtn.length > 1) {
         // Fix IE 8
         $submitBtn = $(':submit#SubmitBtn', e.data.el);
       }
-
       if ($submitBtn.length > 0) {
         $submitBtn.trigger('click');
       } else {
@@ -348,8 +316,7 @@ define([
         }
         _opt.title = _t_1;
         _opt.content = '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...';
-        e.data.$nextBtn.attr('disabled', true).popover(_opt).popover('show')
-          .next('.popover').addClass('success');
+        e.data.$nextBtn.attr('disabled', true).popover(_opt).popover('show').next('.popover').addClass('success');
       } else {
         _opt.title = '<i class="icon-edit"></i> Validation Error';
         _opt.content = 'Please correct the form';
@@ -361,26 +328,21 @@ define([
      **/
     renderErrorPopover: function($btn, $form, opts) {
       $btn.attr('disabled', true).popover(opts).popover('show');
-
-      window.setTimeout(
-        function() {
-          var $firstError = $('.invalid:first', $form);
-          if (!($firstError.is(':checkbox') || $firstError.is(':radio'))) {
-            $firstError.focus();
-          }
-          $btn.attr('disabled', false).popover('destroy');
-          $btn.next('.popover').remove();
-        }, 2000);
+      window.setTimeout(function() {
+        var $firstError = $('.invalid:first', $form);
+        if (!($firstError.is(':checkbox') || $firstError.is(':radio'))) {
+          $firstError.focus();
+        }
+        $btn.attr('disabled', false).popover('destroy');
+        $btn.next('.popover').remove();
+      }, 2000);
     },
     respondResult: function(e) {
-      window.setTimeout(
-        function() {
-          if (typeof e.data !== 'undefined' && typeof e.data.$nextBtn !== 'undefined') {
-            e.data.$nextBtn.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
-          }
-        },
-        3000
-      );
+      window.setTimeout(function() {
+        if (typeof e.data !== 'undefined' && typeof e.data.$nextBtn !== 'undefined') {
+          e.data.$nextBtn.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+        }
+      }, 3000);
     },
     scrollToTopView: function(step) {
       var $topView = $('#wizard_step' + (step + 1)).parent();

@@ -1,11 +1,5 @@
 'use strict';
-
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'events'
-], function($, _, Backbone, Events) {
+define(['jquery', 'underscore', 'backbone', 'events'], function($, _, Backbone, Events) {
   var views = {},
     countries = {
       "US": "United States",
@@ -264,17 +258,14 @@ define([
         }
       }
     },
-
     create = function(context, name, View, options) {
       // View clean up isn't actually implemented yet but will simply call .clean, .remove and .unbind
       remove(name);
-
       if (!View) {
         return null;
       }
       var view = new View(options);
       views[name] = view;
-
       if (context) {
         if (typeof context.children === 'undefined') {
           context.children = {};
@@ -286,7 +277,6 @@ define([
       Events.trigger('viewCreated');
       return view;
     },
-
     // Convert all key to lowercase
     toLower = function(obj, skipKey) {
       if (_.isNull(obj)) {
@@ -309,11 +299,14 @@ define([
           } else if (typeof skipKey !== 'undefined' && ((!_.isArray(skipKey) && keyLower === skipKey) || (_.isArray(skipKey) && _.indexOf(skipKey, keyLower) > -1))) {
             continue;
           }
+          if ('copyvaluesfrom' === keyLower && _.isArray(obj[keyLower])) {
+            // console.log('- keyLower:', keyLower, ' obj[key]:', JSON.stringify(obj[keyLower]));
+            continue;
+          }
           this.toLower(obj[keyLower]);
         }
       }
     },
-
     // Parse HTML Code to normal text
     decodeHtml = function(obj) {
       if (obj.fields) {
@@ -326,7 +319,6 @@ define([
         });
       }
     },
-
     // Change Language
     changeLanguage = function(obj, language) {
       var self = this;
@@ -340,14 +332,12 @@ define([
             if (element['values-' + language]) {
               element.values = element['values-' + language];
             }
-
             if (element.options && typeof element.options.defaulttext === 'object') {
               element.description = element.options.defaulttext[language];
             } else if (element.options && element.options.defaulttext) {
               element.description = element.options.defaulttext;
             }
             break;
-
           case 'list':
             if (element.fields) {
               self.changeLanguage(element.fields, language);
@@ -356,12 +346,10 @@ define([
         }
       });
     },
-
     // Get Country from 2 Digit Code
     getCountry = function(code) {
       return countries[code];
     };
-
   return {
     create: create,
     remove: remove,

@@ -1069,6 +1069,8 @@ To render existing data, will use description to render as the heading in the re
 To Render Custom Table Header simply pass in Options.TableTitle in Fields.
 This will get generate the table header with that text and simply hover over to see the full detail of description.
 
+When you want the list to automatic copy value from a parent please pass in "Options.CopyValuesFrom": [ { "ListKeyName": "ParentKeyToCopy"}]
+
 Example,
 
     {
