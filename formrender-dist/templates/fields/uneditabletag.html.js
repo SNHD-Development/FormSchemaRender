@@ -1,1 +1,0 @@
-define([],function(){var e='<div class="select-tags"><ul><% _.each(value, function(element) { %><li><span class="uneditable-input"><%= element %></span></li><% }); %></ul></div>';return e});

@@ -1,1 +1,0 @@
-define([],function(){var e='<%var currentTime = parseInt( new Date().getTime() / 1000 );%><input type="hidden"  id="<%= (typeof attributes.id !== \'undefined\') ? attributes.id: name %>" name="<%= name %>" data-value="<%= currentTime %>"/>';return e});

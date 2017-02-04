@@ -1,1 +1,0 @@
-define([],function(){var e='<label><%= label %></label><div class="read-checkbox"><% _.each(value, function(element){if (element === \'_other\') {element = otherValue;}%><span class="uneditable-input"><%= element %></span><% }) %></div>';return e});

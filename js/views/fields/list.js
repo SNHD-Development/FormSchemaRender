@@ -574,7 +574,7 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
           placement: 'top',
           trigger: 'manual',
           title: '<i class="icon-edit"></i> Validation Error',
-          content: 'Please correct the form'
+          content: 'Please complete the required fields'
         };
         _submitBtn.popover(_opt).popover('show');
         window.setTimeout(function() {
