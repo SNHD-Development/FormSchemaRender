@@ -16,7 +16,8 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
       var that = this,
         _required, _parentRender = BaseFieldView.prototype.render,
         _html = '',
-        visibleOnArray = [];
+        visibleOnArray = [],
+        fieldsType = {};
       _.each(this.options.formSchema.fields, function(value, key, list) {
         var _temp = '',
           _typeLowerCase = value.type.toLowerCase();
@@ -49,10 +50,14 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
         } else {
           _html += _temp;
         }
+        // Mapping the input type
+        if (value && value.name && value.type) {
+          fieldsType[value.name] = $.trim(value.type.toLowerCase());
+        }
       });
       // Make VisibleOn from Top Down
       _.each(visibleOnArray, function(ele) {
-        BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html);
+        BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html, null, fieldsType);
       });
       // not auto rendering the button
       //_html += BaseFieldView.prototype.renderButton.call(this, this.options.formSchema.formoptions);

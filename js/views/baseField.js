@@ -1073,7 +1073,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
             }
             field.attributes.value = this.options.formData.fields[field.name];
           }
-          break
+          break;
       }
       // Check to see if this is button or submit
       if (_type === 'button' && field.options.visibleon) {
@@ -1960,7 +1960,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
      * Setup the VisibleOn Options
      * This is the function to handle all of logic for VisibleOn
      **/
-    setupVisibleOn: function(field, htmlTmpl, parentContainer) {
+    setupVisibleOn: function(field, htmlTmpl, parentContainer, fieldsType) {
       parentContainer = parentContainer || false;
       var that = this,
         _typeLowerCase = field.type.toLowerCase();
@@ -2013,9 +2013,17 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
       // If should attached Event?
       if (_shouldAttachedTheVSB) {
         if (DEBUG) {
-          console.log('- Attached "' + field.options.visibleon.name + '"');
+          console.log('- Attached "' + field.options.visibleon.name + '", _vsbName = ', _vsbName);
         }
-        $(this.el).on('change', ':input[name="' + _vsbName + '"]', function(e) {
+        // If this is a checkbox, will need to append []
+        if (DEBUG) {
+          console.log('- fieldsType:', fieldsType);
+        }
+        var _inputNameQ = (fieldsType && fieldsType[_vsbName] && fieldsType[_vsbName] === 'checkbox') ? ':input[name="' + _vsbName + '[]"]' : ':input[name="' + _vsbName + '"]';
+        if (DEBUG) {
+          console.log('- _inputNameQ:', _inputNameQ);
+        }
+        $(this.el).on('change', _inputNameQ, function(e) {
           var DEBUG_VS_ON = false;
           var DEBUG_VISIBLE_ON_ONLY = false;
           if (DEBUG_VS_ON) {
@@ -2038,15 +2046,68 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           // if (debug) {
           //   console.log($container);
           // }
-          if (DEBUG_VS_ON) {
-            console.log('- _visibleOnName:', _visibleOnName);
+          var _currentInputName = $currentTarget.attr('name');
+          // _currentInputName = 'lol_lol';
+          var _hasBracket = _currentInputName.match(/\w+\[\]$/ig);
+          var _visibleValInArray = field.options.visibleon.values === _visibleVal;
+          if (_.isArray(field.options.visibleon.values)) {
+            _visibleValInArray = _.find(field.options.visibleon.values, function(value) {
+              if (DEBUG_VS_ON) {
+                console.log('- value:', value, ', _visibleVal:', _visibleVal, ', result = ', value === _visibleVal);
+              }
+              return value === _visibleVal;
+            });
           }
-          if (_visibleOnName.match(/\[\]$/ig)) {
+          if (_hasBracket && _hasBracket.length) {
+            _hasBracket = true;
+          }
+          // var DEBUG_VS_ON = true;
+          if (DEBUG_VS_ON) {
+            console.log('');
+            console.log('- _visibleOnName:', _visibleOnName);
+            console.log('- $currentTarget:', $currentTarget);
+            console.log('- _currentInputName:', _currentInputName);
+            console.log('- _hasBracket:', _hasBracket);
+            // console.log('- $container:', $container);
+            console.log('- _visibleVal:', _visibleVal);
+            console.log('- field.options.visibleon.values:', field.options.visibleon.values);
+            console.log('- _visibleValInArray:', _visibleValInArray);
+            console.log('');
+          }
+          if (_hasBracket) {
+            var _isCurrentTargetChecked = $currentTarget.is(':checked')
+            $currentTarget.closest('.checkbox-container').find(':checkbox:checked').each(function(el) {
+              var _checkedVal = $(this).val();
+              if (DEBUG_VS_ON) {
+                console.log('- _checkedVal:', _checkedVal);
+              }
+              if (!_isCurrentTargetChecked && _visibleVal === _checkedVal) {
+                _visibleVal = null;
+                if (DEBUG_VS_ON) {
+                  console.log('- Set _visibleVal to :', _visibleVal);
+                }
+                return;
+              }
+              if (_visibleVal !== _checkedVal && _.indexOf(field.options.visibleon.values, _checkedVal) > -1) {
+                _visibleVal = _checkedVal;
+              }
+            });
+            if (!_isCurrentTargetChecked && _visibleVal === $currentTarget.val()) {
+              _visibleVal = null;
+            }
+            if (DEBUG_VS_ON) {
+              console.log('- _visibleVal:', _visibleVal);
+            }
+            // var DEBUG_VS_ON = false;
+          } else if (_visibleOnName.match(/\[\]$/ig)) {
             if (!$container.length) {
               $container = $currentTarget.closest('.checkbox-container');
             }
             _visibleOnName = _visibleOnName.substr(0, _visibleOnName.length - 2);
             $container = $container.closest('.checkbox-container');
+            if (DEBUG_VS_ON) {
+              console.log('- this is checkbox?', $currentTarget.is(':checkbox'));
+            }
             if ($currentTarget.is(':checkbox')) {
               _visibleVal = '';
               $container.find(':checkbox:checked').each(function() {
@@ -2107,6 +2168,11 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
                 break;
               }
             };
+          }
+          if (DEBUG_VS_ON) {
+            console.log('- field.options.visibleon.values:', field.options.visibleon.values);
+            console.log('- _visibleVal:', _visibleVal);
+            console.log('- isValidSteps:', isValidSteps);
           }
           if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1 && isValidSteps) {
             if (DEBUG_VS_ON) {

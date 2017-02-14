@@ -19,7 +19,8 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
         _parentRender = BaseFieldView.prototype.render,
         _html = '',
         _required,
-        visibleOnArray = [];
+        visibleOnArray = [],
+        fieldsType = {};
       _.each(this.options.formSchema.fields, function(value, key, list) {
         var _temp = '',
           _wrapper = false,
@@ -77,10 +78,14 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
         } else {
           _html += _temp;
         }
+        // Mapping the input type
+        if (value && value.name && value.type) {
+          fieldsType[value.name] = $.trim(value.type.toLowerCase());
+        }
       });
       // Make VisibleOn from Top Down
       _.each(visibleOnArray, function(ele) {
-        BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html, '.control-group');
+        BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html, '.control-group', fieldsType);
       });
       // Closed open div
       _html += BaseFieldView.prototype.closeOpenDiv.call(this);
