@@ -220,3 +220,6 @@ ophp/pod-user-form.php
 /formrender-dist/
 formrender-dist
 ant-build.xml
+._.DS_Store
+._.gitignore
+.DS_Store

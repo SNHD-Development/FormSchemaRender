@@ -1328,6 +1328,9 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
             _.each(formIdArr, function(v) {
               _html += '<a class="btn btn-primary" title="View FormId = ' + v + '" href="' + _tmpInternalViewUrl + '/' + v + '" style="margin-right:20px;">View</a>';
             });
+          } else if (_type === 'html') {
+            // Adding for Render HTML
+            _html += field.description;
           } else {
             _html += that.inputTemplate['uneditableinput']({
               value: _field_data,
@@ -1961,6 +1964,8 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
      * This is the function to handle all of logic for VisibleOn
      **/
     setupVisibleOn: function(field, htmlTmpl, parentContainer, fieldsType) {
+      var DEBUG = false;
+      // console.log('[*] setupVisibleOn:', field);
       parentContainer = parentContainer || false;
       var that = this,
         _typeLowerCase = field.type.toLowerCase();
@@ -2560,6 +2565,29 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
             }
           }
         });
+
+        // First Time to Fired for Update Mode
+        if (this && this.options && this.options.mode === 'update') {
+          // console.log('Here');
+          // console.log(this);
+          $('#' + this.options.formSchema.name).on(this.options.formSchema.name + '.renderCompleted', function() {
+            // console.log('- _inputNameQ:', $(_inputNameQ));
+            // console.log('- field:', field);
+            if (field && field.options && field.options.visibleon) {
+              _.forEach(field.options.visibleon.values, function(v) {
+                var $inputs = $(_inputNameQ).filter(':checkbox:checked');
+                $inputs.each(function() {
+                  var $this = $(this);
+                  var value = $this.val();
+                  // console.log(value);
+                  if (v === value) {
+                    $this.trigger('change');
+                  }
+                });
+              });
+            }
+          });
+        }
       }
     },
     /**
