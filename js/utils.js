@@ -524,6 +524,7 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
           _val = _month + '/' + _day + '/' + _year;
           $bdateInput.val();
         }
+        // console.log('- $bdateInput:', $bdateInput);
         model.set($bdateInput.attr('name'), $bdateInput.val());
       });
     },

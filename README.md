@@ -1244,6 +1244,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Fix the BooleanInput glitch when combine with VisibleOn in Read Mode
     - Fix the Read Mode checking for false value into check for undefined
     - Fix the update mode with MultiFiles type
+    - Adding Turn-Off DOB Checked for invalid year
 
 * 0.2.0
     - Adding ReadModeAppendComment Module

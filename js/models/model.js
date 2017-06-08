@@ -7,6 +7,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
    * @param  boolean mode either this will be internal or not
    * @return
    */
+  var DEBUG_CHANGED = false;
   var DEBUG = false;
   var parseFields = function(model, attrs, mode) {
       var DEBUG = false;
@@ -231,6 +232,8 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
                 _validation[value.name + '_birth[month]'] = _.clone(_dateValidation);
                 _validation[value.name + '_birth[day]'] = _.clone(_dateValidation);
                 _validation[value.name + '_birth[year]'] = _.clone(_dateValidation);
+
+                // console.log('_validation:', _validation);
               }
             } else {
               _attrs[value.name] = '';
@@ -392,7 +395,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
        * Add Invalid Event
        **/
       this.on('validated:invalid', function(model, errors) {
-        // var DEBUG = true;
+        var DEBUG = false;
         if (console && console.log) {
           console.log('Invalid Fields', errors);
         }
@@ -412,18 +415,20 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
         });
       });
       // Debug
-      /*this.on('change', function() {
-        var DEBUG = true;
-        if (DEBUG) {
-          console.log('=== Check Model Change ===');
-          console.log('[x] Values');
-          console.log(this.toJSON());
-          console.log('[x] Binding');
-          console.log(this.bindings);
-          console.log('[x] MultiFilesDefaultValue');
-          console.log(this.multiFilesDefaultValue);
-        }
-      });*/
+      if (DEBUG_CHANGED) {
+        this.on('change', function() {
+          var DEBUG = true;
+          if (DEBUG) {
+            console.log('=== Check Model Change ===');
+            console.log('[x] Values');
+            console.log(this.toJSON());
+            console.log('[x] Binding');
+            console.log(this.bindings);
+            console.log('[x] MultiFilesDefaultValue');
+            console.log(this.multiFilesDefaultValue);
+          }
+        });
+      }
 
       // HTML Entities
       if (this.escapeHtmlInputs.length) {

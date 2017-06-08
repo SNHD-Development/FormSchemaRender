@@ -193,7 +193,10 @@
 
       // Update the option sets according to options and user selections
       $fieldset.change(function() {
+        // console.log('*** Changed ***');
+        // var $day = $(':input[name="' + settings['id'] + '_birth[day]"]');
         // todays date values
+        // console.log('*** Changed ***');
         var todayDate = new Date(),
           todayYear = todayDate.getFullYear(),
           todayMonth = todayDate.getMonth() + 1,
@@ -208,44 +211,68 @@
           curMaxMonth = parseInt($month.children(":last").val(), 10),
           curMaxDay = parseInt($day.children(":last").val(), 10);
 
+        var selectedDayDefault = selectedDay;
+        var selectedMonthDefault = selectedMonth;
+
         // if (isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDay)) {
         //     return;
         // }
 
+        // console.log('- actMaxDay:', actMaxDay);
+        // console.log('- selectedDay:', selectedDay);
+        // console.log('- curMaxDay:', curMaxDay);
+
         // Dealing with the number of days in a month
         // http://bugs.jquery.com/ticket/3041
         if (curMaxDay > actMaxDay) {
+          // console.log('Here 2');
+          // console.log('curMaxDay:', curMaxDay);
+          // console.log('todayDay:', todayDay);
           while (curMaxDay > actMaxDay) {
             $day.children(":last").remove();
             curMaxDay--;
+            // $day.children(":last").attr("selected", "selected");
+            // selectedDay = curMaxDay;
           }
         } else if (curMaxDay < actMaxDay) {
           while (curMaxDay < actMaxDay) {
             curMaxDay++;
             $day.append("<option value=" + curMaxDay + ">" + curMaxDay + "</option>");
+            // $day.children(":last").attr("selected", "selected");
+            // selectedDay = curMaxDay;
           }
         }
-        $day = $(':input[name="' + settings['id'] + '_birth[day]"]');
         var _option = $day.find('option[value="' + selectedDay + '"]');
-        _option.attr('selected', true);
+        // console.log('- selectedDay:', selectedDay);
+        // console.log('- _option:', _option.length);
+        // _option.attr('selected', true);
 
         // Dealing with future months/days in current year
         // or months/days that fall after the minimum age
         if (!settings["futuredates"] && selectedYear == startYear) {
+          // console.log('Here !futuredates');
           if (curMaxMonth > todayMonth) {
             while (curMaxMonth > todayMonth) {
               $month.children(":last").remove();
               curMaxMonth--;
             }
+            // $month.children(":last").attr("selected", "selected");
             // reset the day selection
             if (!_option.length) {
-              $day.children(":first").attr("selected", "selected");
+              // console.log('Reset Day');
+              // $day.children(":first").attr("selected", "selected");
             }
           }
           if (selectedMonth === todayMonth) {
+            // console.log('Here');
+            // console.log('curMaxDay:', curMaxDay);
+            // console.log('todayDay:', todayDay);
+            // console.log('selectedDay:', selectedDay);
             while (curMaxDay > todayDay) {
               $day.children(":last").remove();
               curMaxDay -= 1;
+              // $day.children(":last").attr("selected", "selected");
+              // selectedDay = curMaxDay;
             }
           }
         }
@@ -260,14 +287,90 @@
         }
 
         // update the hidden date
+        // console.log('selectedYear:', selectedYear, ' selectedMonth:', selectedMonth, ' selectedDay:', selectedDay);
+        // console.log(selectedYear * selectedMonth * selectedDay);
         if ((selectedYear * selectedMonth * selectedDay) != 0) {
+          /*if (selectedDayDefault !== selectedDay) {
+            // console.log('- Fired Changed: ', selectedDay);
+            if (_.isNaN(selectedDay) && !_.isNaN(selectedYear)) {
+              console.log('- Day:');
+              console.log('curMaxDay:', curMaxDay);
+              console.log('todayDay:', todayDay);
+              console.log('selectedDay:', selectedDay);
+              _option = $day.find('option[value="' + curMaxDay + '"]');
+              // console.log('- Fired Changed: ', curMaxDay);
+              _option.attr('selected', true).trigger('changed');
+              selectedDay = curMaxDay;
+            }
+            // return;
+          }
+          if (selectedMonthDefault !== selectedMonth) {
+            if (_.isNaN(selectedMonth) && !_.isNaN(selectedYear)) {
+              // console.log('curMaxDay:', curMaxDay);
+              // console.log('todayDay:', todayDay);
+              // console.log('selectedDay:', selectedDay);
+              _option = $month.find('option[value="' + curMaxMonth + '"]');
+              // console.log('- Fired Changed: ', curMaxDay);
+              _option.attr('selected', true).trigger('changed');
+              selectedMonth = curMaxMonth;
+              console.log('- Month:');
+              console.log('curMaxDay:', curMaxDay);
+              console.log('todayDay:', todayDay);
+              console.log('selectedDay:', selectedDay);
+            }
+          }*/
           //hiddendate = selectedYear + "-" + selectedMonth + "-" + selectedDay;
           selectedMonth = (selectedMonth < 10) ? '0' + selectedMonth : selectedMonth;
           selectedDay = (selectedDay < 10) ? '0' + selectedDay : selectedDay;
           hiddendate = selectedMonth + "/" + selectedDay + "/" + selectedYear;
           $(this).find('#' + settings["fieldid"]).val(hiddendate);
+          // console.log('- hiddendate:', hiddendate);
+          var hiddenDateMo = moment(hiddendate);
+          if (hiddenDateMo && hiddenDateMo.isValid()) {
+            var todayMoment = moment(moment().format('MM/DD/YYYY'));
+            // console.log(hiddenDateMo.format());
+            // console.log(todayMoment.format());
+            if (hiddenDateMo.isAfter(todayMoment)) {
+              // console.log('- Reset to today!');
+              selectedMonth = todayMoment.month() + 1;
+              selectedDay = todayMoment.date();
+              // console.log('- selectedMonth:', selectedMonth);
+              // console.log('- selectedDay:', selectedDay);
+              // console.log('');
+              // $month.find('option').each(function() {
+              //   console.log($(this).val());
+              // });
+              // console.log('');
+              // console.log('option[value="' + selectedMonth + '"]');
+              // console.log($month.find('option[value="' + selectedMonth + '"]').length);
+              $month.val(selectedMonth);
+              // console.log('');
+              // $day.find('option').each(function() {
+              //   console.log($(this).val());
+              // });
+              // console.log('');
+              // console.log('option[value="' + selectedDay + '"]');
+              // console.log($day.find('option[value="' + selectedDay + '"]').length);
+              $day.val(selectedDay);
+              // console.log($month.find(':checked').val());
+              // console.log($day.find(':checked').val());
+              // console.log('Reset!');
+              $(this).find('#' + settings["fieldid"]).val(todayMoment.format('MM/DD/YYYY'));
+              // console.log($(this).find('#' + settings["fieldid"]).val());
+              // $fieldset.trigger('change');
+              // console.log(todayMoment.date());
+              // console.log(_newMonth);
+              // $fieldset.trigger('change');
+              // $day.find('option[value="' + todayMoment.date() + '"]');
+              // $fieldset.trigger('change');
+            }
+          }
+
+          // _option.attr('selected', true).trigger('change');
+          // console.log('- hiddendate:', hiddendate);
           // $day.val(selectedDay);
           if (settings["onchange"] != null) {
+            // console.log('- Called onchange');
             settings["onchange"](hiddendate);
           }
         }
@@ -283,6 +386,7 @@
         }
         $year.val(date.getFullYear());
         $month.val(date.getMonth() + 1);
+        // console.log('Here');
         $day.val(date.getDate()).trigger('change');
       } else {
         // Will auto set the year to prevent the problem on reset the date (Current Year)
