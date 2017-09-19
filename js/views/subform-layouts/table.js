@@ -89,6 +89,13 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
           // console.log(model);
           // console.log(that);
           switch (element.type.toLowerCase()) {
+            case 'country':
+              var _c = Vm.getCountry(model[element.name]);
+              if (!_c) {
+                _c = model[element.name];
+              }
+              _values[index].push(_c);
+              break;
             case 'timestamp':
               _labels[_labels.length - 1] = 'Timestamps';
               // Convert to Human Readable Time

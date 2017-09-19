@@ -611,8 +611,8 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
     /**
      * Setup Date Input
      **/
-    setupDateInput: function(el, view) {
-      var DEBUG = false;
+    setupDateInput: function(el, view, debug) {
+      var DEBUG = debug;
       var fViewArr, firstTime = false;
       // Logic for Validation
       if (view) {
@@ -628,6 +628,7 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
         console.log(el);
         console.log(view);
         console.log(fViewArr);
+        // console.log(fViewArr.length);
       }
       var _model;
       if (view && view.model) {
@@ -663,7 +664,7 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
           if (fViewArr && fViewArr[_id]) {
             console.log(fViewArr[_id]);
           }
-          console.log(hasDatepickerOptions);
+          console.log('- hasDatepickerOptions: ', hasDatepickerOptions);
         }
         // This is special case
         if (fViewArr && fViewArr[_id] && fViewArr[_id].getvaluefrom && fViewArr[_id].comparison) {
@@ -2150,7 +2151,7 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
      * @param  object $container
      * @return
      */
-    setupSelect2: function(form) {
+    setupSelect2: function(form, id) {
       var DEBUG = false;
       if (!form) {
         return;
@@ -2170,12 +2171,15 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
       }
       // Logic
       if (form.el) {
-        var _id = form.el;
+        var _id = (id) ? id: form.el;
         if (!_.isString(_id)) {
           _id = $(_id).attr('id');
           if (_id) {
             _id = '#' + _id;
           }
+        }
+        if (DEBUG) {
+          console.log(_id);
         }
         $(_id + ' .selecttwo-render').each(function() {
           var $this = $(this);
@@ -2644,6 +2648,126 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
         // console.log('  - $targetRadio:', $targetRadio);
         $targetRadio.attr('checked', true).trigger('change');
       });
+    },
+    performCalculateLogic: function(el, view) {
+      var DEBUG = false;
+      var $calculates = el.find(':input:hidden[data-logic]');
+      if (DEBUG) {
+        console.log('*** performCalculateLogic ***');
+        console.log($calculates);
+        console.log(el);
+        console.log(view);
+      }
+      if (!$calculates || !$calculates.length) {
+        return;
+      }
+      $calculates.each(function() {
+        var $this = $(this);
+        var logic = $this.attr('data-logic');
+        var type = $this.attr('data-type');
+        if (type) {
+          type = type.toLowerCase();
+        }
+        if (DEBUG) {
+          console.log('- logic: ', logic);
+          console.log('- type: ', type);
+        }
+        // Would be in
+        // ID - ID
+        // ID + ID
+        var matches = logic.match(/(\S+)\s+(\S+)\s+(\S+)/);
+        if (DEBUG) {
+          console.log('- matches: ', matches);
+        }
+        var firstEl, secondEl, arith, _result;
+        if (matches) {
+          if (matches.length === 4) {
+            arith = $.trim(matches[2]);
+            firstEl = $('#'+matches[1]).val();
+            secondEl = $('#'+matches[3]).val();
+            if (DEBUG) {
+              console.log('- firstEl: ', firstEl);
+              console.log('- secondEl: ', secondEl);
+            }
+          } else {
+            throw new Error('Does not know how to calulate! ('+logic+')');
+          }
+          _result = calculated(firstEl, secondEl, arith, type);
+          if (DEBUG) {
+            console.log('- _result: ', _result);
+          }
+          $this.val(_result).trigger('change');
+        }
+      });
+
+      function calculated(val1, val2, arith, type) {
+        arith = $.trim(arith);
+        if (type) {
+          type = $.trim(type);
+        }
+        if (type) {
+          switch (type) {
+            case 'day':
+              var m1, m2;
+              if (val1) {
+                m1 = moment(val1, 'MM/DD/YYYY');
+                if (m1.isValid()) {
+                  val1 = m1.valueOf();
+                }
+              }
+              if (val2) {
+                m2 = moment(val2, 'MM/DD/YYYY');
+                if (m2.isValid()) {
+                  val2 = m2.valueOf();
+                }
+              }
+              break;
+            default:
+              if (console && console.error) {
+                console.error('- calculated:'+type+' is not implement yet!');
+              }
+          }
+        }
+        if (DEBUG) {
+          console.log('- val1: ', val1);
+          console.log('- val2: ', val2);
+        }
+        var result;
+        switch (arith) {
+          case '+':
+            result = val1 + val2;
+            break;
+
+          case '-':
+            result = val1 - val2;
+            break;
+
+          case '*':
+            result = val1 * val2;
+            break;
+
+          case '/':
+            result = val1 / val2;
+            break;
+
+          default:
+            throw new Error('Not implement ' + arith + ' yet!');
+        }
+        if (DEBUG) {
+          console.log('- result: ', result);
+        }
+        if (type) {
+          switch (type) {
+            case 'day':
+              result = result / 1000 / 60 / 60 / 24;
+              break;
+          }
+        }
+        if (DEBUG) {
+          console.log('- result: ', result);
+        }
+        return result;
+      }
     },
     setModelRadioValues: function(el, view, debug) {
       var DEBUG = debug || false;

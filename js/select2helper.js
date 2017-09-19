@@ -281,6 +281,13 @@ define([
         var renderAsHidden = false;
         var _name = $element.attr('name');
         var _defaultValue = $element.attr('data-select-value');
+        // console.log(_defaultValue);
+        // console.log('- $element.val(): ', $element.val());
+        /*if (_defaultValue === '') {
+          $element.val(_defaultValue);
+        }*/
+
+        // console.log('- _defaultValue: ', _defaultValue);
         if (form && form.children) {
           // List Field Type
           if (form.children.BaseField) {
@@ -310,6 +317,7 @@ define([
               opt.allowClear = true;
               opt.placeholder = 'Please select a value';
               if (_defaultValue) {
+                // console.log('Here');
                 opt.initSelection = function(el, cb) {
                   if (DEBUG) {
                     console.log('- initSelection for "' + _name + '"');
@@ -348,6 +356,7 @@ define([
             }
           });
         } else {
+          // console.log('- opt: ', opt);
           $element.select2(opt);
         }
         // console.log($hidden);

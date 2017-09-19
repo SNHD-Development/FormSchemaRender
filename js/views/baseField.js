@@ -1,6 +1,6 @@
 // Field Base Class
 'use strict';
-define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils', 'models/model', 'collections/collections', 'modelbinder', 'validation', 'views/fields/list', 'text!data/email.json', 'text!data/schooles.json', 'text!data/county.json', 'text!templates/fields/html.html', 'text!templates/fields/label.html', 'text!templates/fields/text.html', 'text!templates/fields/password.html', 'text!templates/fields/telephone.html', 'text!templates/fields/socialsecurity.html', 'text!templates/fields/hidden.html', 'text!templates/fields/timestamp.html', 'text!templates/fields/useraccount.html', 'text!templates/fields/fraction.html', 'text!templates/fields/booleaninput.html', 'text!templates/fields/radio.html', 'text!templates/fields/file.html', 'text!templates/fields/multifiles.html', 'text!templates/fields/filerepository.html', 'text!templates/fields/read-filerepository.html', 'text!templates/fields/state.html', 'text!templates/fields/county.html', 'text!templates/fields/zipcode.html', 'text!templates/fields/country.html', 'text!templates/fields/fullname.html', 'text!templates/fields/address.html', 'text!templates/fields/textarea.html', 'text!templates/fields/number.html', 'text!templates/fields/email.html', 'text!templates/fields/date.html', 'text!templates/fields/select.html', 'text!templates/fields/check.html', 'text!templates/fields/birthdate.html', 'text!templates/fields/button.html', 'text!templates/fields/buttongroup.html', 'text!templates/fields/list.html', 'text!templates/fields/uneditableinput.html', 'text!templates/fields/uneditablecheck.html', 'text!templates/fields/uneditabletag.html', 'text!templates/fields/uneditabletel.html', 'text!templates/fields/uneditablefile.html', 'text!templates/fields/uneditableimage.html', 'text!templates/fields/buttonclipboard.html', 'text!templates/subform-layouts/table.html', 'text!templates/update-on-read/default-input.html', 'text!templates/update-on-read/default-input-radio.html', 'text!templates/update-on-read/default-input-textarea.html', 'text!templates/update-on-read/default-input-date.html', 'jquery.expose', 'jquery.datepicker', 'jquery.birthdaypicker', 'bootstrap'], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Collections, Modelbinder, Validation, listView, emailData, schoolesData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, socialsecurityTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, filerepositoryTemplate, readFilerepositoryTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate, readModeUpdatedefaultInputTemplate, readModeUpdatedefaultInputRadioTemplate, readModeUpdatedefaultInputTextAreaTemplate, readModeUpdatedefaultInputDateTemplate) {
+define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils', 'models/model', 'collections/collections', 'modelbinder', 'validation', 'views/fields/list', 'text!data/email.json', 'text!data/schooles.json', 'text!data/schoolclarkcounty.json', 'text!data/county.json', 'text!templates/fields/html.html', 'text!templates/fields/label.html', 'text!templates/fields/text.html', 'text!templates/fields/password.html', 'text!templates/fields/telephone.html', 'text!templates/fields/socialsecurity.html', 'text!templates/fields/hidden.html', 'text!templates/fields/timestamp.html', 'text!templates/fields/useraccount.html', 'text!templates/fields/fraction.html', 'text!templates/fields/booleaninput.html', 'text!templates/fields/radio.html', 'text!templates/fields/file.html', 'text!templates/fields/multifiles.html', 'text!templates/fields/filerepository.html', 'text!templates/fields/read-filerepository.html', 'text!templates/fields/state.html', 'text!templates/fields/county.html', 'text!templates/fields/zipcode.html', 'text!templates/fields/country.html', 'text!templates/fields/fullname.html', 'text!templates/fields/address.html', 'text!templates/fields/textarea.html', 'text!templates/fields/number.html', 'text!templates/fields/email.html', 'text!templates/fields/date.html', 'text!templates/fields/select.html', 'text!templates/fields/check.html', 'text!templates/fields/birthdate.html', 'text!templates/fields/button.html', 'text!templates/fields/buttongroup.html', 'text!templates/fields/list.html', 'text!templates/fields/uneditableinput.html', 'text!templates/fields/uneditablecheck.html', 'text!templates/fields/uneditabletag.html', 'text!templates/fields/uneditabletel.html', 'text!templates/fields/uneditablefile.html', 'text!templates/fields/uneditableimage.html', 'text!templates/fields/buttonclipboard.html', 'text!templates/subform-layouts/table.html', 'text!templates/update-on-read/default-input.html', 'text!templates/update-on-read/default-input-radio.html', 'text!templates/update-on-read/default-input-textarea.html', 'text!templates/update-on-read/default-input-date.html', 'jquery.expose', 'jquery.datepicker', 'jquery.birthdaypicker', 'bootstrap'], function($, _, Backbone, Bootstrap, Events, Vm, Utils, Model, Collections, Modelbinder, Validation, listView, emailData, schoolesData, schoolclarkcountyData, countyData, htmlTemplate, labelTemplate, textTemplate, passwordTemplate, telephoneTemplate, socialsecurityTemplate, hiddenTemplate, timestampTemplate, useraccountTemplate, fractionTemplate, booleanInputTemplate, radioTemplate, fileTemplate, multifilesTemplate, filerepositoryTemplate, readFilerepositoryTemplate, stateTemplate, countyTemplate, zipcodeTemplate, countryTemplate, fullnameTemplate, addressTemplate, textareaTemplate, numberTemplate, emailTemplate, dateTemplate, selectTemplate, checkTemplate, bdateTemplate, buttonTemplate, buttongroupTemplate, listTemplate, uneditableinputTemplate, uneditablecheckTemplate, uneditabletagTemplate, uneditabletelTemplate, uneditablefileTemplate, uneditableimageTemplate, buttonclipboardTemplate, tableTemplate, readModeUpdatedefaultInputTemplate, readModeUpdatedefaultInputRadioTemplate, readModeUpdatedefaultInputTextAreaTemplate, readModeUpdatedefaultInputDateTemplate) {
   // Debug Flag
   var DEBUG = false;
   // Cache Template
@@ -260,6 +260,17 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
         // console.log(_type);
       }
       switch (_type) {
+        case 'calculate':
+          _type = 'hidden';
+          if (!field.options || !field.options.logic) {
+            throw new Error('In order to use ' + _type + ', please set up the Options.Logic');
+          }
+          // console.log('- this.options: ', this.options);
+          field.attributes['data-logic'] = field.options.logic;
+          if (field.options.type) {
+            field.attributes['data-type'] = field.options.type;
+          }
+          break;
         case 'booleaninput':
           this._hasBooleanInput = true;
           break;
@@ -431,6 +442,15 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
               field._data = field.values[this.options.formData['fields'][field.name]];
             }
             this.addDataToElementData(field.name, 'value', this.options.formData.fields[field.name]);
+          }
+          break;
+        case 'country':
+          var classNameToAdd = 'selecttwo-render';
+          if (!field.attributes['class']) {
+            field.attributes['class'] = classNameToAdd;
+          } else if (field.attributes['class'].indexOf(classNameToAdd) < 0) {
+            // console.log('Add Class');
+            field.attributes['class'] += ' ' + classNameToAdd;
           }
           break;
         case 'county':
@@ -1021,11 +1041,25 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           }
           break;
         case 'schooles':
+        case 'schoolclarkcounty':
+          var schoolType = _type;
           _type = 'text';
           field.attributes['class'] = Utils.setupClassAttr(field.attributes['class'], 'span12');
           field.attributes['data-provide'] = 'typeahead';
           field.attributes['autocomplete'] = 'off';
-          field.attributes['data-source'] = schoolesData.replace(/\n/g, '').replace(/'/g, "&#39");
+          var schoolData;
+          switch(schoolType) {
+            case 'schooles':
+              schoolData = schoolesData;
+              break;
+            case 'schoolclarkcounty':
+              schoolData = schoolclarkcountyData;
+              // schoolData = schoolesData;
+              break;
+            default:
+              throw new Error('Not mapped school data for "' + schoolType + '" yet!');
+          }
+          field.attributes['data-source'] = schoolData.replace(/\r\n/g, '').replace(/\n/g, '').replace(/'/g, "&#39").replace(/,/g, "&#44");
           break;
           // Step Field Type only render for wizard view
         case 'step':
@@ -1400,6 +1434,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
         if (DEBUG && typeof this.inputTemplate[_type] === 'undefined') {
           throw 'Template of "' + _type + '" not found!';
         }
+        // console.log('- _type: ', _type, ' _attr: ', _attr);
         _html += (typeof this.inputTemplate[_type] !== 'undefined') ? this.inputTemplate[_type](_.extend({
           _attr: _attr,
           _lang: this.options.lang,
@@ -1438,7 +1473,12 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
       if (field.options.renderas) {
         _type = field.options.renderas.toLowerCase();
       }
+      // console.log('- _type: ', _type);
       switch (_type) {
+
+        case 'calculate':
+          return '';
+
         case 'hidden':
           if (this.options.mode === 'create') {
             return '';
@@ -1674,6 +1714,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
       }
       $(this).parents('div.actions').fadeOut();
       require(['views/fields/list'], function(SubFormView) {
+        var $expose;
         if (DEBUG) {
           console.log('- displaySubForm: Render List!');
           if (_data.model) {
@@ -1687,9 +1728,20 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
         }
         subFormView.render(hidden, read);
         if (!hidden) {
-          $subFormView.show();
+          $subFormView.show({
+            complete: function() {
+              // console.log('Fired: ' + e.data.formId + ' show complete');
+              // setTimeout(function() {
+              //   Utils.setupDateInput($subFormView, subFormView, true);
+              // }, 2000);
+            },
+            done: function() {
+              // console.log('Fired: ' + e.data.formId + ' show done');
+              // Utils.setupDateInput($subFormView, subFormView);
+            }
+          });
           $subFormView.addClass('active');
-          $subFormView.expose({
+          $expose = $subFormView.expose({
             closeOnEsc: false,
             closeOnClick: false,
             color: '#000',
@@ -1698,8 +1750,20 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           });
         }
         if (listView) {
+          // console.log('Fired: ' + e.data.formId + '.listViewCreated');
           listView.trigger(e.data.formId + '.listViewCreated', subFormView);
         }
+        /*if (!hidden) {
+          console.log('Fired: ' + e.data.formId + '.listViewShowed');
+          subFormView.trigger(e.data.formId + '.listViewShowed', subFormView);
+        }*/
+        /*if (!hidden) {
+          setTimeout(function() {
+            console.log('- subFormView: ', subFormView);
+            console.log('- $subFormView: ', $subFormView);
+            Utils.setupDateInput($subFormView, subFormView, true);
+          }, 1000);
+        }*/
       });
     },
     /**
@@ -1916,7 +1980,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
         }
       }
       // console.log('- subFormOptions:', subFormOptions);
-      // Render View
+      // Render SubForm List View
       require(['views/subform-layouts/' + _view], function(CollectionView) {
         if (DEBUG) {
           console.log('    in "views/subform-layouts/' + _view + '"');

@@ -2,7 +2,7 @@ FormSchemaRender
 ================
 Read JS object and Build the HTML Form.
 
-Version `version 0.2.0`
+Version `version 0.2.2`
 
 ### Head Section
 Please use font-awesome to add visual effect to the UI.
@@ -1236,6 +1236,11 @@ Sometime there are some fileds that internal should not be able to update these 
 	}
 
 ## Version
+
+* 0.2.2
+    - Update School List
+    - Update Email List
+    - Adding Options.Logic to Calculate Value
 
 * 0.2.1
     - When Button has BtnMarkAsUnacceptable, it will ask to put in the "Unacceptable Reason" (In Read Mode)

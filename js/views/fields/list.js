@@ -76,13 +76,17 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
     /**
      * Init List View
      **/
-    initialize: function() {
+    initialize: function(opts) {
+      opts = opts || {};
+      // console.log('*** initialize ***');
+      // console.log(arguments);
       // Setup BB Binder
       this._modelBinder = new Modelbinder();
       var _tmp;
       if (!this.options) {
         this.options = {};
       }
+      this.options._id = opts.formId;
       if (!this.options.options) {
         this.options.options = {};
       }
@@ -138,7 +142,10 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
       }
       // Render Fields
       require(['views/baseField'], function(BaseField) {
+        // console.log('*** Start : List ***');
+        // var DEBUG = true;
         // console.log(that.options);
+        var _id = that.options._id;
         var _html = '',
           _required, formView = Vm.create(that, 'BaseField', BaseField, {
             formSchema: that.options.formSchema,
@@ -368,7 +375,8 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
         }
         // If there are DatePicker
         if (formView._hasDate) {
-          Utils.setupDateInput(that.$el, that);
+          // console.log('- Here');
+          Utils.setupDateInput(that.$el, formView);
         }
         // If this is the first time need to click cancel button
         if (firstTime) {
@@ -378,6 +386,7 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
         // var DEBUG = true;
         // Will need to loop through the value and trigger change
         // console.log(' - that.model.toJSON():', JSON.stringify(that.model.toJSON()));
+        // console.log('- firstTime: ', firstTime);
         _.each(that.model.toJSON(), function(value, key) {
           if (value === '') {
             return;
@@ -385,6 +394,7 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
           var _inputName = that.$el.find(':input[name="' + key + '"]'),
             _val = _inputName.val(),
             _modelVal = that.model.get(key);
+          // var DEBUG = true;
           if (DEBUG) {
             console.log('    - ' + key);
             console.log(_val);
@@ -423,7 +433,7 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
         try {
           // console.log(that);
           // console.log(that.model.toJSON());
-          Utils.setupSelect2(that);
+          Utils.setupSelect2(formView, '#'+_id);
           // console.log(that.model.toJSON());
         } catch (err) {
           if (console && console.error) {
@@ -448,6 +458,12 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
           $btnDone.hide();
           $btnCancel.text('Close');
         }
+
+        // console.log('- formView: ', formView);
+
+        // console.log('- formView: ', formView);
+        // console.log('Fired: ' + _id + '.listViewShowed');
+        formView.trigger(_id + '.listViewShowed', formView);
         // console.log('- current model:', JSON.stringify(that.options.model));
       });
     },
@@ -544,6 +560,10 @@ define(['jquery', 'lodash', 'backbone', 'models/model', 'modelbinder', 'validati
       });
       // Set Radio Values
       Utils.setModelRadioValues(this.$el, this, false);
+
+      // Perform Calculate Logic
+      Utils.performCalculateLogic(this.$el, this);
+
       // Need to format the value
       formatModel(this);
       /*if (this.model) {
