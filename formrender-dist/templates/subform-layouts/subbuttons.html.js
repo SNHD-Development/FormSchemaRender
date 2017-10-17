@@ -1,1 +1,1 @@
-define([],function(){var n="";return n});
+define([],function(){return""});

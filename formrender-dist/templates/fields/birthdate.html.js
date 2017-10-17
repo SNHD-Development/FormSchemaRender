@@ -1,1 +1,1 @@
-define([],function(){var i="<div<%= _attr %>></div>";return i});
+define([],function(){return"<div<%= _attr %>></div>"});

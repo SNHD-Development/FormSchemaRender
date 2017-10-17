@@ -1,1 +1,1 @@
-define([],function(){var i='<div class="row-fluid"><div class="span12"><%= html %></div></div>';return i});
+define([],function(){return'<div class="row-fluid"><div class="span12"><%= html %></div></div>'});

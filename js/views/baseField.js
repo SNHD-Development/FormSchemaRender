@@ -1871,7 +1871,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
      * Add model to List
      **/
     addSubformData: function(e, list, models, reset) {
-      // var DEBUG = false;
+      // var DEBUG = true;
       if (DEBUG) {
         console.log('[*] baseField.addSubformData');
         console.log(arguments);
@@ -1887,13 +1887,24 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
       if (DEBUG) {
         console.log('- addSubformData:currentModel');
         console.log(_key);
-        console.log(currentModel);
-        console.log(currentModel.toJSON());
+        // console.log(currentModel);
+        console.log('- currentModel: ', currentModel, typeof currentModel);
+        if (currentModel.toJSON) {
+          console.log(currentModel.toJSON());
+        }
       }
       if (typeof currentModel !== 'object') {
+        if (DEBUG) {
+          console.log('- currentModel is not object!');
+          console.log(e.data.model);
+        }
         // console.log(arguments);
         if (e.data.model._listFieldType[_key]) {
+          if (DEBUG) {
+            console.log('- e.data.model._listFieldType[_key]: ', e.data.model._listFieldType[_key]);
+          }
           e.data.model.set(_key, e.data.model._listFieldType[_key]);
+          currentModel = e.data.model.get(_key);
         }
       }
       if (reset) {

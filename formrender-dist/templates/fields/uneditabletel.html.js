@@ -1,1 +1,1 @@
-define([],function(){var n='<span class="uneditable-input input-col2" id="<%= id %>"><%= value %></span><span class="add-on">Provider</span><span class="uneditable-input input-col2" id="<%= id %>"><%= providerValue %></span>';return n});
+define([],function(){return'<span class="uneditable-input input-col2" id="<%= id %>"><%= value %></span><span class="add-on">Provider</span><span class="uneditable-input input-col2" id="<%= id %>"><%= providerValue %></span>'});
