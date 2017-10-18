@@ -1255,6 +1255,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Update Email List
     - Adding Options.Logic to Calculate Value
     - Adding ability to exclude country in Country field
+    - Update VisibleOn to handle FullName field
 
 * 0.2.1
     - When Button has BtnMarkAsUnacceptable, it will ask to put in the "Unacceptable Reason" (In Read Mode)

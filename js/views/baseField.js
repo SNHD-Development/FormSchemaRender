@@ -2077,7 +2077,12 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           parentContainer = field.options.visibleon.parentcontainer;
         }
       }
+      // console.log('- _typeLowerCase: ', _typeLowerCase, field.name);
       switch (_typeLowerCase) {
+        case 'fullname':
+          delete this.model.validation[field.name + '_fullname_first_name'];
+          delete this.model.validation[field.name + '_fullname_last_name'];
+          break;
         case 'address':
           delete this.model.validation[field.name + '_address_street'];
           delete this.model.validation[field.name + '_address_city'];
@@ -2148,6 +2153,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
               }
               return value === _visibleVal;
             });
+            // console.log('- _visibleValInArray:', _visibleValInArray);
           }
           if (_hasBracket && _hasBracket.length) {
             _hasBracket = true;
@@ -2329,8 +2335,24 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
                 $nextContainer = $container.parent();
               }
               $nextContainer.find(':input').not('input[type="hidden"]').placeholder();
+              if (DEBUG_VS_ON) {
+                console.log('');
+                console.log('- _typeLowerCase:', _typeLowerCase);
+                console.log('- that.model.validation:', that.model.validation);
+              }
               // Adding Validation Scheme, if has one
-              if (_typeLowerCase === 'address') {
+              if (_typeLowerCase === 'fullname') {
+                var _full_name_key = field.name + '_fullname_first_name';
+                if (that.options.formSchema.validation[_full_name_key]) {
+                  that.model.validation[_full_name_key] = that.options.formSchema.validation[_full_name_key];
+                }
+                _addressArray.push(_full_name_key);
+                _full_name_key = field.name + '_fullname_last_name';
+                if (that.options.formSchema.validation[_full_name_key]) {
+                  that.model.validation[_full_name_key] = that.options.formSchema.validation[_full_name_key];
+                }
+                _addressArray.push(_full_name_key);
+              } else if (_typeLowerCase === 'address') {
                 var _address_name = field.name + '_address_street';
                 if (that.options.formSchema.validation[_address_name]) {
                   that.model.validation[_address_name] = that.options.formSchema.validation[_address_name];
@@ -2399,7 +2421,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
                   }
                 });
               } else if (that.options.mode === 'update') {
-                // var DEBUG = false;
+                // var DEBUG = true;
                 if (DEBUG) {
                   console.log('- Check for Field. ' + field.name);
                   console.log(field.name);
@@ -2488,8 +2510,17 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
             }
           } else {
             // Trigger Event to let other objects know that this fields will go out of markup
-            // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '"');
-            $('#' + field.name, that.el).trigger('removeVisibleOn');
+            // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '" ' + _typeLowerCase);
+            var $removeVisibleOnElement = $('#' + field.name, that.el);
+            if ($removeVisibleOnElement && $removeVisibleOnElement.length) {
+              if ($removeVisibleOnElement.val()) {
+                $removeVisibleOnElement.val('').trigger('change');
+              }
+            }
+            // console.log($removeVisibleOnElement);
+            // console.log($removeVisibleOnElement.val());
+            // console.log(that.model.get(field.name));
+            $removeVisibleOnElement.trigger('removeVisibleOn');
             // Remove this out of the markup
             $('.options-visible-on-' + field.name, that.el).remove();
             // Need to remove the "visible-parent-{name}"
