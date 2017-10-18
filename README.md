@@ -431,6 +431,19 @@ By default, will render three textboxes as "First Name", "Middle Initial" and "L
 if we don't want to render "Middle Initial" simply set in "Options.MiddleName = false".
 If we want to accept Middle Name instead of Middle Initial simply set "Options.FullMiddleName = true". This option will change the placeholder text to "Middle Name".
 
+### Country Field
+
+To exclude some countries, pass in `Options.ExcludeCountry` as a list with 2 digit code.
+
+    {
+        "Name" : "ShippingCountry",
+        "Type" : "Country",
+        "Description" : "Shipping Country",
+        "Options" : {
+            "ExcludeCountry" : ["US", "GR"]
+        }
+    }
+
 ### Address Field
 
 By default, Address Field will render "Street, City, State, ZipCode and Country"
@@ -1241,6 +1254,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Update School List
     - Update Email List
     - Adding Options.Logic to Calculate Value
+    - Adding ability to exclude country in Country field
 
 * 0.2.1
     - When Button has BtnMarkAsUnacceptable, it will ask to put in the "Unacceptable Reason" (In Read Mode)
