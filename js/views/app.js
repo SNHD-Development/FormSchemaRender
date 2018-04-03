@@ -416,10 +416,16 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
         // Error Message
         $('.not_sending', $form).attr('disabled', false);
         // Debug: Validation
-        // if (console && console.log) {
-        //     console.log(this.formView.model.toJSON());
-        //     console.log($('.not_sending', $form));
-        // }
+        if ('console' in window && console && console.log) {
+            console.log('*** Submitted Error ***');
+            console.log(this.formView.model.toJSON());
+            // console.log($('.not_sending', $form));
+            console.log(this.formView.model.validation);
+            // console.log('- validationError:', this.formView.model.validationError);
+            console.log('- _isCheckBoxGood:', _isCheckBoxGood);
+            console.log('- .invalid:', $('.invalid'));
+            console.log('******');
+        }
         if (this.formView.options.formSchema.view !== 'wizard') {
           _opt = {
             html: true,

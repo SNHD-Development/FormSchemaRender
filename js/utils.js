@@ -2760,6 +2760,8 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
           switch (type) {
             case 'day':
               result = result / 1000 / 60 / 60 / 24;
+              // Round Up
+              result = Math.ceil(result);
               break;
           }
         }
@@ -2771,7 +2773,15 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
     },
     setModelRadioValues: function(el, view, debug) {
       var DEBUG = debug || false;
+      // DEBUG = true;
       view = view || null;
+
+      // Need to remove previous invalid class
+      var $radiosInvalid = el.find(':radio.invalid');
+      if ($radiosInvalid.length) {
+        $radiosInvalid.removeClass('invalid');
+      }
+
       var $radios = el.find(':radio:checked');
       if (!$radios.length) {
         return;

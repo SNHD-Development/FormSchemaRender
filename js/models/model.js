@@ -396,7 +396,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/collections', '../utils
        **/
       this.on('validated:invalid', function(model, errors) {
         var DEBUG = false;
-        if (console && console.log) {
+        if ('console' in window && console && console.log) {
           console.log('Invalid Fields', errors);
         }
         if (DEBUG) {
