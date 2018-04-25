@@ -743,6 +743,14 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
                   return date.valueOf() < maxDate.valueOf() ? 'disabled' : '';
                 };
                 break;
+              default:
+                nowTemp = moment($this.attr('data-mindate'), 'MM/DD/YYYY');
+                if (nowTemp && nowTemp.isValid()) {
+                  maxDate = new Date(nowTemp.year(), nowTemp.month(), nowTemp.date(), 0, 0, 0, 0);
+                  _options.onRender = function(date) {
+                    return date.valueOf() < maxDate.valueOf() ? 'disabled' : '';
+                  };
+                }
             }
           }
         }

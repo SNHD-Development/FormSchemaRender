@@ -1257,6 +1257,7 @@ Sometime there are some fileds that internal should not be able to update these 
     - Adding ability to exclude country in Country field
     - Update VisibleOn to handle FullName field
     - Clear .invalid class for all radio inputs before submission
+    - Fix validation for Date type when passing in the future date
 
 * 0.2.1
     - When Button has BtnMarkAsUnacceptable, it will ask to put in the "Unacceptable Reason" (In Read Mode)

@@ -645,6 +645,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
               field.attributes['data-maxdate'] = _validation_tmp.maxdate;
             }
             if (_validation_tmp.mindate) {
+              // console.log('- _validation_tmp.mindate:', _validation_tmp.mindate);
               field.attributes['data-mindate'] = _validation_tmp.mindate;
             }
             if (field.options && field.options.datepickeroptions) {
