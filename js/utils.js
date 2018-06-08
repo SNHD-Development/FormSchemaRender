@@ -5,6 +5,66 @@
 "use strict";
 define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'select2helper', 'text!data/county.json', 'bootstrap', 'jquery.select2', 'jquery.spinner', 'jquery.birthdaypicker', 'jquery.placeholder', 'jquery.expose', 'jquery.zclip', 'jquery.stupidtable', 'xdr'], function($, _, Backbone, Vm, humane, FormModel, Select2Helper, countyData) {
   var DEBUG = false;
+
+  var SYSTEM_LANG = {
+    'Please complete the required fields': {
+      "en": "",
+      "sp": "",
+      "ar": "",
+      "zh-cn": "",
+      "zh-tw": "",
+      "fa": "",
+      "ko": "",
+      "pt": "",
+      "ru": "",
+      "tl": "",
+      "th": "",
+      "vi": ""
+    },
+    'Previous': {
+      "en": "Previous",
+      "sp": "Anterior",
+      "ar": "سابق",
+      "zh-cn": "以前",
+      "zh-tw": "以前",
+      "fa": "قبلی",
+      "ko": "너무 이른",
+      "pt": "Anterior",
+      "ru": "предыдущий",
+      "tl": "Nakaraan",
+      "th": "ก่อน",
+      "vi": "Trước"
+    },
+    'Next': {
+      "en": "Next",
+      "sp": "Siguiente",
+      "ar": "التالى",
+      "zh-cn": "下一個",
+      "zh-tw": "下一个",
+      "fa": "بعد",
+      "ko": "다음 것",
+      "pt": "Próximo",
+      "ru": "следующий",
+      "tl": "Susunod",
+      "th": "ต่อไป",
+      "vi": "Kế tiếp"
+    },
+    'Submit': {
+      "en": "Submit",
+      "sp": "Enviar",
+      "ar": "خضع",
+      "zh-cn": "提交",
+      "zh-tw": "提交",
+      "fa": "ارسال",
+      "ko": "제출",
+      "pt": "Enviar",
+      "ru": "Отправить",
+      "tl": "Ipasa",
+      "th": "เสนอ",
+      "vi": "Gửi đi"
+    }
+  }
+
   return {
     config: {
       fileUrl: '/form/getFile',
@@ -3263,7 +3323,9 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
      */
     scrollToTop: function() {
       document.body.scrollTop = document.documentElement.scrollTop = 0;
-    }
+    },
+
+    getText: getText
   };
   /**
    * Setup DependOn Options
@@ -3285,5 +3347,31 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
         $(':input[name="' + value.options.visibleon.name + '"]').trigger('change');
       }
     });
+  }
+  /**
+   * Get System Language
+   */
+  function getText(text, lang) {
+    console.log('[*] getText');
+    console.log(arguments);
+    if (!text) {
+      return text;
+    }
+    if (!lang) {
+      return text;
+    }
+    if (!(text in SYSTEM_LANG)) {
+      return text;
+    }
+    var _currentText = SYSTEM_LANG[text];
+    if (!(lang in _currentText)) {
+      return text;
+    }
+    var currentText = _currentText[lang];
+    if (!currentText) {
+      return text;
+    }
+    // console.log('- currentText:', currentText);
+    return currentText;
   }
 });

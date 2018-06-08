@@ -69,9 +69,17 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
       // Closed open div
       _html += BaseFieldView.prototype.closeOpenDiv.call(this);
       _html += BaseFieldView.prototype.closeOpenDiv.call(this, '_stepDiv');
+
+      // console.log('- this.options:', this.options);
+      var _lang = this.options.lang;
+      var _prev = Utils.getText('Previous', _lang);
+      var _submit = Utils.getText('Submit', _lang);
+
       $(this.el).html(this.template(_.extend({
         html: _html,
-        lang: this.options.lang
+        lang: this.options.lang,
+        _prev: _prev,
+        _submit: _submit
       }, this.options.formSchema)));
       this.renderWizardNavBar();
       // Bind Model

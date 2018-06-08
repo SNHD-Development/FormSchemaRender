@@ -87,6 +87,10 @@
       if (settings['lang'] !== '') {
         settings['monthformat'] = 'short-' + settings['lang'];
       }
+      // console.log("settings['monthformat']:",settings['monthformat']);
+      if (!(settings['monthformat'] in months)) {
+        settings['monthformat'] = 'short';
+      }
       var tabindex = settings["tabindex"];
 
       // Deal with the various Date Formats
