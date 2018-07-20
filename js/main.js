@@ -179,6 +179,7 @@ require(['jquery', 'views/app', 'vm', 'utils', 'libs/date', 'moment'], function(
     // Render Custom Script Here
     if (typeof formEvents !== 'undefined') {
       _.each(formEvents, function(value, key) {
+        // console.log(arguments)
         $('div#app').on(formSchema.name + '.' + key, {
           Utils: Utils
         }, value);

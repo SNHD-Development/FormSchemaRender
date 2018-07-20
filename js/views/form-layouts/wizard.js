@@ -73,7 +73,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
       // console.log('- this.options:', this.options);
       var _lang = this.options.lang;
       var _prev = Utils.getText('Previous', _lang);
-      var _submit = Utils.getText('Submit', _lang);
+      var _submit = Utils.getText('Next', _lang);
 
       $(this.el).html(this.template(_.extend({
         html: _html,
@@ -200,14 +200,14 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
                 break;
               }
             case (_numSteps - 1):
-              var btnSubmit;
-              switch (_lang) {
-                case 'sp':
-                  btnSubmit = 'Enviar';
-                  break;
-                default:
-                  btnSubmit = 'Submit';
-              }
+              var btnSubmit = Utils.getText('Submit', _lang);
+              // switch (_lang) {
+              //   case 'sp':
+              //     btnSubmit = 'Enviar';
+              //     break;
+              //   default:
+              //     btnSubmit = 'Submit';
+              // }
               e.data.$nextBtn.removeClass('btn-primary').addClass('btn-info').html('<i class="icon-envelope-alt"></i> ' + btnSubmit);
               break;
           }
@@ -241,6 +241,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
       var that = this,
         _error = false,
         _elementError, $element;
+
       if (typeof this._stepValidated[index] !== 'undefined') {
         _.each(this._stepValidated[index], function(element) {
           $element = $(':input[name="' + element + '"]', that.el).removeClass('invalid');
@@ -260,17 +261,26 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
           }
         });
         if (_error) {
+          var $form = $(this.el);
+          // console.log($form)
+          // console.log(this)
+          // Example of custom event
+          $form.trigger($form.attr('id') + '.isStepValidError', [$form, this]);
+
+          var _lang = this.options.lang;
+          var validationError = Utils.getText('Validation Error', _lang);
+          var contentError = Utils.getText('Please complete the required fields', _lang);
           var _opt = {
             html: true,
             placement: 'top',
             trigger: 'manual',
-            title: '<i class="icon-edit"></i> Validation Error',
-            content: 'Please complete the required fields'
+            title: '<i class="icon-edit"></i> ' + validationError,
+            content: contentError
           };
-          if (this.options.lang === 'sp') {
-            _opt.title = '<i class="icon-edit"></i> Error de validaci&oacute;n';
-            _opt.content = 'Por favor, corrija la forma';
-          }
+          // if (this.options.lang === 'sp') {
+          //   _opt.title = '<i class="icon-edit"></i> Error de validaci&oacute;n';
+          //   _opt.content = 'Por favor, corrija la forma';
+          // }
           this.renderErrorPopover(this.$nextBtn, $(this.el), _opt);
         }
       }

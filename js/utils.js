@@ -7,19 +7,33 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
   var DEBUG = false;
 
   var SYSTEM_LANG = {
+    'Validation Error': {
+      "en": "Validation Error",
+      "sp": "Error de validacion",
+      "ar": "خطئ في التحقق",
+      "zh-cn": "验证错误",
+      "zh-tw": "驗證錯誤",
+      "fa": "خطای اعتبار سنجی",
+      "ko": "유효성 검사 오류",
+      "pt": "erro de validação",
+      "ru": "Ошибка проверки",
+      "tl": "May error sa validation.",
+      "th": "ข้อผิดพลาดในการตรวจสอบ",
+      "vi": "Lỗi xác nhận"
+    },
     'Please complete the required fields': {
-      "en": "",
-      "sp": "",
-      "ar": "",
-      "zh-cn": "",
-      "zh-tw": "",
-      "fa": "",
-      "ko": "",
-      "pt": "",
-      "ru": "",
-      "tl": "",
-      "th": "",
-      "vi": ""
+      "en": "Please complete the required fields",
+      "sp": "Por favor complete los campos requeridos",
+      "ar": "يرجى إكمال الحقول المطلوبة",
+      "zh-cn": "请填写必填字段",
+      "zh-tw": "請填寫必填字段",
+      "fa": "لطفا فیلدهای مورد نیاز را تکمیل کنید",
+      "ko": "필수 입력란을 작성하십시오.",
+      "pt": "Por favor, preencha os campos obrigatórios",
+      "ru": "Заполните необходимые поля",
+      "tl": "Maaring kumpletuhin and mga kailangan na mga fields",
+      "th": "โปรดกรอกข้อมูลในฟิลด์ที่จำเป็น",
+      "vi": "Vui lòng hoàn tất các trường bắt buộc"
     },
     'Previous': {
       "en": "Previous",
@@ -3311,8 +3325,10 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
       if (view.$el) {
         $inputFirst = view.$el.find('form:first').find(q);
       }
-      if ($inputFirst && $inputFirst.length) {
-        $inputFirst.focus().blur();
+      // console.log('- $inputFirst:', $inputFirst)
+      if ($inputFirst && $inputFirst.length && !($inputFirst.is(':radio') || $inputFirst.is(':checkbox'))) {
+        // $inputFirst.focus().blur();
+        $inputFirst.focus();
         if ($inputFirst.hasClass('datepicker')) {
           $inputFirst.datepicker('hide');
         }
@@ -3352,8 +3368,8 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
    * Get System Language
    */
   function getText(text, lang) {
-    console.log('[*] getText');
-    console.log(arguments);
+    // console.log('[*] getText');
+    // console.log(arguments);
     if (!text) {
       return text;
     }

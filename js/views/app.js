@@ -427,6 +427,8 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
             console.log('******');
         }
         if (this.formView.options.formSchema.view !== 'wizard') {
+          // console.log('*****');
+          // console.log(arguments);
           _opt = {
             html: true,
             placement: 'top',
