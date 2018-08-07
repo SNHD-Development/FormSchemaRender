@@ -933,6 +933,18 @@ Validation FormSchema
 		}
 	}
 
+If we want to add num days from todays date on minDate
+
+
+	{
+		"Validation": {
+			"MyDate": {
+				"required": true,
+				"minDate": "5"
+			}
+		}
+	}
+
 Datepicker Options:
 
 If we want to add a logic to limit the date in datepicker we can do so by adding
