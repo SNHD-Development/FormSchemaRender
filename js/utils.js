@@ -818,13 +818,35 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
                 };
                 break;
               default:
-                nowTemp = moment($this.attr('data-mindate'), 'MM/DD/YYYY');
-                if (nowTemp && nowTemp.isValid()) {
-                  maxDate = new Date(nowTemp.year(), nowTemp.month(), nowTemp.date(), 0, 0, 0, 0);
+                // Add the ability to add number of business days for mindate.
+                if($this.attr('data-mindate').match(/^\d+$/) != null) {
+                  var numDays = parseInt($this.attr('data-mindate'));
+                  var numDaysPlusWeekend = numDays;
+                  nowTemp = new Date();
+                  for(var i = 1; i <= numDaysPlusWeekend; i++) {
+                    nowTemp.setDate(nowTemp.getDate() + 1);
+                    //console.log(nowTemp.getDate() + ': ' + nowTemp.getDay());
+                    if(nowTemp.getDay() == 0 || nowTemp.getDay() == 6) {
+                      numDaysPlusWeekend++;
+                    }
+                  }
+                  
+                  //nowTemp.setDate(nowTemp.getDate() + numDaysPlusWeekend);
+                  //console.log(nowTemp.getDay());
+                  maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
                   _options.onRender = function(date) {
-                    return date.valueOf() < maxDate.valueOf() ? 'disabled' : '';
+                    return date.valueOf() < nowTemp.valueOf() ? 'disabled' : '';
                   };
+                } else {
+                  nowTemp = moment($this.attr('data-mindate'), 'MM/DD/YYYY');
+                  if (nowTemp && nowTemp.isValid()) {
+                    maxDate = new Date(nowTemp.year(), nowTemp.month(), nowTemp.date(), 0, 0, 0, 0);
+                    _options.onRender = function(date) {
+                      return date.valueOf() < maxDate.valueOf() ? 'disabled' : '';
+                    };
+                  }
                 }
+                break;
             }
           }
         }
