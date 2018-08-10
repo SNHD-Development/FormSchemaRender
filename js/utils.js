@@ -819,18 +819,24 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
                 break;
               default:
                 // Add the ability to add number of business days for mindate.
+                // Should have ability to count the weekend as well, in the future
                 if($this.attr('data-mindate').match(/^\d+$/) != null) {
                   var numDays = parseInt($this.attr('data-mindate'));
                   var numDaysPlusWeekend = numDays;
                   nowTemp = new Date();
+                  var jsWeekend = [0, 6];
                   for(var i = 1; i <= numDaysPlusWeekend; i++) {
                     nowTemp.setDate(nowTemp.getDate() + 1);
                     //console.log(nowTemp.getDate() + ': ' + nowTemp.getDay());
-                    if(nowTemp.getDay() == 0 || nowTemp.getDay() == 6) {
+                    if(_.indexOf(jsWeekend, nowTemp.getDay()) >= 0) {
                       numDaysPlusWeekend++;
                     }
                   }
-                  
+                  // If this is a Friday need to add more days
+                  if (nowTemp.getDay() === 5) {
+                    nowTemp.setDate(nowTemp.getDate() + 2);
+                  }
+
                   //nowTemp.setDate(nowTemp.getDate() + numDaysPlusWeekend);
                   //console.log(nowTemp.getDay());
                   maxDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);

@@ -539,8 +539,16 @@
         // minDate validator
         // Validate that the value has to be greater than minDate
         mindate: function(value, attr, minDate, model) {
+          var DEBUG = false;
           if (!value || value === '') {
             return;
+          }
+          if (DEBUG) {
+            console.log('**** mindate ****');
+            console.log('- value:', value);
+            console.log('- attr:', attr);
+            console.log('- minDate:', minDate);
+            console.log('- model:', model);
           }
           if (!value || !value.length || value === '') {
             value = jQuery('#' + attr).val();
@@ -550,8 +558,30 @@
           }
           var _val = (value && value.split) ? value.split('/') : [];
           if (_val.length === 3) {
-            if (minDate.search(/\//i) < 0) {
+            if (minDate.match(/^\d+$/ig)) {
+              if (DEBUG) {
+                console.log('- minDate is a numeric:', minDate);
+              }
+              var jsWeekend = [0, 6];
+              var nowTemp = new Date();
+              var numDaysPlusWeekend = parseInt(minDate, 10)
+              for(var i = 1; i <= numDaysPlusWeekend; i++) {
+                nowTemp.setDate(nowTemp.getDate() + 1);
+                //console.log(nowTemp.getDate() + ': ' + nowTemp.getDay());
+                if(_.indexOf(jsWeekend, nowTemp.getDay()) >= 0) {
+                  numDaysPlusWeekend++;
+                }
+              }
+              // If this is a Friday need to add more days
+              if (nowTemp.getDay() === 5) {
+                nowTemp.setDate(nowTemp.getDate() + 3);
+              }
+              minDate = (nowTemp.getMonth() + 1) + '/' + nowTemp.getDate() + '/' + nowTemp.getFullYear()
+            } else if (minDate.search(/\//i) < 0) {
               var _minDate = minDate.toLowerCase();
+              if (DEBUG) {
+                console.log('- _minDate:', _minDate);
+              }
               switch (_minDate) {
                 case 'today':
                   _minDate = new Date();
