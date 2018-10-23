@@ -3036,9 +3036,11 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
       return true;
     },
     shouldRenderShowOnUser: function(field) {
+
       if (!(field.options && field.options.showonuser)) {
         return true;
       }
+      
       if (!_.isArray(field.options.showonuser)) {
         throw 'In order to use Options.ShowOnUser for ' + field.type + ' with "' + field.name + '" required an array!';
       }

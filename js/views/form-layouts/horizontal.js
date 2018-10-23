@@ -25,6 +25,9 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
         var _temp = '',
           _wrapper = false,
           _typeLowerCase = value.type.toLowerCase();
+        if (!Utils.shouldRenderShowOnUser(value)) {
+          return '';
+        }
         // Check for Show On Mode
         if (!BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status)) {
           return '';

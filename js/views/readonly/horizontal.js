@@ -33,6 +33,10 @@ define([
         _html = '';
       _.each(this.options.formSchema.fields, function(value, key, list) {
 
+        if (!Utils.shouldRenderShowOnUser(value)) {
+          return '';
+        }
+
         var _typeLowerCase = value.type.toLowerCase();
 
         Utils.addFormSubmittedData(value, that);

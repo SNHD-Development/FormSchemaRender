@@ -21,6 +21,10 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
       _.each(this.options.formSchema.fields, function(value, key, list) {
         var _temp = '',
           _typeLowerCase = value.type.toLowerCase();
+
+        if (!Utils.shouldRenderShowOnUser(value)) {
+          return '';
+        }
         // Check for Show On Mode
         if (!BaseFieldView.prototype.checkShowOnMode.call(that, value, that.options.mode, that.options.formData.status)) {
           return '';
