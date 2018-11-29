@@ -3047,10 +3047,13 @@ define(['jquery', 'underscore', 'backbone', 'vm', 'humane', 'models/form', 'sele
       // Perform Logic to check the User
       var _curr_user = this.getUserIdFormHtml();
       if (_curr_user && _curr_user !== '') {
-        var _userRegEx = /(\w+)$/i,
-          _nameToken = _curr_user.match(_userRegEx);
+        var _nameToken = _curr_user.replace('cchd\\','');
+        // Added a fix for usernames that has hypen. 11-28-2018 - Phillip Pilares
+
+        // var _userRegEx = /(\w+)$/i,
+        //   _nameToken = _curr_user.match(_userRegEx);
         if (_nameToken) {
-          if (_.indexOf(field.options.showonuser, _nameToken.pop()) > -1) {
+          if (_.indexOf(field.options.showonuser, _nameToken) > -1) {
             return true;
           }
         }
