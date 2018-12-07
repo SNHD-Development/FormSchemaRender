@@ -2228,51 +2228,74 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap', 'events', 'vm', 'utils'
           }
           // Added: Steps to Validate Logic
           var isValidSteps = true;
-          if (field && field.options && field.options.visibleon && field.options.visibleon.steps) {
-            if (!_.isArray(field.options.visibleon.steps) || !field.options.visibleon.steps.length) {
-              throw new Error(field.name + ' must not contain an empty VisibleOn.Steps');
-            }
-            // var DEBUG = true;
-            var _steps = field.options.visibleon.steps;
-            if (DEBUG) {
-              console.log('[*] Debug: VisibleOn with Steps');
-              // console.log(that);
-              console.log(_visibleVal);
-              console.log(field.name);
-              console.log(_steps);
-            }
-            for (var i = 0; i < _steps.length; i++) {
-              var _currentStep = _steps[i];
-              var _stepValues = _currentStep.values;
-              if (!_stepValues || !_.isArray(_stepValues)) {
-                var _tempError = (typeof JSON !== 'undefined' && JSON && JSON.stringify) ? JSON.stringify(_currentStep) : null;
-                throw new Error('Expects an array for "Values" in "' + _tempError + '"');
+          if (field && field.options && field.options.visibleon) {
+            // debugger;
+            if (field.options.visibleon.steps) {
+              if (!_.isArray(field.options.visibleon.steps) || !field.options.visibleon.steps.length) {
+                throw new Error(field.name + ' must not contain an empty VisibleOn.Steps');
               }
-              var $stepTargetValue = $(':input[name="' + _currentStep.name + '"]');
-              var _stepVal = $.trim($stepTargetValue.val());
-              var _inArray = _.indexOf(_stepValues, _stepVal);
-              var _stepResult = (_currentStep.notin) ? _inArray < 0 : _inArray > -1;
+              // var DEBUG = true;
+              var _steps = field.options.visibleon.steps;
               if (DEBUG) {
-                console.log('[*] Step: ' + i);
-                console.log($stepTargetValue);
-                console.log(_currentStep);
-                console.log(_stepVal);
-                console.log(_stepValues);
-                console.log(_inArray);
-                console.log(_stepResult);
+                console.log('[*] Debug: VisibleOn with Steps');
+                // console.log(that);
+                console.log(_visibleVal);
+                console.log(field.name);
+                console.log(_steps);
               }
+              for (var i = 0; i < _steps.length; i++) {
+                var _currentStep = _steps[i];
+                var _stepValues = _currentStep.values;
+                if (!_stepValues || !_.isArray(_stepValues)) {
+                  var _tempError = (typeof JSON !== 'undefined' && JSON && JSON.stringify) ? JSON.stringify(_currentStep) : null;
+                  throw new Error('Expects an array for "Values" in "' + _tempError + '"');
+                }
+                var $stepTargetValue = $(':input[name="' + _currentStep.name + '"]');
+                var _stepVal = $.trim($stepTargetValue.val());
+                var _inArray = _.indexOf(_stepValues, _stepVal);
+                var _stepResult = (_currentStep.notin) ? _inArray < 0 : _inArray > -1;
+                if (DEBUG) {
+                  console.log('[*] Step: ' + i);
+                  console.log($stepTargetValue);
+                  console.log(_currentStep);
+                  console.log(_stepVal);
+                  console.log(_stepValues);
+                  console.log(_inArray);
+                  console.log(_stepResult);
+                }
+                if (!_stepResult) {
+                  isValidSteps = false;
+                  break;
+                }
+              };
+            } else if (field.options.visibleon.notin && field.options.visibleon.values) {
+              var DEBUG_NOTIN = false;
+              var $stepTargetValue = $(':input[name="' + field.options.visibleon.name + '"]');
+              var _stepVal = $.trim($stepTargetValue.val());
+              var _inArray = _.indexOf(field.options.visibleon.values, _stepVal);
+              var _stepResult = (field.options.visibleon.notin) ? _inArray < 0 : _inArray > -1;
               if (!_stepResult) {
-                isValidSteps = false;
-                break;
+                  isValidSteps = false;
               }
-            };
+              if (DEBUG_NOTIN) {
+                console.log('- $stepTargetValue:', $stepTargetValue);
+                console.log('- _stepVal:',_stepVal);
+                console.log('- _inArray:',_inArray);
+                console.log('- _stepResult',_stepResult);
+                console.log('- isValidSteps',isValidSteps);
+              }
+            }
           }
           if (DEBUG_VS_ON) {
             console.log('- field.options.visibleon.values:', field.options.visibleon.values);
             console.log('- _visibleVal:', _visibleVal);
             console.log('- isValidSteps:', isValidSteps);
           }
-          if (_.indexOf(field.options.visibleon.values, _visibleVal) > -1 && isValidSteps) {
+          // isValidSteps: This is the variabled that determined if the VisibleOn show
+          if (
+            (!field.options.visibleon.notin && _.indexOf(field.options.visibleon.values, _visibleVal) > -1 && isValidSteps)
+            || (field.options.visibleon.notin && isValidSteps)
+            ) {
             if (DEBUG_VS_ON) {
               console.log('[x] Match Value with VisibleOn, will render [' + field.name + '].');
               console.log($currentTarget);
