@@ -1,52 +1,86 @@
 /**
  * Main View Controller
  **/
-'use strict';
-define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates/layout.html', 'jquery.ajaxsubmit', 'jquery.datepicker', 'jquery.placeholder', 'jquery.lightbox', 'jquery.expose', 'bootstrap', 'jquery.select2', 'jloader'], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
+"use strict";
+define([
+  "jquery",
+  "lodash",
+  "backbone",
+  "vm",
+  "utils",
+  "events",
+  "text!templates/layout.html",
+  "jquery.ajaxsubmit",
+  "jquery.datepicker",
+  "jquery.placeholder",
+  "jquery.lightbox",
+  "jquery.expose",
+  "bootstrap",
+  "jquery.select2",
+  "jloader"
+], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
   // Default Config
   function removePopover($ele) {
-    $ele.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+    $ele
+      .attr("disabled", false)
+      .popover("destroy")
+      .next(".popover")
+      .removeClass("success")
+      .remove();
   }
   var AppView = Backbone.View.extend({
     template: _.template(layoutTemplate),
-    el: '#app',
+    el: "#app",
     initialize: function() {
-      if (typeof this.options.formSchema === 'undefined') {
-        throw 'formSchema is not in the options parameters';
+      if (typeof this.options.formSchema === "undefined") {
+        throw "formSchema is not in the options parameters";
       }
     },
     render: function() {
       var that = this,
-        formLayout = ('view' in this.options.formSchema) ? this.options.formSchema.view : 'default',
+        formLayout =
+          "view" in this.options.formSchema
+            ? this.options.formSchema.view
+            : "default",
         _opts = {
           formSchema: that.options.formSchema,
           formData: that.options.formData,
           mode: that.options.mode,
           internal: that.options.internal,
           hideButtons: that.options.hideButtons,
-          lang: that.options.lang
+          lang: that.options.lang,
+          formEvents: this.options.formEvents
         };
       this.$el.html(this.template(this.options.formSchema));
       // Generic Setup
-      $('#' + this.options.formSchema.name, this.el).on(this.options.formSchema.name + '.renderCompleted', function() {
-        Utils.genericSetup(that);
-      });
-      if (typeof this.options.mode !== 'undefined' && this.options.mode === 'read') {
-        $('#' + that.options.formSchema.name, that.el).addClass('read-mode');
+      $("#" + this.options.formSchema.name, this.el).on(
+        this.options.formSchema.name + ".renderCompleted",
+        function() {
+          Utils.genericSetup(that);
+        }
+      );
+      if (
+        typeof this.options.mode !== "undefined" &&
+        this.options.mode === "read"
+      ) {
+        $("#" + that.options.formSchema.name, that.el).addClass("read-mode");
         // Async Call
-        require(['views/readonly/' + formLayout], function(ReadView) {
+        require(["views/readonly/" + formLayout], function(ReadView) {
           try {
-            var readView = Vm.create(that, 'ReadView', ReadView, _opts);
+            var readView = Vm.create(that, "ReadView", ReadView, _opts);
             readView.render();
             Utils.finalReadSetup(readView);
             // Render Form Complete
             // Send view at second parameter
-            $('#' + that.options.formSchema.name, that.el).trigger(that.options.formSchema.name + '.renderCompleted', that);
+            $("#" + that.options.formSchema.name, that.el).trigger(
+              that.options.formSchema.name + ".renderCompleted",
+              that
+            );
             // Final Setup for All Mode
             Utils.finalSetupAllMode(readView);
           } catch (err) {
             if (console && console.error) {
-              console.error('[x] Rendering Read Mode Error');
+              console.error("[x] Rendering Read Mode Error");
               console.error(err);
             }
             Utils.renderError($(readView.el), err);
@@ -58,13 +92,13 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
         // Will render Form
         // Render Form Layout
         // Async Call
-        require(['views/form-layouts/' + formLayout], function(FormView) {
+        require(["views/form-layouts/" + formLayout], function(FormView) {
           try {
-            that.formView = Vm.create(that, 'FormView', FormView, _opts);
+            that.formView = Vm.create(that, "FormView", FormView, _opts);
             that.formView.render();
           } catch (err) {
             if (console && console.log) {
-              console.log('Exception: in app.js');
+              console.log("Exception: in app.js");
               console.log(err);
             }
             Utils.renderError(that.$el, err);
@@ -95,37 +129,46 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
             Utils.finalSetup(that.formView);
             // Render Form Complete
             // Send view at second parameter
-            $('#' + that.options.formSchema.name, that.el).trigger(that.options.formSchema.name + '.renderCompleted', that);
+            $("#" + that.options.formSchema.name, that.el).trigger(
+              that.options.formSchema.name + ".renderCompleted",
+              that
+            );
             // Final Setup for All Mode
             Utils.finalSetupAllMode(that.formView);
             // Set the Action if has one
-            var $form = $(that.el).find('form.form-render');
+            var $form = $(that.el).find("form.form-render");
             if (that.options.formActionUrl) {
-              $form.attr('action', that.options.formActionUrl);
+              $form.attr("action", that.options.formActionUrl);
             }
             // Render the buttons
             // Check for the .form-actions class
-            var $formButtons = $('div.form-actions', $form);
+            var $formButtons = $("div.form-actions", $form);
             // If we have JavaUpload Need to Start it here
             if (that.formView._javaUpload.length > 0) {
               that.setupJavaUpload(that.formView._javaUpload);
             }
             // Set Up Ajax Call
-            Utils.setupUrlAjaxCall($('form.form-render'));
+            Utils.setupUrlAjaxCall($("form.form-render"));
             // Set Up Select2 when having class .
             // console.log(that.formView);
             Utils.setupSelect2(that.formView);
             // console.log('Validation:', that.formView.model.validation);
             // console.log('Model, Before Bind ModelBinder:', that.formView.model.toJSON());
             // Bind Model Here
-            that.formView._modelBinder.bind(that.formView.model, that.formView.el, that.formView.model.bindings);
+            that.formView._modelBinder.bind(
+              that.formView.model,
+              that.formView.el,
+              that.formView.model.bindings
+            );
             // console.log('Model, After Bind:', that.formView.model.toJSON());
             Backbone.Validation.bind(that.formView, {
               forceUpdate: true
             });
           } catch (err) {
             if (console && console.error) {
-              console.error('[x] Rendering ' + that.options.mode + ' Mode Error');
+              console.error(
+                "[x] Rendering " + that.options.mode + " Mode Error"
+              );
               console.error(err);
             }
             Utils.renderError($(that.formView.el), err);
@@ -221,68 +264,77 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
      * View Events
      **/
     events: {
-      'submit form.form-render': 'submitForm',
-      'click .form-actions .btn-clear-form': 'clearForm',
-      'click .form-actions .btn-render-form': 'setupForm',
-      'blur :input:not(:button)': 'preValidate',
-      'change :file': 'preValidate',
-      'keydown :input[type="email"]': 'preventSpace',
-      'keydown :input.number': 'allowNumber',
-      'keydown :input.rational': 'allowRational',
-      'keydown :input.natural': 'allowNaturalNumber',
-      'keydown :input.whole': 'allowWholeNumber',
-      'keydown :input.allowzipcode, :input.integer': 'allowZipCode',
-      'keydown :input.telephone': 'formatTelephoneNumber',
-      'blur :input.telephone': 'formatTelephoneNumber',
-      'keydown :input.socialsecurity': 'formatSocialSecurity',
-      'blur :input.socialsecurity': 'formatSocialSecurity',
-      'keydown :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
-      'blur :input.allowzipcodeplusfour': 'formatZipCodePlusFour',
-      'keypress :input': 'preventEnterPressed',
-      'keyup :input.field-keyboard-command': 'ajaxCommandByKeyBoard',
-      'click .update-cancel': 'clickUpdateCancelBtn',
-      'click .update-submit': 'clickUpdateSubmitBtn'
+      "submit form.form-render": "submitForm",
+      "click .form-actions .btn-clear-form": "clearForm",
+      "click .form-actions .btn-render-form": "setupForm",
+      "blur :input:not(:button)": "preValidate",
+      "change :file": "preValidate",
+      'keydown :input[type="email"]': "preventSpace",
+      "keydown :input.number": "allowNumber",
+      "keydown :input.rational": "allowRational",
+      "keydown :input.natural": "allowNaturalNumber",
+      "keydown :input.whole": "allowWholeNumber",
+      "keydown :input.allowzipcode, :input.integer": "allowZipCode",
+      "keydown :input.telephone": "formatTelephoneNumber",
+      "blur :input.telephone": "formatTelephoneNumber",
+      "keydown :input.socialsecurity": "formatSocialSecurity",
+      "blur :input.socialsecurity": "formatSocialSecurity",
+      "keydown :input.allowzipcodeplusfour": "formatZipCodePlusFour",
+      "blur :input.allowzipcodeplusfour": "formatZipCodePlusFour",
+      "keypress :input": "preventEnterPressed",
+      "keyup :input.field-keyboard-command": "ajaxCommandByKeyBoard",
+      "click .update-cancel": "clickUpdateCancelBtn",
+      "click .update-submit": "clickUpdateSubmitBtn"
     },
     /**
      * Submit Form
      **/
     submitForm: function(e) {
       // debugger;
-      var $form = $('#' + this.options.formSchema.name, this.el),
+      var $form = $("#" + this.options.formSchema.name, this.el),
         $submitBtn = $('.form-actions button[type="submit"]', this.el),
-        _opt, _options,
+        _opt,
+        _options,
         that = this;
       // DatePicker
-      var $datepickers = $form.find('.datepicker');
+      var $datepickers = $form.find(".datepicker");
       $datepickers.each(function() {
         var $this = $(this),
           _val = $this.val();
-        if (_val && _val !== '') {
-          that.formView.model.set($this.attr('name'), _val);
+        if (_val && _val !== "") {
+          that.formView.model.set($this.attr("name"), _val);
         }
       });
-      $form.removeClass('invalid_prevalidation').trigger($form.attr('id') + '.preValidation', [e, $form, this]);
-      if ($form.hasClass('invalid_prevalidation')) {
+      $form
+        .removeClass("invalid_prevalidation")
+        .trigger($form.attr("id") + ".preValidation", [e, $form, this]);
+      if ($form.hasClass("invalid_prevalidation")) {
         e.preventDefault();
         return false;
       }
-      if ($form.hasClass('form_submitted')) {
+      if ($form.hasClass("form_submitted")) {
         e.preventDefault();
         return false;
       }
-      $form.addClass('form_submitted').removeClass('validation_pass validation_error not_sending_data_yet');
+      $form
+        .addClass("form_submitted")
+        .removeClass("validation_pass validation_error not_sending_data_yet");
       this.getBDateinput(this.el, this.formView.model);
       Utils.getUserId(this.el, this.formView.model);
       // Remove Not needed input from submitting data
-      $('.not_sending', $form).attr('disabled', true);
+      $(".not_sending", $form).attr("disabled", true);
       // Attached the subform input
-      this.formView.model.appendSubFormInput(this.options.formSchema.name, this.formView._internalFields, this.formView._listSchema);
+      this.formView.model.appendSubFormInput(
+        this.options.formSchema.name,
+        this.formView._internalFields,
+        this.formView._listSchema
+      );
       // Check Data
       Utils.getDefaultValues(this.formView.el, that.formView.model); // Make sure to get default value for each type.
       // Select2 Dynamic Validation
-      $form.find(':input.has-select2-dynamic').each(function() {
+      $form.find(":input.has-select2-dynamic").each(function() {
         var $this = $(this);
-        that.formView.model.set($this.attr('name'), $this.val());
+        that.formView.model.set($this.attr("name"), $this.val());
       });
       // Adding ability to skip the multifile in update mode
       // console.log('Model, before calling Utils.setDefaultMultiFile', this.formView.model.toJSON());
@@ -292,19 +344,19 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
       var _isCheckBoxGood = Utils.validateCheckBox($form);
       // Check for the Select that has empty value and then not select it.
       // console.log(this);
-      var $selectInput = this.$(':selected');
+      var $selectInput = this.$(":selected");
       // console.log($selectInput);
       Utils.resetSelectsOption($selectInput);
       // Sometime the Select not get clear properly
       // Since HTML will not send any info if the select is not select
-      var $selectInputNull = this.$('select');
+      var $selectInputNull = this.$("select");
       if ($selectInputNull.length) {
         $selectInputNull.each(function() {
           var $this = $(this);
           var _val = $this.val();
           // console.log($this.val());
           if (_.isNull(_val)) {
-            $this.val('');
+            $this.val("");
           }
           // console.log($this.val());
         });
@@ -312,21 +364,36 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
       // console.log('Is model valid?', this.formView.model.isValid(true));
       // console.log('Is sub-form model valid?', this.formView.model.isSubformValid());
       // console.log('Model, value before submitted', this.formView.model.toJSON());
-      if (this.formView.model.isValid(true) && this.formView.model.isSubformValid() && _isCheckBoxGood) {
+      if (
+        this.formView.model.isValid(true) &&
+        this.formView.model.isSubformValid() &&
+        _isCheckBoxGood
+      ) {
         // If there is an hidden type that has data-value, then will need to send this as well
-        $form.find(':input:hidden[data-value]').each(function() {
+        $form.find(":input:hidden[data-value]").each(function() {
           var $this = $(this);
-          if ($this.val() === '') {
-            $this.val($this.attr('data-value'));
+          if ($this.val() === "") {
+            $this.val($this.attr("data-value"));
           }
         });
-        $form.addClass('validation_pass');
-        if (this.options.token !== '') {
-          $form.prepend('<input type="hidden" name="token" value="' + this.options.token + '"/>');
+        $form.addClass("validation_pass");
+        if (this.options.token !== "") {
+          $form.prepend(
+            '<input type="hidden" name="token" value="' +
+              this.options.token +
+              '"/>'
+          );
         }
-        var _action = $form.attr('action');
-        if (this.options.mode === 'create' && _action.search(/name=\w/ig) === -1) {
-          $form.prepend('<input type="hidden" name="form_name" value="' + this.options.formSchema.name + '"/>');
+        var _action = $form.attr("action");
+        if (
+          this.options.mode === "create" &&
+          _action.search(/name=\w/gi) === -1
+        ) {
+          $form.prepend(
+            '<input type="hidden" name="form_name" value="' +
+              this.options.formSchema.name +
+              '"/>'
+          );
         }
         _options = {
           beforeSubmit: this.showRequest,
@@ -344,11 +411,16 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
           var _javaPowSubmit = false,
             _error = false;
           _.each(this.formView._javaUpload, function(element) {
-            var $container = $('#' + element.id + '_java-upload');
-            if ($container.hasClass('in')) {
+            var $container = $("#" + element.id + "_java-upload");
+            if ($container.hasClass("in")) {
               _javaPowSubmit = true;
               var JavaPowUpload = document.getElementById(element.id);
-              if ($('#' + element.id + '_java-upload-applet', $container).hasClass('required')) {
+              if (
+                $(
+                  "#" + element.id + "_java-upload-applet",
+                  $container
+                ).hasClass("required")
+              ) {
                 if (!JavaPowUpload.getFiles().size()) {
                   _error = true;
                   return;
@@ -360,9 +432,9 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
           });
           if (_javaPowSubmit) {
             if (_error) {
-              $form.addClass('validation_error').removeClass('validation_pass');
-              $form.removeClass('form_submitted');
-              $('.not_sending', $form).attr('disabled', false);
+              $form.addClass("validation_error").removeClass("validation_pass");
+              $form.removeClass("form_submitted");
+              $(".not_sending", $form).attr("disabled", false);
               $(':input[name="form_name"]', $form).remove();
               $(':input[name="token"]', $form).remove();
             }
@@ -370,34 +442,98 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
             return;
           }
         }
+
+        var _debugFormSubmitEvent = false;
+
         // Check for Internal Fields and make sure to append _internal at the end
-        Utils.parseInternalFieldsBeforeSubmit($form, this.formView._internalFields);
+        Utils.parseInternalFieldsBeforeSubmit(
+          $form,
+          this.formView._internalFields
+        );
+
+        if (_debugFormSubmitEvent) {
+          console.log(
+            "- this.formView._ajaxSubmit:",
+            this.formView._ajaxSubmit
+          );
+        }
         if (this.formView._ajaxSubmit) {
           e.preventDefault();
+          if (_debugFormSubmitEvent) {
+            console.log("- before fire: $form.ajaxSubmit");
+            console.log("- _options:", _options);
+          }
           $form.ajaxSubmit(_options);
         } else {
+          if (_debugFormSubmitEvent) {
+            console.log("- before fire: " + $form.attr("id") + ".preSubmit");
+          }
           // This is not using AJAX to send POST
-          $form.trigger($form.attr('id') + '.preSubmit', [e, $form, this]);
+          $form.trigger($form.attr("id") + ".preSubmit", [e, $form, this]);
+
+          // Prevent form to send if has data-stopsubmit in it
+          if (_debugFormSubmitEvent) {
+            console.log(
+              '- $form.attr("data-stopsubmit"):',
+              $form.attr("data-stopsubmit")
+            );
+            console.log(
+              '- $form.attr("data-stopSubmit"):',
+              $form.attr("data-stopSubmit")
+            );
+          }
+          var attrStopSubmit =
+            $form.attr("data-stopSubmit") || $form.attr("data-stopsubmit");
+          if (attrStopSubmit && attrStopSubmit !== "") {
+            $form.removeAttr("data-stopSubmit");
+            $form.removeAttr("data-stopsubmit");
+            e.preventDefault();
+            $form.removeClass("form_submitted");
+            // Error Message
+            $(".not_sending", $form).attr("disabled", false);
+            if (_debugFormSubmitEvent) {
+              console.log(
+                '- $form.attr("data-stopsubmit"):',
+                $form.attr("data-stopsubmit")
+              );
+              console.log(
+                '- $form.attr("data-stopSubmit"):',
+                $form.attr("data-stopSubmit")
+              );
+            }
+            return;
+          }
         }
-        if (this.formView.options.formSchema.view !== 'wizard' && !$form.hasClass('not_sending_data_yet')) {
+        if (
+          this.formView.options.formSchema.view !== "wizard" &&
+          !$form.hasClass("not_sending_data_yet")
+        ) {
           var _t_1, _t_2;
           switch (this.formView.options.lang) {
-            case 'sp':
-              _t_1 = 'Enviando la forma; por favor espere';
-              _t_2 = 'Cargando Informaci&oacute;n';
+            case "sp":
+              _t_1 = "Enviando la forma; por favor espere";
+              _t_2 = "Cargando Informaci&oacute;n";
               break;
             default:
-              _t_1 = 'Submitting form; please wait.';
-              _t_2 = 'Sending data';
+              _t_1 = "Submitting form; please wait.";
+              _t_2 = "Sending data";
           }
           _opt = {
             html: true,
-            placement: 'top',
-            trigger: 'manual',
+            placement: "top",
+            trigger: "manual",
             title: _t_1,
-            content: '<i class="icon-spinner icon-spin icon-large"></i> ' + _t_2 + ' ...'
+            content:
+              '<i class="icon-spinner icon-spin icon-large"></i> ' +
+              _t_2 +
+              " ..."
           };
-          $submitBtn.attr('disabled', true).popover(_opt).popover('show').next('.popover').addClass('success');
+          $submitBtn
+            .attr("disabled", true)
+            .popover(_opt)
+            .popover("show")
+            .next(".popover")
+            .addClass("success");
         }
         // Debugger Point if not using AJAX Post
         // console.log(this);
@@ -411,43 +547,46 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
       } else {
         // Invalid: Events
         e.preventDefault();
-        $form.addClass('validation_error');
-        $form.removeClass('form_submitted');
+        $form.addClass("validation_error");
+        $form.removeClass("form_submitted");
         // Error Message
-        $('.not_sending', $form).attr('disabled', false);
+        $(".not_sending", $form).attr("disabled", false);
         // Debug: Validation
-        if ('console' in window && console && console.log) {
-            console.log('*** Submitted Error ***');
-            console.log(this.formView.model.toJSON());
-            // console.log($('.not_sending', $form));
-            console.log(this.formView.model.validation);
-            // console.log('- validationError:', this.formView.model.validationError);
-            console.log('- _isCheckBoxGood:', _isCheckBoxGood);
-            console.log('- .invalid:', $('.invalid'));
-            console.log('******');
+        if ("console" in window && console && console.log) {
+          console.log("*** Submitted Error ***");
+          console.log(this.formView.model.toJSON());
+          // console.log($('.not_sending', $form));
+          console.log(this.formView.model.validation);
+          // console.log('- validationError:', this.formView.model.validationError);
+          console.log("- _isCheckBoxGood:", _isCheckBoxGood);
+          console.log("- .invalid:", $(".invalid"));
+          console.log("******");
         }
-        if (this.formView.options.formSchema.view !== 'wizard') {
+        if (this.formView.options.formSchema.view !== "wizard") {
           // console.log('*****');
           // console.log(arguments);
           _opt = {
             html: true,
-            placement: 'top',
-            trigger: 'manual',
+            placement: "top",
+            trigger: "manual",
             title: '<i class="icon-edit"></i> Validation Error',
-            content: 'Please complete the required fields'
+            content: "Please complete the required fields"
           };
-          $submitBtn.attr('disabled', true).popover(_opt).popover('show');
+          $submitBtn
+            .attr("disabled", true)
+            .popover(_opt)
+            .popover("show");
           window.setTimeout(function() {
-            var $firstError = $('.invalid:first', $form);
-            if (!($firstError.is(':checkbox') || $firstError.is(':radio'))) {
+            var $firstError = $(".invalid:first", $form);
+            if (!($firstError.is(":checkbox") || $firstError.is(":radio"))) {
               $firstError.focus();
             }
-            $submitBtn.attr('disabled', false).popover('destroy');
-            $submitBtn.next('.popover').remove();
+            $submitBtn.attr("disabled", false).popover("destroy");
+            $submitBtn.next(".popover").remove();
           }, 2000);
         }
       }
-      $form.trigger(this.options.formSchema.name + '.validated');
+      $form.trigger(this.options.formSchema.name + ".validated");
     },
     /**
      * Debug point to check for Data, Called before the form get send
@@ -457,12 +596,44 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
      * @return boolean
      */
     showRequest: function(formData, jqForm, options) {
+      var _debug = false;
+
       // console.log('===== POST Data =====');
       // console.log($.param(formData));
       // If form has data-stopSubmit = true, the form will not continue to send data
-      jqForm.trigger(jqForm.attr('id') + '.preSubmit', [formData, jqForm, options]);
-      if (jqForm.attr('data-stopSubmit')) {
-        jqForm.removeAttr('data-stopSubmit');
+      jqForm.trigger(jqForm.attr("id") + ".preSubmit", [
+        formData,
+        jqForm,
+        options
+      ]);
+
+      if (_debug) {
+        console.log("*** showRequest ***");
+        console.log(arguments);
+
+        console.log(
+          '- jqForm.attr("data-stopSubmit"):',
+          jqForm.attr("data-stopSubmit")
+        );
+
+        console.log(
+          '- jqForm.attr("data-stopsubmit"):',
+          jqForm.attr("data-stopsubmit")
+        );
+      }
+
+      if (jqForm.attr("data-stopSubmit")) {
+        jqForm.removeAttr("data-stopSubmit");
+        if (_debug) {
+          console.log("- remove: data-stopSubmit");
+        }
+        return false;
+      }
+      if (jqForm.attr("data-stopsubmit")) {
+        jqForm.removeAttr("data-stopsubmit");
+        if (_debug) {
+          console.log("- remove: data-stopsubmit");
+        }
         return false;
       }
     },
@@ -474,33 +645,38 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
      * @param  object $form
      */
     showResponse: function(responseText, statusText, xhr, $form) {
+      var _debugPostSubmit = false;
       if (console && console.info) {
-        console.info('[*] showResponse');
+        console.info("[*] showResponse");
         console.info(arguments);
       }
       var _jsonText,
-        $submitBtn = $('.form-actions.wizard-actions button[type="button"].btn_next');
+        $submitBtn = $(
+          '.form-actions.wizard-actions button[type="button"].btn_next'
+        );
       if (!$submitBtn.length) {
         $submitBtn = $('.form-actions button[type="submit"]');
       }
       try {
-        _jsonText = (_.isString(responseText)) ? $.parseJSON(responseText) : responseText;
+        _jsonText = _.isString(responseText)
+          ? $.parseJSON(responseText)
+          : responseText;
       } catch (err) {
         // console.log(err);
         // IE 9 and Below
         // console.log(responseText);
         try {
-          var _index = responseText.search(/<pre>/ig);
+          var _index = responseText.search(/<pre>/gi);
           if (_index > -1) {
             // Found Pre Tag
-            responseText = responseText.replace(/<pre>|<\/pre>/ig, '');
+            responseText = responseText.replace(/<pre>|<\/pre>/gi, "");
           }
           _jsonText = JSON.parse(responseText);
           if (_jsonText.html) {
             var _max = 5;
             while (_max) {
               _max--;
-              if (_jsonText.html.search(/&\w+;/ig) > -1) {
+              if (_jsonText.html.search(/&\w+;/gi) > -1) {
                 _jsonText.html = _.unescape(_jsonText.html);
               } else {
                 break;
@@ -511,7 +687,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
           if (console && console.log) {
             console.log(_err);
           }
-          alert('Response is invalid. Please try again.');
+          alert("Response is invalid. Please try again.");
           return;
         }
       }
@@ -521,30 +697,41 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
       // Perform the Hidden Form
       if (_jsonText.html) {
         // Special Case
-        require(['views/hiddenForm'], function(HiddenFormView) {
-          var hiddenFormView = Vm.create({}, 'FormView', HiddenFormView);
+        require(["views/hiddenForm"], function(HiddenFormView) {
+          var hiddenFormView = Vm.create({}, "FormView", HiddenFormView);
           hiddenFormView.render(_jsonText);
         });
         return;
       }
       _.each(_jsonText, function(value, key) {
-        if (typeof value === 'string') {
+        if (typeof value === "string") {
           _jsonText[key] = _.unescape(value);
         }
       });
-      if (_jsonText.status && _jsonText.status === 'error') {
+      if (_jsonText.status && _jsonText.status === "error") {
         removePopover($submitBtn);
-        var _errorMsg = _jsonText.error_message || _jsonText.message || _jsonText.response || 'Please try again.';
+        var _errorMsg =
+          _jsonText.error_message ||
+          _jsonText.message ||
+          _jsonText.response ||
+          "Please try again.";
         var _opt = {
           html: true,
-          placement: 'top',
-          trigger: 'manual',
-          title: 'Application Error',
-          content: '<b>Error Message:</b> <br>' + _errorMsg + '<br> <hr> Please fill all the required fields completely. We will reload this form in <span id="count_time">20</span> seconds.'
+          placement: "top",
+          trigger: "manual",
+          title: "Application Error",
+          content:
+            "<b>Error Message:</b> <br>" +
+            _errorMsg +
+            '<br> <hr> Please fill all the required fields completely. We will reload this form in <span id="count_time">20</span> seconds.'
         };
-        $submitBtn.attr('disabled', true).popover(_opt).popover('show').next('.popover');
+        $submitBtn
+          .attr("disabled", true)
+          .popover(_opt)
+          .popover("show")
+          .next(".popover");
         window.setTimeout(function() {
-          var $timer = $('#count_time');
+          var $timer = $("#count_time");
           setTimeout(function() {
             location.reload();
           }, parseInt($timer.text(), 10) * 1000);
@@ -560,11 +747,29 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
         return;
       }
       $(':hidden[name="token"], :hidden[name="form_name"]', $form).remove();
-      $form.removeClass('form_submitted');
-      $('.not_sending', $form).attr('disabled', false);
-      $form.trigger($form.attr('id') + '.postSubmit', [responseText, _jsonText, statusText, xhr, $form]);
+      $form.removeClass("form_submitted");
+      $(".not_sending", $form).attr("disabled", false);
+      if (_debugPostSubmit) {
+        console.log(
+          "- fired: $form.trigger(" + $form.attr("id") + ' + ".postSubmit"'
+        );
+      }
+      var postSubmitEventName = $form.attr("id") + ".postSubmit";
+      $form.trigger(postSubmitEventName, [
+        responseText,
+        _jsonText,
+        statusText,
+        xhr,
+        $form
+      ]);
+
       window.setTimeout(function() {
-        $submitBtn.attr('disabled', false).popover('destroy').next('.popover').removeClass('success').remove();
+        $submitBtn
+          .attr("disabled", false)
+          .popover("destroy")
+          .next(".popover")
+          .removeClass("success")
+          .remove();
       }, 3000);
     },
     /**
@@ -576,11 +781,11 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
      */
     processError: function(jqXHR, textStatus, errorThrown, $element) {
       if (console && console.error) {
-        console.error('[*] showResponse');
+        console.error("[*] showResponse");
         console.error(arguments);
       }
       // If Error Happen in AJAX
-      var $submitBtn = $('.form-actions.wizard-actions button.btn_next'),
+      var $submitBtn = $(".form-actions.wizard-actions button.btn_next"),
         errorTxt = errorThrown;
       if (!$submitBtn.length) {
         // This could be a normal form
@@ -595,25 +800,29 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
           try {
             errorTxt = JSON.parse(jqXHR.responseText);
             if (errorTxt.message && console && console.log) {
-              console.log('*** Error ***');
+              console.log("*** Error ***");
               console.log(errorTxt.message);
             }
           } catch (err) {
-            console.log('*** Error (Exception) ***');
+            console.log("*** Error (Exception) ***");
             console.log(err);
           }
-          errorTxt = errorThrown + ', please try again later.';
+          errorTxt = errorThrown + ", please try again later.";
         }
         var _opt = {
           html: true,
-          placement: 'top',
-          trigger: 'manual',
-          title: 'Application Error',
+          placement: "top",
+          trigger: "manual",
+          title: "Application Error",
           content: errorTxt
         };
-        $submitBtn.attr('disabled', true).popover(_opt).popover('show').next('.popover');
+        $submitBtn
+          .attr("disabled", true)
+          .popover(_opt)
+          .popover("show")
+          .next(".popover");
       } else {
-        alert(errorTxt + ', please try again later.');
+        alert(errorTxt + ", please try again later.");
         if (console && console.log && jqXHR.responseText) {
           console.log(jqXHR.responseText);
         }
@@ -633,24 +842,24 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
     clearForm: function() {
       var that = this;
       _.each(this.formView.model.attributes, function(value, key) {
-        if (typeof value.reset === 'function') {
+        if (typeof value.reset === "function") {
           that.formView.model.get(key).reset();
         } else {
           var $field = $(':input[name="' + key + '"]', that.el);
-          if ($field.is(':checked')) {
-            $field.attr('checked', false);
-          } else if ($field.is(':radio')) {
+          if ($field.is(":checked")) {
+            $field.attr("checked", false);
+          } else if ($field.is(":radio")) {
             return;
           }
-          $field.val('');
-          $field.trigger('change');
-          that.formView.model.set(key, '');
+          $field.val("");
+          $field.trigger("change");
+          that.formView.model.set(key, "");
         }
       });
     },
     preventEnterPressed: function(e) {
       if (e.keyCode === 13) {
-        if ($(e.currentTarget).is('input')) {
+        if ($(e.currentTarget).is("input")) {
           e.stopPropagation();
           return false;
         }
@@ -663,10 +872,10 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
       var that = this,
         $target = $(e.currentTarget);
       e.preventDefault();
-      $.getJSON($target.attr('href'), {}, function(data, status) {
-        if (status === 'success') {
-          require(['views/hiddenForm'], function(HiddenFormView) {
-            var hiddenFormView = Vm.create(that, 'FormView', HiddenFormView);
+      $.getJSON($target.attr("href"), {}, function(data, status) {
+        if (status === "success") {
+          require(["views/hiddenForm"], function(HiddenFormView) {
+            var hiddenFormView = Vm.create(that, "FormView", HiddenFormView);
             hiddenFormView.render(data);
           });
         } else {
@@ -681,72 +890,95 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
      */
     setupJavaUpload: function(jArray) {
       var $view = $(this).get(0),
-        jSerialNumber = (this.formView.options.formSchema.jserialnumber) ? this.formView.options.formSchema.jserialnumber : window.jSerialNumber;
+        jSerialNumber = this.formView.options.formSchema.jserialnumber
+          ? this.formView.options.formSchema.jserialnumber
+          : window.jSerialNumber;
       if (jSerialNumber == undefined) {
-        throw 'Please set jSerialNumber to match with your purchase number.';
+        throw "Please set jSerialNumber to match with your purchase number.";
       }
       var parameters = {
-          "progressbar": "true",
-          "boxmessage": "Loading File Uploader Applet ...",
+          progressbar: "true",
+          boxmessage: "Loading File Uploader Applet ...",
           "Common.SerialNumber": window.jSerialNumber,
           "Common.UploadMode": "true",
           "Common.UseLiveConnect": "true",
           "Common.ProgressArea.DownloadButton.Visible": "false",
-          "Common.SkinLF.ThemepackURL": "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip",
+          "Common.SkinLF.ThemepackURL":
+            "//public.southernnevadahealthdistrict.org/assets/assets/jar/jupload/themepack.zip",
           "Common.Language.AutoDetect": "true",
-          "Upload.UploadUrl": $(this.formView.el).attr('action'),
+          "Upload.UploadUrl": $(this.formView.el).attr("action"),
           "Upload.Compress.Enabled": "true",
           "Upload.Compress.ArchiveFileName": "#UNIQUEID#",
           "Upload.Compress.Format": "ZIP",
           "Upload.Compress.Level": "DEFAULT",
           "Upload.HttpUpload.FieldName.FilePath": "SelectedPath_#COUNTER#",
-          "Upload.HttpUpload.FormName": this.formView.el.replace('#', ''),
+          "Upload.HttpUpload.FormName": this.formView.el.replace("#", ""),
           "Upload.HttpUpload.AddFormValuesToPostFields": "true",
           "Upload.HttpUpload.AddFormValuesToHeaders": "false",
           "Upload.HttpUpload.AddFormValuesToQueryString": "false",
           "Upload.HttpUpload.FieldName.FileBody": "FileBody_#COUNTER#",
           "Upload.HttpUpload.SendBrowserCookie": "true"
         },
-        version = '1.5.1';
+        version = "1.5.1";
       // console.log(parameters["Upload.UploadUrl"]);
       // Since deplyJava will override your body
       var oldwrite = document.write,
-        content = '';
+        content = "";
       document.write = function(text) {
         content += text;
       };
       _.each(jArray, function(value) {
-        content = '';
+        content = "";
         parameters["Upload.HttpUpload.FieldName.FileBody"] = value.id;
         deployJava.runApplet(value, parameters, version);
-        var $appletParent = $('#' + value.id + '_java-upload-applet').html(content);
-        if ($view.options.formSchema && $view.options.formSchema.validation && $view.options.formSchema.validation[value.id]) {
+        var $appletParent = $("#" + value.id + "_java-upload-applet").html(
+          content
+        );
+        if (
+          $view.options.formSchema &&
+          $view.options.formSchema.validation &&
+          $view.options.formSchema.validation[value.id]
+        ) {
           if ($view.formView.model.validation[value.id].required) {
-            $appletParent.addClass('required');
+            $appletParent.addClass("required");
           }
           $view.formView.model.validation[value.id] = {};
         }
-        $('#' + value.id + '_accordion').on('click', '.accordion-heading', function() {
-          var $this = $(this),
-            $container = $this.next(),
-            $parent = $this.closest('.accordion-group');
-          // console.log($view.formView);
-          if ($container.find('applet').length) {
-            $view.formView.model.validation[value.id] = {};
-            $parent.next().find('input').attr('disabled', true);
-          } else {
-            $container.find('input').attr('disabled', false);
-            if ($view.options.formSchema && $view.options.formSchema.validation && $view.options.formSchema.validation[value.id]) {
-              $view.formView.model.validation[value.id] = $view.options.formSchema.validation[value.id];
+        $("#" + value.id + "_accordion").on(
+          "click",
+          ".accordion-heading",
+          function() {
+            var $this = $(this),
+              $container = $this.next(),
+              $parent = $this.closest(".accordion-group");
+            // console.log($view.formView);
+            if ($container.find("applet").length) {
+              $view.formView.model.validation[value.id] = {};
+              $parent
+                .next()
+                .find("input")
+                .attr("disabled", true);
+            } else {
+              $container.find("input").attr("disabled", false);
+              if (
+                $view.options.formSchema &&
+                $view.options.formSchema.validation &&
+                $view.options.formSchema.validation[value.id]
+              ) {
+                $view.formView.model.validation[value.id] =
+                  $view.options.formSchema.validation[value.id];
+              }
             }
           }
-        });
+        );
       });
       document.write = oldwrite;
       // Attached the OnCompleted Event
       window.JavaPowUpload_onUploadFinish = function() {
         // Will Refresh the page
-        (window.jRedirect) ? location.replace(window.jRedirect): location.reload(true);
+        window.jRedirect
+          ? location.replace(window.jRedirect)
+          : location.reload(true);
       };
     },
     /**
@@ -757,164 +989,177 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'text!templates
       var DEBUG = false;
       var keyCode = e.keyCode;
       var isInternal = this.options.internal;
-      var tmpUrl = (isInternal) ? '/form/edit?id=' + this.options.formData._id.$oid : null;
+      var tmpUrl = isInternal
+        ? "/form/edit?id=" + this.options.formData._id.$oid
+        : null;
       var $this = $(e.target);
       // Function to switch to read view
       var switchToReadField = function(updateSpan) {
-        var $container = $this.closest('.update-on-read-mode');
-        $this.fadeOut('slow', function() {
-          var $spanTxt = $container.find('.uneditable-input');
+        var $container = $this.closest(".update-on-read-mode");
+        $this.fadeOut("slow", function() {
+          var $spanTxt = $container.find(".uneditable-input");
           if (updateSpan) {
-            var newVal = updateSpan[$spanTxt.attr('id')];
+            var newVal = updateSpan[$spanTxt.attr("id")];
             if (newVal) {
               $spanTxt.html(newVal);
             } else {
               if (console && console.error) {
-                console.error('[x] Error: Update New Value');
+                console.error("[x] Error: Update New Value");
                 console.error(newVal);
                 console.log(updateSpan);
               }
-              Utils.showHumaneErrorBox('Error, could not update new value!');
+              Utils.showHumaneErrorBox("Error, could not update new value!");
             }
           }
-          $spanTxt.fadeIn('slow', function() {
-            $this.addClass('force-hide');
-            $container.removeClass('ajax');
+          $spanTxt.fadeIn("slow", function() {
+            $this.addClass("force-hide");
+            $container.removeClass("ajax");
           });
         });
-      }
+      };
       // Function to send POST Request
       var sendPostRequest = function(targetUrl, data) {
-        if ($this.hasClass('ajax-submitted')) {
+        if ($this.hasClass("ajax-submitted")) {
           // Do nothing
           return false;
         }
         // Start Sending AJAX
-        $this.addClass('ajax-submitted');
-        Utils.showHumaneSuccessBox('Updating');
+        $this.addClass("ajax-submitted");
+        Utils.showHumaneSuccessBox("Updating");
         $.ajax({
           url: targetUrl,
-          type: 'POST',
+          type: "POST",
           data: data,
           cache: false,
           success: function(d, t, jqXHR) {
-            $this.removeClass('ajax-submitted');
-            Utils.showHumaneSuccessBox('Success');
+            $this.removeClass("ajax-submitted");
+            Utils.showHumaneSuccessBox("Success");
             switchToReadField(data);
           },
           error: function(jqXHR, textStatus, errorThrown) {
-            $this.removeClass('ajax-submitted');
+            $this.removeClass("ajax-submitted");
             if (console && console.error) {
-              console.error('[x] Error: Sending Data to POST "' + targetUrl + '"');
+              console.error(
+                '[x] Error: Sending Data to POST "' + targetUrl + '"'
+              );
               console.error(data);
               console.error(arguments);
             }
-            Utils.showHumaneErrorBox('Error, please try again!');
+            Utils.showHumaneErrorBox("Error, please try again!");
           }
         });
-      }
+      };
       if (DEBUG) {
-        console.log('[*] ajaxCommandByKeyBoard: Key=' + keyCode);
+        console.log("[*] ajaxCommandByKeyBoard: Key=" + keyCode);
         console.log(arguments);
         console.log(this);
       }
       switch (keyCode) {
         case 13:
           if (DEBUG) {
-            console.log('Enter Pressed!');
+            console.log("Enter Pressed!");
           }
           if (!tmpUrl) {
-            throw 'Not implement outside internal yet.';
+            throw "Not implement outside internal yet.";
           }
           // Get The ID
           // Send POST Request
           var _d = {};
-          _d[$this.attr('name')] = $.trim($this.val());
+          _d[$this.attr("name")] = $.trim($this.val());
           sendPostRequest(tmpUrl, _d);
           break;
         case 27:
           if (DEBUG) {
-            console.log('ESC Pressed!');
+            console.log("ESC Pressed!");
           }
           switchToReadField();
           break;
       }
     },
     clickUpdateCancelBtn: function(e) {
-      if (this.options.mode !== 'read') {
+      if (this.options.mode !== "read") {
         return;
       }
       // Only Activate on Read Mode
       var $this = $(e.target);
-      var $container = $this.closest('.update-on-read-mode');
+      var $container = $this.closest(".update-on-read-mode");
       if (!$container.length) {
         return;
       }
-      var $fieldContainer = $container.find('.field-container');
-      $fieldContainer.fadeOut('slow', function() {
-        var $spanTxt = $container.find('.uneditable-input');
-        $spanTxt.fadeIn('slow', function() {
-          $container.removeClass('ajax');
-          $fieldContainer.addClass('force-hide');
+      var $fieldContainer = $container.find(".field-container");
+      $fieldContainer.fadeOut("slow", function() {
+        var $spanTxt = $container.find(".uneditable-input");
+        $spanTxt.fadeIn("slow", function() {
+          $container.removeClass("ajax");
+          $fieldContainer.addClass("force-hide");
         });
       });
     },
     clickUpdateSubmitBtn: function(e) {
-      if (this.options.mode !== 'read') {
+      if (this.options.mode !== "read") {
         return;
       }
       var $this = $(e.target);
-      if ($this.hasClass('ajax-submitted')) {
+      if ($this.hasClass("ajax-submitted")) {
         // Do nothing
         return false;
       }
       // Start Sending AJAX
-      $this.addClass('ajax-submitted');
+      $this.addClass("ajax-submitted");
       var that = this;
-      var $input, _val, _d = {},
+      var $input,
+        _val,
+        _d = {},
         _html;
       var isInternal = this.options.internal;
-      var tmpUrl = (isInternal) ? '/form/edit?id=' + this.options.formData._id.$oid : null;
+      var tmpUrl = isInternal
+        ? "/form/edit?id=" + this.options.formData._id.$oid
+        : null;
       var sendPostRequest = function(targetUrl, data, htmlToUpdate) {
         // Start Sending AJAX
-        $this.addClass('ajax-submitted');
-        Utils.showHumaneSuccessBox('Updating');
+        $this.addClass("ajax-submitted");
+        Utils.showHumaneSuccessBox("Updating");
         $.ajax({
           url: targetUrl,
-          type: 'POST',
+          type: "POST",
           data: data,
           cache: false,
           success: function(d, t, jqXHR) {
-            $this.removeClass('ajax-submitted');
-            Utils.showHumaneSuccessBox('Success');
+            $this.removeClass("ajax-submitted");
+            Utils.showHumaneSuccessBox("Success");
             if (htmlToUpdate) {
-              $input.closest('.update-on-read-mode').find('.uneditable-input').html(htmlToUpdate);
+              $input
+                .closest(".update-on-read-mode")
+                .find(".uneditable-input")
+                .html(htmlToUpdate);
             }
             that.clickUpdateCancelBtn(e);
           },
           error: function(jqXHR, textStatus, errorThrown) {
-            $this.removeClass('ajax-submitted');
+            $this.removeClass("ajax-submitted");
             if (console && console.error) {
-              console.error('[x] Error: Sending Data to POST "' + targetUrl + '"');
+              console.error(
+                '[x] Error: Sending Data to POST "' + targetUrl + '"'
+              );
               console.error(data);
               console.error(arguments);
             }
-            Utils.showHumaneErrorBox('Error, please try again!');
+            Utils.showHumaneErrorBox("Error, please try again!");
           }
         });
-      }
-      var $wrapper = $this.closest('.field-container');
-      if ($wrapper.hasClass('radio-container')) {
+      };
+      var $wrapper = $this.closest(".field-container");
+      if ($wrapper.hasClass("radio-container")) {
         // This is Radio Container
-        $input = $wrapper.find(':radio:checked');
+        $input = $wrapper.find(":radio:checked");
         _val = $.trim($input.val());
-        _html = $input.attr('data-radio-value');
-        _d[$input.attr('name')] = _val;
+        _html = $input.attr("data-radio-value");
+        _d[$input.attr("name")] = _val;
         sendPostRequest(tmpUrl, _d, _html);
       } else {
-        $input = $wrapper.find(':input');
+        $input = $wrapper.find(":input");
         _val = $.trim($input.val());
-        _d[$input.attr('name')] = _val;
+        _d[$input.attr("name")] = _val;
         sendPostRequest(tmpUrl, _d, _val);
       }
     }

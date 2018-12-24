@@ -193,14 +193,23 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
         }
       });
     }
+    var debugEvents = false;
     // Render Custom Script Here
     if (typeof formEvents !== "undefined") {
+      if (debugEvents) {
+        console.log("*** Found formEvents ***");
+        console.log("- formSchema.name:", formSchema.name);
+      }
       _.each(formEvents, function(value, key) {
         // console.log(arguments)
+        if (debugEvents) {
+          console.log("- attached event:", key);
+        }
         $("div#app").on(
           formSchema.name + "." + key,
           {
-            Utils: Utils
+            Utils: Utils,
+            event: value
           },
           value
         );
@@ -214,7 +223,8 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
       token: _token,
       internal: typeof internal === "undefined" ? false : internal,
       hideButtons: typeof hideButtons === "undefined" ? false : hideButtons,
-      lang: lang
+      lang: lang,
+      formEvents: formEvents
     };
     if (typeof formActionUrl !== "undefined") {
       _opts.formActionUrl = formActionUrl;
