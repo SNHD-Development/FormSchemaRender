@@ -139,6 +139,7 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
   if (!window.console.log) window.console.log = function() {};
   $(function() {
     Utils.setupOldBrowser();
+    var _formEvents = {};
     var _mode,
       _view,
       _token,
@@ -205,6 +206,7 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
         if (debugEvents) {
           console.log("- attached event:", key);
         }
+        _formEvents[key] = value;
         $("div#app").on(
           formSchema.name + "." + key,
           {
@@ -224,7 +226,7 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
       internal: typeof internal === "undefined" ? false : internal,
       hideButtons: typeof hideButtons === "undefined" ? false : hideButtons,
       lang: lang,
-      formEvents: formEvents
+      formEvents: _formEvents
     };
     if (typeof formActionUrl !== "undefined") {
       _opts.formActionUrl = formActionUrl;
