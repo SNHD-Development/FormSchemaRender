@@ -935,6 +935,15 @@ define([
           if (field.attributes && !field.attributes.placeholder) {
             field.attributes.placeholder = "HH:MM AM/PM";
           }
+          if (!field.options) {
+            field.options = {};
+          }
+          var timeConfig = field.options.configuration;
+          if (timeConfig && !_.isEmpty(timeConfig) && _.isObject(timeConfig)) {
+            field.attributes["data-timepicker-options"] = JSON.stringify(
+              timeConfig
+            );
+          }
           break;
         case "dateinput":
           _type = "date";

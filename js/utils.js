@@ -798,23 +798,29 @@ define([
         console.log("    Found: " + $allTimepicker.length);
         console.log($allTimepicker);
       }
+      // DEBUG = true;
       $allTimepicker.each(function() {
         var $this = $(this);
         var dataOptions = $this.attr("data-timepicker-options");
+        if (DEBUG) {
+          console.log("- dataOptions:", dataOptions);
+        }
         if (!dataOptions || _.isEmpty(dataOptions)) {
           dataOptions = {};
+        } else if (_.isString(dataOptions)) {
+          var parseJsonOptions = $.parseJSON(dataOptions);
+          if (
+            parseJsonOptions &&
+            !_.isEmpty(parseJsonOptions) &&
+            _.isObject(parseJsonOptions)
+          ) {
+            if (DEBUG) {
+              console.log("- dataOptions:", dataOptions);
+            }
+            dataOptions = parseJsonOptions;
+          }
         }
-        $this.timepicker({
-          timeFormat: "h:mm p",
-          interval: 60,
-          minTime: "10",
-          maxTime: "6:00pm",
-          defaultTime: "11",
-          startTime: "10:00",
-          dynamic: false,
-          dropdown: true,
-          scrollbar: true
-        });
+        $this.timepicker(dataOptions);
       });
     },
     /**
