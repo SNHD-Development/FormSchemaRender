@@ -822,17 +822,21 @@ define([
         }
         if (_.isObject(dataOptions)) {
           dataOptions.change = function(e) {
+            // var DEBUG = true;
             var $this = $(this);
             var value = $this.val();
-            // console.log(
-            //   "- change:",
-            //   arguments,
-            //   "- $this:",
-            //   $this,
-            //   "- value:",
-            //   value
-            // );
+            if (DEBUG) {
+              console.log("- change:", "- $this:", $this, "- value:", value);
+            }
+            $this.removeClass("invalid");
+            // var DEBUG = true;
+            if (DEBUG) {
+              console.log("- value:", value);
+            }
             $this.trigger("change");
+            if (DEBUG) {
+              console.log("- value:", value);
+            }
           };
         }
         $this.timepicker(dataOptions);
