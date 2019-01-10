@@ -300,6 +300,12 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
       // Wait for the Module to attached
       setTimeout(function() {
         appView.render();
+        // Attach Global Event
+        /*$("body").on("change", ".form-render :input.timepicker", function(e) {
+          var $this = $(this);
+          var value = $this.val();
+          console.log('- $this:', $this, ': value=', value);
+        });*/
       }, 800);
     } catch (err) {
       Utils.renderError(appView.$el, err);

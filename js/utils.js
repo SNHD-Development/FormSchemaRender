@@ -820,6 +820,21 @@ define([
             dataOptions = parseJsonOptions;
           }
         }
+        if (_.isObject(dataOptions)) {
+          dataOptions.change = function(e) {
+            var $this = $(this);
+            var value = $this.val();
+            // console.log(
+            //   "- change:",
+            //   arguments,
+            //   "- $this:",
+            //   $this,
+            //   "- value:",
+            //   value
+            // );
+            $this.trigger("change");
+          };
+        }
         $this.timepicker(dataOptions);
       });
     },
