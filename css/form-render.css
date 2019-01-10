@@ -1,40 +1,54 @@
+@charset "UTF-8";
 /**
  * Icons
  */
-@import url(./humane-themes/bigbox.css);
-@import url(./humane-themes/boldlight.css);
-@import url(./humane-themes/jackedup.css);
-@import url(./humane-themes/libnotify.css);
-@import url(./humane-themes/original.css);
-@import url(./humane-themes/flatty.css);
-@import url(./jquery.loadmask.spin.css);
+@import "./humane-themes/bigbox.css";
+@import "./humane-themes/boldlight.css";
+@import "./humane-themes/jackedup.css";
+@import "./humane-themes/libnotify.css";
+@import "./humane-themes/original.css";
+@import "./humane-themes/flatty.css";
+@import "./jquery.loadmask.spin.css";
+@import "./jquery.timepicker.min.css";
 .show-ex-icon {
   position: relative;
   background-repeat: no-repeat;
-  background-position: 15px center; }
-  .show-ex-icon:hover p {
-    text-decoration: underline; }
-  .show-ex-icon.png {
-    background-image: url("./16px/png.png"); }
-  .show-ex-icon.jpg {
-    background-image: url("./16px/jpg.png"); }
-  .show-ex-icon.gif {
-    background-image: url("./16px/gif.png"); }
-  .show-ex-icon.doc {
-    background-image: url("./16px/doc.png"); }
-  .show-ex-icon.pdf {
-    background-image: url("./16px/pdf.png"); }
-  .show-ex-icon.ppt {
-    background-image: url("./16px/ppt.png"); }
-  .show-ex-icon.xls {
-    background-image: url("./16px/xls.png"); }
-  .show-ex-icon.xlsx {
-    background-image: url("./16px/xlsx.png"); }
-  .show-ex-icon.zip {
-    background-image: url("./16px/zip.png"); }
-  .show-ex-icon > p {
-    width: auto;
-    margin: 0 0 0 35px; }
+  background-position: 15px center;
+}
+.show-ex-icon:hover p {
+  text-decoration: underline;
+}
+.show-ex-icon.png {
+  background-image: url("./16px/png.png");
+}
+.show-ex-icon.jpg {
+  background-image: url("./16px/jpg.png");
+}
+.show-ex-icon.gif {
+  background-image: url("./16px/gif.png");
+}
+.show-ex-icon.doc {
+  background-image: url("./16px/doc.png");
+}
+.show-ex-icon.pdf {
+  background-image: url("./16px/pdf.png");
+}
+.show-ex-icon.ppt {
+  background-image: url("./16px/ppt.png");
+}
+.show-ex-icon.xls {
+  background-image: url("./16px/xls.png");
+}
+.show-ex-icon.xlsx {
+  background-image: url("./16px/xlsx.png");
+}
+.show-ex-icon.zip {
+  background-image: url("./16px/zip.png");
+}
+.show-ex-icon > p {
+  width: auto;
+  margin: 0 0 0 35px;
+}
 
 /**
  * Libraries
@@ -47,25 +61,30 @@
  * Visibility
  */
 .force-hide {
-  display: none !important; }
+  display: none !important;
+}
 
 /**
  * Text
  */
 .text-left {
-  text-align: left !important; }
+  text-align: left !important;
+}
 
 .text-center {
-  text-align: center !important; }
+  text-align: center !important;
+}
 
 .text-right {
-  text-align: right !important; }
+  text-align: right !important;
+}
 
 /**
  * Override BootStrap
  */
 .typeahead.dropdown-menu {
-  z-index: 1028; }
+  z-index: 1028;
+}
 
 /**
  * Form Render Global Styles
@@ -143,521 +162,687 @@
      */
   /**
      * Field UI Helper
-     */ }
-  .form-render label:hover {
-    cursor: pointer; }
-  .form-render input::-webkit-calendar-picker-indicator {
-    display: none; }
-  .form-render input[type="date"]::-webkit-input-placeholder {
-    visibility: hidden !important; }
-  .form-render input[type='number'] {
-    -moz-appearance: textfield; }
-  .form-render input::-webkit-outer-spin-button,
-  .form-render input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0;
-    /* <-- Apparently some margin are still there even though it's hidden */ }
-  .form-render .showInputFile {
-    display: inline !important;
-    margin-right: 20px !important; }
-  .form-render .hideInputFile {
-    display: block !important;
-    position: relative !important;
-    left: -999999px !important;
-    width: 1px !important;
-    height: 1px !important;
-    margin: 0px !important;
-    padding: 0px !important; }
-  .form-render .placeholder {
-    color: #bbbbbb !important;
-    font-style: italic !important; }
-  .form-render ::-webkit-input-placeholder {
-    color: #bbbbbb !important;
-    font-style: italic !important; }
-  .form-render ::-moz-placeholder {
-    color: #bbbbbb !important;
-    font-style: italic !important; }
-  .form-render :-ms-input-placeholder {
-    color: #bbbbbb !important;
-    font-style: italic !important; }
-  .form-render input:-moz-placeholder {
-    color: #bbbbbb !important;
-    font-style: italic !important; }
-  .form-render label span.required {
-    color: #B94A48;
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 5px; }
-  .form-render fieldset {
-    clear: both; }
-    .form-render fieldset.birthday-picker {
-      clear: none; }
-  .form-render .form-fraction span {
-    margin: auto 5px; }
-  .form-render .form-fraction input {
-    width: 40%; }
-  .form-render select {
-    min-width: 220px;
-    width: auto; }
-    .form-render select[class^="birth-"] {
-      min-width: 0; }
-  .form-render .radio-container {
-    overflow: hidden;
-    margin-bottom: 10px; }
-    .form-render .radio-container label.radio {
-      margin-left: 30px;
-      width: auto;
-      display: block; }
-      .form-render .radio-container label.radio input[type="radio"] {
-        margin-left: -25px; }
-    .form-render .radio-container .radio-value-render {
-      display: inline;
-      margin-left: 30px !important;
-      margin-bottom: 0; }
-  .form-render .checkbox-container {
-    margin-bottom: 10px;
-    overflow: hidden; }
-    .form-render .checkbox-container .text-right {
-      margin-top: 10px;
-      margin-bottom: 20px; }
-      .form-render .checkbox-container .text-right button {
-        margin-right: 20px; }
-    .form-render .checkbox-container label.checkbox {
-      margin-left: 30px; }
-      .form-render .checkbox-container label.checkbox input[type="checkbox"] {
-        margin-left: -25px; }
-    .form-render .checkbox-container textarea.other-textbox {
-      display: none;
-      margin-top: 10px; }
-  .form-render .tel-wrapper .tel-provider {
-    margin-left: 20px; }
-  .form-render .form-render_booleaninput_wrapper {
-    margin-top: 10px;
-    overflow: hidden; }
-  .form-render .form-render_booleaninput {
-    margin-left: 30px;
-    margin-bottom: 20px;
-    float: left; }
-    .form-render .form-render_booleaninput .btn.active {
-      text-decoration: underline; }
-  .form-render .booleaninput-value-render {
-    float: left;
-    margin-left: 12px !important;
-    margin-top: 5px; }
-  .form-render textarea {
-    min-height: 100px; }
-  .form-render .row-fluid [class*="span"] textarea {
-    min-height: 100px; }
-  .form-render .birthday-picker select {
-    margin-right: 10px; }
-    .form-render .birthday-picker select:last-child {
-      margin-right: 0; }
-  .form-render .popover-form,
-  .form-render .subform-actions {
-    margin: 10px auto; }
-    .form-render .popover-form .popover-action,
-    .form-render .subform-actions .popover-action {
-      text-align: center; }
-      .form-render .popover-form .popover-action .popover-submit,
-      .form-render .subform-actions .popover-action .popover-submit {
-        margin-right: 30px; }
-  .form-render .controls-row input,
-  .form-render .controls-row select,
-  .form-render .controls-row textarea {
-    margin-bottom: 15px; }
-  .form-render .controls-row .add-on {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin-left: 3px;
-    margin-right: 3px;
-    font-size: 18px; }
-  .form-render .select2-container {
-    margin-bottom: 15px;
-    width: 90%;
-    float: none; }
-    .form-render .select2-container.span12 {
-      margin-left: 0; }
-  .form-render .subform-container {
-    padding: 20px 0;
-    margin-bottom: 30px;
-    /**
-         * Select 2 Container
-         */ }
-    .form-render .subform-container input,
-    .form-render .subform-container select,
-    .form-render .subform-container textarea {
-      margin-bottom: 15px; }
-    .form-render .subform-container .select2-container {
-      margin-left: 0;
-      margin-bottom: 15px; }
-    .form-render .subform-container div.active {
-      padding: 30px 20px 0;
-      border: 1px solid #d5d5d5;
-      border-radius: 8px;
-      background: #FFF; }
-      .form-render .subform-container div.active form {
-        margin-bottom: 0; }
-        .form-render .subform-container div.active form .form-actions {
-          margin-bottom: 5px; }
-    .form-render .subform-container .actions {
-      padding: 15px 25px 0; }
-      .form-render .subform-container .actions .required {
-        font-size: 18px;
-        font-weight: bold;
-        color: inherit; }
-    .form-render .subform-container .subform-collection {
-      margin: 20px auto; }
-      .form-render .subform-container .subform-collection .table th a {
-        display: inline-block;
-        padding-left: 8px;
-        padding-right: 8px; }
-    .form-render .subform-container .subform-actions {
-      text-align: center; }
-      .form-render .subform-container .subform-actions .btn {
-        margin: 5px 8px; }
-      .form-render .subform-container .subform-actions .popover-title {
-        padding: 12px;
-        text-align: center;
-        font-weight: bold; }
-  .form-render .form-actions {
-    text-align: center;
-    padding: 19px 20px 20px; }
-    .form-render .form-actions .btn {
-      margin-right: 30px;
-      margin-bottom: 20px; }
-      .form-render .form-actions .btn:last-child {
-        margin-right: 0; }
-    .form-render .form-actions .sub-button .btn {
-      margin: 10px auto; }
-    .form-render .form-actions .popover-title,
-    .form-render .form-actions .popover-inner {
-      color: #b94a48; }
-    .form-render .form-actions .popover p {
-      margin-bottom: 0; }
-    .form-render .form-actions .popover.success .popover-title,
-    .form-render .form-actions .popover.success .popover-inner {
-      color: #468847; }
-    .form-render .form-actions .popover .popover-content {
-      text-align: center;
-      padding-top: 12px;
-      padding-bottom: 12px; }
-      .form-render .form-actions .popover .popover-content .btn {
-        margin-bottom: 5px; }
-    .form-render .form-actions .popover-title {
-      text-align: left;
-      font-weight: bold; }
-    .form-render .form-actions .subform-button-wrapper {
-      color: #3a87ad; }
-      .form-render .form-actions .subform-button-wrapper .form-markup-field {
-        text-align: left;
-        margin: 8px auto; }
-        .form-render .form-actions .subform-button-wrapper .form-markup-field input {
-          width: 90%; }
-      .form-render .form-actions .subform-button-wrapper .btn {
-        margin-bottom: 0; }
-      .form-render .form-actions .subform-button-wrapper .subform-btn-submit {
-        width: 70%; }
-      .form-render .form-actions .subform-button-wrapper .icon-spinner {
-        margin: auto 8px; }
-  .form-render div.invalid a.select2-choice {
-    border-color: #b94a48;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
-  .form-render input,
-  .form-render select,
-  .form-render textarea {
-    margin-bottom: 10px; }
-    .form-render input[type="file"].invalid,
-    .form-render select[type="file"].invalid,
-    .form-render textarea[type="file"].invalid {
-      border: solid 1px #b94a48; }
-    .form-render input[type="radio"].invalid,
-    .form-render select[type="radio"].invalid,
-    .form-render textarea[type="radio"].invalid {
-      outline: 1px solid #b94a48; }
-    .form-render input.invalid,
-    .form-render select.invalid,
-    .form-render textarea.invalid {
-      border-color: #b94a48;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-      -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
-  .form-render.read-mode {
-    /** Tags **/
-    /** Table Sorter **/
-    /**
-         * For Update on Read Mode
-         */ }
-    .form-render.read-mode fieldset.table-view {
-      margin-bottom: 30px; }
-    .form-render.read-mode .read-checkbox {
-      margin: 10px auto 20px;
-      width: 95%; }
-      .form-render.read-mode .read-checkbox span.uneditable-input {
-        width: auto;
-        margin-right: 20px;
-        padding: 4px 8px; }
-    .form-render.read-mode .add-on {
-      margin: auto 10px; }
-    .form-render.read-mode .row-fluid div[class^="span"] > label {
-      margin-top: 15px; }
-    .form-render.read-mode .table {
-      margin: 30px auto; }
-    .form-render.read-mode .select-tags {
-      padding: 0; }
-      .form-render.read-mode .select-tags ul {
-        overflow: hidden;
-        padding-left: 0;
-        margin-left: 0;
-        margin-bottom: 0; }
-        .form-render.read-mode .select-tags ul li {
-          list-style-type: none;
-          float: left;
-          margin-right: 30px;
-          line-height: 30px;
-          margin-bottom: 5px; }
-    .form-render.read-mode .stupidtable th:hover {
-      cursor: pointer;
-      text-decoration: underline; }
-      .form-render.read-mode .stupidtable th:hover .dir-icon,
-      .form-render.read-mode .stupidtable th:hover .dir-icon:before {
-        text-decoration: none; }
-    .form-render.read-mode .stupidtable th a {
-      display: inline-block;
-      padding-left: 8px;
-      padding-right: 8px; }
-    .form-render.read-mode .update-on-read-mode {
-      position: relative; }
-      .form-render.read-mode .update-on-read-mode:hover {
-        /**
-                 * Show Edit Icon
-                 */ }
-        .form-render.read-mode .update-on-read-mode:hover:after {
-          position: absolute;
-          color: #08c;
-          content: "\f044";
-          font-family: FontAwesome;
-          font-style: normal;
-          font-weight: 400;
-          margin-left: 8px;
-          transition: all 0.1s ease-in 0s;
-          font-size: 16px;
-          top: 5px;
-          right: 3%; }
-      .form-render.read-mode .update-on-read-mode [class*='input-'],
-      .form-render.read-mode .update-on-read-mode .radio-container {
-        width: 80%;
-        margin-bottom: 0; }
-      .form-render.read-mode .update-on-read-mode .uneditable-input:hover {
-        cursor: pointer; }
-      .form-render.read-mode .update-on-read-mode .update-cancel {
-        margin-right: 30px; }
-      .form-render.read-mode .update-on-read-mode .update-buttons {
-        margin-top: 15px;
-        text-align: left; }
-        .form-render.read-mode .update-on-read-mode .update-buttons .btn {
-          display: inline-block; }
-  .form-render .uneditable-input {
-    width: 80%;
-    height: auto;
-    overflow: auto;
-    white-space: normal;
-    min-height: 20px; }
-    .form-render .uneditable-input.input-col2 {
-      width: 40%; }
-  .form-render .uneditable-input-textarea {
-    height: auto;
-    min-height: 20px; }
-  .form-render .uneditable-input-image {
-    max-height: 250px;
-    max-width: 500px;
-    min-height: 20px; }
-  .form-render .control-group .uneditable-input.input-col2 {
-    width: 34%; }
-  .form-render .emailpicker .add-on {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    position: relative;
-    top: -3px;
-    font-size: 16px; }
-  .form-render .copy-values-from {
-    margin: 20px auto; }
-    .form-render .copy-values-from label {
-      display: inline; }
-    .form-render .copy-values-from .btn-group {
-      margin-left: 30px; }
-  .form-render .wizard-view .step-content .btn-group .active {
-    display: inline; }
-  .form-render .fileupload-buttonbar input[type="file"] {
-    display: none; }
-  .form-render .fileupload-buttonbar .fileinput-button {
-    margin-right: 30px; }
-  .form-render .fileupload-buttonbar .btn i {
-    margin-right: 3px; }
-  .form-render .fileupload-buttonbar .btn.cancel {
-    margin-left: 10px;
-    display: inline; }
-  .form-render .table-multi-files {
-    margin-top: 20px; }
-    .form-render .table-multi-files input[type="file"] {
-      display: none; }
-    .form-render .table-multi-files td .btn i {
-      margin-right: 3px; }
-  .form-render .btn-decision-data-wrapper {
-    margin: 20px auto; }
-    .form-render .btn-decision-data-wrapper .btn-decision-data-render caption {
-      text-align: left;
-      font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #dddddd; }
-    .form-render .btn-decision-data-wrapper .btn-decision-data-render thead td {
-      font-weight: bold; }
-  .form-render #module-approval-modal .modal-header .close {
-    opacity: 0.4; }
-  .form-render #module-approval-modal .modal-body {
-    padding: 30px; }
-    .form-render #module-approval-modal .modal-body form {
-      width: 90%; }
-  .form-render #module-approval-modal .modal-footer {
-    overflow: hidden;
-    padding-left: 50px;
-    padding-right: 50px; }
-    .form-render #module-approval-modal .modal-footer .btn-success {
-      float: left; }
-    .form-render #module-approval-modal .modal-footer .btn-danger {
-      float: right; }
-    .form-render #module-approval-modal .modal-footer .btn {
-      margin-bottom: 0; }
-  .form-render .append-comment-modal .modal-body {
-    padding: 15px 25px; }
-    .form-render .append-comment-modal .modal-body form label,
-    .form-render .append-comment-modal .modal-body form textarea {
-      width: 95%; }
-  .form-render .append-comment-modal .modal-footer {
-    text-align: center; }
-    .form-render .append-comment-modal .modal-footer .btn {
-      margin-bottom: 10px;
-      padding: 6px 18px; }
-  .form-render form.render-default {
-    margin: auto; }
-    .form-render form.render-default label,
-    .form-render form.render-default input,
-    .form-render form.render-default textarea {
-      float: none;
-      text-align: left;
-      display: block;
-      width: 90%; }
-  .form-render .modal {
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    background-clip: border-box; }
-    .form-render .modal .modal-header {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      border-radius: 6px 6px 0 0; }
-      .form-render .modal .modal-header h3 {
-        font-size: 24.5px;
-        font-weight: bold; }
-  .form-render .filerepository-wrapper {
-    padding: 0 20px;
-    margin-bottom: 20px; }
-    .form-render .filerepository-wrapper .filerepository-form {
-      padding: 0 20px 10px; }
-      .form-render .filerepository-wrapper .filerepository-form label,
-      .form-render .filerepository-wrapper .filerepository-form input,
-      .form-render .filerepository-wrapper .filerepository-form textarea {
-        width: 98%;
-        margin: 8px auto; }
-      .form-render .filerepository-wrapper .filerepository-form label {
-        font-weight: bold; }
-      .form-render .filerepository-wrapper .filerepository-form input,
-      .form-render .filerepository-wrapper .filerepository-form textarea {
-        margin-bottom: 12px; }
-    .form-render .filerepository-wrapper .filerepository-form-wrapper .icon-spinner {
-      margin: auto 20px; }
-    .form-render .filerepository-wrapper .filerepository-form-wrapper .modal-footer .btn {
-      margin: auto 10px;
-      padding-left: 25px;
-      padding-right: 25px; }
-    .form-render .filerepository-wrapper .table td.show-ex-icon {
-      min-width: 150px; }
-    .form-render .filerepository-wrapper .table td img {
-      width: 80%; }
-  .form-render .sub-fields-box {
-    margin-top: 15px;
-    padding: 10px 30px !important;
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    border-radius: 4px; }
+     */
+}
+.form-render label:hover {
+  cursor: pointer;
+}
+.form-render input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+.form-render input[type=date]::-webkit-input-placeholder {
+  visibility: hidden !important;
+}
+.form-render input[type=number] {
+  -moz-appearance: textfield;
+}
+.form-render input::-webkit-outer-spin-button,
+.form-render input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
+}
+.form-render .showInputFile {
+  display: inline !important;
+  margin-right: 20px !important;
+}
+.form-render .hideInputFile {
+  display: block !important;
+  position: relative !important;
+  left: -999999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0px !important;
+  padding: 0px !important;
+}
+.form-render .placeholder {
+  color: #bbbbbb !important;
+  font-style: italic !important;
+}
+.form-render ::-webkit-input-placeholder {
+  color: #bbbbbb !important;
+  font-style: italic !important;
+}
+.form-render ::-moz-placeholder {
+  color: #bbbbbb !important;
+  font-style: italic !important;
+}
+.form-render :-ms-input-placeholder {
+  color: #bbbbbb !important;
+  font-style: italic !important;
+}
+.form-render input:-moz-placeholder {
+  color: #bbbbbb !important;
+  font-style: italic !important;
+}
+.form-render label span.required {
+  color: #b94a48;
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.form-render fieldset {
+  clear: both;
+}
+.form-render fieldset.birthday-picker {
+  clear: none;
+}
+.form-render .form-fraction span {
+  margin: auto 5px;
+}
+.form-render .form-fraction input {
+  width: 40%;
+}
+.form-render select {
+  min-width: 220px;
+  width: auto;
+}
+.form-render select[class^=birth-] {
+  min-width: 0;
+}
+.form-render .radio-container {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.form-render .radio-container label.radio {
+  margin-left: 30px;
+  width: auto;
+  display: block;
+}
+.form-render .radio-container label.radio input[type=radio] {
+  margin-left: -25px;
+}
+.form-render .radio-container .radio-value-render {
+  display: inline;
+  margin-left: 30px !important;
+  margin-bottom: 0;
+}
+.form-render .checkbox-container {
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.form-render .checkbox-container .text-right {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.form-render .checkbox-container .text-right button {
+  margin-right: 20px;
+}
+.form-render .checkbox-container label.checkbox {
+  margin-left: 30px;
+}
+.form-render .checkbox-container label.checkbox input[type=checkbox] {
+  margin-left: -25px;
+}
+.form-render .checkbox-container textarea.other-textbox {
+  display: none;
+  margin-top: 10px;
+}
+.form-render .tel-wrapper .tel-provider {
+  margin-left: 20px;
+}
+.form-render .form-render_booleaninput_wrapper {
+  margin-top: 10px;
+  overflow: hidden;
+}
+.form-render .form-render_booleaninput {
+  margin-left: 30px;
+  margin-bottom: 20px;
+  float: left;
+}
+.form-render .form-render_booleaninput .btn.active {
+  text-decoration: underline;
+}
+.form-render .booleaninput-value-render {
+  float: left;
+  margin-left: 12px !important;
+  margin-top: 5px;
+}
+.form-render textarea {
+  min-height: 100px;
+}
+.form-render .row-fluid [class*=span] textarea {
+  min-height: 100px;
+}
+.form-render .birthday-picker select {
+  margin-right: 10px;
+}
+.form-render .birthday-picker select:last-child {
+  margin-right: 0;
+}
+.form-render .popover-form,
+.form-render .subform-actions {
+  margin: 10px auto;
+}
+.form-render .popover-form .popover-action,
+.form-render .subform-actions .popover-action {
+  text-align: center;
+}
+.form-render .popover-form .popover-action .popover-submit,
+.form-render .subform-actions .popover-action .popover-submit {
+  margin-right: 30px;
+}
+.form-render .controls-row input,
+.form-render .controls-row select,
+.form-render .controls-row textarea {
+  margin-bottom: 15px;
+}
+.form-render .controls-row .add-on {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-left: 3px;
+  margin-right: 3px;
+  font-size: 18px;
+}
+.form-render .select2-container {
+  margin-bottom: 15px;
+  width: 90%;
+  float: none;
+}
+.form-render .select2-container.span12 {
+  margin-left: 0;
+}
+.form-render .subform-container {
+  padding: 20px 0;
+  margin-bottom: 30px;
+  /**
+       * Select 2 Container
+       */
+}
+.form-render .subform-container input,
+.form-render .subform-container select,
+.form-render .subform-container textarea {
+  margin-bottom: 15px;
+}
+.form-render .subform-container .select2-container {
+  margin-left: 0;
+  margin-bottom: 15px;
+}
+.form-render .subform-container div.active {
+  padding: 30px 20px 0;
+  border: 1px solid #d5d5d5;
+  border-radius: 8px;
+  background: #fff;
+}
+.form-render .subform-container div.active form {
+  margin-bottom: 0;
+}
+.form-render .subform-container div.active form .form-actions {
+  margin-bottom: 5px;
+}
+.form-render .subform-container .actions {
+  padding: 15px 25px 0;
+}
+.form-render .subform-container .actions .required {
+  font-size: 18px;
+  font-weight: bold;
+  color: inherit;
+}
+.form-render .subform-container .subform-collection {
+  margin: 20px auto;
+}
+.form-render .subform-container .subform-collection .table th a {
+  display: inline-block;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.form-render .subform-container .subform-actions {
+  text-align: center;
+}
+.form-render .subform-container .subform-actions .btn {
+  margin: 5px 8px;
+}
+.form-render .subform-container .subform-actions .popover-title {
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+.form-render .form-actions {
+  text-align: center;
+  padding: 19px 20px 20px;
+}
+.form-render .form-actions .btn {
+  margin-right: 30px;
+  margin-bottom: 20px;
+}
+.form-render .form-actions .btn:last-child {
+  margin-right: 0;
+}
+.form-render .form-actions .sub-button .btn {
+  margin: 10px auto;
+}
+.form-render .form-actions .popover-title,
+.form-render .form-actions .popover-inner {
+  color: #b94a48;
+}
+.form-render .form-actions .popover p {
+  margin-bottom: 0;
+}
+.form-render .form-actions .popover.success .popover-title,
+.form-render .form-actions .popover.success .popover-inner {
+  color: #468847;
+}
+.form-render .form-actions .popover .popover-content {
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.form-render .form-actions .popover .popover-content .btn {
+  margin-bottom: 5px;
+}
+.form-render .form-actions .popover-title {
+  text-align: left;
+  font-weight: bold;
+}
+.form-render .form-actions .subform-button-wrapper {
+  color: #3a87ad;
+}
+.form-render .form-actions .subform-button-wrapper .form-markup-field {
+  text-align: left;
+  margin: 8px auto;
+}
+.form-render .form-actions .subform-button-wrapper .form-markup-field input {
+  width: 90%;
+}
+.form-render .form-actions .subform-button-wrapper .btn {
+  margin-bottom: 0;
+}
+.form-render .form-actions .subform-button-wrapper .subform-btn-submit {
+  width: 70%;
+}
+.form-render .form-actions .subform-button-wrapper .icon-spinner {
+  margin: auto 8px;
+}
+.form-render div.invalid a.select2-choice {
+  border-color: #b94a48;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.form-render input,
+.form-render select,
+.form-render textarea {
+  margin-bottom: 10px;
+}
+.form-render input[type=file].invalid,
+.form-render select[type=file].invalid,
+.form-render textarea[type=file].invalid {
+  border: solid 1px #b94a48;
+}
+.form-render input[type=radio].invalid,
+.form-render select[type=radio].invalid,
+.form-render textarea[type=radio].invalid {
+  outline: 1px solid #b94a48;
+}
+.form-render input.invalid,
+.form-render select.invalid,
+.form-render textarea.invalid {
+  border-color: #b94a48;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.form-render.read-mode {
+  /** Tags **/
+  /** Table Sorter **/
+  /**
+       * For Update on Read Mode
+       */
+}
+.form-render.read-mode fieldset.table-view {
+  margin-bottom: 30px;
+}
+.form-render.read-mode .read-checkbox {
+  margin: 10px auto 20px;
+  width: 95%;
+}
+.form-render.read-mode .read-checkbox span.uneditable-input {
+  width: auto;
+  margin-right: 20px;
+  padding: 4px 8px;
+}
+.form-render.read-mode .add-on {
+  margin: auto 10px;
+}
+.form-render.read-mode .row-fluid div[class^=span] > label {
+  margin-top: 15px;
+}
+.form-render.read-mode .table {
+  margin: 30px auto;
+}
+.form-render.read-mode .select-tags {
+  padding: 0;
+}
+.form-render.read-mode .select-tags ul {
+  overflow: hidden;
+  padding-left: 0;
+  margin-left: 0;
+  margin-bottom: 0;
+}
+.form-render.read-mode .select-tags ul li {
+  list-style-type: none;
+  float: left;
+  margin-right: 30px;
+  line-height: 30px;
+  margin-bottom: 5px;
+}
+.form-render.read-mode .stupidtable th:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.form-render.read-mode .stupidtable th:hover .dir-icon,
+.form-render.read-mode .stupidtable th:hover .dir-icon:before {
+  text-decoration: none;
+}
+.form-render.read-mode .stupidtable th a {
+  display: inline-block;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.form-render.read-mode .update-on-read-mode {
+  position: relative;
+}
+.form-render.read-mode .update-on-read-mode:hover {
+  /**
+           * Show Edit Icon
+           */
+}
+.form-render.read-mode .update-on-read-mode:hover:after {
+  position: absolute;
+  color: #08c;
+  content: "";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: 400;
+  margin-left: 8px;
+  transition: all 0.1s ease-in 0s;
+  font-size: 16px;
+  top: 5px;
+  right: 3%;
+}
+.form-render.read-mode .update-on-read-mode [class*=input-],
+.form-render.read-mode .update-on-read-mode .radio-container {
+  width: 80%;
+  margin-bottom: 0;
+}
+.form-render.read-mode .update-on-read-mode .uneditable-input:hover {
+  cursor: pointer;
+}
+.form-render.read-mode .update-on-read-mode .update-cancel {
+  margin-right: 30px;
+}
+.form-render.read-mode .update-on-read-mode .update-buttons {
+  margin-top: 15px;
+  text-align: left;
+}
+.form-render.read-mode .update-on-read-mode .update-buttons .btn {
+  display: inline-block;
+}
+.form-render .uneditable-input {
+  width: 80%;
+  height: auto;
+  overflow: auto;
+  white-space: normal;
+  min-height: 20px;
+}
+.form-render .uneditable-input.input-col2 {
+  width: 40%;
+}
+.form-render .uneditable-input-textarea {
+  height: auto;
+  min-height: 20px;
+}
+.form-render .uneditable-input-image {
+  max-height: 250px;
+  max-width: 500px;
+  min-height: 20px;
+}
+.form-render .control-group .uneditable-input.input-col2 {
+  width: 34%;
+}
+.form-render .emailpicker .add-on {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: relative;
+  top: -3px;
+  font-size: 16px;
+}
+.form-render .copy-values-from {
+  margin: 20px auto;
+}
+.form-render .copy-values-from label {
+  display: inline;
+}
+.form-render .copy-values-from .btn-group {
+  margin-left: 30px;
+}
+.form-render .wizard-view .step-content .btn-group .active {
+  display: inline;
+}
+.form-render .fileupload-buttonbar input[type=file] {
+  display: none;
+}
+.form-render .fileupload-buttonbar .fileinput-button {
+  margin-right: 30px;
+}
+.form-render .fileupload-buttonbar .btn i {
+  margin-right: 3px;
+}
+.form-render .fileupload-buttonbar .btn.cancel {
+  margin-left: 10px;
+  display: inline;
+}
+.form-render .table-multi-files {
+  margin-top: 20px;
+}
+.form-render .table-multi-files input[type=file] {
+  display: none;
+}
+.form-render .table-multi-files td .btn i {
+  margin-right: 3px;
+}
+.form-render .btn-decision-data-wrapper {
+  margin: 20px auto;
+}
+.form-render .btn-decision-data-wrapper .btn-decision-data-render caption {
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+.form-render .btn-decision-data-wrapper .btn-decision-data-render thead td {
+  font-weight: bold;
+}
+.form-render #module-approval-modal .modal-header .close {
+  opacity: 0.4;
+}
+.form-render #module-approval-modal .modal-body {
+  padding: 30px;
+}
+.form-render #module-approval-modal .modal-body form {
+  width: 90%;
+}
+.form-render #module-approval-modal .modal-footer {
+  overflow: hidden;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.form-render #module-approval-modal .modal-footer .btn-success {
+  float: left;
+}
+.form-render #module-approval-modal .modal-footer .btn-danger {
+  float: right;
+}
+.form-render #module-approval-modal .modal-footer .btn {
+  margin-bottom: 0;
+}
+.form-render .append-comment-modal .modal-body {
+  padding: 15px 25px;
+}
+.form-render .append-comment-modal .modal-body form label,
+.form-render .append-comment-modal .modal-body form textarea {
+  width: 95%;
+}
+.form-render .append-comment-modal .modal-footer {
+  text-align: center;
+}
+.form-render .append-comment-modal .modal-footer .btn {
+  margin-bottom: 10px;
+  padding: 6px 18px;
+}
+.form-render form.render-default {
+  margin: auto;
+}
+.form-render form.render-default label,
+.form-render form.render-default input,
+.form-render form.render-default textarea {
+  float: none;
+  text-align: left;
+  display: block;
+  width: 90%;
+}
+.form-render .modal {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  background-clip: border-box;
+}
+.form-render .modal .modal-header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 6px 6px 0 0;
+}
+.form-render .modal .modal-header h3 {
+  font-size: 24.5px;
+  font-weight: bold;
+}
+.form-render .filerepository-wrapper {
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+.form-render .filerepository-wrapper .filerepository-form {
+  padding: 0 20px 10px;
+}
+.form-render .filerepository-wrapper .filerepository-form label,
+.form-render .filerepository-wrapper .filerepository-form input,
+.form-render .filerepository-wrapper .filerepository-form textarea {
+  width: 98%;
+  margin: 8px auto;
+}
+.form-render .filerepository-wrapper .filerepository-form label {
+  font-weight: bold;
+}
+.form-render .filerepository-wrapper .filerepository-form input,
+.form-render .filerepository-wrapper .filerepository-form textarea {
+  margin-bottom: 12px;
+}
+.form-render .filerepository-wrapper .filerepository-form-wrapper .icon-spinner {
+  margin: auto 20px;
+}
+.form-render .filerepository-wrapper .filerepository-form-wrapper .modal-footer .btn {
+  margin: auto 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.form-render .filerepository-wrapper .table td.show-ex-icon {
+  min-width: 150px;
+}
+.form-render .filerepository-wrapper .table td img {
+  width: 80%;
+}
+.form-render .sub-fields-box {
+  margin-top: 15px;
+  padding: 10px 30px !important;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+  border-radius: 4px;
+}
 
 /**
  * Override DatePicker
  */
 .datepicker.dropdown-menu {
-  z-index: 2000; }
+  z-index: 2000;
+}
 
 /**
  * Override Remodal
  */
 .remodal-unacceptable-modal .custom-html {
-  padding: 0 20px; }
-  .remodal-unacceptable-modal .custom-html textarea {
-    width: 90%;
-    min-height: 60px; }
-  .remodal-unacceptable-modal .custom-html .radio {
-    text-align: left;
-    width: auto;
-    padding-left: 20%;
-    display: block; }
+  padding: 0 20px;
+}
+.remodal-unacceptable-modal .custom-html textarea {
+  width: 90%;
+  min-height: 60px;
+}
+.remodal-unacceptable-modal .custom-html .radio {
+  text-align: left;
+  width: auto;
+  padding-left: 20%;
+  display: block;
+}
 
 /**
  * Modules
  */
 #formreloadwhenstatuschange {
-  width: 480px; }
-  #formreloadwhenstatuschange .modal-header {
-    padding: 12px; }
-    #formreloadwhenstatuschange .modal-header h3 {
-      font-size: 24px;
-      font-weight: bold; }
+  width: 480px;
+}
+#formreloadwhenstatuschange .modal-header {
+  padding: 12px;
+}
+#formreloadwhenstatuschange .modal-header h3 {
+  font-size: 24px;
+  font-weight: bold;
+}
 
 .qrcode-wrapper {
   margin: 10px;
-  text-align: center; }
-  .qrcode-wrapper img {
-    max-height: 100px; }
+  text-align: center;
+}
+.qrcode-wrapper img {
+  max-height: 100px;
+}
 
 /**
  * IE8 Style Only
  **/
 body.ie8 .form-render .controls-row {
-  margin-bottom: 10px; }
-  body.ie8 .form-render .controls-row input {
-    min-height: 20px !important; }
-  body.ie8 .form-render .controls-row .span6 {
-    width: 43%; }
-body.ie8 .form-render input[class*="span"],
-body.ie8 .form-render select[class*="span"] {
-  min-height: 20px; }
+  margin-bottom: 10px;
+}
+body.ie8 .form-render .controls-row input {
+  min-height: 20px !important;
+}
+body.ie8 .form-render .controls-row .span6 {
+  width: 43%;
+}
+body.ie8 .form-render input[class*=span],
+body.ie8 .form-render select[class*=span] {
+  min-height: 20px;
+}
 
 /**
  * IE7 Style Only
  **/
 body.ie7 .form-render .controls-row {
-  margin-bottom: 10px; }
-  body.ie7 .form-render .controls-row input {
-    min-height: 20px; }
-  body.ie7 .form-render .controls-row .span6 {
-    width: 43%; }
-  body.ie7 .form-render .controls-row .span5 {
-    width: 36%; }
-  body.ie7 .form-render .controls-row .span4 {
-    width: 29%; }
-  body.ie7 .form-render .controls-row .span3 {
-    width: 21%; }
+  margin-bottom: 10px;
+}
+body.ie7 .form-render .controls-row input {
+  min-height: 20px;
+}
+body.ie7 .form-render .controls-row .span6 {
+  width: 43%;
+}
+body.ie7 .form-render .controls-row .span5 {
+  width: 36%;
+}
+body.ie7 .form-render .controls-row .span4 {
+  width: 29%;
+}
+body.ie7 .form-render .controls-row .span3 {
+  width: 21%;
+}
 
 /**
  * Mobile
@@ -665,4 +850,8 @@ body.ie7 .form-render .controls-row {
 @media (max-width: 767px) {
   .form-render .radio-container label.radio {
     width: auto;
-    margin-left: 5px; } }
+    margin-left: 5px;
+  }
+}
+
+/*# sourceMappingURL=form-render.css.map */

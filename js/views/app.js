@@ -17,7 +17,8 @@ define([
   "jquery.expose",
   "bootstrap",
   "jquery.select2",
-  "jloader"
+  "jloader",
+  "jquery.timepicker"
 ], function($, _, Backbone, Vm, Utils, Events, layoutTemplate) {
   // Default Config
   function removePopover($ele) {
@@ -107,6 +108,9 @@ define([
           try {
             if (that.formView._hasDate) {
               that.setupDateInput(null, that);
+            }
+            if (that.formView._hasTime) {
+              that.setupTimeInput(null, that);
             }
             if (that.formView._hasBDate) {
               that.setupBDateInput();
@@ -204,6 +208,9 @@ define([
      **/
     setupDateInput: function() {
       Utils.setupDateInput(this.el, this);
+    },
+    setupTimeInput: function() {
+      Utils.setupTimeInput(this.el, this);
     },
     /**
      * Prevent Space Bar

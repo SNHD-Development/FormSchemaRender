@@ -45,6 +45,10 @@
       deps: ['jquery', 'bootstrap'],
       exports: 'jQuery.birthdaypicker'
     },
+    "jquery.timepicker": {
+      deps: ['jquery', 'bootstrap'],
+      exports: 'jQuery.timepicker'
+    },
     "jquery.lightbox": {
       deps: ['jquery', 'bootstrap'],
       exports: 'jQuery.lightbox'
@@ -112,6 +116,7 @@
 
     // Bootstrap Plugin
     "jquery.datepicker": 'libs/bootstrap-datepicker/bootstrap-datepicker',
+    "jquery.timepicker": "libs/jquery/jquery.timepicker.min",
 
     // Require.js plugins
     text: 'libs/require/text',

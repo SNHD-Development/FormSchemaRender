@@ -39,6 +39,7 @@ require.config({
     "jquery.zclip": "libs/copy/jquery.zclip.min",
     "jquery.select2": "libs/select2/select2.min",
     "jquery.stupidtable": "libs/jquery/stupidtable.min",
+    "jquery.timepicker": "libs/jquery/jquery.timepicker.min",
     "jquery.purl": "libs/purl",
     "jquery.mask": "libs/jquery-form-plugin/jquery.loadmask.spin",
     // FileUpload
@@ -82,6 +83,10 @@ require.config({
     "jquery.datepicker": {
       deps: ["jquery", "bootstrap"],
       exports: "jQuery.datepicker"
+    },
+    "jquery.timepicker": {
+      deps: ["jquery", "bootstrap"],
+      exports: "jQuery.timepicker"
     },
     "jquery.wizard": {
       deps: ["jquery", "bootstrap"],
