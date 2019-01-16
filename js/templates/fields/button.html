@@ -89,7 +89,7 @@ var _btnType = (typeof _submit === 'undefined') ? 'button' : 'submit';
                       location.reload(true);
                     }, 1000);
                 });
-            }
+            };
 
             var summission = function () {
                 var $val = $this.find('#UnacceptableReason');
@@ -123,7 +123,7 @@ var _btnType = (typeof _submit === 'undefined') ? 'button' : 'submit';
                   },
                   error: showError
                 });
-            }
+            };
             $this.find('.all-btns').fadeOut('slow');
             $this.find('.spinner.text-success').fadeIn('slow', summission);
         });
