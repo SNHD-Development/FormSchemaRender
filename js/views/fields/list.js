@@ -679,7 +679,7 @@ define([
             that.model.set($this.attr("name"), fileInfoData);
           };
 
-          reader.readAsText(currentFile);
+          reader.readAsDataURL(currentFile);
           return;
         }
         // console.log($this.attr('name'));

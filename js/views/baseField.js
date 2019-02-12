@@ -1940,6 +1940,7 @@ define([
             (this.options.formData.fields[field.name].length > 0 ||
               _.size(this.options.formData.fields[field.name]) > 0)
           ) {
+            // Read Mode: List Rendering Logic
             var _labels = [],
               _sortBy = [],
               _sortByVal = [],
@@ -2065,6 +2066,15 @@ define([
                       _tempDate = _tempDate.format("MM/DD/YYYY");
                     }
                     _values[index].push(_tempDate);
+                    break;
+                  case 'file':
+                    // console.log('- hello');
+                    _values[index].push({
+                      value: modelData[element.name],
+                      valueObj: JSON.parse(modelData[element.name]),
+                      valueBase64: Utils.Base64.encode(modelData[element.name]),
+                      renderAs: 'downloadFromJS'
+                    });
                     break;
                   case "number":
                     if (

@@ -17,7 +17,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
     },
     render: function() {
       var DEBUG = false;
-      //console.log('=== Render List View ===');
+      // console.log('=== Render List View ===');
       //console.log(this.collection.toJSON());
       if (DEBUG) {
         console.log('[*] render table.js in subform-layouts -');

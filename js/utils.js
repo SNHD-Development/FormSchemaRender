@@ -2223,6 +2223,8 @@ define([
       // Set Up Popover
       // console.log($form);
       this.setupPopover($form);
+
+      // console.log('hello');
     },
     /**
      * Setup Read Mode
@@ -4247,6 +4249,7 @@ define([
       // private method for UTF-8 decoding
       _utf8_decode: function(utftext) {
         var string = "";
+        var c1, c2, c3;
         var i = 0;
         var c = c1 = c2 = 0;
         while (i < utftext.length) {
