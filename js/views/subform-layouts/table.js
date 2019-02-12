@@ -51,6 +51,9 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
       }
       var _options = this.options;
       var _userIndex;
+
+      var hasFileElement = false;
+
       _.each(this.options.formSchema.fields, function(element) {
         if (element) {
           if (!element.options) {
@@ -94,17 +97,23 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
               if (!_c) {
                 _c = model[element.name];
               }
-              _values[index].push(_c);
+              _values[index].push({
+                value: _c
+              });
               break;
             case 'timestamp':
               _labels[_labels.length - 1] = 'Timestamps';
               // Convert to Human Readable Time
-              _values[index].push(Utils.getHumanTime(model[element.name]));
+              _values[index].push({
+                value: Utils.getHumanTime(model[element.name])
+              });
               break;
             case 'useraccount':
               _userIndex = _labels.length - 1;
               _labels[_userIndex] = 'User';
-              _values[index].push(model[element.name]);
+              _values[index].push({
+                value: model[element.name]
+              });
               break;
             case 'fullname':
               _fullName = (model[element.name + '_fullname_first_name']) ? model[element.name + '_fullname_first_name'] : '';
@@ -115,11 +124,15 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
                 _fullName += ' ';
               }
               _fullName += (model[element.name + '_fullname_last_name']) ? model[element.name + '_fullname_last_name'] : '';
-              _values[index].push(_fullName);
+              _values[index].push({
+                value: _fullName
+              });
               break;
             case 'booleaninput':
               var _booleanVal = (model[element.name] === true) ? 'Yes' : ((model[element.name] === false) ? 'No' : '');
-              _values[index].push(_booleanVal);
+              _values[index].push({
+                value: _booleanVal
+              });
               break;
             case 'number':
               var _number;
@@ -128,7 +141,9 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
               } else {
                 _number = model[element.name];
               }
-              _values[index].push(_number);
+              _values[index].push({
+                value: _number
+              });
               break;
             case 'date':
               var _tempDate = model[element.name];
@@ -139,17 +154,53 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
                 }
                 _tempDate = _tempDate.format('MM/DD/YYYY');
               }
-              _values[index].push(_tempDate);
+              _values[index].push({
+                value:_tempDate
+              });
+              break;
+            case 'file':
+              hasFileElement = true;
+              var _fileDef = model[element.name];
+              // console.log('- _fileDef:', _fileDef);
+              if (_fileDef) {
+                if (typeof _fileDef === 'string') {
+                  _fileDef = JSON.parse(_fileDef);
+                }
+                var fileStr = _fileDef.fileName + ' (' + Utils.humanFileSize(_fileDef.fileSize) + ')';
+                _values[index].push({
+                  value: fileStr
+                });
+              } else {
+                // Default value
+                _values[index].push({
+                  value: ''
+                });
+              }
               break;
             default:
               var _defVal = model[element.name];
               if (_fieldsMap && _fieldsMap[element.name] && typeof _fieldsMap[element.name][_defVal] !== 'undefined') {
                 _defVal = _fieldsMap[element.name][_defVal];
               }
-              _values[index].push(_defVal);
+              _values[index].push({
+                value: _defVal
+              });
           }
         });
       });
+
+      if (hasFileElement) {
+        // console.log('- _values:', _values);
+        // debugger
+        if (_values && _values[0] && _values[0].length === 1) {
+          _values = _.map(_values, function(el) {
+            el.hideEdit = true;
+            return el;
+          });
+        }
+      }
+
+
       // console.log('- _values:', _values);
       $(this.el).html(this.template({
         labels: _labels,

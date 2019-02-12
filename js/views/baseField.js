@@ -574,7 +574,11 @@ define([
               !field.options.internalcanupdate
             )
           ) {
-            $("form" + this.el).attr("enctype", "multipart/form-data");
+            // console.log('- this.el:', this.el);
+            // debugger;
+            if (typeof this.el === 'string') {
+              $("form" + this.el).attr("enctype", "multipart/form-data");
+            }
           }
           var _validation_tmp = this.getFormValidationData(field.name);
           if (_validation_tmp.accept) {

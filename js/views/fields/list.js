@@ -196,7 +196,17 @@ define([
         }
         // var DEBUG = true;
         _.each(that.options.formSchema.fields, function(value, key, list) {
+          // console.log('- _options:', _options);
           // Check for Show On Mode
+
+          var currentModelValue = that.model.get(value.name);
+
+          // console.log('- currentModelValue:', currentModelValue);
+
+          if (value && value.type && value.type.toLowerCase() === "file" && currentModelValue) {
+            return;
+          }
+
           if (
             !BaseField.prototype.checkShowOnMode.call(
               that,
@@ -225,12 +235,13 @@ define([
             );
             _html += formView.renderLabel(value, _required);
           }
+
           if (
             value.type.toLowerCase() === "email" &&
             value.options.autocomplete
           ) {
-            if (that.model.get(value.name) !== "") {
-              var _strArray = that.model.get(value.name).split("@");
+            if (currentModelValue !== "") {
+              var _strArray = currentModelValue.split("@");
               that.model.set(value.name + "_username", _strArray[0]);
               that.model.set(value.name + "_server", _strArray[1]);
               if (value.options["default"]) {
@@ -245,7 +256,7 @@ define([
             console.log("    - Loop: " + key);
             console.log(value);
             if (value.name) {
-              console.log(that.model.get(value.name));
+              console.log(currentModelValue);
             }
           }
           // console.log(value);
@@ -602,6 +613,8 @@ define([
       if (_submitBtn.hasClass("submitted")) {
         return;
       }
+
+      var forceInvalid = false;
       // console.log('- current model:', JSON.stringify(that.options.model));
       _submitBtn.addClass("submitted");
       Utils.setHiddenField(this.el);
@@ -637,6 +650,38 @@ define([
         if ($this.is(":radio")) {
           return;
         }
+        if ($this.is(":file")) {
+          if (!('FileReader' in window)) {
+            throw new Error('No FileReader, please use modern browser like Chrome!');
+          }
+          var currentFile = $this[0].files[0];
+
+          if (!currentFile) {
+            // forceInvalid = true;
+            that.model.set($this.attr("name"), '');
+            return;
+          }
+
+          var reader = new FileReader();
+          reader.onload = function() {
+            // console.log('- onload:', arguments);
+            // return;
+
+            var base64encoded = Utils.Base64.encode(reader.result);
+            // Get the File Name
+            var fileInfo = {
+              fileName: currentFile.name,
+              fileSize: currentFile.size,
+              fileType: currentFile.type,
+              base64Data: base64encoded
+            };
+            var fileInfoData = JSON.stringify(fileInfo);
+            that.model.set($this.attr("name"), fileInfoData);
+          };
+
+          reader.readAsText(currentFile);
+          return;
+        }
         // console.log($this.attr('name'));
         // console.log($this.val());
         that.model.set($this.attr("name"), $this.val());
@@ -664,7 +709,7 @@ define([
           console.log(this.model.toJSON());
         }
       }*/
-      if (this.model.isValid(true)) {
+      if (!forceInvalid && this.model.isValid(true)) {
         // var DEBUG = true;
         var $not_sending = $(".not_sending", this.el)
           .trigger("change")

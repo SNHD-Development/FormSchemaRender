@@ -29,12 +29,15 @@ if (heading) {
 		</tr>
 	</thead>
 	<tbody>
-		<% _.each( values, function(element1, index) { %>
+		<% _.each( values, function(element1, index) {
+        var hideEdit = element1.hideEdit || false;
+        %>
 		<tr>
 			<%
             /* Find Matching Username */
             var _match = false;
-            _.each( element1, function(element2, index2) {
+            _.each( element1, function(element2Obj, index2) {
+                var element2 = element2Obj.value;
                 if (_model && selfOnly && userIndex === index2) {
                     _match = (currentUserLowerCase === jQuery.trim(element2.toLowerCase()));
                 }
@@ -48,7 +51,11 @@ if (heading) {
                 <button class="btn btn-primary subform-read-model" data-id="<%= modelId[index] %>"><i class="icon-file"></i> View</button>
                 <% } %>
                 <% if (!addOnly && !selfOnly || selfOnly && _match) { %>
-				<button class="btn btn-info subform-edit-model" data-id="<%= modelId[index] %>"><i class="icon-edit"></i> Edit</button>
+
+                    <% if (!hideEdit) { %>
+    				    <button class="btn btn-info subform-edit-model" data-id="<%= modelId[index] %>"><i class="icon-edit"></i> Edit</button>
+                    <% } %>
+
 				<button class="btn btn-danger subform-remove-model" data-id="<%= modelId[index] %>"><i class="icon-remove"></i> Remove</button>
                 <% } %>
 			</td>
