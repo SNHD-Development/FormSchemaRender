@@ -1980,7 +1980,10 @@ define([
                     : 'data-sort="string"'
                 );
               }
-              _.each(that.options.formData.fields[field.name], function(
+
+              var currentFieldFormData = Utils.getModelValueForViewModel(that.options.formData, field.name);
+
+              _.each(currentFieldFormData, function(
                 modelData,
                 index
               ) {
@@ -2073,6 +2076,7 @@ define([
                       value: modelData[element.name],
                       valueObj: JSON.parse(modelData[element.name]),
                       valueBase64: Utils.Base64.encode(modelData[element.name]),
+                      // valueBase64: modelData[element.name].valueBase64,
                       renderAs: 'downloadFromJS'
                     });
                     break;
@@ -2108,6 +2112,7 @@ define([
                   : field.options.readmodedescription
             });
           } else {
+            // console.log('- set html to blank!', field.name);
             _html += "";
           }
         } else if (_type === "telephone" && field._providerValue) {
@@ -2288,6 +2293,7 @@ define([
         if (DEBUG && typeof this.inputTemplate[_type] === "undefined") {
           throw 'Template of "' + _type + '" not found!';
         }
+
         // console.log('- _type: ', _type, ' _attr: ', _attr);
         _html +=
           typeof this.inputTemplate[_type] !== "undefined"
@@ -2591,17 +2597,18 @@ define([
         this.options.formData.fields[field.name].length > 0
       ) {
         _listView.on(_options.formId + ".listViewCreated", function(list) {
-          console.log("- " + _options.formId + ".listViewCreated");
-          console.log(" - that.el:", that.el);
-          console.log(" - id:", id);
-          console.log(" - list:", list);
-          console.log(
-            " - that.options.formData.fields[field.name]:",
-            that.options.formData.fields[field.name]
-          );
+          // console.log("- " + _options.formId + ".listViewCreated");
+          // console.log(" - that.el:", that.el);
+          // console.log(" - id:", id);
+          // console.log(" - list:", list);
+          // console.log(
+          //   " - that.options.formData.fields[field.name]:",
+          //   that.options.formData.fields[field.name]
+          // );
+          var currentFieldFormData = Utils.getModelValueForViewModel(that.options.formData, field.name);
           $(that.el).trigger(id + ".add", [
             list,
-            that.options.formData.fields[field.name]
+            currentFieldFormData
           ]);
           _listView.off();
         });
@@ -2670,6 +2677,7 @@ define([
         console.log(listView);
         console.log(read);
       }
+      // debugger;
       model = model || {};
       hidden = hidden || false;
       listView = listView || false;
@@ -2750,7 +2758,8 @@ define([
       id,
       list
     ) {
-      var DEBUG = false;
+      // debugger
+      // var DEBUG = true;
       if (field.options) {
         if (field.options.copyvaluesfrom) {
           // Need to listen for the model change event form the parent form

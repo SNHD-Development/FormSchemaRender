@@ -4093,8 +4093,11 @@ define([
 
     Base64: getBase64(),
 
-    humanFileSize: humanFileSize
+    humanFileSize: humanFileSize,
+
+    getModelValueForViewModel: getModelValueForViewModel
   };
+
   /**
    * Setup DependOn Options
    **/
@@ -4273,5 +4276,25 @@ define([
     };
 
     return Base64;
+  }
+
+  function getModelValueForViewModel(data, fieldToGet) {
+    data = data || {};
+    if (!data.fields) {
+      return;
+    }
+    var currentFieldFormData = data.fields[fieldToGet];
+
+    if (_.isString(currentFieldFormData)){
+      try {
+        var tempCurrentFieldFormData = JSON.parse(currentFieldFormData);
+        currentFieldFormData = tempCurrentFieldFormData;
+      } catch(err) {
+        console.error('[x] baseField.js: could not parse JSON string for ' + fieldToGet + ' (' + currentFieldFormData + ')');
+        return currentFieldFormData;
+      }
+    }
+
+    return currentFieldFormData;
   }
 });
