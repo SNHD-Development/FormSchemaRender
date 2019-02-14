@@ -107,7 +107,7 @@ define([
               }
               var fileType = dataObj.fileType;
               var fileName = dataObj.fileName;
-              base64Data = Utils.Base64.decode(base64Data);
+              // base64Data = Utils.Base64.decode(base64Data);
               // base64Data = atob(base64Data)
               // console.log('- base64Data:', base64Data);
               // console.log('- base64Data:', base64Data);

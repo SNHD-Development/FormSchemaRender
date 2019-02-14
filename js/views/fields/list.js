@@ -667,7 +667,8 @@ define([
             // console.log('- onload:', arguments);
             // return;
 
-            var base64encoded = Utils.Base64.encode(reader.result);
+            // var base64encoded = Utils.Base64.encode(reader.result);
+            var base64encoded = reader.result;
             // Get the File Name
             var fileInfo = {
               fileName: currentFile.name,
