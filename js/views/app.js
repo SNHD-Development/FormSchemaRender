@@ -72,10 +72,12 @@ define([
             readView.render();
             Utils.finalReadSetup(readView);
 
-            // console.log('data ');
+            /**
+             * Attached Event for Download btn-js-download
+             */
             $(readView.el).on('click', '.btn-js-download', function() {
               var $button = $(this);
-              // console.log('- $button:', $button);
+
               var data = $button.attr('data-file');
               if (!data) {
                 return;
@@ -89,11 +91,9 @@ define([
                 return;
               }
 
-              // console.log('- data:', data);
               var dataObj = Utils.Base64.decode(data);
-              // console.log('- dataObj:', dataObj);
               if (!dataObj) {
-                return
+                return;
               }
 
               if (typeof dataObj === 'string') {
@@ -107,64 +107,27 @@ define([
               }
               var fileType = dataObj.fileType;
               var fileName = dataObj.fileName;
-              // base64Data = Utils.Base64.decode(base64Data);
-              // base64Data = atob(base64Data)
-              // console.log('- base64Data:', base64Data);
-              // console.log('- base64Data:', base64Data);
-              // if (!base64Data) {
-              //   return;
-              // }
-
-              /**
-               * <img src="data:image/png;base64,iVBORw0KGgoAAA
-                  ANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4
-                  //8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU
-                  5ErkJggg==" alt="Red dot" />
-               */
-
-              // console.log('- base64Data:', base64Data);
-
 
               $button.addClass(downloadingFile);
 
-              // Need to serve this binary
-              var element = document.createElement('a');
-              element.setAttribute('href', base64Data);
-              element.setAttribute('download', fileName);
-              element.style.display = 'none';
-              document.body.appendChild(element);
-              element.click();
-              document.body.removeChild(element);
+              // Need to serve this binary, non-ie
+              var element, blob;
+              if (navigator && navigator.msSaveBlob) {
+                // This is IE
+                blob = Utils.convertDataURIToBlob(base64Data, fileName);
+                navigator.msSaveBlob(blob);
+              } else {
+                // This is the cool browsers
+                element = document.createElement('a');
+                element.setAttribute('href', base64Data);
+                element.setAttribute('download', fileName);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+              }
 
               $button.removeClass(downloadingFile);
-
-              // var a = document.createElement("a");
-              // document.body.appendChild(a);
-              // a.style = "display: none";
-              // var blob = new Blob(base64Data, {type: fileType}),
-              //     url = window.URL.createObjectURL(blob);
-              // a.href = url;
-              // a.download = fileName;
-              // a.click();
-              // window.URL.revokeObjectURL(url);
-
-              // if (!('FileReader' in window)) {
-              //   throw new Error('Please use a modern browser like Chrome!');
-              // }
-
-              // var frb = new FileReader();
-              // frb.onload = function(){
-              //     var i, l, d, array;
-              //     d = this.result;
-              //     l = d.length;
-              //     array = new Uint8Array(l);
-              //     for (var i = 0; i < l; i++){
-              //         array[i] = d.charCodeAt(i);
-              //     }
-              //     var b = new Blob([array], {type: 'application/octet-stream'});
-              //     window.location.href = URL.createObjectURL(b);
-              // };
-              // frb.readAsBinaryString(base64Data);
             });
 
             // Render Form Complete
