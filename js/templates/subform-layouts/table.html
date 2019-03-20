@@ -42,12 +42,17 @@ if (heading) {
                 if (_model && selfOnly && userIndex === index2) {
                     _match = (currentUserLowerCase === jQuery.trim(element2.toLowerCase()));
                 }
-
+                
                 if (renderAs) {
                     switch(renderAs) {
                         case 'downloadFromJS':
-                            element2 = '<a class="btn btn-primary btn-js-download" data-file="' + element2Obj.valueBase64 + '">Download - ' + element2Obj.valueObj.fileName + '</a>';
-                            break;
+                        if(typeof element2Obj.valueObj.base64Data !== 'undefined') {
+                        	element2 = '<a class="btn btn-primary" href="/form/getFile/' + element2Obj.valueObj.base64Data + '" target="_blank">Download - ' + element2Obj.valueObj.fileName + '</a>';
+                    	} else {
+							element2 = '<a class="btn btn-primary btn-js-download" data-file="' + element2Obj.valueBase64 + '">Download - ' + element2Obj.valueObj.fileName + '</a>';
+                            
+                    	}
+                        break; 
                     }
                 }
             %>
