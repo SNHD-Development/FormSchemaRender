@@ -383,6 +383,13 @@ To change to render as a Bootstrap Inline Button can be done by adding Options.R
 To add button class simply add Options.BtnClass = "btn-primary"
 Note: "btn" class already include by default
 
+Options
+
+| Label         | Value         | Explanation |  
+| ------------- | ------------- | ------------- |
+| Layout        | in-line        | This options will render the radio buttons next to each other. Example: x Yes x No
+
+
 Example,
 
     {
@@ -422,7 +429,8 @@ Example,
             "Test Three": "Test 3"
         },
         "Options": {
-            "Render": "btn-group"
+            "Render": "btn-group",
+            "Layout": "in-line"
         }
     }
 
