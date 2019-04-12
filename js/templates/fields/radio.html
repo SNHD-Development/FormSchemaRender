@@ -4,8 +4,14 @@
 	_cnt = -1,
 	_defaultVal = (typeof _data !== 'undefined') ? ' value="' + _data + '" class="has-default-val"': '',
 	_btnClass = (options.btnclass) ? options.btnclass: '';
+	
+	_inLineClass = '';
+	if (options.layout === 'in-line') {
+		_inLineClass = _inLineClass + 'style="display:inline-flex"';
+	}
 %>
-<div class="radio-container">
+
+<div class="radio-container" <%= _inLineClass %> >
 	<% if (typeof values !== 'undefined') { %>
 		<% if (typeof options.render === 'undefined') { %>
 			<% _.each(values, function(element, index) {
