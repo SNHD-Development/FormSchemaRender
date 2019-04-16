@@ -649,6 +649,7 @@ define([
             }
             $submitBtn.attr("disabled", false).popover("destroy");
             $submitBtn.next(".popover").remove();
+            Utils.validateBooleanInput($form);
           }, 2000);
         }
       }

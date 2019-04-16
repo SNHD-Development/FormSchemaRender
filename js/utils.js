@@ -3763,6 +3763,31 @@ define([
       }
       return valid;
     },
+    validateBooleanInput: function($form) {
+      var valid = true;
+      try {
+        $form
+          .find('.form-render_booleaninput input[type="hidden"].invalid')
+          .each(function() {
+            valid = false;
+          var $this = $(this),
+            _errorTxt =
+              '<span class="text-error">Please answer this question.</span>';
+          $this
+            .closest(".form-render_booleaninput")
+            .next()
+            .html(_errorTxt)
+            .show("slow");
+          });
+      } catch (err) {
+        if (console && console.log) {
+          console.log("[x] Error: validateBooleanInput");
+          console.log(err);
+        }
+        valid = false;
+      }
+      return valid;
+    },
     /**
      * Pass in options that is select, then check value and if it null or empty string.
      * Will de-select it
