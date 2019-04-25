@@ -387,7 +387,7 @@ Options
 
 | Label         | Value         | Explanation |  
 | ------------- | ------------- | ------------- |
-| Layout        | horizontal    | This options will render the radio buttons next to each other (Horizontally(. Example: x Yes x No. The default render value is Vertically
+| layout        | horizontal    | This options will render the radio buttons next to each other (Horizontally(. Example: x Yes x No. The default render value is Vertically
 
 
 Example,
@@ -430,7 +430,7 @@ Example,
         },
         "Options": {
             "Render": "btn-group",
-            "Layout": "in-line"
+            "layout": "horizontal"
         }
     }
 
