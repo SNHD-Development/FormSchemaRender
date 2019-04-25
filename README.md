@@ -387,7 +387,7 @@ Options
 
 | Label         | Value         | Explanation |  
 | ------------- | ------------- | ------------- |
-| layout        | horizontal    | This options will render the radio buttons next to each other (Horizontally(. Example: x Yes x No. The default render value is Vertically
+| layout        | horizontal    | This options will render the radio buttons next to each other (Horizontally). Example: x Yes x No. The default render value is Vertically
 
 
 Example,
