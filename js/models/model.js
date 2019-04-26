@@ -590,21 +590,48 @@ define([
      * Parse nested JSON data, case Model -> Collection and append to the form input
      **/
     appendSubFormInput: function(formId, internalField, listSchema) {
+      var DEBUG = false;
       // debugger;
       listSchema = listSchema || null;
       var _data = _.clone(this.toJSON()),
         _postfix,
         $form = $("#" + formId);
       $("input.subform_before_submit", $form).remove();
+      if (DEBUG) {
+        console.log('- _data:', _data);
+      }
+      var that = this;
+
+      if (DEBUG) {
+        console.log('- this:', this);
+      }
+
+      var listOfSubFormLowerCase = (that.subFormLists) ? _.map(that.subFormLists, function(el) {
+        return el.toLowerCase();
+      }) : null;
+
+      if (DEBUG) {
+        console.log('- listOfSubFormLowerCase:', listOfSubFormLowerCase);
+      }
+
       _.each(_data, function(value, key) {
         /*if (key && key === 'AddAPublicPOD') {
           debugger;
         }*/
         _postfix = internalField.indexOf(key) > -1 ? "_internal" : "";
+
+        var isAListFieldType = (listOfSubFormLowerCase && key && (_.indexOf(listOfSubFormLowerCase, key.toLowerCase()) >= 0));
+
+        /*if (DEBUG) {
+          // debugger;
+          console.log('- key:', key);
+          console.log('- isAListFieldType:', isAListFieldType);
+        }*/
+
         if (
           typeof value !== "undefined" &&
           value &&
-          typeof value.toJSON === "function"
+          (typeof value.toJSON === "function" || isAListFieldType)
         ) {
           // Need to Check FormSchema and Parse the correct Data into input
           if (listSchema && listSchema[key].fields) {
@@ -692,15 +719,24 @@ define([
           /*if (key && key === 'AddAPublicPOD') {
             debugger;
           }*/
-          var _tmpJsonTxt = JSON.stringify(value.toJSON());
-          $form.prepend(
-            '<input type="hidden" name="' +
-              key +
-              _postfix +
-              '" value="" class="subform_before_submit">'
-          );
-          $form.find(':input[name="' + key + _postfix + '"]').val(_tmpJsonTxt);
-        } else {
+
+          var _tmpJsonTxt;
+          if (value && value.toJSON) {
+            _tmpJsonTxt = JSON.stringify(value.toJSON());
+          } else if (value) {
+            _tmpJsonTxt = value;
+          }
+
+          if (_tmpJsonTxt) {
+            $form.prepend(
+              '<input type="hidden" name="' +
+                key +
+                _postfix +
+                '" value="" class="subform_before_submit">'
+            );
+            $form.find(':input[name="' + key + _postfix + '"]').val(_tmpJsonTxt);
+          }
+
         }
       });
     },
@@ -731,6 +767,7 @@ define([
      * @return {Boolean}
      */
     isSubformValid: function() {
+      var DEBUG = false;
       var that = this,
         _result = true;
       _.each(this.subFormLists, function(element) {
@@ -745,8 +782,10 @@ define([
           var _subFormData = $(
             'input.subform_before_submit[name="' + element + '"]'
           ).val();
-          // console.log(_subFormData);
-          // console.log('- validation:', validation);
+          if (DEBUG) {
+            console.log('- _subFormData:', _subFormData);
+            console.log('- validation:', validation);
+          }
           switch (key) {
             case "required":
               if (_subFormData === "[]" || !_subFormData) {
@@ -756,6 +795,9 @@ define([
           }
         });
       });
+      if (DEBUG) {
+        console.log('- isSubformValid:', _result);
+      }
       return _result;
     },
     /**
