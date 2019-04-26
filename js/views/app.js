@@ -195,7 +195,7 @@ define([
             $("#" + that.options.formSchema.name, that.el).trigger(
               that.options.formSchema.name + ".renderCompleted",
               that
-            );
+            );        
             // Final Setup for All Mode
             Utils.finalSetupAllMode(that.formView);
             // Set the Action if has one
@@ -416,6 +416,7 @@ define([
       // Sometime the Select not get clear properly
       // Since HTML will not send any info if the select is not select
       var $selectInputNull = this.$("select");
+      // console.log($selectInputNull);
       if ($selectInputNull.length) {
         $selectInputNull.each(function() {
           var $this = $(this);
@@ -427,9 +428,6 @@ define([
           // console.log($this.val());
         });
       }
-      // console.log('Is model valid?', this.formView.model.isValid(true));
-      // console.log('Is sub-form model valid?', this.formView.model.isSubformValid());
-      // console.log('Model, value before submitted', this.formView.model.toJSON());
       if (
         this.formView.model.isValid(true) &&
         this.formView.model.isSubformValid() &&
@@ -611,6 +609,13 @@ define([
         // }
         // return false;
       } else {
+        console.log('************* Model Invalid *************');
+        console.log('Is model valid?', this.formView.model.isValid(true));
+        console.log('Is sub-form model valid?', this.formView.model.isSubformValid());
+        console.log('Model, value before submitted', this.formView.model.toJSON());
+        console.log('_isCheckBoxGood', _isCheckBoxGood);
+        console.log('');
+
         // Invalid: Events
         e.preventDefault();
         $form.addClass("validation_error");
@@ -618,7 +623,7 @@ define([
         // Error Message
         $(".not_sending", $form).attr("disabled", false);
         // Debug: Validation
-        if ("console" in window && console && console.log) {
+        if (false && "console" in window && console && console.log) {
           console.log("*** Submitted Error ***");
           console.log(this.formView.model.toJSON());
           // console.log($('.not_sending', $form));

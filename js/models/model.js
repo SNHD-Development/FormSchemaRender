@@ -737,14 +737,16 @@ define([
         if (!that.validation[element]) {
           return;
         }
+        // console.log('- that.validation:', that.validation);
         _.each(that.validation[element], function(validation, key) {
-          if (_.isObject(validation) || !_result) {
+          if (_.isObject(validation) || !_result || !validation) {
             return;
           }
           var _subFormData = $(
             'input.subform_before_submit[name="' + element + '"]'
           ).val();
           // console.log(_subFormData);
+          // console.log('- validation:', validation);
           switch (key) {
             case "required":
               if (_subFormData === "[]" || !_subFormData) {
