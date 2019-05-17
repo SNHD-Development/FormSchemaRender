@@ -164,12 +164,24 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
               // console.log('- _fileDef:', _fileDef);
               if (_fileDef) {
                 if (typeof _fileDef === 'string') {
-                  _fileDef = JSON.parse(_fileDef);
+                  // console.log(_fileDef);
+                  try {
+                    _fileDef = JSON.parse(_fileDef);
+                    var fileStr = _fileDef.fileName + ' (' + Utils.humanFileSize(_fileDef.fileSize) + ')';
+                    _values[index].push({
+                      value: fileStr
+                    });
+                  } catch (e) {
+                    // console.log('- e:', e);
+                    _values[index].push({
+                      value: _fileDef
+                    });
+
+                    window.setTimeout(function() {
+                      that.render();
+                    }, 2000);
+                  }
                 }
-                var fileStr = _fileDef.fileName + ' (' + Utils.humanFileSize(_fileDef.fileSize) + ')';
-                _values[index].push({
-                  value: fileStr
-                });
               } else {
                 // Default value
                 _values[index].push({
