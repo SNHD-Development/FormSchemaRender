@@ -167,7 +167,10 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
                   // console.log(_fileDef);
                   try {
                     _fileDef = JSON.parse(_fileDef);
-                    var fileStr = _fileDef.fileName + ' (' + Utils.humanFileSize(_fileDef.fileSize) + ')';
+                    var fileStr = _fileDef.fileName;
+                    if (_fileDef.fileSize) {  // only add the file size if exist to the fileName string
+                      fileStr = fileStr + ' (' + Utils.humanFileSize(_fileDef.fileSize) + ')';
+                    }
                     _values[index].push({
                       value: fileStr
                     });
