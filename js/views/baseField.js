@@ -142,7 +142,7 @@ define([
     "default-input-date": _.template(readModeUpdatedefaultInputDateTemplate)
   };
   // Function to build simple HTML form markup
-  function buildHtmlBasicFormMarkup(field) {
+  function buildHtmlBasicFormMarkup(field, templates) {
     var html,
       defaultLabel = true;
     if (DEBUG) {
@@ -193,6 +193,19 @@ define([
           '" id="' +
           field.name +
           '"/>';
+        break;
+      case "checkbox":
+      case "check":
+        html = templates[typeLower](
+          _.extend(
+            {
+              _attr: {},
+              _lang: "en",
+              _renderMode: "edit"
+            },
+            field
+          )
+        );
         break;
       default:
         throw 'Not implement "' +
@@ -576,7 +589,7 @@ define([
           ) {
             // console.log('- this.el:', this.el);
             // debugger;
-            if (typeof this.el === 'string') {
+            if (typeof this.el === "string") {
               $("form" + this.el).attr("enctype", "multipart/form-data");
             }
           }
@@ -1549,7 +1562,10 @@ define([
             var validationSubFormBtn = field.options.subform.validation;
             _.each(subFormBtnOptions.fields, function(fieldSubFormBtn) {
               // Simple HTML Render
-              htmlSubFormBtn += buildHtmlBasicFormMarkup(fieldSubFormBtn);
+              htmlSubFormBtn += buildHtmlBasicFormMarkup(
+                fieldSubFormBtn,
+                that.inputTemplate
+              );
             });
             htmlSubFormBtn =
               '<div class="subform-button-wrapper">' +
@@ -1981,12 +1997,12 @@ define([
                 );
               }
 
-              var currentFieldFormData = Utils.getModelValueForViewModel(that.options.formData, field.name);
+              var currentFieldFormData = Utils.getModelValueForViewModel(
+                that.options.formData,
+                field.name
+              );
 
-              _.each(currentFieldFormData, function(
-                modelData,
-                index
-              ) {
+              _.each(currentFieldFormData, function(modelData, index) {
                 var _fullName;
                 if (!_.isNumber(index)) {
                   if (_keys[element.name]) {
@@ -2070,14 +2086,14 @@ define([
                     }
                     _values[index].push(_tempDate);
                     break;
-                  case 'file':
+                  case "file":
                     // console.log('- hello');
                     _values[index].push({
                       value: modelData[element.name],
                       valueObj: JSON.parse(modelData[element.name]),
                       valueBase64: Utils.Base64.encode(modelData[element.name]),
                       // valueBase64: modelData[element.name].valueBase64,
-                      renderAs: 'downloadFromJS'
+                      renderAs: "downloadFromJS"
                     });
                     break;
                   case "number":
@@ -2605,11 +2621,11 @@ define([
           //   " - that.options.formData.fields[field.name]:",
           //   that.options.formData.fields[field.name]
           // );
-          var currentFieldFormData = Utils.getModelValueForViewModel(that.options.formData, field.name);
-          $(that.el).trigger(id + ".add", [
-            list,
-            currentFieldFormData
-          ]);
+          var currentFieldFormData = Utils.getModelValueForViewModel(
+            that.options.formData,
+            field.name
+          );
+          $(that.el).trigger(id + ".add", [list, currentFieldFormData]);
           _listView.off();
         });
       } else {
