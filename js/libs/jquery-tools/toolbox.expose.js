@@ -102,7 +102,7 @@
 			var size = viewport();
 
 			mask.css({
-				position:'absolute',
+				position:'fixed',
 				top: 0,
 				left: 0,
 				width: size[0],
