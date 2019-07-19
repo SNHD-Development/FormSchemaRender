@@ -163,10 +163,14 @@ define([
     }
     var typeLower = field.type.toLowerCase();
     var className = "";
+    field.options = field.options || {};
+    field._required = true;
+
     switch (typeLower) {
       case "hidden":
         defaultLabel = false;
         var _val = field.attributes.value;
+
         html =
           '<input type="hidden" name="' +
           field.name +
@@ -196,7 +200,23 @@ define([
         break;
       case "checkbox":
       case "check":
-        html = templates[typeLower](
+        //console.log(templates);
+        //console.log(typeLower);
+
+        if (field.options.numcolumns) {
+          if (!_.isNumber(field.options.numcolumns)) {
+            throw "NumColumns must be a valid number for " + field.name;
+          }
+          if (field.options.numcolumns > 4) {
+            field.options.numcolumns = 4;
+          } else if (field.options.numcolumns < 1) {
+            field.options.numcolumns = 1;
+          }
+        } else {
+          field.options.numcolumns = 1;
+        }
+
+        html = templates["check"](
           _.extend(
             {
               _attr: {},

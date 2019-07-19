@@ -2529,7 +2529,7 @@ define([
           }
           // Default Parameters for Select2
           var _ajaxObj = {
-              url: _url.match(/^(\w|\.|\/|:)+\(?/gi).shift(),
+              url: _url.match(/^(\w|\.|\/|:|-)+\(?/gi).shift(),
               data: function(term, page) {
                 var _result = _staticResult || {};
                 _.each(_tokens, function(element) {
@@ -3770,14 +3770,14 @@ define([
           .find('.form-render_booleaninput input[type="hidden"].invalid')
           .each(function() {
             valid = false;
-          var $this = $(this),
-            _errorTxt =
-              '<span class="text-error">Please answer this question.</span>';
-          $this
-            .closest(".form-render_booleaninput")
-            .next()
-            .html(_errorTxt)
-            .show("slow");
+            var $this = $(this),
+              _errorTxt =
+                '<span class="text-error">Please answer this question.</span>';
+            $this
+              .closest(".form-render_booleaninput")
+              .next()
+              .html(_errorTxt)
+              .show("slow");
           });
       } catch (err) {
         if (console && console.log) {
@@ -4181,18 +4181,18 @@ define([
 
   function humanFileSize(bytes, si) {
     var thresh = si ? 1000 : 1024;
-    if(Math.abs(bytes) < thresh) {
-        return bytes + ' B';
+    if (Math.abs(bytes) < thresh) {
+      return bytes + " B";
     }
     var units = si
-        ? ['kB','MB','GB','TB','PB','EB','ZB','YB']
-        : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
+      ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+      : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
     var u = -1;
     do {
-        bytes /= thresh;
-        ++u;
-    } while(Math.abs(bytes) >= thresh && u < units.length - 1);
-    return bytes.toFixed(1)+' '+units[u];
+      bytes /= thresh;
+      ++u;
+    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+    return bytes.toFixed(1) + " " + units[u];
   }
 
   /**
@@ -4207,7 +4207,8 @@ define([
      **/
     var Base64 = {
       // private property
-      _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+      _keyStr:
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
       // public method for encoding
       encode: function(input) {
         var output = "";
@@ -4227,7 +4228,12 @@ define([
           } else if (isNaN(chr3)) {
             enc4 = 64;
           }
-          output = output + this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) + this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+          output =
+            output +
+            this._keyStr.charAt(enc1) +
+            this._keyStr.charAt(enc2) +
+            this._keyStr.charAt(enc3) +
+            this._keyStr.charAt(enc4);
         }
         return output;
       },
@@ -4265,7 +4271,7 @@ define([
           var c = string.charCodeAt(n);
           if (c < 128) {
             utftext += String.fromCharCode(c);
-          } else if ((c > 127) && (c < 2048)) {
+          } else if (c > 127 && c < 2048) {
             utftext += String.fromCharCode((c >> 6) | 192);
             utftext += String.fromCharCode((c & 63) | 128);
           } else {
@@ -4281,20 +4287,22 @@ define([
         var string = "";
         var c1, c2, c3;
         var i = 0;
-        var c = c1 = c2 = 0;
+        var c = (c1 = c2 = 0);
         while (i < utftext.length) {
           c = utftext.charCodeAt(i);
           if (c < 128) {
             string += String.fromCharCode(c);
             i++;
-          } else if ((c > 191) && (c < 224)) {
+          } else if (c > 191 && c < 224) {
             c2 = utftext.charCodeAt(i + 1);
             string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
             i += 2;
           } else {
             c2 = utftext.charCodeAt(i + 1);
             c3 = utftext.charCodeAt(i + 2);
-            string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+            string += String.fromCharCode(
+              ((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63)
+            );
             i += 3;
           }
         }
@@ -4312,12 +4320,18 @@ define([
     }
     var currentFieldFormData = data.fields[fieldToGet];
 
-    if (_.isString(currentFieldFormData)){
+    if (_.isString(currentFieldFormData)) {
       try {
         var tempCurrentFieldFormData = JSON.parse(currentFieldFormData);
         currentFieldFormData = tempCurrentFieldFormData;
-      } catch(err) {
-        console.error('[x] baseField.js: could not parse JSON string for ' + fieldToGet + ' (' + currentFieldFormData + ')');
+      } catch (err) {
+        console.error(
+          "[x] baseField.js: could not parse JSON string for " +
+            fieldToGet +
+            " (" +
+            currentFieldFormData +
+            ")"
+        );
         return currentFieldFormData;
       }
     }
@@ -4328,10 +4342,13 @@ define([
   function convertDataURIToBlob(dataURI, fileName) {
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    var byteString = atob(dataURI.split(',')[1]);
+    var byteString = atob(dataURI.split(",")[1]);
 
     // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    var mimeString = dataURI
+      .split(",")[0]
+      .split(":")[1]
+      .split(";")[0];
 
     // write the bytes of the string to an ArrayBuffer
     var ab = new ArrayBuffer(byteString.length);
@@ -4341,11 +4358,11 @@ define([
 
     // set the bytes of the buffer to the correct values
     for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
+      ia[i] = byteString.charCodeAt(i);
     }
 
     // write the ArrayBuffer to a blob, and you're done
-    var blob = new Blob([ab], {type: mimeString}, fileName);
+    var blob = new Blob([ab], { type: mimeString }, fileName);
     return blob;
   }
 });

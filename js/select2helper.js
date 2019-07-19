@@ -2,37 +2,43 @@
  * Select2 Utilities Functions
  * Events
  **/
-define([
-  'jquery',
-  'underscore',
-  'utils',
-  'jquery.select2'
-], function($, _, Utils) {
-
+define(["jquery", "underscore", "utils", "jquery.select2"], function(
+  $,
+  _,
+  Utils
+) {
   if (!$().select2) {
-    throw 'Could not be abel to find select2';
+    throw "Could not be abel to find select2";
   }
 
   function cloneInputToHiddenInput($element) {
-    var attrArray = ['name', 'class', 'id', 'style', 'data-events', 'data-url', 'data-select-value'],
-      str = '';
+    var attrArray = [
+        "name",
+        "class",
+        "id",
+        "style",
+        "data-events",
+        "data-url",
+        "data-select-value"
+      ],
+      str = "";
     _.each(attrArray, function(element) {
       var _attr = $element.attr(element);
       if (_attr) {
         str += element + '="' + _attr + '" ';
       }
     });
-    str = '<input type="hidden" ' + str + ' />';
+    str = '<input type="hidden" ' + str + " />";
     $element.after(str);
-    var _width = $element.css('width'),
+    var _width = $element.css("width"),
       $hidden = $element.next();
     $element.remove();
     if (!_width) {
-      $hidden.css('width', '98%');
+      $hidden.css("width", "98%");
     } else {
-      $hidden.css('width', _width);
+      $hidden.css("width", _width);
     }
-    var _selectVal = $hidden.attr('data-select-value');
+    var _selectVal = $hidden.attr("data-select-value");
     if (_selectVal) {
       $hidden.val(_selectVal);
     }
@@ -40,29 +46,31 @@ define([
   }
 
   function setupEvents($element, events) {
-    var token, tokens, that = this;
+    var token,
+      tokens,
+      that = this;
     if (!_.isObject(events)) {
-      throw 'setupEvents() required events to be a valid object';
+      throw "setupEvents() required events to be a valid object";
     }
     _.each(events, function(value, key) {
       var _func;
       if (_.isString(value)) {
-        token = value.match(/\(([^)]+)\)/ig);
+        token = value.match(/\(([^)]+)\)/gi);
         if (token) {
-          token = token[0].replace(/(\(|\))/ig, '');
-          tokens = token.split(',');
+          token = token[0].replace(/(\(|\))/gi, "");
+          tokens = token.split(",");
           // Only support predefined function
-          token = value.match(/^\s*(\w+)/ig);
+          token = value.match(/^\s*(\w+)/gi);
           if (token) {
-            eval('_func = ' + token[0] + ';');
+            eval("_func = " + token[0] + ";");
           }
         } else {
           // Only support predefined function
-          eval('_func = ' + value + ';');
+          eval("_func = " + value + ";");
         }
       }
-      if (typeof _func !== 'function') {
-        throw 'setupEvents() require events to be a valid function.';
+      if (typeof _func !== "function") {
+        throw "setupEvents() require events to be a valid function.";
       }
       $element.on(key, function(e) {
         // console.log('*** Here ***');
@@ -93,11 +101,11 @@ define([
     if (e.added) {
       // Search string for -
       var txt = e.added.text;
-      if (txt.indexOf('-') >= 0) {
-        var _tokens = txt.match(/(\d+)(\s*)-(\s*)(\d+)/ig);
+      if (txt.indexOf("-") >= 0) {
+        var _tokens = txt.match(/(\d+)(\s*)-(\s*)(\d+)/gi);
         if (_tokens) {
           var _token = _tokens.shift();
-          _token = _token.split('-');
+          _token = _token.split("-");
           var first = parseInt(_token.shift(), 10),
             second = parseInt(_token.shift(), 10),
             _cnt;
@@ -115,14 +123,20 @@ define([
             }
           }
           if (_cnt > 200) {
-            alert('Cannot have the range greater than 200. (from ' + first + ' to ' + second + ')');
+            alert(
+              "Cannot have the range greater than 200. (from " +
+                first +
+                " to " +
+                second +
+                ")"
+            );
             return;
           }
           e.val = _.without(e.val, txt);
           for (var i = 0; i <= _cnt; i++) {
             e.val.push(first + i);
           }
-          $element.select2('val', e.val);
+          $element.select2("val", e.val);
         }
       }
     }
@@ -144,13 +158,13 @@ define([
         return;
       }
       // Auto Add the number.
-      var $targetNumber = $('#' + fieldName),
+      var $targetNumber = $("#" + fieldName),
         _val = parseFloat($targetNumber.val());
       if (_.isNaN(_val)) {
         return;
       }
       if (_val > 200) {
-        alert('Cannot have the range greater than 200.');
+        alert("Cannot have the range greater than 200.");
         return;
       }
       e.val = [];
@@ -159,26 +173,30 @@ define([
         txt++;
         _val--;
       }
-      $element.select2('val', e.val);
+      $element.select2("val", e.val);
     }
   }
 
   return {
     renderTags: function($element, form) {
-
       var _setUpSelectTwoTag = function(data) {
-
         // console.log($element);
         // console.log($hidden);
 
         data = data || null;
-        if (form._elementData && form._elementData[elementName] && form._elementData[elementName].value) {
+        if (
+          form._elementData &&
+          form._elementData[elementName] &&
+          form._elementData[elementName].value
+        ) {
           // Set Up Values for edit mode
-          var _val = JSON.stringify(form._elementData[elementName].value).replace(/\[|\]|\"/ig, '');
+          var _val = JSON.stringify(
+            form._elementData[elementName].value
+          ).replace(/\[|\]|\"/gi, "");
           $hidden.val(_val);
         }
         var _options = {
-          tags: (data) ? data : []
+          tags: data ? data : []
         };
         // console.log($hidden.attr('name'));
         /*if (form) {
@@ -189,10 +207,14 @@ define([
         }*/
         // Only added [] to the select input when it is not a List Fields Type
         if (!form || !form._isListFieldType) {
-          $hidden.attr('name', $hidden.attr('name') + '[]');
+          $hidden.attr("name", $hidden.attr("name") + "[]");
         }
         $hidden.select2(_options);
-        if (form._elementData && form._elementData[elementName] && form._elementData[elementName].events) {
+        if (
+          form._elementData &&
+          form._elementData[elementName] &&
+          form._elementData[elementName].events
+        ) {
           setupEvents($hidden, form._elementData[elementName].events);
         }
         // console.log($hidden);
@@ -203,13 +225,13 @@ define([
        * Example, $("#e12").select2({tags:["red", "green", "blue"]});
        */
       var $hidden = cloneInputToHiddenInput($element),
-        elementName = $hidden.attr('name');
+        elementName = $hidden.attr("name");
       // If this has Options.Url
-      var _url = $hidden.attr('data-url');
+      var _url = $hidden.attr("data-url");
       if (_url) {
         $.ajax({
           url: _url,
-          type: 'GET',
+          type: "GET",
           cache: false,
           success: function(data, textStatus, jqXHR) {
             // console.log(arguments);
@@ -238,10 +260,10 @@ define([
           },
           error: function(jqXHR, textStatus, errorThrown) {
             if (console && console.error) {
-              console.error('Could not be able to Send Request to ' + _url);
+              console.error("Could not be able to Send Request to " + _url);
               console.error(arguments);
             }
-            throw new Error('Error when send Ajax Request!');
+            throw new Error("Error when send Ajax Request!");
           }
         });
       } else {
@@ -251,7 +273,7 @@ define([
     render: function($element, form) {
       var DEBUG = false;
       if (DEBUG) {
-        console.log('[*] select2helper.js:render');
+        console.log("[*] select2helper.js:render");
         console.log(arguments);
       }
 
@@ -260,27 +282,33 @@ define([
         if (!$tmpTarget.length) {
           throw new Error('Could not be able to find "' + lkVal + '"');
         } else if ($tmpTarget.length > 1) {
-          throw new Error('Found more than one element for "' + lkVal + '" [' + $tmpTarget.length + ']');
+          throw new Error(
+            'Found more than one element for "' +
+              lkVal +
+              '" [' +
+              $tmpTarget.length +
+              "]"
+          );
         }
         var _dataVal = $tmpTarget.val();
         if (DEBUG) {
-          console.log('- Query:');
+          console.log("- Query:");
           console.log(arguments);
           console.log($tmpTarget);
           console.log(_dataVal);
         }
         if (_.isString(_dataVal)) {
-          _dataVal = _dataVal.split(',');
+          _dataVal = _dataVal.split(",");
         }
         return _dataVal;
       };
 
-      if ($element.is('select')) {
+      if ($element.is("select")) {
         // DEBUG = true;
         var opt = {};
         var renderAsHidden = false;
-        var _name = $element.attr('name');
-        var _defaultValue = $element.attr('data-select-value');
+        var _name = $element.attr("name");
+        var _defaultValue = $element.attr("data-select-value");
         // console.log(_defaultValue);
         // console.log('- $element.val(): ', $element.val());
         /*if (_defaultValue === '') {
@@ -313,9 +341,9 @@ define([
                   });
                 });
                 q.callback(data);
-              }
+              };
               opt.allowClear = true;
-              opt.placeholder = 'Please select a value';
+              opt.placeholder = "Please select a value";
               if (_defaultValue) {
                 // console.log('Here');
                 opt.initSelection = function(el, cb) {
@@ -337,7 +365,7 @@ define([
           var $hidden = cloneInputToHiddenInput($element);
           $hidden.select2(opt);
 
-          $hidden.on('change', function(e) {
+          $hidden.on("change", function(e) {
             var DEBUG = false;
             if (DEBUG) {
               console.log('- Select 2: change "' + _name + '"');
