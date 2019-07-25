@@ -372,7 +372,7 @@ define([
         // Bind Model
         try {
           if (that.el) {
-            // var DEBUG = false;
+            // var DEBUG = true;
             if (DEBUG) {
               console.log(
                 "    Binding Model in List.js [" +

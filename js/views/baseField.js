@@ -988,9 +988,10 @@ define([
           var _debug_date = false;
           // Check for $date
           if (this.options.formData && this.options.formData.fields) {
-            if (typeof this.options.formData.fields[field.name] === "object") {
+            var _currentDateValue = this.options.formData.fields[field.name];
+            if (_currentDateValue && typeof _currentDateValue === "object" && _currentDateValue.$date) {
               var _tmpDate = new Date(
-                this.options.formData.fields[field.name].$date
+                _currentDateValue.$date
               );
               var _month = _tmpDate.getMonth() + 1;
               if (_month < 10) {
@@ -3059,6 +3060,7 @@ define([
       // console.log('- subFormOptions:', subFormOptions);
       // Render SubForm List View
       require(["views/subform-layouts/" + _view], function(CollectionView) {
+        // var DEBUG = true;
         if (DEBUG) {
           console.log('    in "views/subform-layouts/' + _view + '"');
           // console.log(arguments);

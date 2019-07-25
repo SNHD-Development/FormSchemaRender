@@ -38,11 +38,19 @@ if (heading) {
             var _match = false;
             _.each( element1, function(element2Obj, index2) {
                 var element2 = element2Obj.value || element2Obj;
+                try {
+                    if (element2 && _.isObject(element2) && 'value' in element2) {
+                        element2 = element2.value;
+                    }
+                } catch(err) {
+                    console.log('[x] Exception in table.html: could not parse element2');
+                    console.log(err);
+                }
                 var renderAs = element2Obj.renderAs || null;
                 if (_model && selfOnly && userIndex === index2) {
                     _match = (currentUserLowerCase === jQuery.trim(element2.toLowerCase()));
                 }
-                
+
                 if (renderAs) {
                     switch(renderAs) {
                         case 'downloadFromJS':
@@ -50,9 +58,9 @@ if (heading) {
                         	element2 = '<a class="btn btn-primary" href="/form/getFile/' + element2Obj.valueObj.base64Data + '" target="_blank">Download - ' + element2Obj.valueObj.fileName + '</a>';
                     	} else {
 							element2 = '<a class="btn btn-primary btn-js-download" data-file="' + element2Obj.valueBase64 + '">Download - ' + element2Obj.valueObj.fileName + '</a>';
-                            
+
                     	}
-                        break; 
+                        break;
                     }
                 }
             %>

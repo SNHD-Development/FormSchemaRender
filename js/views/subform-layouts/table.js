@@ -147,6 +147,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
               break;
             case 'date':
               var _tempDate = model[element.name];
+              // console.log('- _tempDate:', _tempDate);
               if (_tempDate && _tempDate.$date) {
                 _tempDate = moment(_tempDate.$date);
                 if (!_tempDate.isValid()) {
@@ -155,7 +156,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
                 _tempDate = _tempDate.format('MM/DD/YYYY');
               }
               _values[index].push({
-                value:_tempDate
+                value: _tempDate
               });
               break;
             case 'file':
