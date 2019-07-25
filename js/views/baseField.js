@@ -1158,36 +1158,48 @@ define([
             typeof readMode !== "undefined" &&
             typeof this.options.formData !== "undefined"
           ) {
-            this.options.formData.fields[
+            var _currentFormDataAddress = this.options.formData.fields;
+            // console.log('- _currentFormDataAddress:', _currentFormDataAddress);
+            // Build Address String
+            _currentFormDataAddress[
               field.name + "_address_country"
-            ] = Vm.getCountry(
-              this.options.formData.fields[field.name + "_address_country"]
-            );
+            ] = (_currentFormDataAddress[field.name + "_address_country"]) ? Vm.getCountry(
+              _currentFormDataAddress[field.name + "_address_country"]
+            ): null;
             if (
-              this.options.formData.fields[field.name + "_address_street"] &&
-              this.options.formData.fields[
+              _currentFormDataAddress[field.name + "_address_street"] &&
+              _currentFormDataAddress[
                 field.name + "_address_street"
               ].charAt(
-                this.options.formData.fields[field.name + "_address_street"]
+                _currentFormDataAddress[field.name + "_address_street"]
                   .length - 1
               ) !== "."
             ) {
-              this.options.formData.fields[field.name + "_address_street"] +=
+              _currentFormDataAddress[field.name + "_address_street"] +=
                 ".";
             }
-            this.options.formData.fields[field.name + "_address_street"] +=
+            if (_currentFormDataAddress[field.name + "_address_street"]) {
+              _currentFormDataAddress[field.name + "_address_street"] +=
               "<br>";
-            this.options.formData.fields[field.name + "_address_city"] += ",";
-            this.options.formData.fields[field.name + "_address_state"] +=
-              "<br>";
-            this.options.formData.fields[field.name + "_address_zip"] += "<br>";
+            }
+            if (_currentFormDataAddress[field.name + "_address_city"]) {
+              _currentFormDataAddress[field.name + "_address_city"] += ",";
+            }
+            if (_currentFormDataAddress[field.name + "_address_state"]) {
+              _currentFormDataAddress[field.name + "_address_state"] +=
+                "<br>";
+            }
+            if (_currentFormDataAddress[field.name + "_address_zip"]) {
+              _currentFormDataAddress[field.name + "_address_zip"] += "<br>";
+            }
           } else if (
             this.options.mode === "update" &&
             this.options.formData.fields[field.name + "_address_country"] !==
               "US"
           ) {
+            var _currentFormDataAddress = this.options.formData.fields;
             // Will Render Input
-            field["default_value_state"] = this.options.formData.fields[
+            field["default_value_state"] = _currentFormDataAddress[
               field.name + "_address_state"
             ];
           } else if (this.options.mode === "create") {
@@ -1203,6 +1215,7 @@ define([
                 break;
             }
           }
+          // console.log('- _name:', _name);
           break;
         case "number":
           var _num_class;
@@ -1894,15 +1907,18 @@ define([
         var _field_data = "",
           _href = "";
         _.each(_name, function(element) {
-          if (typeof that.options.formData.fields[element] !== "object") {
+          var _currentFormDataValue = that.options.formData.fields[element];
+          // console.log('- _currentFormDataValue:', _currentFormDataValue);
+          if (typeof _currentFormDataValue !== "object") {
             _field_data +=
-              (typeof that.options.formData.fields[element] !== "undefined"
-                ? that.options.formData.fields[element]
+              (typeof _currentFormDataValue !== "undefined"
+                ? _currentFormDataValue
                 : "") + " ";
-          } else {
-            _field_data = that.options.formData.fields[element];
+          } else if (_currentFormDataValue !== undefined && _currentFormDataValue !== null) {
+            _field_data += _currentFormDataValue;
           }
         });
+        // console.log('- _field_data:', _field_data, '- _name:', _name);
         if (typeof _field_data === "string") {
           _field_data = $.trim(_field_data);
         }
@@ -2246,6 +2262,9 @@ define([
             // Adding for Render HTML
             _html += field.description;
           } else {
+
+            // console.log('- field.name:', field.name, '- value:', _field_data);
+
             _html += that.inputTemplate["uneditableinput"]({
               value: _field_data,
               css_class: _textarea,
