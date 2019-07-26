@@ -54,10 +54,29 @@ define([
         };
       this.$el.html(this.template(this.options.formSchema));
       // Generic Setup
-      $("#" + this.options.formSchema.name, this.el).on(
+      var $_targetForm = $("#" + this.options.formSchema.name, this.el);
+      $_targetForm.on(
         this.options.formSchema.name + ".renderCompleted",
         function() {
           Utils.genericSetup(that);
+
+          var _formSchema = _opts.formSchema;
+          // Render Completed
+          // console.log('- _formSchema:', _formSchema);
+
+          if (_formSchema) {
+            if (_formSchema.allowenterkeytosubmit) {
+              // console.log('- allow enter key to pressed');
+              $_targetForm.on('keyup', 'input[type="text"]', function(e) {
+                // console.log('- e', e, '- e.keyCode:', e.keyCode);
+                if (e.keyCode !== 13) {
+                  return;
+                }
+                // console.log('- text: submitted button');
+                $_targetForm.submit();
+              });
+            }
+          }
         }
       );
       if (
@@ -195,7 +214,7 @@ define([
             $("#" + that.options.formSchema.name, that.el).trigger(
               that.options.formSchema.name + ".renderCompleted",
               that
-            );        
+            );
             // Final Setup for All Mode
             Utils.finalSetupAllMode(that.formView);
             // Set the Action if has one

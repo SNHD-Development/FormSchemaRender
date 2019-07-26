@@ -385,7 +385,7 @@ Note: "btn" class already include by default
 
 Options
 
-| Label         | Value         | Explanation |  
+| Label         | Value         | Explanation |
 | ------------- | ------------- | ------------- |
 | layout        | horizontal    | This options will render the radio buttons next to each other (Horizontally). Example: x Yes x No. The default render value is Vertically
 
@@ -832,6 +832,12 @@ Validation FormSchema
                 "required": true
             }
         }
+    }
+
+Allow Submit Key to Submit Form, please set "AllowEnterKeyToSubmit" to true in FormSchema
+
+    {
+        "AllowEnterKeyToSubmit" : true
     }
 
 ### CopyValuesFrom Options
