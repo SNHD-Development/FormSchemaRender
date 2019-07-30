@@ -515,12 +515,14 @@ define([
         // Convert to lowercase
         if ($e.hasClass("tolowercase")) {
           _val = _val.toLowerCase();
-          _val = _val.replace(/^([0-9]\w+)|\s+([0-9]\w+)/g, function($1) {
-            return $1.toUpperCase();
-          });
-          _val = _val.replace(/^(us\s)|\s+(us)\s/gi, function($1) {
-            return $1.toUpperCase();
-          });
+          if (!$e.hasClass("tolowercase_email")) {
+            _val = _val.replace(/^([0-9]\w+)|\s+([0-9]\w+)/g, function($1) {
+              return $1.toUpperCase();
+            });
+            _val = _val.replace(/^(us\s)|\s+(us)\s/gi, function($1) {
+              return $1.toUpperCase();
+            });
+          }
         }
         // Convert to ucwords
         if ($e.hasClass("toucwords")) {

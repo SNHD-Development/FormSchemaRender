@@ -1115,7 +1115,7 @@ define([
         case "email":
           field.attributes["class"] = Utils.setupClassAttr(
             field.attributes["class"],
-            "tolowercase span12"
+            "tolowercase tolowercase_email span12"
           );
           if (
             typeof field.options.autocomplete !== "undefined" &&
@@ -1127,7 +1127,7 @@ define([
             field.attributes["autocomplete"] = "off";
             field.attributes["style"] = "width:45%;";
             field.attributes["class"] =
-              "not_sending emailpicker_server tolowercase";
+              "not_sending emailpicker_server tolowercase tolowercase_email";
             field.attributes["data-source"] = emailData
               .replace(/\n/g, "")
               .replace(/'/g, "&#39");
