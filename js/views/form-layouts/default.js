@@ -18,6 +18,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
         _html = '',
         visibleOnArray = [],
         fieldsType = {};
+
       _.each(this.options.formSchema.fields, function(value, key, list) {
         var _temp = '',
           _typeLowerCase = value.type.toLowerCase();
@@ -59,6 +60,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'modelbinder', 
           fieldsType[value.name] = $.trim(value.type.toLowerCase());
         }
       });
+
       // Make VisibleOn from Top Down
       _.each(visibleOnArray, function(ele) {
         BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html, null, fieldsType);

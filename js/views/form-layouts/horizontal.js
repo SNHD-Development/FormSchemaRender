@@ -43,6 +43,7 @@ define([
         _required,
         visibleOnArray = [],
         fieldsType = {};
+
       _.each(this.options.formSchema.fields, function(value, key, list) {
         var _temp = "",
           _wrapper = false,
@@ -137,6 +138,7 @@ define([
           fieldsType[value.name] = $.trim(value.type.toLowerCase());
         }
       });
+
       // Make VisibleOn from Top Down
       _.each(visibleOnArray, function(ele) {
         BaseFieldView.prototype.setupVisibleOn.call(

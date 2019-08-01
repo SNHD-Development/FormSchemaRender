@@ -1916,36 +1916,51 @@ define([
       }
     },
     isRenderVisibleOn: function(view, value, typeLowerCase) {
-      if (value.options.visibleon && typeLowerCase !== "html") {
-        var _visibleOnName = value.options.visibleon.name;
-        if (_visibleOnName.match(/\[\]$/gi)) {
-          _visibleOnName = _visibleOnName.substr(0, _visibleOnName.length - 2);
-        }
-        if (_.isArray(view.options.formData.fields[_visibleOnName])) {
-          var _found = false;
-          _.each(view.options.formData.fields[_visibleOnName], function(
-            element
-          ) {
-            if (_found) {
-              return;
+      var _DEBUG = false;
+      if (value.options && value.options.visibleon) {
+        if (typeLowerCase !== "html" || value.options.visibleon.forcerenderonread) {
+          var _visibleOnName = value.options.visibleon.name;
+          if (_DEBUG) {
+            console.log('***** isRenderVisibleOn *****', _visibleOnName);
+          }
+          if (_visibleOnName.match(/\[\]$/gi)) {
+            _visibleOnName = _visibleOnName.substr(0, _visibleOnName.length - 2);
+          }
+          if (_DEBUG) {
+            console.log(view.options.formData.fields[_visibleOnName]);
+          }
+          if (_.isArray(view.options.formData.fields[_visibleOnName])) {
+            var _found = false;
+            _.each(view.options.formData.fields[_visibleOnName], function(
+              element
+            ) {
+              if (_found) {
+                return;
+              }
+              _found = value.options.visibleon.values.indexOf(element) !== -1;
+            });
+            if (!_found) {
+              return false;
             }
-            _found = value.options.visibleon.values.indexOf(element) !== -1;
-          });
-          if (!_found) {
-            return false;
-          }
-        } else {
-          var _lookupValue;
-          if (view._lookupValues && view._lookupValues[_visibleOnName]) {
-            _lookupValue = view._lookupValues[_visibleOnName].value;
           } else {
-            _lookupValue = view.options.formData.fields[_visibleOnName];
-          }
-          if (value.options.visibleon.values.indexOf(_lookupValue) === -1) {
-            return false;
+            var _lookupValue;
+            if (view._lookupValues && view._lookupValues[_visibleOnName]) {
+              _lookupValue = view._lookupValues[_visibleOnName].value;
+            } else {
+              _lookupValue = view.options.formData.fields[_visibleOnName];
+            }
+            if (_DEBUG) {
+              console.log('- _lookupValue:', _lookupValue);
+              console.log('- value.options.visibleon.values:', value.options.visibleon.values);
+              console.log('- value.options.visibleon.values.indexOf(_lookupValue):', value.options.visibleon.values.indexOf(_lookupValue));
+            }
+            if (value.options.visibleon.values.indexOf(_lookupValue) === -1) {
+              return false;
+            }
           }
         }
       }
+
       return true;
     },
     /**
@@ -2260,6 +2275,13 @@ define([
       } else if (
         typeof view.options.formData.fields[value.name] === "undefined"
       ) {
+
+        if (value && value.options) {
+          if (value.options.visibleon && value.options.visibleon.forcerenderonread) {
+            return true;
+          }
+        }
+
         switch (_type) {
           case "fieldsetstart":
           case "fieldsetend":

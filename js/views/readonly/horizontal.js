@@ -37,15 +37,18 @@ define([
       $(this.el).addClass("form-horizontal");
     },
     render: function() {
+      var _DEBUG = false;
       var that = this,
         _parentRender = BaseFieldView.prototype.render,
+        visibleOnArray = [],
+        fieldsType = {},
         _html = "";
       _.each(this.options.formSchema.fields, function(value, key, list) {
         if (!Utils.shouldRenderShowOnUser(value)) {
           return "";
         }
 
-        var _typeLowerCase = value.type.toLowerCase();
+        var _typeLowerCase = value.type.toLowerCase(), _temp = '';
 
         Utils.addFormSubmittedData(value, that);
 
@@ -70,7 +73,7 @@ define([
         ) {
           return "";
         } else if (_typeLowerCase === "buttondecision") {
-          _html +=
+          _temp +=
             '<input type="hidden" name="' +
             value.name +
             '" id="' +
@@ -85,22 +88,60 @@ define([
           typeof value.description !== "undefined" &&
           _.indexOf(that.notRenderLabelRead, _typeLowerCase) === -1
         ) {
-          _html += '<div class="control-group">';
+          _temp += '<div class="control-group">';
           this._divcontrolgroup++;
-          _html += that.renderLabel(value, false, "control-label");
-          _html += '<div class="controls">';
+          _temp += that.renderLabel(value, false, "control-label");
+          _temp += '<div class="controls">';
         }
-        _html += _parentRender.call(that, value, true);
+        _temp += _parentRender.call(that, value, true);
         if (
           typeof value.description !== "undefined" &&
           _.indexOf(that.notRenderLabelRead, _typeLowerCase) === -1
         ) {
-          _html += "</div></div>";
+          _temp += "</div></div>";
           this._divcontrolgroup--;
         }
+
+        // If this has VisibleOn in options
+        if (
+          value.options.visibleon &&
+          !(_typeLowerCase === "button" || _typeLowerCase === "submit")
+        ) {
+          if (_typeLowerCase === "checkbox") {
+            _temp = _temp.replace(/<label>(\s*)\w+(\s*)<\/label>/i, "");
+          }
+          visibleOnArray.unshift({
+            value: value,
+            html: _temp
+          });
+          // BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
+        } else {
+          _html += _temp;
+        }
+
+        // Mapping the input type
+        if (value && value.name && value.type) {
+          fieldsType[value.name] = $.trim(value.type.toLowerCase());
+        }
       });
+
+      if (_DEBUG) {
+        console.log('- visibleOnArray:', visibleOnArray);
+      }
+
+      // Make VisibleOn from Top Down
+      _.each(visibleOnArray, function(ele) {
+        BaseFieldView.prototype.setupVisibleOn.call(
+          that,
+          ele.value,
+          ele.html,
+          ".control-group",
+          fieldsType
+        );
+      });
+
       // not auto rendering the button
-      //_html += BaseFieldView.prototype.renderButton.call(this, this.options.formSchema.formoptions);
+      //_temp += BaseFieldView.prototype.renderButton.call(this, this.options.formSchema.formoptions);
 
       // Closed open div
       _html += BaseFieldView.prototype.closeOpenDiv.call(this);

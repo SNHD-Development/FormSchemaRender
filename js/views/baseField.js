@@ -2406,11 +2406,11 @@ define([
       required = required || false;
       field.attributes = field.attributes || {};
       field.options = field.options || {};
+      // cssClass = 'hello';
       var _type = field.type.toLowerCase(),
         _cssClass =
           typeof cssClass !== "undefined" && cssClass
-            ? ' class="' + cssClass + '"'
-            : "";
+            ? cssClass : "";
       // If has RenderAs
       if (field.options.renderas) {
         _type = field.options.renderas.toLowerCase();
@@ -2427,6 +2427,16 @@ define([
           break;
         case "buttondecision":
           return "";
+      }
+      // console.log('- Date.now(): ' + Date.now());
+      var name = (field.name) ? field.name: Date.now();
+      _cssClass += ' label-for-' + field.name;
+      // console.log('- _cssClass:', _cssClass);
+
+      _cssClass = $.trim(_cssClass);
+
+      if (_cssClass && _cssClass.match && !_cssClass.match(/class.*=.*("|').+/ig)) {
+        _cssClass = 'class="' + _cssClass + '"';
       }
       return this.inputTemplate["label"](
         _.extend(
@@ -2473,7 +2483,8 @@ define([
      **/
     checkShowOnMode: function(value, readMode, status) {
       var DEBUG = false;
-      var DEBUG_NAME = "BillAnotherDept";
+      // var DEBUG_NAME = "BillAnotherDept";
+      var DEBUG_NAME = "SubmittedFirstTimeNotification";
       var locationCnt = 0;
       var _type = value.type.toLowerCase();
       if (DEBUG && value && value.name) {
@@ -2519,7 +2530,7 @@ define([
       }
       if (DEBUG && value.name === DEBUG_NAME) {
         locationCnt++;
-        console.log("Location: " + locationCnt);
+        console.log("Location: " + locationCnt, '- _type:', _type);
       }
       // If this is type VisibleOn and in Read Mode will not render if does not have data
       if (this.options.mode === "read") {
@@ -2529,7 +2540,8 @@ define([
             !(
               _type === "fullname" ||
               _type === "address" ||
-              _type === "buttonclipboard"
+              _type === "buttonclipboard" ||
+              _type === "html"
             )
           ) {
             if (DEBUG && value.name === DEBUG_NAME) {
@@ -2605,6 +2617,10 @@ define([
         if (_type !== "image") {
           return false;
         }
+      }
+      if (DEBUG && value.name === DEBUG_NAME) {
+        locationCnt++;
+        console.log("Location: " + locationCnt, 'before return true');
       }
       return true;
     },
@@ -3197,8 +3213,10 @@ define([
       }
       // Attched Event to these input.
       // var DEBUG = true;
+
       var _vsbName = field.options.visibleon.name,
         _shouldAttachedTheVSB = true;
+
       // if (!this._visibleonEventAttached[_vsbName]) {
       //   _shouldAttachedTheVSB = true;
       //   this._visibleonEventAttached[_vsbName] = true;
@@ -3215,15 +3233,20 @@ define([
         if (DEBUG) {
           console.log("- fieldsType:", fieldsType);
         }
+
+        var keyStrToCheck = (!this.options.mode || this.options.mode !== 'read') ? ':input[name="': 'span[id="';
+
         var _inputNameQ =
           fieldsType &&
           fieldsType[_vsbName] &&
           fieldsType[_vsbName] === "checkbox"
-            ? ':input[name="' + _vsbName + '[]"]'
-            : ':input[name="' + _vsbName + '"]';
+            ? keyStrToCheck + _vsbName + '[]"]'
+            : keyStrToCheck + _vsbName + '"]';
+
         if (DEBUG) {
           console.log("- _inputNameQ:", _inputNameQ);
         }
+
         $(this.el).on("change", _inputNameQ, function(e) {
           var DEBUG_VS_ON = false;
           var DEBUG_VISIBLE_ON_ONLY = false;
@@ -3243,6 +3266,7 @@ define([
             _visibleVal = $currentTarget.val(),
             _checkBindingArray = ["", "[]"],
             debug = false;
+
           if (
             !$container.length &&
             parentContainer === field.options.visibleon.parentcontainer
@@ -3259,6 +3283,36 @@ define([
           //   console.log($container);
           // }
           var _currentInputName = $currentTarget.attr("name");
+
+          if (!_currentInputName) {
+            if (DEBUG_VS_ON) {
+              console.log(
+                "[x] No attribute by \"Name\", get by \"ID\""
+              );
+              console.log('- _visibleVal:', _visibleVal, typeof _visibleVal);
+            }
+            _currentInputName = $currentTarget.attr("id");
+
+            if (!_visibleVal) {
+              if (DEBUG_VS_ON) {
+                console.log(
+                  '[x] There is no value to get, try get as html'
+                );
+              }
+
+              _visibleVal = $currentTarget.text();
+              if (!_visibleVal) {
+                _visibleVal = $currentTarget.html();
+              }
+            }
+          }
+
+          if (DEBUG_VS_ON) {
+            console.log(
+              "- _currentInputName:", _currentInputName
+            );
+          }
+
           // _currentInputName = 'lol_lol';
           var _hasBracket = _currentInputName.match(/\w+\[\]$/gi);
           var _visibleValInArray =
@@ -4026,29 +4080,45 @@ define([
         });
 
         // First Time to Fired for Update Mode
-        if (this && this.options && this.options.mode === "update") {
-          // console.log('Here');
-          // console.log(this);
-          $("#" + this.options.formSchema.name).on(
-            this.options.formSchema.name + ".renderCompleted",
-            function() {
-              // console.log('- _inputNameQ:', $(_inputNameQ));
-              // console.log('- field:', field);
-              if (field && field.options && field.options.visibleon) {
-                _.forEach(field.options.visibleon.values, function(v) {
-                  var $inputs = $(_inputNameQ).filter(":checkbox:checked");
-                  $inputs.each(function() {
-                    var $this = $(this);
-                    var value = $this.val();
-                    // console.log(value);
-                    if (v === value) {
-                      $this.trigger("change");
-                    }
+        if (this && this.options && this.options.mode) {
+          var $targetFormContainer = $("#" + this.options.formSchema.name);
+          var functionToExecute = null;
+          switch(this.options.mode) {
+            case 'update':
+              functionToExecute = function() {
+                if (field && field.options && field.options.visibleon) {
+                  _.forEach(field.options.visibleon.values, function(v) {
+                    var $inputs = $(_inputNameQ).filter(":checkbox:checked");
+                    $inputs.each(function() {
+                      var $this = $(this);
+                      var value = $this.val();
+                      // console.log(value);
+                      if (v === value) {
+                        $this.trigger("change");
+                      }
+                    });
                   });
-                });
+                }
+              };
+              break;
+            case 'read':
+              functionToExecute = function() {
+                var $readField = $(_inputNameQ);
+                if (DEBUG) {
+                  console.log('- _inputNameQ: about to trigger change', _inputNameQ, $readField);
+                }
+                $readField.trigger('change');
               }
+              break;
+          }
+
+          if (functionToExecute && (typeof functionToExecute === 'function')) {
+            if (DEBUG) {
+              console.log('- about to add renderCompleted event!');
             }
-          );
+            $targetFormContainer.on(
+              this.options.formSchema.name + ".renderCompleted", functionToExecute);
+          }
         }
       }
     },

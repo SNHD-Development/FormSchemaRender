@@ -27,6 +27,8 @@ define([
     render: function() {
       var that = this,
         _parentRender = BaseFieldView.prototype.render,
+        visibleOnArray = [],
+        fieldsType = {},
         _html = '';
       _.each(this.options.formSchema.fields, function(value, key, list) {
 
@@ -34,7 +36,7 @@ define([
           return '';
         }
 
-        var _typeLowerCase = value.type.toLowerCase();
+        var _typeLowerCase = value.type.toLowerCase(), _temp = '';
 
         Utils.addFormSubmittedData(value, that);
 
@@ -43,27 +45,6 @@ define([
           return '';
         }
 
-        // VisibleOn Options
-        // if (value.options.visibleon && value.type.toLowerCase() !== 'html' && value.options.visibleon.values) {
-        //   var shouldShow = true;
-        //   if (that.options.formData.fields[value.options.visibleon.name] && _.isArray(that.options.formData.fields[value.options.visibleon.name])) {
-        //     shouldShow = false;
-        //     for (var i = 0; i < that.options.formData.fields[value.options.visibleon.name].length; i++) {
-        //       var _currentValue = that.options.formData.fields[value.options.visibleon.name][i];
-        //       // console.log('- _currentValue:', _currentValue);
-        //       if (value.options.visibleon.values.indexOf(_currentValue) >= 0) {
-        //         shouldShow = true;
-        //         break;
-        //       }
-        //     }
-        //   }
-        //   else if (value.options.visibleon.values.indexOf(that.options.formData.fields[value.options.visibleon.name]) === -1) {
-        //     shouldShow = false;
-        //   }
-        //   if (!shouldShow) {
-        //     return '';
-        //   }
-        // }
         if (!Utils.isRenderVisibleOn(that, value, _typeLowerCase)) {
           return '';
         }
@@ -73,19 +54,47 @@ define([
           return '';
         }
 
-        if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabelRead, value.type.toLowerCase()) === -1) {
-          _html += that.renderLabel(value, false);
+        if (typeof value.description !== 'undefined' && _.indexOf(that.notRenderLabelRead, _typeLowerCase) === -1) {
+          _required = Utils.checkRequireFields(value, that.options.formSchema.validation);
+          _temp += that.renderLabel(value, _required);
         }
-        var _currentHtml = _parentRender.call(that, value, true);
-        _html += _currentHtml;
+        _temp += _parentRender.call(that, value, true);
+        // If this field has CopyValuesFrom
+        if (that.options.mode === 'create' && value.options.copyvaluesfrom && _typeLowerCase !== 'list') {
+          _html += BaseFieldView.prototype.setupCopyValuesFrom.call(that, value);
+        }
+        // If this has VisibleOn in options
+        if (value.options.visibleon && !(_typeLowerCase === 'button' || _typeLowerCase === 'submit')) {
+          _temp = '<div class="options-visible-on-' + value.name + '" style="display:none">' + _temp + '</div>';
+          visibleOnArray.unshift({
+            value: value,
+            html: _temp
+          });
+          // BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp);
+        } else {
+          _html += _temp;
+        }
+
         // console.log('- value:', value);
         // if (value && value.type.toLowerCase() === 'html') {
         //   console.log('- value:', value);
         //   console.log('- _currentHtml:', _currentHtml);
         // }
+
+        // Mapping the input type
+        if (value && value.name && value.type) {
+          fieldsType[value.name] = $.trim(value.type.toLowerCase());
+        }
       });
       // not auto rendering the button
       //_html += BaseFieldView.prototype.renderButton.call(this, this.options.formSchema.formoptions);
+
+      // console.log('- visibleOnArray:', visibleOnArray);
+
+      // Make VisibleOn from Top Down
+      _.each(visibleOnArray, function(ele) {
+        BaseFieldView.prototype.setupVisibleOn.call(that, ele.value, ele.html, null, fieldsType);
+      });
 
       // Closed open div
       _html += BaseFieldView.prototype.closeOpenDiv.call(this);
