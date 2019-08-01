@@ -1,0 +1,31 @@
+<a id="module-external-create-user-data-btn" class="btn btn-info external-created-user-modal-btn">View User Submitted This Form</a>
+<div id="module-external-create-user-data-modal" class="modal hide fade">
+  <div class="modal-header text-left">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3><i class="fa fa-user icon-user"></i> User Submitted This Form</h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-render read-mode">
+
+      <div class="field-wrapper">
+        <label class="text-left pull-left">Full Name:</label>
+        <span class="input-xlarge uneditable-input pull-right"><%= data.fullName %></span>
+      </div>
+
+      <div class="field-wrapper">
+        <label class="text-left pull-left">Email:</label>
+        <span class="input-xlarge uneditable-input pull-right"><%= data.UsernameLower %></span>
+      </div>
+
+      <div class="field-wrapper">
+        <label class="text-left pull-left">Phone:</label>
+        <span class="input-xlarge uneditable-input pull-right"><%= data.PhoneNumber %></span>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>

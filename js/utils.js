@@ -12,6 +12,7 @@ define([
   "models/form",
   "select2helper",
   "text!data/county.json",
+  "text!templates/modules/external-create-user-data-modal.html",
   "bootstrap",
   "jquery.select2",
   "jquery.spinner",
@@ -22,7 +23,7 @@ define([
   "jquery.stupidtable",
   "xdr",
   "jquery.timepicker"
-], function($, _, Backbone, Vm, humane, FormModel, Select2Helper, countyData) {
+], function($, _, Backbone, Vm, humane, FormModel, Select2Helper, countyData, externalCreateUserDataTemplate) {
   var DEBUG = false;
 
   var SYSTEM_LANG = {
@@ -2242,7 +2243,53 @@ define([
       this.setupPopover($form);
 
       // console.log('hello');
+
+      this.setupCreateUserViewModal($form, view);
     },
+
+    setupCreateUserViewModal: function($form, view) {
+      var _DEBUG = false;
+      if (_DEBUG) {
+        console.log('***** setupCreateUserViewModal *****');
+        console.log('- $form:', $form);
+      }
+      if (!$form || !$form.length || !view || !view.options.formData || !view.options.formData.externalcreateuserdata) {
+        return;
+      }
+      var $actionDiv = $form.find('.form-actions');
+      if (!$actionDiv || !$actionDiv.length) {
+        return;
+      }
+      if (_DEBUG) {
+        console.log('- $actionDiv:', $actionDiv);
+      }
+      var $userModalButton = $actionDiv.find('.btn.external-created-user-modal-btn');
+      if ($userModalButton && $userModalButton.length) {
+        return;
+      }
+      // Let Add a DOM here
+      var userData = view.options.formData.externalcreateuserdata;
+      if (_DEBUG) {
+        console.log('- userData:', userData);
+      }
+      var tmplModal = _.template(externalCreateUserDataTemplate);
+
+      $actionDiv.append(tmplModal({data:userData}));
+
+      var $modal;
+      $actionDiv.find('#module-external-create-user-data-btn').click(function(e) {
+        if (e && e.preventDefault) {
+          e.preventDefault();
+        }
+        $modal.modal('toggle');
+      });
+      $modal = $actionDiv.find('#module-external-create-user-data-modal').modal({
+        backdrop: 'static',
+        show: false,
+        keyboard: true
+      });
+    },
+
     /**
      * Setup Read Mode
      * Check for valid data to be rendered

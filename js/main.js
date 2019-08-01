@@ -160,6 +160,7 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
     }
     // Cast to lowercase
     Vm.toLower(formSchema);
+
     // Set the View Property
     _view = typeof view !== "undefined" ? view.toLowerCase() : "horizontal";
     // Change the Languages
@@ -180,6 +181,42 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
         formData.fields = _.extend(formData.fields, formData.internalfields);
         delete formData.internalfields;
       }
+
+      // console.log('- formData:', formData);
+      if (formSchema && formSchema.formsadminappendexternalcreateuservalues && formData.externalcreateuserdata) {
+        // Let Do This!!!
+        try {
+          formData.externalcreateuserdata = jQuery.parseJSON(formData.externalcreateuserdata);
+
+          var userData = formData.externalcreateuserdata;
+          var fullNameTokens =[];
+
+          if (userData.LastName) {
+            userData.LastName = $.trim(userData.LastName);
+            fullNameTokens.push(userData.LastName + ',');
+          }
+          if (userData.FirstName) {
+            userData.FirstName = $.trim(userData.FirstName);
+            fullNameTokens.push(userData.FirstName);
+          }
+          if (userData.MiddleName) {
+            userData.MiddleName = $.trim(userData.MiddleName);
+            fullNameTokens.push(userData.MiddleName);
+          }
+          if (userData.Username) {
+            userData.UsernameLower = $.trim(userData.Username).toLowerCase();
+          }
+
+          userData.fullName = (fullNameTokens && fullNameTokens.length) ? fullNameTokens.join(' '): '';
+          // console.log('- fullNameTokens:', fullNameTokens);
+          // console.log('- userData.fullName:', userData.fullName);
+        } catch(e) {
+          console.log('[x] could not parse this json string!');
+          console.log(e);
+          formData.externalcreateuserdata = null;
+        }
+      }
+
     } else {
       _mode =
         typeof mode !== "undefined" && config.view.indexOf(_view) > -1
