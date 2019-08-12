@@ -179,6 +179,9 @@ define(["jquery", "underscore", "utils", "jquery.select2"], function(
 
   return {
     renderTags: function($element, form) {
+
+      var _debug = false;
+
       var _setUpSelectTwoTag = function(data) {
         // console.log($element);
         // console.log($hidden);
@@ -195,9 +198,19 @@ define(["jquery", "underscore", "utils", "jquery.select2"], function(
           ).replace(/\[|\]|\"/gi, "");
           $hidden.val(_val);
         }
+
+        if (_debug) {
+          console.log('- data:', data);
+        }
+
         var _options = {
           tags: data ? data : []
         };
+
+        if (_debug) {
+          console.log('- _options:', _options);
+        }
+
         // console.log($hidden.attr('name'));
         /*if (form) {
           console.log(form);
@@ -219,6 +232,10 @@ define(["jquery", "underscore", "utils", "jquery.select2"], function(
         }
         // console.log($hidden);
       };
+
+      if (_debug) {
+          console.log('- form:', form);
+        }
 
       form = form || null;
       /**

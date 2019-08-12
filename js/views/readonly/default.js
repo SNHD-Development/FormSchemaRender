@@ -25,6 +25,7 @@ define([
       this.el = '#' + this.options.formSchema.name;
     },
     render: function() {
+      // console.log('here');
       var that = this,
         _parentRender = BaseFieldView.prototype.render,
         visibleOnArray = [],

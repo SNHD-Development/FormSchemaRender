@@ -37,6 +37,7 @@ define([
       $(this.el).addClass("form-horizontal");
     },
     render: function() {
+      // console.log('- here');
       var _DEBUG = false;
       var that = this,
         _parentRender = BaseFieldView.prototype.render,

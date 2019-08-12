@@ -464,6 +464,7 @@ define([
       //   console.log(field.name);
       //   console.log('');
       // }
+      var _debug = false;
       var that = this,
         _html = "",
         _name = [field.name],
@@ -691,6 +692,9 @@ define([
             _type = "select";
           }
         case "select":
+          // if (_debug) {
+          //   console.log('- field:', field);
+          // }
           // If this is read mode and have the value for this field
           if (
             this.options.mode === "update" &&
@@ -1914,8 +1918,11 @@ define([
               (typeof _currentFormDataValue !== "undefined"
                 ? _currentFormDataValue
                 : "") + " ";
+          } else if (_.isArray(_currentFormDataValue)) {
+            _field_data = _currentFormDataValue;
           } else if (_currentFormDataValue !== undefined && _currentFormDataValue !== null) {
             _field_data += _currentFormDataValue;
+            // console.log('- _field_data:', _field_data, 'append with string');
           }
         });
         // console.log('- _field_data:', _field_data, '- _name:', _name);
@@ -2185,6 +2192,7 @@ define([
             otherValue: field._otherValue ? field._otherValue : ""
           });
         } else if (_type === "select" && field.options && field.options.tags) {
+          // console.log('- field:', field, '- _field_data:', _field_data);
           // Sort Tag by Numerical
           if (_.isArray(_field_data)) {
             _field_data.sort(function(a, b) {

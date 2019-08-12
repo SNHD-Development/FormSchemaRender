@@ -38,6 +38,7 @@ define([
       }
     },
     render: function() {
+      // console.log('here');
       var that = this,
         formLayout =
           "view" in this.options.formSchema
