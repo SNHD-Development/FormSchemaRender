@@ -1912,13 +1912,13 @@ define([
           _href = "";
         _.each(_name, function(element) {
           var _currentFormDataValue = that.options.formData.fields[element];
-          // console.log('- _currentFormDataValue:', _currentFormDataValue);
+          // console.log('- _currentFormDataValue:', _currentFormDataValue, typeof _currentFormDataValue);
           if (typeof _currentFormDataValue !== "object") {
             _field_data +=
               (typeof _currentFormDataValue !== "undefined"
                 ? _currentFormDataValue
                 : "") + " ";
-          } else if (_.isArray(_currentFormDataValue)) {
+          } else if (_.isArray(_currentFormDataValue) || typeof _currentFormDataValue === "object") {
             _field_data = _currentFormDataValue;
           } else if (_currentFormDataValue !== undefined && _currentFormDataValue !== null) {
             _field_data += _currentFormDataValue;
