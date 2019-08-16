@@ -103,8 +103,10 @@ define([
           this._divcontrolgroup--;
         }
 
+        _html += _temp;
+
         // If this has VisibleOn in options
-        if (
+        /*if (
           value.options.visibleon &&
           !(_typeLowerCase === "button" || _typeLowerCase === "submit")
         ) {
@@ -118,7 +120,7 @@ define([
           // BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp, '.control-group');
         } else {
           _html += _temp;
-        }
+        }*/
 
         // Mapping the input type
         if (value && value.name && value.type) {

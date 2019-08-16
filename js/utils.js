@@ -1936,11 +1936,17 @@ define([
               element
             ) {
               if (_found) {
+                if (_DEBUG) {
+                  console.log('- return: blank');
+                }
                 return;
               }
               _found = value.options.visibleon.values.indexOf(element) !== -1;
             });
             if (!_found) {
+              if (_DEBUG) {
+                console.log('- return: false');
+              }
               return false;
             }
           } else {
@@ -1956,10 +1962,17 @@ define([
               console.log('- value.options.visibleon.values.indexOf(_lookupValue):', value.options.visibleon.values.indexOf(_lookupValue));
             }
             if (value.options.visibleon.values.indexOf(_lookupValue) === -1) {
+              if (_DEBUG) {
+                console.log('- return: false');
+              }
               return false;
             }
           }
         }
+      }
+
+      if (_DEBUG) {
+        console.log('- return: true');
       }
 
       return true;

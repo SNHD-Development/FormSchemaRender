@@ -3163,6 +3163,7 @@ define([
      **/
     setupVisibleOn: function(field, htmlTmpl, parentContainer, fieldsType) {
       var DEBUG = false;
+      var DEBUG_VS_ON = false;
       // console.log('[*] setupVisibleOn:', field);
       parentContainer = parentContainer || false;
       var that = this,
@@ -3347,7 +3348,6 @@ define([
           if (_hasBracket && _hasBracket.length) {
             _hasBracket = true;
           }
-          // var DEBUG_VS_ON = true;
           if (DEBUG_VS_ON) {
             console.log("");
             console.log("- _visibleOnName:", _visibleOnName);
@@ -4088,6 +4088,9 @@ define([
         });
 
         // First Time to Fired for Update Mode
+        if (DEBUG) {
+          console.log('- about to assigned: functionToExecute!', this.options.mode);
+        }
         if (this && this.options && this.options.mode) {
           var $targetFormContainer = $("#" + this.options.formSchema.name);
           var functionToExecute = null;

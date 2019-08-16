@@ -65,7 +65,7 @@ define([
           _html += BaseFieldView.prototype.setupCopyValuesFrom.call(that, value);
         }
         // If this has VisibleOn in options
-        if (value.options.visibleon && !(_typeLowerCase === 'button' || _typeLowerCase === 'submit')) {
+        /*if (value.options.visibleon && !(_typeLowerCase === 'button' || _typeLowerCase === 'submit')) {
           _temp = '<div class="options-visible-on-' + value.name + '" style="display:none">' + _temp + '</div>';
           visibleOnArray.unshift({
             value: value,
@@ -74,7 +74,9 @@ define([
           // BaseFieldView.prototype.setupVisibleOn.call(that, value, _temp);
         } else {
           _html += _temp;
-        }
+        }*/
+
+        _html += _temp;
 
         // console.log('- value:', value);
         // if (value && value.type.toLowerCase() === 'html') {
