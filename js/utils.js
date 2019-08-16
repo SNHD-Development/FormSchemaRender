@@ -2310,6 +2310,14 @@ define([
     isRenderReadMode: function(view, value) {
       var alwaysAllow = ["buttonclipboard", "filerepository"];
       var _type = value.type.toLowerCase();
+
+      if (_type === 'html') {
+        // Default HTML type will not render in Read Mode.
+        if (!('internal' in value.options)) {
+          value.options.internal = false;
+        }
+      }
+
       if (
         value.options.internal &&
         value.options.internal !== view.options.internal
