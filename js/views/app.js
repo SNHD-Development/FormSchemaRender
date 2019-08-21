@@ -68,14 +68,22 @@ define([
           if (_formSchema) {
             if (_formSchema.allowenterkeytosubmit) {
               // console.log('- allow enter key to pressed');
-              $_targetForm.on('keyup', 'input[type="text"]', function(e) {
-                // console.log('- e', e, '- e.keyCode:', e.keyCode);
-                if (e.keyCode !== 13) {
-                  return;
-                }
-                // console.log('- text: submitted button');
-                $_targetForm.submit();
-              });
+
+              var listOfInputTypes = [
+                'input[type="text"]',
+                'input[type="password"]',
+              ];
+
+              for (var i in listOfInputTypes) {
+                $_targetForm.on('keyup', listOfInputTypes[i], function(e) {
+                  // console.log('- e', e, '- e.keyCode:', e.keyCode);
+                  if (e.keyCode !== 13) {
+                    return;
+                  }
+                  // console.log('- text: submitted button');
+                  $_targetForm.submit();
+                });
+              }
             }
           }
         }
