@@ -37,7 +37,7 @@ define([
       $(this.el).addClass("form-horizontal");
     },
     render: function() {
-      // console.log('- here');
+      // console.log("- here - horizontal");
       var _DEBUG = false;
       var that = this,
         _parentRender = BaseFieldView.prototype.render,
@@ -49,7 +49,8 @@ define([
           return "";
         }
 
-        var _typeLowerCase = value.type.toLowerCase(), _temp = '';
+        var _typeLowerCase = value.type.toLowerCase(),
+          _temp = "";
 
         Utils.addFormSubmittedData(value, that);
 
@@ -129,7 +130,7 @@ define([
       });
 
       if (_DEBUG) {
-        console.log('- visibleOnArray:', visibleOnArray);
+        console.log("- visibleOnArray:", visibleOnArray);
       }
 
       // Make VisibleOn from Top Down

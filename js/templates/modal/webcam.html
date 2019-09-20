@@ -1,0 +1,32 @@
+<div class="modal hide fade" id="formrender-webcam-modal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Webcam</h3>
+  </div>
+  <div class="modal-body">
+    <div id="formrender-my-camera"></div>
+    <div class="actions text-center">
+      <button class="btn btn-primary formrender-webcam-take-snapshot">Take Snapshot</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal hide fade" id="formrender-webcam-modal-crop">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Image</h3>
+  </div>
+  <div class="modal-body">
+    <canvas id="formrender-webcam-canvas" width='320' height='240' style="border:1px solid #d3d3d3;"></canvas>
+    <div id="formrender-cropped-result"></div>
+    <div class="actions text-center">
+      <button class="btn btn-warning formrender-webcam-retake-snapshot">Re-Take Snapshot</button>
+      <button class="btn btn-success formrender-webcam-process-image">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal hide fade" id="formrender-webcam-modal-notification">
+  <div class="modal-body message">
+  </div>
+</div>

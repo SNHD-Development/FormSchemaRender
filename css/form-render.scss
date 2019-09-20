@@ -22,6 +22,11 @@
 $text_area_min_height: 100px;
 
 /**
+ * Cropper
+ */
+@import "./cropper.css";
+
+/**
  * Visibility
  */
 
@@ -1103,8 +1108,7 @@ body.ie7 {
                     margin-left: 5px;
 
                     input {
-                        &[type="radio"] {
-                        }
+                        &[type="radio"] {}
                     }
                 }
             }
@@ -1120,7 +1124,6 @@ body.ie7 {
         overflow: hidden;
 
         .field-wrapper {
-
             overflow: hidden;
             margin-bottom: 20px;
 
@@ -1143,12 +1146,39 @@ body.ie7 {
     }
 
     .modal-footer {
-        background-color: #FFF;
+        background-color: #fff;
         border-top: none;
 
         .btn {
             width: 100%;
             margin-bottom: 0;
         }
+    }
+}
+
+/**
+ * Webcam Related
+ */
+.form-render-has-webcam-wrapper {
+    margin-top: 30px;
+}
+
+#formrender-my-camera, #formrender-webcam-canvas {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#formrender-webcam-modal, #formrender-webcam-modal-crop, #formrender-webcam-modal-notification {
+    .actions {
+        margin-top: 20px;
+
+        .btn {
+            margin-left: 12px;
+            margin-right: 12px;
+        }
+    }
+
+    .alert {
+        margin-bottom: 0;
     }
 }

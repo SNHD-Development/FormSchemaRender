@@ -57,6 +57,8 @@ require.config({
     //'jquery.fileupload-ui': 'libs/file-upload/jquery.fileupload-ui',
     // Bootstrap Plugin
     "jquery.datepicker": "libs/bootstrap-datepicker/bootstrap-datepicker",
+    cropper: "libs/images/cropper",
+    webcam: "libs/webcam/webcam",
     // Require.js plugins
     text: "libs/require/text",
     // Just a short cut so we can put our html outside the js dir
@@ -129,6 +131,8 @@ require.config({
       exports: "jQuery.mask"
     },
     "jquery.select2": ["jquery"],
+    webcam: ["jquery"],
+    cropper: ["jquery"],
     xdr: ["jquery"]
   }
 });
@@ -183,17 +187,23 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
       }
 
       // console.log('- formData:', formData);
-      if (formSchema && formSchema.formsadminappendexternalcreateuservalues && formData.externalcreateuserdata) {
+      if (
+        formSchema &&
+        formSchema.formsadminappendexternalcreateuservalues &&
+        formData.externalcreateuserdata
+      ) {
         // Let Do This!!!
         try {
-          formData.externalcreateuserdata = jQuery.parseJSON(formData.externalcreateuserdata);
+          formData.externalcreateuserdata = jQuery.parseJSON(
+            formData.externalcreateuserdata
+          );
 
           var userData = formData.externalcreateuserdata;
-          var fullNameTokens =[];
+          var fullNameTokens = [];
 
           if (userData.LastName) {
             userData.LastName = $.trim(userData.LastName);
-            fullNameTokens.push(userData.LastName + ',');
+            fullNameTokens.push(userData.LastName + ",");
           }
           if (userData.FirstName) {
             userData.FirstName = $.trim(userData.FirstName);
@@ -207,16 +217,18 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
             userData.UsernameLower = $.trim(userData.Username).toLowerCase();
           }
 
-          userData.fullName = (fullNameTokens && fullNameTokens.length) ? fullNameTokens.join(' '): '';
+          userData.fullName =
+            fullNameTokens && fullNameTokens.length
+              ? fullNameTokens.join(" ")
+              : "";
           // console.log('- fullNameTokens:', fullNameTokens);
           // console.log('- userData.fullName:', userData.fullName);
-        } catch(e) {
-          console.log('[x] could not parse this json string!');
+        } catch (e) {
+          console.log("[x] could not parse this json string!");
           console.log(e);
           formData.externalcreateuserdata = null;
         }
       }
-
     } else {
       _mode =
         typeof mode !== "undefined" && config.view.indexOf(_view) > -1

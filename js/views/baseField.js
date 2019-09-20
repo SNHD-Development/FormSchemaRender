@@ -614,6 +614,14 @@ define([
               $("form" + this.el).attr("enctype", "multipart/form-data");
             }
           }
+          // console.log("- field.options:", field.options);
+          var hasWebcamOption =
+            field.options &&
+            "usewebcam" in field.options &&
+            !_.isEmpty(field.options.usewebcam);
+          // console.log('- hasWebcamOption:', hasWebcamOption);
+          // console.log('- field.options.usewebcam:', field.options.usewebcam);
+          var webcamUrl = (hasWebcamOption && field.options.usewebcam.url) ? field.options.usewebcam.url: null;
           var _validation_tmp = this.getFormValidationData(field.name);
           if (_validation_tmp.accept) {
             field.attributes.accept = _validation_tmp.accept;
@@ -632,6 +640,23 @@ define([
             };
             this._javaUpload.push(_jObject);
           }
+
+          if (!field.attributes) {
+            field.attributes = {};
+          }
+          field.attributes.class = field.attributes.class
+            ? field.attributes.class
+            : "";
+          // console.log("- hasWebcamOption:", hasWebcamOption);
+          if (hasWebcamOption) {
+            field.attributes.class += " form-render-has-webcam ";
+          }
+          // console.log('- webcamUrl', webcamUrl);
+          if (webcamUrl) {
+            field.attributes['data-webcam-url'] = webcamUrl;
+          }
+          // console.log("- field.attributes.class:", field.attributes.class);
+
           // Check to see if this contain markDownloadDateTimeOf
           if (
             field.options.markdownloaddatetimeof &&
@@ -993,10 +1018,12 @@ define([
           // Check for $date
           if (this.options.formData && this.options.formData.fields) {
             var _currentDateValue = this.options.formData.fields[field.name];
-            if (_currentDateValue && typeof _currentDateValue === "object" && _currentDateValue.$date) {
-              var _tmpDate = new Date(
-                _currentDateValue.$date
-              );
+            if (
+              _currentDateValue &&
+              typeof _currentDateValue === "object" &&
+              _currentDateValue.$date
+            ) {
+              var _tmpDate = new Date(_currentDateValue.$date);
               var _month = _tmpDate.getMonth() + 1;
               if (_month < 10) {
                 _month = "0" + _month;
@@ -1167,31 +1194,28 @@ define([
             // Build Address String
             _currentFormDataAddress[
               field.name + "_address_country"
-            ] = (_currentFormDataAddress[field.name + "_address_country"]) ? Vm.getCountry(
-              _currentFormDataAddress[field.name + "_address_country"]
-            ): null;
+            ] = _currentFormDataAddress[field.name + "_address_country"]
+              ? Vm.getCountry(
+                  _currentFormDataAddress[field.name + "_address_country"]
+                )
+              : null;
             if (
               _currentFormDataAddress[field.name + "_address_street"] &&
-              _currentFormDataAddress[
-                field.name + "_address_street"
-              ].charAt(
-                _currentFormDataAddress[field.name + "_address_street"]
-                  .length - 1
+              _currentFormDataAddress[field.name + "_address_street"].charAt(
+                _currentFormDataAddress[field.name + "_address_street"].length -
+                  1
               ) !== "."
             ) {
-              _currentFormDataAddress[field.name + "_address_street"] +=
-                ".";
+              _currentFormDataAddress[field.name + "_address_street"] += ".";
             }
             if (_currentFormDataAddress[field.name + "_address_street"]) {
-              _currentFormDataAddress[field.name + "_address_street"] +=
-              "<br>";
+              _currentFormDataAddress[field.name + "_address_street"] += "<br>";
             }
             if (_currentFormDataAddress[field.name + "_address_city"]) {
               _currentFormDataAddress[field.name + "_address_city"] += ",";
             }
             if (_currentFormDataAddress[field.name + "_address_state"]) {
-              _currentFormDataAddress[field.name + "_address_state"] +=
-                "<br>";
+              _currentFormDataAddress[field.name + "_address_state"] += "<br>";
             }
             if (_currentFormDataAddress[field.name + "_address_zip"]) {
               _currentFormDataAddress[field.name + "_address_zip"] += "<br>";
@@ -1203,9 +1227,8 @@ define([
           ) {
             var _currentFormDataAddress = this.options.formData.fields;
             // Will Render Input
-            field["default_value_state"] = _currentFormDataAddress[
-              field.name + "_address_state"
-            ];
+            field["default_value_state"] =
+              _currentFormDataAddress[field.name + "_address_state"];
           } else if (this.options.mode === "create") {
             this.model.set(field.name + "_address_state", "NV"); // Default to NV for create mode
             this.model.set(field.name + "_address_country", "US"); // Default to USA for create mode
@@ -1918,9 +1941,15 @@ define([
               (typeof _currentFormDataValue !== "undefined"
                 ? _currentFormDataValue
                 : "") + " ";
-          } else if (_.isArray(_currentFormDataValue) || typeof _currentFormDataValue === "object") {
+          } else if (
+            _.isArray(_currentFormDataValue) ||
+            typeof _currentFormDataValue === "object"
+          ) {
             _field_data = _currentFormDataValue;
-          } else if (_currentFormDataValue !== undefined && _currentFormDataValue !== null) {
+          } else if (
+            _currentFormDataValue !== undefined &&
+            _currentFormDataValue !== null
+          ) {
             _field_data += _currentFormDataValue;
             // console.log('- _field_data:', _field_data, 'append with string');
           }
@@ -1986,12 +2015,18 @@ define([
             }
             _attr += " " + key + "='" + value + "'";
           });
+          // console.log('- name:', field.name, _field_data);
           _html += that.inputTemplate["uneditable" + _type]({
+            name: field.name,
             value: _field_data,
             text: field.description,
             _attr: _attr,
             id: field.name,
-            href: _href
+            href: _href,
+            css_class: field.attributes.class ? field.attributes.class: '',
+            internal: field.options.internal ? 'data-internal="true"': '',
+            mongo_id: this.options.formData && this.options.formData._id && this.options.formData._id.$oid ? this.options.formData._id.$oid: null,
+            data_webcam: 'data-webcam-url' in field.attributes && field.attributes['data-webcam-url'] ? ' data-webcam-url="' + field.attributes['data-webcam-url'] + '" ': null
           });
         } else if (_type === "list") {
           // If this is 'list' type
@@ -2181,7 +2216,8 @@ define([
             value: _field_data,
             label: field.description,
             id: field.name,
-            providerValue: field._providerValue
+            providerValue: field._providerValue,
+            css_class: field.attributes.class
           });
         } else if (_type === "check") {
           // This is check box and need to render to make it look easy to read
@@ -2189,7 +2225,8 @@ define([
             value: _field_data,
             label: field.description,
             id: field.name,
-            otherValue: field._otherValue ? field._otherValue : ""
+            otherValue: field._otherValue ? field._otherValue : "",
+            css_class: field.attributes.class
           });
         } else if (_type === "select" && field.options && field.options.tags) {
           // console.log('- field:', field, '- _field_data:', _field_data);
@@ -2202,7 +2239,8 @@ define([
           // This is check box and need to render to make it look easy to read
           _html += that.inputTemplate["uneditabletag"]({
             value: _field_data,
-            id: field.name
+            id: field.name,
+            css_class: field.attributes.class
           });
         } else if (_type === "filerepository") {
           // Render File Repository Here
@@ -2212,7 +2250,8 @@ define([
               {
                 data: this.options.formData.fields[field.name],
                 formId: this.options.formData._id.$oid,
-                Utils: Utils
+                Utils: Utils,
+                css_class: field.attributes.class
               },
               field
             )
@@ -2270,7 +2309,6 @@ define([
             // Adding for Render HTML
             _html += field.description;
           } else {
-
             // console.log('- field.name:', field.name, '- value:', _field_data);
 
             _html += that.inputTemplate["uneditableinput"]({
@@ -2324,7 +2362,8 @@ define([
           text: field.description,
           _attr: _attr,
           id: field.name,
-          href: _href
+          href: _href,
+          css_class: field.attributes.class
         });
       } else {
         //*** Create and Update Mode ***//
@@ -2366,7 +2405,8 @@ define([
                   {
                     _attr: _attr,
                     _lang: this.options.lang,
-                    _renderMode: this.options.mode
+                    _renderMode: this.options.mode,
+                    css_class: field.attributes.class
                   },
                   field
                 )
@@ -2416,9 +2456,7 @@ define([
       field.options = field.options || {};
       // cssClass = 'hello';
       var _type = field.type.toLowerCase(),
-        _cssClass =
-          typeof cssClass !== "undefined" && cssClass
-            ? cssClass : "";
+        _cssClass = typeof cssClass !== "undefined" && cssClass ? cssClass : "";
       // If has RenderAs
       if (field.options.renderas) {
         _type = field.options.renderas.toLowerCase();
@@ -2437,13 +2475,17 @@ define([
           return "";
       }
       // console.log('- Date.now(): ' + Date.now());
-      var name = (field.name) ? field.name: Date.now();
-      _cssClass += ' label-for-' + field.name;
+      var name = field.name ? field.name : Date.now();
+      _cssClass += " label-for-" + field.name;
       // console.log('- _cssClass:', _cssClass);
 
       _cssClass = $.trim(_cssClass);
 
-      if (_cssClass && _cssClass.match && !_cssClass.match(/class.*=.*("|').+/ig)) {
+      if (
+        _cssClass &&
+        _cssClass.match &&
+        !_cssClass.match(/class.*=.*("|').+/gi)
+      ) {
         _cssClass = 'class="' + _cssClass + '"';
       }
       return this.inputTemplate["label"](
@@ -2538,7 +2580,7 @@ define([
       }
       if (DEBUG && value.name === DEBUG_NAME) {
         locationCnt++;
-        console.log("Location: " + locationCnt, '- _type:', _type);
+        console.log("Location: " + locationCnt, "- _type:", _type);
       }
       // If this is type VisibleOn and in Read Mode will not render if does not have data
       if (this.options.mode === "read") {
@@ -2628,7 +2670,7 @@ define([
       }
       if (DEBUG && value.name === DEBUG_NAME) {
         locationCnt++;
-        console.log("Location: " + locationCnt, 'before return true');
+        console.log("Location: " + locationCnt, "before return true");
       }
       return true;
     },
@@ -3244,7 +3286,10 @@ define([
           console.log("- fieldsType:", fieldsType);
         }
 
-        var keyStrToCheck = (!this.options.mode || this.options.mode !== 'read') ? ':input[name="': 'span[id="';
+        var keyStrToCheck =
+          !this.options.mode || this.options.mode !== "read"
+            ? ':input[name="'
+            : 'span[id="';
 
         var _inputNameQ =
           fieldsType &&
@@ -3296,18 +3341,14 @@ define([
 
           if (!_currentInputName) {
             if (DEBUG_VS_ON) {
-              console.log(
-                "[x] No attribute by \"Name\", get by \"ID\""
-              );
-              console.log('- _visibleVal:', _visibleVal, typeof _visibleVal);
+              console.log('[x] No attribute by "Name", get by "ID"');
+              console.log("- _visibleVal:", _visibleVal, typeof _visibleVal);
             }
             _currentInputName = $currentTarget.attr("id");
 
             if (!_visibleVal) {
               if (DEBUG_VS_ON) {
-                console.log(
-                  '[x] There is no value to get, try get as html'
-                );
+                console.log("[x] There is no value to get, try get as html");
               }
 
               _visibleVal = $currentTarget.text();
@@ -3318,9 +3359,7 @@ define([
           }
 
           if (DEBUG_VS_ON) {
-            console.log(
-              "- _currentInputName:", _currentInputName
-            );
+            console.log("- _currentInputName:", _currentInputName);
           }
 
           // _currentInputName = 'lol_lol';
@@ -4090,13 +4129,16 @@ define([
 
         // First Time to Fired for Update Mode
         if (DEBUG) {
-          console.log('- about to assigned: functionToExecute!', this.options.mode);
+          console.log(
+            "- about to assigned: functionToExecute!",
+            this.options.mode
+          );
         }
         if (this && this.options && this.options.mode) {
           var $targetFormContainer = $("#" + this.options.formSchema.name);
           var functionToExecute = null;
-          switch(this.options.mode) {
-            case 'update':
+          switch (this.options.mode) {
+            case "update":
               functionToExecute = function() {
                 if (field && field.options && field.options.visibleon) {
                   _.forEach(field.options.visibleon.values, function(v) {
@@ -4113,23 +4155,29 @@ define([
                 }
               };
               break;
-            case 'read':
+            case "read":
               functionToExecute = function() {
                 var $readField = $(_inputNameQ);
                 if (DEBUG) {
-                  console.log('- _inputNameQ: about to trigger change', _inputNameQ, $readField);
+                  console.log(
+                    "- _inputNameQ: about to trigger change",
+                    _inputNameQ,
+                    $readField
+                  );
                 }
-                $readField.trigger('change');
-              }
+                $readField.trigger("change");
+              };
               break;
           }
 
-          if (functionToExecute && (typeof functionToExecute === 'function')) {
+          if (functionToExecute && typeof functionToExecute === "function") {
             if (DEBUG) {
-              console.log('- about to add renderCompleted event!');
+              console.log("- about to add renderCompleted event!");
             }
             $targetFormContainer.on(
-              this.options.formSchema.name + ".renderCompleted", functionToExecute);
+              this.options.formSchema.name + ".renderCompleted",
+              functionToExecute
+            );
           }
         }
       }

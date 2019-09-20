@@ -9,6 +9,7 @@
 @import url(./humane-themes/flatty.css);
 @import url(./jquery.loadmask.spin.css);
 @import url(./jquery.timepicker.min.css);
+@import url(./cropper.css);
 .show-ex-icon {
   position: relative;
   background-repeat: no-repeat;
@@ -44,6 +45,9 @@
 /**
  * Global Variables
  **/
+/**
+ * Cropper
+ */
 /**
  * Visibility
  */
@@ -684,10 +688,28 @@ body.ie7 .form-render .controls-row {
 #module-external-create-user-data-modal .modal-body {
   padding-bottom: 0; }
 #module-external-create-user-data-modal .modal-footer {
-  background-color: #FFF;
+  background-color: #fff;
   border-top: none; }
   #module-external-create-user-data-modal .modal-footer .btn {
     width: 100%;
     margin-bottom: 0; }
+
+/**
+ * Webcam Related
+ */
+.form-render-has-webcam-wrapper {
+  margin-top: 30px; }
+
+#formrender-my-camera, #formrender-webcam-canvas {
+  margin-left: auto;
+  margin-right: auto; }
+
+#formrender-webcam-modal .actions, #formrender-webcam-modal-crop .actions, #formrender-webcam-modal-notification .actions {
+  margin-top: 20px; }
+  #formrender-webcam-modal .actions .btn, #formrender-webcam-modal-crop .actions .btn, #formrender-webcam-modal-notification .actions .btn {
+    margin-left: 12px;
+    margin-right: 12px; }
+#formrender-webcam-modal .alert, #formrender-webcam-modal-crop .alert, #formrender-webcam-modal-notification .alert {
+  margin-bottom: 0; }
 
 /*# sourceMappingURL=form-render.css.map */
