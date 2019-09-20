@@ -124,6 +124,8 @@
     // Just a short cut so we can put our html outside the js dir
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: 'templates',
-    views: 'views'
+    views: 'views',
+    cropper: "libs/images/cropper",
+    webcam: "libs/webcam/webcam"
   }
 })
