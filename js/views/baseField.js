@@ -1447,7 +1447,7 @@ define([
           }
           // Parse Template
           if (field.url) {
-            field.url = Utils.changeURLGetTemplateString(field.url);
+            field.url = Utils.changeURLGetTemplateString(field.url, this.options.formData);
           }
           if (
             this.options.internal &&

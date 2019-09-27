@@ -359,8 +359,9 @@ define([
      * @param  string str
      * @return string
      */
-    changeURLGetTemplateString: function(str) {
+    changeURLGetTemplateString: function(str, formData) {
       var DEBUG = false;
+      formData = formData || null;
       if (DEBUG) {
         console.log("[*] --- changeURLGetTemplateString ---");
       }
@@ -387,6 +388,36 @@ define([
               _to +
               '"';
           }
+
+          if (formData && _tmpArr && _.indexOf(_tmpArr, '.') >= 0 && _tmpArr.split) {
+            var fieldsTokens = _tmpArr.split('.');
+            if (fieldsTokens && fieldsTokens.length > 0) {
+              var lastValue = formData;
+              // console.log('- fieldsTokens:', fieldsTokens);
+              _.each(fieldsTokens, function(key) {
+                // console.log('- key:', key);
+                var keyLower = key.toLowerCase();
+                var allKeys = _.map(_.keys(lastValue), function(k) {
+                  return k.toLowerCase();
+                });
+                if (_.indexOf(allKeys, keyLower) < 0) {
+                  // console.log('- not in');
+                  return;
+                }
+                lastValue = (key in lastValue) ? lastValue[key]: lastValue[keyLower];
+                // console.log('- lastValue:', lastValue);
+              });
+              // console.log('- lastValue:', lastValue);
+              if (lastValue) {
+                newStr = newStr.replace(
+                  "{{" + _tmpArr + "}}",
+                  lastValue
+                );
+                continue;
+              }
+            }
+          }
+
           switch (_tmpArr) {
             case "userid":
               newStr = newStr.replace(
