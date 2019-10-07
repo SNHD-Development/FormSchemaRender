@@ -26,7 +26,20 @@ define([
   "jquery.stupidtable",
   "xdr",
   "jquery.timepicker"
-], function($, _, Backbone, Vm, humane, FormModel, Select2Helper, countyData, externalCreateUserDataTemplate, webcamTemplate, WebCam, Cropper) {
+], function(
+  $,
+  _,
+  Backbone,
+  Vm,
+  humane,
+  FormModel,
+  Select2Helper,
+  countyData,
+  externalCreateUserDataTemplate,
+  webcamTemplate,
+  WebCam,
+  Cropper
+) {
   var DEBUG = false;
 
   var SYSTEM_LANG = {
@@ -389,8 +402,13 @@ define([
               '"';
           }
 
-          if (formData && _tmpArr && _.indexOf(_tmpArr, '.') >= 0 && _tmpArr.split) {
-            var fieldsTokens = _tmpArr.split('.');
+          if (
+            formData &&
+            _tmpArr &&
+            _.indexOf(_tmpArr, ".") >= 0 &&
+            _tmpArr.split
+          ) {
+            var fieldsTokens = _tmpArr.split(".");
             if (fieldsTokens && fieldsTokens.length > 0) {
               var lastValue = formData;
               // console.log('- fieldsTokens:', fieldsTokens);
@@ -404,15 +422,13 @@ define([
                   // console.log('- not in');
                   return;
                 }
-                lastValue = (key in lastValue) ? lastValue[key]: lastValue[keyLower];
+                lastValue =
+                  key in lastValue ? lastValue[key] : lastValue[keyLower];
                 // console.log('- lastValue:', lastValue);
               });
               // console.log('- lastValue:', lastValue);
               if (lastValue) {
-                newStr = newStr.replace(
-                  "{{" + _tmpArr + "}}",
-                  lastValue
-                );
+                newStr = newStr.replace("{{" + _tmpArr + "}}", lastValue);
                 continue;
               }
             }
@@ -1953,13 +1969,19 @@ define([
     isRenderVisibleOn: function(view, value, typeLowerCase) {
       var _DEBUG = false;
       if (value.options && value.options.visibleon) {
-        if (typeLowerCase !== "html" || value.options.visibleon.forcerenderonread) {
+        if (
+          typeLowerCase !== "html" ||
+          value.options.visibleon.forcerenderonread
+        ) {
           var _visibleOnName = value.options.visibleon.name;
           if (_DEBUG) {
-            console.log('***** isRenderVisibleOn *****', _visibleOnName);
+            console.log("***** isRenderVisibleOn *****", _visibleOnName);
           }
           if (_visibleOnName.match(/\[\]$/gi)) {
-            _visibleOnName = _visibleOnName.substr(0, _visibleOnName.length - 2);
+            _visibleOnName = _visibleOnName.substr(
+              0,
+              _visibleOnName.length - 2
+            );
           }
           if (_DEBUG) {
             console.log(view.options.formData.fields[_visibleOnName]);
@@ -1971,7 +1993,7 @@ define([
             ) {
               if (_found) {
                 if (_DEBUG) {
-                  console.log('- return: blank');
+                  console.log("- return: blank");
                 }
                 return;
               }
@@ -1979,7 +2001,7 @@ define([
             });
             if (!_found) {
               if (_DEBUG) {
-                console.log('- return: false');
+                console.log("- return: false");
               }
               return false;
             }
@@ -1991,13 +2013,19 @@ define([
               _lookupValue = view.options.formData.fields[_visibleOnName];
             }
             if (_DEBUG) {
-              console.log('- _lookupValue:', _lookupValue);
-              console.log('- value.options.visibleon.values:', value.options.visibleon.values);
-              console.log('- value.options.visibleon.values.indexOf(_lookupValue):', value.options.visibleon.values.indexOf(_lookupValue));
+              console.log("- _lookupValue:", _lookupValue);
+              console.log(
+                "- value.options.visibleon.values:",
+                value.options.visibleon.values
+              );
+              console.log(
+                "- value.options.visibleon.values.indexOf(_lookupValue):",
+                value.options.visibleon.values.indexOf(_lookupValue)
+              );
             }
             if (value.options.visibleon.values.indexOf(_lookupValue) === -1) {
               if (_DEBUG) {
-                console.log('- return: false');
+                console.log("- return: false");
               }
               return false;
             }
@@ -2006,7 +2034,7 @@ define([
       }
 
       if (_DEBUG) {
-        console.log('- return: true');
+        console.log("- return: true");
       }
 
       return true;
@@ -2301,44 +2329,56 @@ define([
     setupCreateUserViewModal: function($form, view) {
       var _DEBUG = false;
       if (_DEBUG) {
-        console.log('***** setupCreateUserViewModal *****');
-        console.log('- $form:', $form);
+        console.log("***** setupCreateUserViewModal *****");
+        console.log("- $form:", $form);
       }
-      if (!$form || !$form.length || !view || !view.options.formData || !view.options.formData.externalcreateuserdata) {
+      if (
+        !$form ||
+        !$form.length ||
+        !view ||
+        !view.options.formData ||
+        !view.options.formData.externalcreateuserdata
+      ) {
         return;
       }
-      var $actionDiv = $form.find('.form-actions');
+      var $actionDiv = $form.find(".form-actions");
       if (!$actionDiv || !$actionDiv.length) {
         return;
       }
       if (_DEBUG) {
-        console.log('- $actionDiv:', $actionDiv);
+        console.log("- $actionDiv:", $actionDiv);
       }
-      var $userModalButton = $actionDiv.find('.btn.external-created-user-modal-btn');
+      var $userModalButton = $actionDiv.find(
+        ".btn.external-created-user-modal-btn"
+      );
       if ($userModalButton && $userModalButton.length) {
         return;
       }
       // Let Add a DOM here
       var userData = view.options.formData.externalcreateuserdata;
       if (_DEBUG) {
-        console.log('- userData:', userData);
+        console.log("- userData:", userData);
       }
       var tmplModal = _.template(externalCreateUserDataTemplate);
 
-      $actionDiv.append(tmplModal({data:userData}));
+      $actionDiv.append(tmplModal({ data: userData }));
 
       var $modal;
-      $actionDiv.find('#module-external-create-user-data-btn').click(function(e) {
-        if (e && e.preventDefault) {
-          e.preventDefault();
-        }
-        $modal.modal('toggle');
-      });
-      $modal = $actionDiv.find('#module-external-create-user-data-modal').modal({
-        backdrop: 'static',
-        show: false,
-        keyboard: true
-      });
+      $actionDiv
+        .find("#module-external-create-user-data-btn")
+        .click(function(e) {
+          if (e && e.preventDefault) {
+            e.preventDefault();
+          }
+          $modal.modal("toggle");
+        });
+      $modal = $actionDiv
+        .find("#module-external-create-user-data-modal")
+        .modal({
+          backdrop: "static",
+          show: false,
+          keyboard: true
+        });
     },
 
     /**
@@ -2349,9 +2389,9 @@ define([
       var alwaysAllow = ["buttonclipboard", "filerepository", "image"];
       var _type = value.type.toLowerCase();
 
-      if (_type === 'html') {
+      if (_type === "html") {
         // Default HTML type will not render in Read Mode.
-        if (!('internal' in value.options)) {
+        if (!("internal" in value.options)) {
           value.options.internal = false;
         }
       }
@@ -2381,9 +2421,11 @@ define([
       } else if (
         typeof view.options.formData.fields[value.name] === "undefined"
       ) {
-
         if (value && value.options) {
-          if (value.options.visibleon && value.options.visibleon.forcerenderonread) {
+          if (
+            value.options.visibleon &&
+            value.options.visibleon.forcerenderonread
+          ) {
             return true;
           }
         }
@@ -4254,8 +4296,8 @@ define([
 
     convertDataURIToBlob: convertDataURIToBlob,
 
-    addWebcamEvent: function ($form, view) {
-      var $webcamList = $form.find('.form-render-has-webcam');
+    addWebcamEvent: function($form, view) {
+      var $webcamList = $form.find(".form-render-has-webcam");
       // debugger
       if (!$webcamList || !$webcamList.length) {
         return;
@@ -4268,12 +4310,12 @@ define([
       $form.append(modalTmpl());
 
       var $canvas = $form.find("#formrender-webcam-canvas");
-      var $webcam = $form.find('#formrender-webcam-modal');
-      var $crop = $form.find('#formrender-webcam-modal-crop');
-      var $notification = $form.find('#formrender-webcam-modal-notification');
-      var $notificationContent = $notification.find('.message');
+      var $webcam = $form.find("#formrender-webcam-modal");
+      var $crop = $form.find("#formrender-webcam-modal-crop");
+      var $notification = $form.find("#formrender-webcam-modal-notification");
+      var $notificationContent = $notification.find(".message");
       var options = {
-        backdrop: 'static',
+        backdrop: "static",
         show: false
       };
       $webcam.modal(options);
@@ -4281,10 +4323,10 @@ define([
       $notification.modal(options);
 
       WebCam.set({
-          width: 320,
-          height: 240,
-          image_format: 'jpeg',
-          jpeg_quality: 90
+        width: 320,
+        height: 240,
+        image_format: "jpeg",
+        jpeg_quality: 90
       });
 
       var fieldName, endpointUrl, mongoId, isInternal;
@@ -4292,36 +4334,37 @@ define([
       var webcamAttached = false;
       var cropperAttached = false;
       var cropper;
-      $webcam.on('shown', function() {
+      $webcam.on("shown", function() {
         if (webcamAttached) {
           return;
         }
         webcamAttached = true;
-        WebCam.attach('#formrender-my-camera');
+        WebCam.attach("#formrender-my-camera");
       });
-      $crop.on('shown', function() {
+      $crop.on("shown", function() {
         if (cropperAttached) {
           return;
         }
         if (_DEBUG) {
-          console.log('- Start Cropper:', $canvas[0]);
+          console.log("- Start Cropper:", $canvas[0]);
         }
         cropperAttached = true;
         cropper = new Cropper($canvas[0], {
-            aspectRatio: 1 / 1,
-            crop: function (e) {
-              var _DEBUG = false;
-              if (_DEBUG) {
-                console.log(e.detail.x);
-                console.log(e.detail.y);
-              }
+          aspectRatio: 1 / 1,
+          /*crop: function(e) {
+            var _DEBUG = false;
+            if (_DEBUG) {
+              console.log(e.detail.x);
+              console.log(e.detail.y);
             }
+          },*/
+          autoCrop: true
         });
-        cropper.start($canvas[0], 1);
+        // cropper.start($canvas[0], 1);
       });
-      $crop.on('hidden', function() {
+      $crop.on("hidden", function() {
         if (_DEBUG) {
-          console.log('- Remove Cropper');
+          console.log("- Remove Cropper");
         }
         if (cropper) {
           cropper.reset();
@@ -4329,122 +4372,182 @@ define([
         }
         cropperAttached = false;
       });
-      $notification.on('hidden', function() {
-        $notificationContent.text('');
+      $notification.on("hidden", function() {
+        $notificationContent.text("");
       });
 
-      $('body').on('click', '.form-render-has-webcam-wrapper .take-snapshot', function(e) {
-        if (e && e.preventDefault) {
-          e.preventDefault();
+      $("body").on(
+        "click",
+        ".form-render-has-webcam-wrapper .take-snapshot",
+        function(e) {
+          if (e && e.preventDefault) {
+            e.preventDefault();
+          }
+          if (_DEBUG) {
+            console.log("click");
+          }
+          var $this = $(this);
+          var $parent = $this.parent().parent();
+          var $webcamData = $parent.find(".form-render-has-webcam");
+          // debugger
+          mongoId = $webcamData.attr("data-mongo-id");
+          fieldName = $webcamData.attr("data-field-name");
+          endpointUrl = $webcamData.attr("data-webcam-url");
+          isInternal = $webcamData.attr("data-internal");
+          isInternal = isInternal && isInternal === "true";
+          if (!mongoId) {
+            throw Error("No Mongo ID Found!");
+          }
+          if (!fieldName) {
+            throw Error("No Field Name Found!");
+          }
+          if (!endpointUrl) {
+            throw Error("No End point Found!");
+          }
+          $webcam.modal("show");
         }
-        if (_DEBUG) {
-          console.log('click');
-        }
-        var $this = $(this);
-        var $parent = $this.parent().parent();
-        var $webcamData = $parent.find('.form-render-has-webcam');
-        // debugger
-        mongoId = $webcamData.attr('data-mongo-id');
-        fieldName = $webcamData.attr('data-field-name');
-        endpointUrl = $webcamData.attr('data-webcam-url');
-        isInternal = $webcamData.attr('data-internal');
-        isInternal = isInternal && isInternal === 'true'
-        if (!mongoId) {
-          throw Error('No Mongo ID Found!')
-        }
-        if (!fieldName) {
-          throw Error('No Field Name Found!')
-        }
-        if (!endpointUrl) {
-          throw Error('No End point Found!')
-        }
-        $webcam.modal('show');
-      });
+      );
 
-      $('body').on('click', '#formrender-webcam-modal .formrender-webcam-take-snapshot', function(e) {
-        if (e && e.preventDefault) {
-          e.preventDefault();
-        }
-        if (_DEBUG) {
-          console.log('- WebCam:', WebCam);
-        }
+      $("body").on(
+        "click",
+        "#formrender-webcam-modal .formrender-webcam-take-snapshot",
+        function(e) {
+          if (e && e.preventDefault) {
+            e.preventDefault();
+          }
+          if (_DEBUG) {
+            console.log("- WebCam:", WebCam);
+          }
 
-        WebCam.snap(pictureDone, $canvas[0]);
-      });
-
-      $('body').on('click', '#formrender-webcam-modal-crop .formrender-webcam-retake-snapshot', function(e) {
-        if (e && e.preventDefault) {
-          e.preventDefault();
+          WebCam.snap(pictureDone, $canvas[0]);
         }
-        showRetake();
-      });
+      );
 
-      $('body').on('click', '#formrender-webcam-modal-crop .formrender-webcam-process-image', function(e) {
-        if (e && e.preventDefault) {
-          e.preventDefault();
+      $("body").on(
+        "click",
+        "#formrender-webcam-modal-crop .formrender-webcam-retake-snapshot",
+        function(e) {
+          if (e && e.preventDefault) {
+            e.preventDefault();
+          }
+          showRetake();
         }
-        if (_DEBUG) {
-          console.log('- start sending data');
+      );
+
+      $("body").on(
+        "click",
+        "#formrender-webcam-modal-crop .formrender-webcam-process-image",
+        function(e) {
+          if (e && e.preventDefault) {
+            e.preventDefault();
+          }
+          if (_DEBUG) {
+            console.log("- start sending data");
+          }
+          // Send to API
+
+          var data = $canvas[0].cropper
+            .getCroppedCanvas()
+            .toDataURL("image/jpeg");
+
+          var debugPicture = false;
+
+          $crop.one("hidden", function() {
+            setTimeout(function() {
+              $notificationContent.html(
+                '<div class="alert alert-success">Sending Data, please wait...</div>'
+              );
+              $notification.modal("show");
+              // debugger
+              if (!data) {
+                console.error($canvas);
+                throw Error("Please try again!!!");
+              }
+              if (debugPicture) {
+                var $debugParent = $webcamList.closest(
+                  ".form-render-has-webcam-wrapper"
+                );
+                var $debug = $debugParent.find(".form-render-has-webcam-debug");
+                if (!$debug || !$debug.length) {
+                  $debugParent.append(
+                    '<img class="form-render-has-webcam-debug" src=""/>'
+                  );
+                  $debug = $debugParent.find(".form-render-has-webcam-debug");
+                }
+                $notification.modal("hide");
+                $debug.attr("src", data);
+                console.log(
+                  "- getCanvasData:",
+                  $canvas[0].cropper.getCanvasData()
+                );
+                console.log(
+                  "- getCropBoxData:",
+                  $canvas[0].cropper.getCropBoxData()
+                );
+                return;
+              }
+              sendPhotoData(data);
+            }, 1200);
+          });
+
+          $crop.modal("hide");
         }
-        // Send to API
-
-        $crop.one('hidden', function() {
-          setTimeout(function() {
-            $notificationContent.html('<div class="alert alert-success">Sending Data, please wait...</div>');
-            $notification.modal('show');
-            // debugger
-            var data = $canvas[0].cropper.getCroppedCanvas().toDataURL('image/jpeg');
-            if (!data) {
-              console.error($canvas);
-              throw Error('Please try aagin!!!');
-            }
-            sendPhotoData(data);
-          }, 1200);
-        });
-
-        $crop.modal('hide');
-      });
+      );
 
       return;
 
       function pictureDone() {
-        $webcam.one('hidden', function() {
+        $webcam.one("hidden", function() {
           setTimeout(function() {
-            $crop.modal('show');
+            $crop.modal("show");
           }, 1200);
         });
-        $webcam.modal('hide');
+        $webcam.modal("hide");
       }
 
       function showRetake() {
-        $crop.one('hidden', function() {
+        $crop.one("hidden", function() {
           setTimeout(function() {
-            $webcam.modal('show');
+            $webcam.modal("show");
           }, 1200);
         });
-        $crop.modal('hide');
+        $crop.modal("hide");
       }
 
       function sendPhotoData(data) {
+        // var _DEBUG = true;
         // Get Options
         if (_DEBUG) {
-          console.log('- fieldName:', fieldName);
-          console.log('- mongoId:', mongoId);
-          console.log('- endpointUrl:', endpointUrl);
+          console.log("- fieldName:", fieldName);
+          console.log("- mongoId:", mongoId);
+          console.log("- endpointUrl:", endpointUrl);
         }
 
         $.ajax({
           url: endpointUrl,
           method: "POST",
-          data: { FieldName: fieldName, MongoId: mongoId, Data: data, Internal: isInternal },
-          dataType: "json",
+          data: {
+            FieldName: fieldName,
+            MongoId: mongoId,
+            Data: data,
+            Internal: isInternal
+          },
+          // dataType: "json",
           success: function() {
+            if (_DEBUG) {
+              console.log("- sendPhotoData: success", arguments);
+            }
             location.reload(true);
           },
           error: function() {
-            $notificationContent.html('<div class="alert alert-dangegr">Error, please try again.</div>');
+            if (_DEBUG) {
+              console.log("- sendPhotoData: error", arguments);
+            }
+            $notificationContent.html(
+              '<div class="alert alert-danger">Error, please try again.</div>'
+            );
             setTimeout(function() {
-              location.reload(true);
+              $notification.modal("hide");
             }, 2000);
           }
         });
@@ -4455,21 +4558,22 @@ define([
       var _DEBUG = false;
 
       if (_DEBUG) {
-        console.log('*** setupWebcamWithCrop ***');
+        console.log("*** setupWebcamWithCrop ***");
         console.log(arguments);
       }
 
-      var $webcamList = $form.find('.form-render-has-webcam');
+      var $webcamList = $form.find(".form-render-has-webcam");
       // debugger
       if (!$webcamList || !$webcamList.length) {
         return;
       }
       // Set it up!!!
-      var html = '<div class="form-render-has-webcam-wrapper"><button class="form-render-has-webcam take-snapshot btn btn-primary">Open Webcam</button></div>';
+      var html =
+        '<div class="form-render-has-webcam-wrapper"><button class="form-render-has-webcam take-snapshot btn btn-primary">Open Webcam</button></div>';
       $webcamList.each(function() {
         var $this = $(this);
         var $parent = $this.parent();
-        var $wrapper = $parent.find('.form-render-has-webcam-wrapper')
+        var $wrapper = $parent.find(".form-render-has-webcam-wrapper");
         if ($wrapper && $wrapper.length) {
           return;
         }
