@@ -621,7 +621,10 @@ define([
             !_.isEmpty(field.options.usewebcam);
           // console.log('- hasWebcamOption:', hasWebcamOption);
           // console.log('- field.options.usewebcam:', field.options.usewebcam);
-          var webcamUrl = (hasWebcamOption && field.options.usewebcam.url) ? field.options.usewebcam.url: null;
+          var webcamUrl =
+            hasWebcamOption && field.options.usewebcam.url
+              ? field.options.usewebcam.url
+              : null;
           var _validation_tmp = this.getFormValidationData(field.name);
           if (_validation_tmp.accept) {
             field.attributes.accept = _validation_tmp.accept;
@@ -653,7 +656,7 @@ define([
           }
           // console.log('- webcamUrl', webcamUrl);
           if (webcamUrl) {
-            field.attributes['data-webcam-url'] = webcamUrl;
+            field.attributes["data-webcam-url"] = webcamUrl;
           }
           // console.log("- field.attributes.class:", field.attributes.class);
 
@@ -1447,7 +1450,10 @@ define([
           }
           // Parse Template
           if (field.url) {
-            field.url = Utils.changeURLGetTemplateString(field.url, this.options.formData);
+            field.url = Utils.changeURLGetTemplateString(
+              field.url,
+              this.options.formData
+            );
           }
           if (
             this.options.internal &&
@@ -2023,10 +2029,21 @@ define([
             _attr: _attr,
             id: field.name,
             href: _href,
-            css_class: field.attributes.class ? field.attributes.class: '',
-            internal: field.options.internal ? 'data-internal="true"': '',
-            mongo_id: this.options.formData && this.options.formData._id && this.options.formData._id.$oid ? this.options.formData._id.$oid: null,
-            data_webcam: 'data-webcam-url' in field.attributes && field.attributes['data-webcam-url'] ? ' data-webcam-url="' + field.attributes['data-webcam-url'] + '" ': null
+            css_class: field.attributes.class ? field.attributes.class : "",
+            internal: field.options.internal ? 'data-internal="true"' : "",
+            mongo_id:
+              this.options.formData &&
+              this.options.formData._id &&
+              this.options.formData._id.$oid
+                ? this.options.formData._id.$oid
+                : null,
+            data_webcam:
+              "data-webcam-url" in field.attributes &&
+              field.attributes["data-webcam-url"]
+                ? ' data-webcam-url="' +
+                  field.attributes["data-webcam-url"] +
+                  '" '
+                : null
           });
         } else if (_type === "list") {
           // If this is 'list' type
@@ -2358,12 +2375,25 @@ define([
           _attr += " " + key + "='" + value + "'";
         });
         _html += that.inputTemplate["uneditable" + _type]({
+          mongo_id:
+            this.options.formData &&
+            this.options.formData._id &&
+            this.options.formData._id.$oid
+              ? this.options.formData._id.$oid
+              : null,
           value: _field_data,
           text: field.description,
           _attr: _attr,
           id: field.name,
           href: _href,
-          css_class: field.attributes.class
+          css_class: field.attributes.class,
+          data_webcam:
+            "data-webcam-url" in field.attributes &&
+            field.attributes["data-webcam-url"]
+              ? ' data-webcam-url="' +
+                field.attributes["data-webcam-url"] +
+                '" '
+              : null
         });
       } else {
         //*** Create and Update Mode ***//
