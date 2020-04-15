@@ -935,9 +935,20 @@ define([
                     nowTemp,
                     $this = $(this);
                 var _id = $this.attr("name");
+                // DEBUG = "OnWhatDateDidYour" === _id;
                 var hasDatepickerOptions = $this.has("data-has-datepicker-options");
+                if (DEBUG) {
+                    console.log("[setupDateInput] _id:", _id, '$this:', $this);
+                    console.log("[setupDateInput] hasDatepickerOptions:", hasDatepickerOptions);
+
+                }
+
+
                 if (_model && _model.get) {
                     var _tmpVal = _model.get(_id);
+                    if (DEBUG) {
+                        console.log("[setupDateInput] _id:", _id, '_tmpVal:', _tmpVal);
+                    }
                     if (_tmpVal && _tmpVal.$date) {
                         _tmpVal = moment(_tmpVal.$date);
                         if (!_tmpVal.isValid()) {
@@ -945,18 +956,30 @@ define([
                                 'Could not be able to parse this date data "' + _id + '".'
                             );
                         }
+                        // console.log(_id, '$this.val:', $this.val(), _model.get(_id));
                         $this.val(_tmpVal.format("MM/DD/YYYY"));
+                        _model.set(_id, $this.val())
+                            // console.log(_id, '$this.val:', $this.val(), _model.get(_id));
                     }
                 }
+                // DEBUG = false;
                 if (DEBUG) {
-                    console.log("   Loop: .datepicker");
+                    console.log("   Loop: .datepicker:", _id);
                     console.log(_id);
                     console.log($this);
                     if (fViewArr && fViewArr[_id]) {
                         console.log(fViewArr[_id]);
                     }
                     console.log("- hasDatepickerOptions: ", hasDatepickerOptions);
+                    console.log("- _tmpVal: ", _tmpVal);
+                    if (_tmpVal && _tmpVal.isValid && _tmpVal.isValid()) {
+                        console.log("_tmpVal:", _tmpVal.format('YYYY-MM-DD'));
+
+                    }
                 }
+                // if ("OnWhatDateDidYour" === _id) {
+                //     debugger;
+                // }
                 // This is special case
                 if (
                     fViewArr &&
@@ -979,11 +1002,17 @@ define([
                             ")"
                         );
                     }
+
                     // Start Creating the new Logic
                     // XXX: Working need to create custom logic to be able to compare with another field
                     // Need to do onchange call back
                     _options.onRender = function(date) {
                         var targetDate = logicOpts.getvaluefrom;
+                        if (DEBUG) {
+                            console.log("[onRender] _id:", _id, "targetDate:", targetDate, 'logicOpts:', logicOpts);
+                            console.log("[onRender] $this:", $this);
+
+                        }
                         if (!fViewArr[targetDate] || !fViewArr[targetDate].element) {
                             // Need to return for VisibleOn
                             return;
@@ -1040,6 +1069,16 @@ define([
                             tmpComp +
                             " " +
                             fViewArr[targetDate].element.date.valueOf();
+                        // DEBUG = "OnWhatDateDidYour" === _id;
+                        if (DEBUG) {
+                            console.log(
+                                "[changeDate] _id:",
+                                _id,
+                                "logicOpts:",
+                                logicOpts
+                            );
+                            console.log("[changeDate] newDate:", newDate);
+                        }
                         if (eval(logic)) {
                             // newDate.setDate(newDate.getDate() + 1);
                             $("#" + targetDate).datepicker("setValue", newDate);
@@ -1072,6 +1111,17 @@ define([
                                     0
                                 );
                                 _options.onRender = function(date) {
+                                    // if (DEBUG) {
+                                    //     console.log("[onRender] _id:", _id);
+                                    //     console.log(
+                                    //         "[onRender] nowTemp:",
+                                    //         nowTemp
+                                    //     );
+                                    //     console.log(
+                                    //         "[onRender] maxDate:",
+                                    //         maxDate
+                                    //     );
+                                    // }
                                     return date.valueOf() > maxDate.valueOf() ? "disabled" : "";
                                 };
                                 break;
@@ -1162,15 +1212,32 @@ define([
                     case "datetime":
                         break;
                 }
+                if (DEBUG) {
+                    console.log(
+                        "_options:",
+                        _options,
+                        "optionsRender:",
+                        optionsRender
+                    );
+
+                }
 
                 var $dpicker = $this
                     .datepicker(_options)
                     .on("changeDate", function(e) {
+
                         var _dateInput = $(e.currentTarget);
                         // This could have special Event
                         var dateId = _dateInput.attr("id");
+                        if (DEBUG) {
+                            console.log("_id [changeDate]", _id, 'dateId:', dateId);
+                        }
                         if (fViewArr && fViewArr[dateId] && fViewArr[dateId].changeDate) {
                             if (typeof fViewArr[dateId].changeDate === "function") {
+                                if (DEBUG) {
+                                    console.log('e:', e);
+
+                                }
                                 fViewArr[dateId].changeDate(e);
                             }
                         }
@@ -1189,6 +1256,14 @@ define([
                         ) {
                             $currentTarget.datepicker("setValue", logicDate);
                         }
+                        if (DEBUG) {
+                            console.log(
+                                "[click] $currentTarget:",
+                                $currentTarget,
+                                "logicDate:",
+                                logicDate
+                            );
+                        }
                         $("div.datepicker.dropdown-menu").css("display", "none");
                         $currentTarget.datepicker("show");
                     });
@@ -1201,9 +1276,22 @@ define([
                     }
                     fViewArr[_id].element = $dpicker;
                 }
+                if (DEBUG) {
+                    console.log("_id:", _id);
+                    console.log(
+                        "$dpicker:",
+                        $dpicker,
+                        "<--------",
+                        "element",
+                        $dpicker.element
+                    );
+                    /* if (_id === "WhenWereYouTestedFor") {
+                        debugger;
+                    } */
+                }
             });
             if (DEBUG) {
-                console.log("    SetUp .datepicker");
+                console.log("    SetUp .datepicker:");
                 console.log(fViewArr);
             }
         },
