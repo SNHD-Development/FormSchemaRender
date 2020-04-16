@@ -229,7 +229,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
                 // console.log('_formName:', _formName);
                 // console.log('currentFieldFormData:', currentFieldFormData);
                 // console.log('_options.options.formData:', _options.options.formData);
-                var totalForms = currentFieldFormData.length;
+                var totalForms = (currentFieldFormData) ? currentFieldFormData.length : 0;
                 _values = _.map(_values, function(el, index) {
                     if (index < totalForms) {
                         el.hideDelete = true;

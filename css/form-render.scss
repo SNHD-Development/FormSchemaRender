@@ -842,6 +842,10 @@ $text_area_min_height: 100px;
      **/
     .cards-render-list {
         .card-items {
+            margin-bottom: 20px;
+            &:last-child {
+                margin-bottom: 0;
+            }
             .data-label {
                 font-weight: bold;
             }
@@ -852,7 +856,7 @@ $text_area_min_height: 100px;
                 }
             }
             .card-list-item {
-                border: 1px solid #eaeaea;
+                border: 1px solid #c0c0c0;
                 border-radius: 5px;
                 padding: 1em;
                 li {

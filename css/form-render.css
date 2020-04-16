@@ -600,33 +600,37 @@
     border: 1px solid #ccc;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     border-radius: 4px; }
-  .form-render .cards-render-list .card-items .data-label {
-    font-weight: bold; }
-  .form-render .cards-render-list .card-items .data-value .text-center {
-    margin-left: 10%;
-    color: #505050; }
-  .form-render .cards-render-list .card-items .card-list-item {
-    border: 1px solid #eaeaea;
-    border-radius: 5px;
-    padding: 1em; }
-    .form-render .cards-render-list .card-items .card-list-item li {
-      padding-bottom: 0.8em;
-      margin-bottom: 0.8em;
-      border-bottom: 1px solid #c0c0c0; }
-      .form-render .cards-render-list .card-items .card-list-item li p {
-        margin-left: 0.5em;
-        margin-right: 0.5em;
-        margin-bottom: 0.2em; }
-      .form-render .cards-render-list .card-items .card-list-item li:last-child {
-        margin-bottom: 0;
-        border-bottom: none;
-        padding-bottom: 0; }
-      .form-render .cards-render-list .card-items .card-list-item li.card-list-action {
-        text-align: center; }
-        .form-render .cards-render-list .card-items .card-list-item li.card-list-action button {
-          margin-right: 0.8em; }
-          .form-render .cards-render-list .card-items .card-list-item li.card-list-action button:last-child {
-            margin-right: 0; }
+  .form-render .cards-render-list .card-items {
+    margin-bottom: 20px; }
+    .form-render .cards-render-list .card-items:last-child {
+      margin-bottom: 0; }
+    .form-render .cards-render-list .card-items .data-label {
+      font-weight: bold; }
+    .form-render .cards-render-list .card-items .data-value .text-center {
+      margin-left: 10%;
+      color: #505050; }
+    .form-render .cards-render-list .card-items .card-list-item {
+      border: 1px solid #c0c0c0;
+      border-radius: 5px;
+      padding: 1em; }
+      .form-render .cards-render-list .card-items .card-list-item li {
+        padding-bottom: 0.8em;
+        margin-bottom: 0.8em;
+        border-bottom: 1px solid #c0c0c0; }
+        .form-render .cards-render-list .card-items .card-list-item li p {
+          margin-left: 0.5em;
+          margin-right: 0.5em;
+          margin-bottom: 0.2em; }
+        .form-render .cards-render-list .card-items .card-list-item li:last-child {
+          margin-bottom: 0;
+          border-bottom: none;
+          padding-bottom: 0; }
+        .form-render .cards-render-list .card-items .card-list-item li.card-list-action {
+          text-align: center; }
+          .form-render .cards-render-list .card-items .card-list-item li.card-list-action button {
+            margin-right: 0.8em; }
+            .form-render .cards-render-list .card-items .card-list-item li.card-list-action button:last-child {
+              margin-right: 0; }
 
 /**
  * Override DatePicker
