@@ -148,7 +148,10 @@
      */
   /**
      * Field UI Helper
-     */ }
+     */
+  /**
+   * List - Card View
+   **/ }
   .form-render label:hover {
     cursor: pointer; }
   .form-render input::-webkit-calendar-picker-indicator {
@@ -597,6 +600,33 @@
     border: 1px solid #ccc;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     border-radius: 4px; }
+  .form-render .cards-render-list .card-items .data-label {
+    font-weight: bold; }
+  .form-render .cards-render-list .card-items .data-value .text-center {
+    margin-left: 10%;
+    color: #505050; }
+  .form-render .cards-render-list .card-items .card-list-item {
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+    padding: 1em; }
+    .form-render .cards-render-list .card-items .card-list-item li {
+      padding-bottom: 0.8em;
+      margin-bottom: 0.8em;
+      border-bottom: 1px solid #c0c0c0; }
+      .form-render .cards-render-list .card-items .card-list-item li p {
+        margin-left: 0.5em;
+        margin-right: 0.5em;
+        margin-bottom: 0.2em; }
+      .form-render .cards-render-list .card-items .card-list-item li:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0; }
+      .form-render .cards-render-list .card-items .card-list-item li.card-list-action {
+        text-align: center; }
+        .form-render .cards-render-list .card-items .card-list-item li.card-list-action button {
+          margin-right: 0.8em; }
+          .form-render .cards-render-list .card-items .card-list-item li.card-list-action button:last-child {
+            margin-right: 0; }
 
 /**
  * Override DatePicker
@@ -700,16 +730,96 @@ body.ie7 .form-render .controls-row {
 .form-render-has-webcam-wrapper {
   margin-top: 30px; }
 
-#formrender-my-camera, #formrender-webcam-canvas {
+#formrender-my-camera,
+#formrender-webcam-canvas {
   margin-left: auto;
   margin-right: auto; }
 
-#formrender-webcam-modal .actions, #formrender-webcam-modal-crop .actions, #formrender-webcam-modal-notification .actions {
+#formrender-webcam-modal .actions,
+#formrender-webcam-modal-crop .actions,
+#formrender-webcam-modal-notification .actions {
   margin-top: 20px; }
-  #formrender-webcam-modal .actions .btn, #formrender-webcam-modal-crop .actions .btn, #formrender-webcam-modal-notification .actions .btn {
+  #formrender-webcam-modal .actions .btn,
+  #formrender-webcam-modal-crop .actions .btn,
+  #formrender-webcam-modal-notification .actions .btn {
     margin-left: 12px;
     margin-right: 12px; }
-#formrender-webcam-modal .alert, #formrender-webcam-modal-crop .alert, #formrender-webcam-modal-notification .alert {
+#formrender-webcam-modal .alert,
+#formrender-webcam-modal-crop .alert,
+#formrender-webcam-modal-notification .alert {
   margin-bottom: 0; }
+
+/**
+ * Small Screen
+ **/
+@media only screen and (max-device-width: 667px) {
+  .page #main {
+    padding: 24px 15px !important;
+    padding-top: 15px !important; }
+
+  .page .info_bar {
+    margin-bottom: 10px; }
+
+  .page .datepicker.dropdown-menu {
+    padding: 8px; }
+  .page .datepicker .datepicker-days .table-condensed td,
+  .page .datepicker .datepicker-days .table-condensed th {
+    width: 12px;
+    height: 12px;
+    padding: 4px 6px;
+    font-size: 15px; }
+  .page .datepicker .datepicker-days .table-condensed tbody td {
+    font-size: 13px; }
+
+  .form-render .table-view {
+    overflow: auto; }
+    .form-render .table-view .table {
+      table-layout: fixed; }
+      .form-render .table-view .table th,
+      .form-render .table-view .table td {
+        padding: 8px;
+        overflow: auto; }
+  .form-render .wizard-view .step-content {
+    padding: 18px 15px;
+    width: 100%;
+    max-width: 100%; }
+    .form-render .wizard-view .step-content .step-pane .subform-container .table-view {
+      overflow: auto; }
+    .form-render .wizard-view .step-content .step-pane .subform-container .table {
+      table-layout: fixed; }
+      .form-render .wizard-view .step-content .step-pane .subform-container .table th,
+      .form-render .wizard-view .step-content .step-pane .subform-container .table td {
+        padding: 8px;
+        overflow: auto; }
+    .form-render .wizard-view .step-content .step-pane .sub_form_render .active {
+      padding: 12px 6px; }
+  .form-render .wizard-view .form-actions {
+    padding-left: 0;
+    padding-right: 0; }
+  .form-render .wizard-view .wizard-actions button {
+    padding: 8px 18px; }
+  .form-render .wizard-view .wizard-actions button.btn_prev {
+    margin-left: 20px; }
+  .form-render .wizard-view .wizard-actions button.btn_next {
+    margin-right: 20px; } }
+/**
+ * Mobile Device
+ **/
+.form-render.mobile-device .subform-container .controls-row {
+  width: 100%; }
+.form-render.mobile-device .subform-container label {
+  width: 100%;
+  display: block;
+  clear: both; }
+.form-render.mobile-device .subform-container input[type="text"],
+.form-render.mobile-device .subform-container input .datepicker {
+  width: 95%;
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+  float: none;
+  clear: both; }
+.form-render.mobile-device .subform-container .actions {
+  text-align: center !important; }
 
 /*# sourceMappingURL=form-render.css.map */

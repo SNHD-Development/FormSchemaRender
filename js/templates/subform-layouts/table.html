@@ -8,10 +8,12 @@ if (_model && selfOnly) {
     currentUserLowerCase = currentUser.toLowerCase();
 }
 
+var totalData = (values && values.length) ? values.length : '';
+
 if (heading) {
 %>
 <fieldset class="table-view">
-	<legend><%= heading %></legend>
+	<legend><%= totalData %> <%= heading %></legend>
 <% } %>
 <table class="table table-striped table-bordered table-hover <%= _tableClass %>">
 	<thead>

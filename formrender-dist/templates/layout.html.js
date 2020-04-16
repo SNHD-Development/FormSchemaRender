@@ -1,1 +1,1 @@
-define([],function(){return'<form id="<%= name %>"<%= (typeof action !== \'undefined\') ? \' action="\'+action+\'"\': \'\'%> class="form-render" method="post" novalidate=""></form>'});
+define([],function(){return'<form id="<%= name %>"<%= (typeof action !== \'undefined\') ? \' action="\'+action+\'"\': \'\'%> class="form-render <%= mobileClassName %>" method="post" novalidate=""></form>'});

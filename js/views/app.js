@@ -53,7 +53,10 @@ define([
                     lang: that.options.lang,
                     formEvents: this.options.formEvents,
                 };
-            this.$el.html(this.template(this.options.formSchema));
+            var viewModel = _.extend({
+                mobileClassName: Utils.isMobileDevice() ? 'mobile-device' : ''
+            }, this.options.formSchema)
+            this.$el.html(this.template(viewModel));
             // Generic Setup
             var $_targetForm = $("#" + this.options.formSchema.name, this.el);
             $_targetForm.on(

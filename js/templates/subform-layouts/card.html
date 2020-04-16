@@ -1,0 +1,85 @@
+<%
+var _model = (typeof modelId !== 'undefined') ? true : false;
+var _createdUser;
+var currentUserLowerCase;
+
+if (_model && selfOnly) {
+    currentUserLowerCase = currentUser.toLowerCase();
+}
+
+var totalData = (values && values.length) ? values.length : '';
+
+/*var renderAs = 'table';*/
+var renderAs = 'card';
+
+if (heading) {
+%>
+<fieldset class="table-view">
+	<legend><%= totalData %> <%= heading %></legend>
+<% } %>
+<div class="cards-render-list">
+    <% _.each( values, function(element, index) {
+        var hideEdit = element.hideEdit || false;
+        var hideDelete = element.hideDelete || false;
+    %>
+        <div class="card-items">
+            <% if (renderAs === 'table') { %>
+                <table class="table table-striped table-bordered table-hover">
+                <% _.each( labels, function(label, labelIndex) { %>
+                    <%
+                    var currentEl = (element && labelIndex in element) ? element[labelIndex]: {};
+                    var hideEdit = currentEl.hideEdit || false;
+                    var hideDelete = currentEl.hideDelete || false;
+                    var dataValue =  currentEl.value || currentEl;
+                    if (_.isEmpty(dataValue)  || (_.isObject(dataValue) && !currentEl.value)) {
+                        dataValue = '<span class="text-center">-</span>';
+                    }
+                    %>
+                    <tr>
+                        <td class="data-label"><%= label %></td>
+                        <td class="data-value"><%= dataValue %></td>
+                    </tr>
+                <% }) %>
+            <% } else if (renderAs === 'card') { %>
+                <ul class="card-list-item unstyled">
+                <% _.each( labels, function(label, labelIndex) { %>
+                    <%
+                    var currentEl = (element && labelIndex in element) ? element[labelIndex]: {};
+                    var dataValue =  currentEl.value || currentEl;
+                    if (_.isEmpty(dataValue) || (_.isObject(dataValue) && !currentEl.value)) {
+                        dataValue = '<span class="text-center">-</span>';
+                    }
+                    %>
+                    <li class="">
+                        <p class="data-label"><%= label %></p>
+                        <p class="data-value"><%= dataValue %></p>
+                    </li>
+                <% }) %>
+                <% if(_model && (!hideDelete || !hideEdit) && (showViewBtn || !addOnly || currentUserLowerCase || (addOnlyWithEditOnCreate)) ) { %>
+                    <li class="card-list-action">
+                        <% if (showViewBtn) { %>
+                        <button class="btn btn-primary subform-read-model" data-id="<%= modelId[index] %>"><i class="icon-file"></i> View</button>
+                        <% } %>
+                        <% if (!addOnly && !selfOnly || selfOnly && _match || addOnlyWithEditOnCreate) { %>
+
+                            <% if (!hideEdit) { %>
+                                <button class="btn btn-info subform-edit-model" data-id="<%= modelId[index] %>"><i class="icon-edit"></i> Edit</button>
+                            <% } %>
+
+                            <% if (!hideDelete) { %>
+                                <button class="btn btn-danger subform-remove-model" data-id="<%= modelId[index] %>"><i class="icon-remove"></i> Remove</button>
+                            <% } %>
+
+                        <% } %>
+                    </li>
+                <% } %>
+                </ul>
+            <% } %>
+            </table>
+        </div>
+    <% }) %>
+</div>
+
+<% if (heading) { %>
+</fieldset>
+<% } %>

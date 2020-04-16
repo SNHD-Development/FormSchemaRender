@@ -1,3 +1,32 @@
 /**
  * Icons
  */
+.show-ex-icon {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: 15px center; }
+  .show-ex-icon:hover p {
+    text-decoration: underline; }
+  .show-ex-icon.png {
+    background-image: url("./16px/png.png"); }
+  .show-ex-icon.jpg {
+    background-image: url("./16px/jpg.png"); }
+  .show-ex-icon.gif {
+    background-image: url("./16px/gif.png"); }
+  .show-ex-icon.doc {
+    background-image: url("./16px/doc.png"); }
+  .show-ex-icon.pdf {
+    background-image: url("./16px/pdf.png"); }
+  .show-ex-icon.ppt {
+    background-image: url("./16px/ppt.png"); }
+  .show-ex-icon.xls {
+    background-image: url("./16px/xls.png"); }
+  .show-ex-icon.xlsx {
+    background-image: url("./16px/xlsx.png"); }
+  .show-ex-icon.zip {
+    background-image: url("./16px/zip.png"); }
+  .show-ex-icon > p {
+    width: auto;
+    margin: 0 0 0 35px; }
+
+/*# sourceMappingURL=icon.css.map */

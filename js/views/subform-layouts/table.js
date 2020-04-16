@@ -1,10 +1,10 @@
 /**
  * Table Collection View Layout
  **/
-define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseField', 'text!templates/subform-layouts/table.html', 'text!templates/notice/confirmation.html', 'bootstrap'], function($, _, Backbone, Vm, Utils, Events, BaseField, tableTemplate, popoverTemplate) {
+define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseField', 'text!templates/subform-layouts/table.html', 'text!templates/subform-layouts/card.html', 'text!templates/notice/confirmation.html', 'bootstrap'], function($, _, Backbone, Vm, Utils, Events, BaseField, tableTemplate, cardTemplate, popoverTemplate) {
     var DEBUG = false;
     var AppView = Backbone.View.extend({
-        template: _.template(tableTemplate),
+        template: _.template(Utils.isMobileDevice() ? cardTemplate : tableTemplate),
         popTemplate: _.template(popoverTemplate),
         clean: function() {
             // Destroy Popover

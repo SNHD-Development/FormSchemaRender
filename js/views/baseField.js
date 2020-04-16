@@ -58,6 +58,7 @@ define([
     "text!templates/fields/uneditableimage.html",
     "text!templates/fields/buttonclipboard.html",
     "text!templates/subform-layouts/table.html",
+    "text!templates/subform-layouts/card.html",
     "text!templates/update-on-read/default-input.html",
     "text!templates/update-on-read/default-input-radio.html",
     "text!templates/update-on-read/default-input-textarea.html",
@@ -125,6 +126,7 @@ define([
     uneditableimageTemplate,
     buttonclipboardTemplate,
     tableTemplate,
+    cardTemplate,
     readModeUpdatedefaultInputTemplate,
     readModeUpdatedefaultInputRadioTemplate,
     readModeUpdatedefaultInputTextAreaTemplate,
@@ -416,7 +418,8 @@ define([
                 uneditablefile: _.template(uneditablefileTemplate),
                 uneditableimage: _.template(uneditableimageTemplate),
                 buttonclipboard: _.template(buttonclipboardTemplate),
-                "subform-table": _.template(tableTemplate)
+                "subform-table": _.template(tableTemplate),
+                "subform-card": _.template(cardTemplate),
             };
             // Init Form Options
             var formOptions = {
@@ -2195,8 +2198,14 @@ define([
                         });
                         // console.log('_values:', _values);
 
+                        var readListTemplate = "subform-table";
+
+                        if (Utils.isMobileDevice()) {
+                            readListTemplate = 'subform-card';
+                        }
+
                         // Render Table View for List
-                        _html += that.inputTemplate["subform-table"]({
+                        _html += that.inputTemplate[readListTemplate]({
                             labels: _labels,
                             values: _values,
                             mode: readMode,
