@@ -228,3 +228,4 @@ ant-build.xml
 html
 css/.sass-cache
 form-schema-render.code-workspace
+data/

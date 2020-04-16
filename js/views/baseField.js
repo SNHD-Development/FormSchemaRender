@@ -2038,7 +2038,14 @@ define([
                             );
                         _.each(field.fields, function(element, index) {
                             element.options = element.options || {};
+                            // console.log('element.options:', element.options);
+                            var notshowontable = element.options.showontable === false;
                             // Make sure about "Options"."TableTitle"
+                            if (notshowontable) {
+                                // console.log('element:', element.name);
+
+                                return;
+                            }
                             var _currentLabel;
                             if (element.options.tabletitle) {
                                 _currentLabel = element.options.tabletitle;
@@ -2186,6 +2193,9 @@ define([
                                 }
                             });
                         });
+                        // console.log('_values:', _values);
+
+                        // Render Table View for List
                         _html += that.inputTemplate["subform-table"]({
                             labels: _labels,
                             values: _values,
@@ -2988,6 +2998,7 @@ define([
         },
         /**
          * Add model to List
+         * This will load table.js to render table view
          **/
         addSubformData: function(e, list, models, reset) {
             // var DEBUG = true;
@@ -2995,6 +3006,8 @@ define([
                 console.log("[*] baseField.addSubformData");
                 console.log(arguments);
             }
+            // console.log('***** addSubformData *****');
+
             // console.log(list)
             // console.log(arguments);
             // console.log(this);
@@ -3142,6 +3155,8 @@ define([
                     // console.log(arguments);
                     console.log(currentModel.toJSON());
                 }
+                // console.log('list:', list);
+
                 var _data = {
                         el: "#" +
                             list.options.formId +

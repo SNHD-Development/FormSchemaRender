@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+# Please install r.js
+# npm install -g requirejs
+
 # Build Script that run two commands at once
 #
 # 1. Compile template to js with `perl js/libs/parsetmpl.pl`

@@ -31,6 +31,7 @@ if (heading) {
 	<tbody>
 		<% _.each( values, function(element1, index) {
         var hideEdit = element1.hideEdit || false;
+        var hideDelete = element1.hideDelete || false;
         %>
 		<tr>
 			<%
@@ -67,18 +68,25 @@ if (heading) {
 			<% var _sortByVal = (mode && typeof sortByVal !== 'undefined' && sortByVal[index][index2]) ? sortByVal[index][index2]: '' %>
 			<td <%= _sortByVal %>><%= element2 %></td>
 			<% }); %>
-			<% if(_model && (showViewBtn || !addOnly || currentUserLowerCase) ) { %>
+			<% if(_model && (showViewBtn || !addOnly || currentUserLowerCase || (addOnlyWithEditOnCreate)) ) { %>
 			<td class="subform-actions">
                 <% if (showViewBtn) { %>
                 <button class="btn btn-primary subform-read-model" data-id="<%= modelId[index] %>"><i class="icon-file"></i> View</button>
                 <% } %>
-                <% if (!addOnly && !selfOnly || selfOnly && _match) { %>
+                <% if (!addOnly && !selfOnly || selfOnly && _match || addOnlyWithEditOnCreate) { %>
 
                     <% if (!hideEdit) { %>
     				    <button class="btn btn-info subform-edit-model" data-id="<%= modelId[index] %>"><i class="icon-edit"></i> Edit</button>
                     <% } %>
 
-				<button class="btn btn-danger subform-remove-model" data-id="<%= modelId[index] %>"><i class="icon-remove"></i> Remove</button>
+					<% if (!hideDelete) { %>
+    				    <button class="btn btn-danger subform-remove-model" data-id="<%= modelId[index] %>"><i class="icon-remove"></i> Remove</button>
+                    <% } %>
+
+					<% if (hideDelete && hideEdit) { %>
+					-
+					<% } %>
+
                 <% } %>
 			</td>
 			<% } %>

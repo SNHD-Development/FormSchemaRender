@@ -1246,6 +1246,32 @@ Example,
         }]
     }
 
+To allowed add only, with can edit in create mode set Options.AddOnlyWithEditOnCreate = true
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do",
+            "ShowViewBtn": true,
+            "AddOnlyWithEditOnCreate": true
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?",
+            "Options": {
+                "SortBy": "int",
+                "ShowOnTable": false
+            }
+        }]
+    }
+
 To allowed edit and delete for created user, set Options.SelfOnly = true
 
 Example,
