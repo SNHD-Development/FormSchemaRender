@@ -2335,22 +2335,30 @@ define([
                 // Render Image As Read Mode, (Depending on the Options.InternalCanUpdate value)
                 var _field_data = "",
                     _href = "";
-                _.each(_name, function(element) {
-                    if (typeof that.options.formData.fields[element] !== "object") {
-                        _field_data +=
-                            (typeof that.options.formData.fields[element] !== "undefined" ?
-                                that.options.formData.fields[element] :
-                                "") + " ";
-                    } else {
-                        _field_data = that.options.formData.fields[element];
-                    }
-                });
+                // console.log('that.options:', that.options);
+                // console.log('that.options.formData:', that.options.formData);
+
+                var hasFileFieldValue = that.options.formData && that.options.formData.fields && that.options.formData.fields[element];
+
+                if (hasFileFieldValue) {
+                    _.each(_name, function(element) {
+                        if (typeof that.options.formData.fields[element] !== "object") {
+                            _field_data +=
+                                (typeof that.options.formData.fields[element] !== "undefined" ?
+                                    that.options.formData.fields[element] :
+                                    "") + " ";
+                        } else {
+                            _field_data = that.options.formData.fields[element];
+                        }
+                    });
+                }
+
                 if (typeof _field_data === "string") {
                     _field_data = $.trim(_field_data);
                 }
-                if (that.options.formData.fields[field.name] === "deleted") {
+                if (hasFileFieldValue && that.options.formData.fields[field.name] === "deleted") {
                     _href = null;
-                } else {
+                } else if (hasFileFieldValue) {
                     field.attributes["src"] =
                         (typeof field.attributes["src"] !== "undefined" ?
                             field.attributes["src"] :
