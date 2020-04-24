@@ -32,6 +32,10 @@ if (heading) {
 	</thead>
 	<tbody>
 		<% _.each( values, function(element1, index) {
+		if (element1 == null) {
+			element1 = {};
+		}
+		/*console.log('element1:', element1);*/
         var hideEdit = element1.hideEdit || false;
         var hideDelete = element1.hideDelete || false;
         %>
@@ -40,6 +44,9 @@ if (heading) {
             /* Find Matching Username */
             var _match = false;
             _.each( element1, function(element2Obj, index2) {
+				if (element2Obj == null) {
+					element2Obj = '';
+				}
                 var element2 = element2Obj.value || element2Obj;
                 try {
                     if (element2 && _.isObject(element2) && 'value' in element2) {

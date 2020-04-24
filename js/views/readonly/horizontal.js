@@ -95,6 +95,8 @@ define([
           _temp += that.renderLabel(value, false, "control-label");
           _temp += '<div class="controls">';
         }
+        // console.log('value:', value, 'that:', that);
+
         _temp += _parentRender.call(that, value, true);
         if (
           typeof value.description !== "undefined" &&

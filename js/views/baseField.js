@@ -2204,6 +2204,8 @@ define([
                             readListTemplate = 'subform-card';
                         }
 
+                        // console.log('readListTemplate:', readListTemplate, '_values:', _values);
+
                         // Render Table View for List
                         _html += that.inputTemplate[readListTemplate]({
                             labels: _labels,
