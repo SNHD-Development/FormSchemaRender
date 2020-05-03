@@ -2340,7 +2340,13 @@ define([
                 // console.log('that.options:', that.options);
                 // console.log('that.options.formData:', that.options.formData);
 
-                var hasFileFieldValue = that.options.formData && that.options.formData.fields && that.options.formData.fields[element];
+                try{
+                    var hasFileFieldValue = that.options.formData && that.options.formData.fields && that.options.formData.fields[field.name];
+                } catch (err) {
+                    console.log('Error: when trying to set hasFileFieldValue!')
+                    throw err;
+                }
+
 
                 if (hasFileFieldValue) {
                     _.each(_name, function(element) {
