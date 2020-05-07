@@ -461,7 +461,7 @@ define([
                 // If there are DatePicker
                 if (formView._hasDate) {
                     // console.log('- Here');
-                    Utils.setupDateInput(that.$el, formView);
+                    Utils.setupDateInput(that.$el, formView, false);
                 }
                 if (formView._hasTime) {
                     // console.log('- Here');

@@ -42,6 +42,8 @@ define([
 ) {
     var DEBUG = false;
 
+    var LUT_ALL_DATE_PICKER = {};
+
     var SYSTEM_LANG = {
         "Validation Error": {
             en: "Validation Error",
@@ -903,6 +905,9 @@ define([
                 firstTime = false;
             // Logic for Validation
             if (view) {
+                // if (DEBUG) {
+                //     debugger;
+                // }
                 if (view.formView && view.formView._DatePickerLogicArr) {
                     fViewArr = view.formView._DatePickerLogicArr;
                     firstTime = true;
@@ -930,11 +935,17 @@ define([
                 console.log($allDatepicker);
             }
             $allDatepicker.each(function() {
+                // var DEBUG = true;
                 var _options = {},
                     maxDate,
                     nowTemp,
                     $this = $(this);
                 var _id = $this.attr("name");
+
+                // if (_id === 'LastDateOfContact') {
+                //     DEBUG = false;
+                // }
+
                 // DEBUG = "OnWhatDateDidYour" === _id;
                 var hasDatepickerOptions = $this.has("data-has-datepicker-options");
                 if (DEBUG) {
@@ -1003,6 +1014,10 @@ define([
                         );
                     }
 
+                    if (DEBUG) {
+                        console.log('before [onRender] setting <--------------');
+                    }
+
                     // Start Creating the new Logic
                     // XXX: Working need to create custom logic to be able to compare with another field
                     // Need to do onchange call back
@@ -1011,13 +1026,34 @@ define([
                         if (DEBUG) {
                             console.log("[onRender] _id:", _id, "targetDate:", targetDate, 'logicOpts:', logicOpts);
                             console.log("[onRender] $this:", $this);
-
+                            console.log("[onRender] fViewArr:", fViewArr);
+                            console.log("[onRender] fViewArr[targetDate]:", fViewArr[targetDate]);
+                            console.log("[onRender] fViewArr[targetDate].element:", fViewArr[targetDate].element);
                         }
-                        if (!fViewArr[targetDate] || !fViewArr[targetDate].element) {
+                        var targetDatePickerEl = (fViewArr[targetDate] && fViewArr[targetDate].element) ? fViewArr[targetDate].element: null;
+                        if (!targetDatePickerEl && fViewArr[targetDate] && logicOpts && logicOpts.getvaluefrom) {
+                            // console.log('fViewArr[targetDate]:', fViewArr[targetDate]);
+                            // console.log('view:', view);
+                            // debugger;
+                            // console.log('LUT_ALL_DATE_PICKER:', LUT_ALL_DATE_PICKER);
+                            // targetDatePickerEl = jQuery('#'+logicOpts.getvaluefrom);
+                            // fViewArr[targetDate].element = targetDatePickerEl
+                            if (LUT_ALL_DATE_PICKER && LUT_ALL_DATE_PICKER[logicOpts.getvaluefrom]) {
+                                targetDatePickerEl = LUT_ALL_DATE_PICKER[logicOpts.getvaluefrom];
+                                fViewArr[targetDate].element = targetDatePickerEl;
+                            }
+                        }
+                        if (!targetDatePickerEl) {
                             // Need to return for VisibleOn
                             return;
                             // throw 'Could not be able to find Datepicker Object with "' + targetDate + '"!';
                         }
+                        // console.log('targetDatePickerEl:', targetDatePickerEl, '<------------------------------------');
+
+                        // var DEBUG = (_id === 'LastDateOfContact') ? true: false;
+                        // if (DEBUG) {
+                        //     debugger;
+                        // }
                         var _cmd, _today;
                         if ($this.attr("data-maxdate")) {
                             _today = new Date();
@@ -1274,7 +1310,9 @@ define([
                             element: null,
                         };
                     }
+                    // console.log("assigned fViewArr[_id].element, _id:", _id, '<----------------');
                     fViewArr[_id].element = $dpicker;
+                    LUT_ALL_DATE_PICKER[_id] = $dpicker;
                 }
                 if (DEBUG) {
                     console.log("_id:", _id);

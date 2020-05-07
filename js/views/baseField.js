@@ -1120,6 +1120,8 @@ define([
                         }
                         if (field.options && field.options.datepickeroptions) {
                             // If has the special validation, will add to logic
+                            // console.log('[_DatePickerLogicArr] adding:', field.name);
+
                             this._DatePickerLogicArr[field.name] =
                                 field.options.datepickeroptions;
                             field.attributes["data-has-datepicker-options"] = true;
