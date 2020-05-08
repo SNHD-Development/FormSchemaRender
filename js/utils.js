@@ -1022,6 +1022,8 @@ define([
                     // XXX: Working need to create custom logic to be able to compare with another field
                     // Need to do onchange call back
                     _options.onRender = function(date) {
+                        // console.log('date:', date);
+
                         var targetDate = logicOpts.getvaluefrom;
                         if (DEBUG) {
                             console.log("[onRender] _id:", _id, "targetDate:", targetDate, 'logicOpts:', logicOpts);
@@ -1041,6 +1043,13 @@ define([
                             if (LUT_ALL_DATE_PICKER && LUT_ALL_DATE_PICKER[logicOpts.getvaluefrom]) {
                                 targetDatePickerEl = LUT_ALL_DATE_PICKER[logicOpts.getvaluefrom];
                                 fViewArr[targetDate].element = targetDatePickerEl;
+                            } else if (logicOpts.getvaluefrom) {
+                                targetDatePickerEl = jQuery('#'+logicOpts.getvaluefrom);
+                                if (!targetDatePickerEl || !targetDatePickerEl.length) {
+                                    targetDatePickerEl = null;
+                                } else {
+                                    fViewArr[targetDate].element = targetDatePickerEl;
+                                }
                             }
                         }
                         if (!targetDatePickerEl) {
@@ -1054,11 +1063,40 @@ define([
                         // if (DEBUG) {
                         //     debugger;
                         // }
+                        if (fViewArr && fViewArr[targetDate] && fViewArr[targetDate].element && !fViewArr[targetDate].element.date) {
+                            // debugger;
+                            // console.log('fViewArr[targetDate].element:', fViewArr[targetDate].element);
+                            fViewArr[targetDate].element.date = {};
+                            fViewArr[targetDate].element.date.valueOf = function() {
+                                var val = (fViewArr[targetDate].element.val) ? fViewArr[targetDate].element.val(): null;
+                                var valMoment = moment(val);
+                                if (valMoment && valMoment.isValid && !valMoment.isValid()) {
+                                    return null;
+                                }
+                                return valMoment.valueOf();
+                            }
+                        }
+                        /* if (fViewArr && fViewArr[targetDate] && fViewArr[targetDate].element && _.isObject(fViewArr[targetDate].element.date) && !fViewArr[targetDate].element.date.valueOf) {
+                            fViewArr[targetDate].element.date.valueOf = function() {
+                                var val = (fViewArr[targetDate].element.val) ? fViewArr[targetDate].element.val(): null;
+                                var valMoment = moment(val);
+                                if (valMoment && valMoment.isValid && !valMoment.isValid()) {
+                                    return null;
+                                }
+                                return valMoment.valueOf();
+                            }
+                        } */
+                        // console.log('fViewArr[targetDate].element.date.valueOf():', fViewArr[targetDate].element.date.valueOf());
+
+                        // if (fViewArr[targetDate].element) {
+                        //     console.log('fViewArr[targetDate].element.date:', fViewArr[targetDate].element.date);
+                        // }
                         var _cmd, _today;
+                        var dateObj = fViewArr[targetDate].element.date;
                         if ($this.attr("data-maxdate")) {
                             _today = new Date();
                             _cmd =
-                                fViewArr[targetDate].element.date.valueOf() +
+                                dateObj.valueOf() +
                                 " " +
                                 logicOpts.comparison +
                                 "  " +
@@ -1071,7 +1109,7 @@ define([
                         } else if ($this.attr("data-mindate")) {
                             _today = new Date();
                             _cmd =
-                                fViewArr[targetDate].element.date.valueOf() +
+                                dateObj.valueOf() +
                                 " " +
                                 logicOpts.comparison +
                                 "  " +
@@ -1083,13 +1121,15 @@ define([
                                 " ? 'disabled' : ''";
                         } else {
                             _cmd =
-                                fViewArr[targetDate].element.date.valueOf() +
+                                dateObj.valueOf() +
                                 " " +
                                 logicOpts.comparison +
                                 " " +
                                 date.valueOf() +
                                 " ? 'disabled' : ''";
                         }
+                        // console.log('_cmd:', _cmd);
+                        // 1588834800000 >=  1589958000000 || 1589958000000  > 1588897083414 ? 'disabled'
                         return eval(_cmd);
                     };
                     if (!fViewArr[logicOpts.getvaluefrom]) {
