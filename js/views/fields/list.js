@@ -86,10 +86,24 @@ define([
         _modelBinder: undefined,
         // Clean Data Binding
         clean: function() {
+            var that = this;
             // Unbind Validation
             Backbone.Validation.unbind(this);
             if (typeof this._modelBinder !== "undefined") {
                 this._modelBinder.unbind();
+            }
+            if (this._hasVisibleOn) {
+                // Need to remove all VisibleOn Event!
+                var keys = _.keys(this._visibleOnEvents);
+                if (keys && keys.length) {
+                    // console.log('keys:', keys);
+                    // console.log('this._visibleOnEvents:', this._visibleOnEvents);
+                    _.each(keys, function(key) {
+                        // console.log('key:', key);
+                        that._visibleOnEvents[key].unbind();
+                        // console.log('unbind:', key);
+                    });
+                }
             }
             // Destroy Popover
             Utils.destroyPopover(this.$el);
@@ -122,10 +136,15 @@ define([
                 if (DEBUG) {
                     console.log("[*] list.initialize: Insert");
                 }
+                // console.log('this.options.formSchema:', this.options.formSchema);
+
+                // console.log('[list] start setting up model');
+
                 this.model = new Model(
                     _.extend(this.options.formSchema, {
                         is_internal: this.options.internal,
-                        render_mode: this.options.mode
+                        render_mode: this.options.mode,
+                        is_list_field: true
                     })
                 );
                 // console.log(this.options);
@@ -159,8 +178,16 @@ define([
             this.template = _.template(_tmp);
             // this is a list
             this._isListFieldType = true;
+            // console.log('this._hasVisibleOn:', this._hasVisibleOn);
+
+            this._hasVisibleOn = false;
+            // console.log('this._hasVisibleOn:', this._hasVisibleOn);
+
+            this._visibleOnEvents = {};
         },
         render: function(firstTime, readMode) {
+            var visibleOnArray = [];
+            var fieldsType = {};
             var that = this,
                 _defaultEmail = "";
             if (!this.options) {
@@ -169,11 +196,16 @@ define([
             if (!this.options.options) {
                 this.options.options = {};
             }
+            // console.log('[list] start render ****', that.cid);
+
             // Render Fields
             require(["views/baseField"], function(BaseField) {
                 // console.log('*** Start : List ***');
                 // var DEBUG = true;
                 // console.log(that.options);
+                // console.log('[list] start BaseField');
+
+                // console.log("- that.model.validation:", JSON.stringify(_.keys(that.model.validation)));
                 var _id = that.options._id;
                 var _html = "",
                     _required,
@@ -188,6 +220,7 @@ define([
                     console.log(that.options);
                     if (that.model && that.model.toJSON) {
                         console.log(that.model.toJSON());
+                        console.log("- that.model.validation:", JSON.stringify(_.keys(that.model.validation)));
                     }
                     if (that.options && that.options.model && that.options.model.toJSON) {
                         console.log(that.options.model.toJSON());
@@ -195,6 +228,8 @@ define([
                 }
                 // var DEBUG = true;
                 _.each(that.options.formSchema.fields, function(value, key, list) {
+                    var _temp = '';
+                    var _typeLowerCase = (value.type) ? value.type.toLowerCase(): null;
                     // console.log('- _options:', _options);
                     // Check for Show On Mode
 
@@ -222,6 +257,7 @@ define([
                         }
                         return "";
                     }
+
                     if (
                         typeof value.description !== "undefined" &&
                         _.indexOf(formView.notRenderLabel, value.type.toLowerCase()) === -1
@@ -230,7 +266,7 @@ define([
                             value,
                             that.options.formSchema.validation
                         );
-                        _html += formView.renderLabel(value, _required);
+                        _temp += formView.renderLabel(value, _required);
                     }
 
                     if (
@@ -256,10 +292,27 @@ define([
                             console.log(currentModelValue);
                         }
                     }
-                    // console.log(value);
-                    _html += formView.render(value);
+
+                    _temp += formView.render(value);
+
                     if (_defaultEmail !== "") {
                         value.options["default"] = _defaultEmail;
+                    }
+                    if (value.options.visibleon && !(_typeLowerCase === 'button' || _typeLowerCase === 'submit')) {
+                        // console.log('_temp:', _temp);
+                        _temp = '<div class="options-visible-on-' + value.name + '" style="display:none">' + _temp + '</div>';
+
+                        visibleOnArray.unshift({
+                            value: value,
+                            html: _temp
+                        });
+                    } else {
+                        _html += _temp;
+                    }
+
+                    // Mapping the input type
+                    if (value && value.name && value.type) {
+                        fieldsType[value.name] = $.trim(value.type.toLowerCase());
                     }
                 });
                 // DEBUG = false;
@@ -364,6 +417,11 @@ define([
                 if (that.options.model) {
                     reFormatModel(that);
                 }
+                // console.log('that.model:', that.model);
+                // console.log('that.model.validation:', that.model.validation);
+                // console.log('that.options.model:', that.options.model);
+
+
                 // console.log('- current model:', JSON.stringify(that.options.model));
                 // Bind Model
                 try {
@@ -379,6 +437,21 @@ define([
                             console.log(that.model.toJSON());
                             console.log(that.model.bindings);
                         }
+
+                        if (visibleOnArray && visibleOnArray.length) {
+                            that._hasVisibleOn = true;
+                            // console.log('[list] that._visibleOnEvents:', that._visibleOnEvents);
+
+                            // console.log('[list] setupVisibleOn:', that.cid);
+
+                            _.each(visibleOnArray, function(ele) {
+                                // console.log('[list] start: BaseField.prototype.setupVisibleOn', ele.value.name);
+                                BaseField.prototype.setupVisibleOn.call(that, ele.value, ele.html, null, fieldsType, formView);
+                            });
+                            // console.log('[list] after setupVisibleOn: that.model.bindings', that.model.bindings);
+
+                        }
+
                         // console.log('- current model:', JSON.stringify(that.options.model));
                         that._modelBinder.bind(that.model, that.el, that.model.bindings);
                         // console.log('- current model:', JSON.stringify(that.options.model));
@@ -426,6 +499,8 @@ define([
                     }
                 }
                 // console.log('- current model:', JSON.stringify(that.options.model));
+                // console.log('Bind Validation <-------------------------');
+
                 Backbone.Validation.bind(that, {
                     forceUpdate: true
                 });
@@ -588,12 +663,36 @@ define([
         },
         preValidate: function(e) {
             e.stopPropagation();
-            // var DEBUG = false;
+            var DEBUG = false;
+            var that = this;
             if (DEBUG) {
-                console.log("[*] list.preValidate");
-                console.log(this.model.toJSON());
+                console.log("[list] list.preValidate ********");
+                // console.log('this.model.toJSON()', this.model.toJSON());
+                // console.log('this.model', this.model);
+                console.log('[list] this.model.validation', JSON.stringify(_.keys(this.model.validation)));
+                console.log('[list] this.model.bindings', this.model.bindings);
+                // console.log('this.options', this.options);
+                console.log('[list] this._hasVisibleOn:', this._hasVisibleOn);
             }
-            Utils.preValidate(e, this.model);
+            if (false && this._hasVisibleOn) {
+                if (DEBUG) {
+                    // console.log('[list] Backbone.Validation.bind <-------------------------');
+                    console.log('[list] this.model:', this.model);
+                }
+                // Backbone.Validation.bind(this, {
+                //     forceUpdate: true
+                // });
+
+                // Need to delay a bit for visible on to finished
+                setTimeout(function() {
+                    if (DEBUG) {
+                        console.log('[list:setTimeout] that.model.validation', JSON.stringify(_.keys(that.model.validation)));
+                    }
+                    Utils.preValidate(e, that.model);
+                }, 800);
+            } else {
+                Utils.preValidate(e, this.model);
+            }
         },
         /**
          * This function will call when using click on "Add"
@@ -699,6 +798,12 @@ define([
             // Perform Calculate Logic
             Utils.performCalculateLogic(this.$el, this);
 
+            // console.log('[list] sendForm *****');
+            // console.log('that.el:', that.el);
+            // console.log('that.cid:', that.cid);
+            // console.log('[list] this.model.validation', JSON.stringify(_.keys(this.model.validation)));
+            // console.log('[list] this.model.bindings', this.model.bindings);
+
             // Need to format the value
             formatModel(this);
             /*if (this.model) {
@@ -706,6 +811,7 @@ define([
                 console.log(this.model.toJSON());
               }
             }*/
+
             if (!forceInvalid && this.model.isValid(true)) {
                 // var DEBUG = true;
                 var $not_sending = $(".not_sending", this.el)

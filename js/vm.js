@@ -250,6 +250,10 @@ define(["jquery", "underscore", "backbone", "events"], function(
       ZW: "Zimbabwe"
     },
     remove = function(name, clean) {
+      var _debug = false;
+      if (_debug) {
+        console.log('[vm.remove]', name, 'clean:', clean, '<------');
+      }
       clean = clean || false;
       if (typeof views[name] !== "undefined") {
         views[name].undelegateEvents();
@@ -265,6 +269,8 @@ define(["jquery", "underscore", "backbone", "events"], function(
     },
     create = function(context, name, View, options) {
       // View clean up isn't actually implemented yet but will simply call .clean, .remove and .unbind
+      // console.log('[vm] create *****', name);
+
       remove(name);
       if (!View) {
         return null;

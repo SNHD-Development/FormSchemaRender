@@ -2840,26 +2840,40 @@ define([
                 _data.model = model;
                 _id = "SubFormViewEdit" + e.data.formId;
             }
+            var that = this;
             $(this)
                 .parents("div.actions")
                 .fadeOut();
             require(["views/fields/list"], function(SubFormView) {
                 var $expose;
+                // var DEBUG = true;
                 if (DEBUG) {
-                    console.log("- displaySubForm: Render List!");
+                    console.log("*** displaySubForm: Render List ***");
+                    console.log('hidden:', hidden);
+
                     if (_data.model) {
                         console.log(JSON.stringify(_data.model));
                     }
                 }
-                var subFormView = Vm.create(this, _id, SubFormView, _data),
+                var subFormView = Vm.create(that, _id, SubFormView, _data),
                     $subFormView = $(subFormView.el);
                 if (hidden) {
                     $subFormView.hide();
                 }
+                if (DEBUG) {
+                    console.log('subFormView:', subFormView);
+                }
                 subFormView.render(hidden, read);
+                if (DEBUG) {
+                    console.log('After: subFormView.render', subFormView.cid);
+                    console.log('subFormView:', subFormView);
+
+                }
                 if (!hidden) {
                     $subFormView.show({
                         complete: function() {
+                            // console.log('*** SubForm.show.complete ***', subFormView.cid);
+
                             // console.log('Fired: ' + e.data.formId + ' show complete');
                             // setTimeout(function() {
                             //   Utils.setupDateInput($subFormView, subFormView, true);
@@ -2946,6 +2960,8 @@ define([
                                     }
                                     // var DEBUG = true;
                                     if (DEBUG) {
+                                        console.log('[baseField] setupSubFormListenValueEvent on change');
+
                                         console.log("- on change fired! " + _name);
                                         // console.log(arguments);
                                         // console.log('  - $e:', $e);
@@ -3012,9 +3028,9 @@ define([
          * Closed Sub Form
          **/
         closeSubForm: function(e, list) {
-            var DEBUG = false;
+            // var DEBUG = true;
             if (DEBUG) {
-                console.log("[*] closeSubForm");
+                console.log("[baseField] closeSubForm <-------");
             }
             list.$el.fadeOut();
             // Close mask bg
@@ -3235,9 +3251,10 @@ define([
          * Setup the VisibleOn Options
          * This is the function to handle all of logic for VisibleOn
          **/
-        setupVisibleOn: function(field, htmlTmpl, parentContainer, fieldsType) {
+        setupVisibleOn: function(field, htmlTmpl, parentContainer, fieldsType, subformViewObj) {
             var DEBUG = false;
             var DEBUG_VS_ON = false;
+            subformViewObj = subformViewObj || {};
             // console.log('[*] setupVisibleOn:', field);
             parentContainer = parentContainer || false;
             var that = this,
@@ -3245,6 +3262,8 @@ define([
             if (!field.name) {
                 throw "In order to use VisibleOn option, we need to pass in the Name";
             }
+
+            // console.log('[baseField] setupVisibleOn:start *****', that.cid);
 
             if (!parentContainer) {
                 // Check if this VisibleOn define the ParentContainer
@@ -3293,6 +3312,9 @@ define([
                     delete this.model.validation[field.name + "[]"];
                     break;
                 default:
+                    // console.log("- that.model.validation:", JSON.stringify(_.keys(that.model.validation)));
+                    // console.log('[baseField] delete:', field.name);
+
                     delete this.model.validation[field.name];
             }
             // Attched Event to these input.
@@ -3333,868 +3355,1001 @@ define([
                     console.log("- _inputNameQ:", _inputNameQ);
                 }
 
-                $(this.el).on("change", _inputNameQ, function(e) {
-                    var DEBUG_VS_ON = false;
-                    var debug_keys = [
-                        // "HaveYouHadAnyOf",
-                        // "OnWhatDateDidYour"
-                    ];
-                    var _visibleOnName = field.options.visibleon.name;
+                var hashLut = _inputNameQ + field.name + that.cid;
 
-                    if (debug_keys && _.indexOf(debug_keys, _visibleOnName) >= 0) {
-                        DEBUG_VS_ON = true;
-                        // console.log("_visibleOnName:", _visibleOnName);
+                // console.log('[baseField] hashLut:', hashLut, 'that.cid:', that.cid, 'subformViewObj.cid:', subformViewObj.cid);
 
+
+                var shouldAttachedVisibleOn = true;
+                var $visibleOnEl = $(this.el);
+                // $visibleOnEl.off('change', _inputNameQ);
+
+                // console.log('[baseField] this.el:', this.el);
+
+
+                if (this._isListFieldType && this._hasVisibleOn) {
+                    // console.log('[baseField] _inputNameQ:', _inputNameQ, 'hashLut:', hashLut);
+                    // console.log(arguments);
+                    if (!(hashLut in this._visibleOnEvents)) {
+
+                        this._visibleOnEvents[hashLut] = $visibleOnEl;
+                        // shouldAttachedVisibleOn = false;
+                        // console.log('if - this._visibleOnEvents[_inputNameQ]:', this._visibleOnEvents[_inputNameQ]);
+                    } else {
+                        this._visibleOnEvents[hashLut].off('change.' + hashLut, _inputNameQ);
+                        delete this._visibleOnEvents[hashLut];
+                        // console.log('else - this._visibleOnEvents[_inputNameQ]:', this._visibleOnEvents[_inputNameQ]);
                     }
-                    var DEBUG_VISIBLE_ON_ONLY = false;
-                    if (DEBUG_VS_ON) {
-                        console.log(
-                            "*** Input [" + _visibleOnName + "] changed ***"
-                        );
-                    }
-                    var $currentTarget = $(e.currentTarget),
-                        $container = parentContainer ?
-                        $currentTarget.parents(parentContainer) :
-                        $currentTarget,
-                        $containerOptions,
-                        $nextContainer,
-                        _addressArray = [],
-                        _visibleVal = $currentTarget.val(),
-                        _checkBindingArray = ["", "[]"],
-                        debug = false;
+                }
 
-                    if (!$container.length &&
-                        parentContainer === field.options.visibleon.parentcontainer
-                    ) {
-                        $container = $currentTarget
-                            .parents(".form-render")
-                            .find(parentContainer);
-                    }
-                    // console.log($currentTarget);
-                    // if (field.name === 'ReproducedDataPublication') {
-                    //   debug = true;
-                    // }
-                    // if (debug) {
-                    //   console.log($container);
-                    // }
-                    var _currentInputName = $currentTarget.attr("name");
+                // console.log('[baseField] shouldAttachedVisibleOn:', shouldAttachedVisibleOn);
+                // console.log('[baseField] this:', this);
+                // console.log('[baseField] this._isListFieldType:', this._isListFieldType);
+                // console.log('[baseField] this._hasVisibleOn:', this._hasVisibleOn);
+                // console.log('[baseField] $visibleOnEl:', $visibleOnEl, '_inputNameQ:', _inputNameQ);
 
-                    if (!_currentInputName) {
-                        if (DEBUG_VS_ON) {
-                            console.log('[x] No attribute by "Name", get by "ID"');
-                            console.log("- _visibleVal:", _visibleVal, typeof _visibleVal);
+                if (shouldAttachedVisibleOn) {
+                    // console.log('[baseField] Attached VisibleOn change event:', hashLut);
+                    // console.log("- that.model.validation:", JSON.stringify(_.keys(that.model.validation)));
+
+                    // console.log('[baseField] attached change event:', that.cid);
+
+                    var eventNameToAdd = (this._isListFieldType && this._hasVisibleOn) ? '.' + hashLut: '';
+                    $visibleOnEl.on("change" + eventNameToAdd, _inputNameQ, function(e) {
+                        // console.log('[baseField] Start', _inputNameQ, 'change event fire! _vsbName:', _vsbName, field.name);
+
+                        var DEBUG_VS_ON = false;
+                        var debug_keys = [
+                            // "HaveYouHadAnyOf",
+                            // "OnWhatDateDidYour"
+                        ];
+                        var _visibleOnName = field.options.visibleon.name;
+
+                        // console.log('[baseField] _visibleOnName:', _visibleOnName);
+                        // console.log("- that.model.validation:", JSON.stringify(_.keys(that.model.validation)));
+
+                        if (debug_keys && _.indexOf(debug_keys, _visibleOnName) >= 0) {
+                            DEBUG_VS_ON = true;
+                            // console.log("_visibleOnName:", _visibleOnName);
+
                         }
-                        _currentInputName = $currentTarget.attr("id");
-
-                        if (!_visibleVal) {
-                            if (DEBUG_VS_ON) {
-                                console.log("[x] There is no value to get, try get as html");
-                            }
-
-                            _visibleVal = $currentTarget.text();
-                            if (!_visibleVal) {
-                                _visibleVal = $currentTarget.html();
-                            }
-                        }
-                    }
-
-                    if (DEBUG_VS_ON) {
-                        console.log("- _currentInputName:", _currentInputName);
-                    }
-
-                    // _currentInputName = 'lol_lol';
-                    var _hasBracket = _currentInputName.match(/\w+\[\]$/gi);
-                    var _visibleValInArray =
-                        field.options.visibleon.values === _visibleVal;
-                    if (_.isArray(field.options.visibleon.values)) {
-                        _visibleValInArray = _.find(
-                            field.options.visibleon.values,
-                            function(value) {
-                                if (DEBUG_VS_ON) {
-                                    console.log(
-                                        "- value:",
-                                        value,
-                                        ", _visibleVal:",
-                                        _visibleVal,
-                                        ", result = ",
-                                        value === _visibleVal
-                                    );
-                                }
-                                return value === _visibleVal;
-                            }
-                        );
-                        // console.log('- _visibleValInArray:', _visibleValInArray);
-                    }
-                    if (_hasBracket && _hasBracket.length) {
-                        _hasBracket = true;
-                    }
-                    if (DEBUG_VS_ON) {
-                        console.log("");
-                        console.log("- _visibleOnName:", _visibleOnName);
-                        console.log("- $currentTarget:", $currentTarget);
-                        console.log("- _currentInputName:", _currentInputName);
-                        console.log("- _hasBracket:", _hasBracket);
-                        // console.log('- $container:', $container);
-                        console.log("- _visibleVal:", _visibleVal);
-                        console.log(
-                            "- field.options.visibleon.values:",
-                            field.options.visibleon.values
-                        );
-                        console.log("- _visibleValInArray:", _visibleValInArray);
-                        console.log("");
-                    }
-                    if (_hasBracket) {
-                        var _isCurrentTargetChecked = $currentTarget.is(":checked");
-                        $currentTarget
-                            .closest(".checkbox-container")
-                            .find(":checkbox:checked")
-                            .each(function(el) {
-                                var _checkedVal = $(this).val();
-                                if (DEBUG_VS_ON) {
-                                    console.log("- _checkedVal:", _checkedVal);
-                                }
-                                if (!_isCurrentTargetChecked && _visibleVal === _checkedVal) {
-                                    _visibleVal = null;
-                                    if (DEBUG_VS_ON) {
-                                        console.log("- Set _visibleVal to :", _visibleVal);
-                                    }
-                                    return;
-                                }
-                                if (
-                                    _visibleVal !== _checkedVal &&
-                                    _.indexOf(field.options.visibleon.values, _checkedVal) > -1
-                                ) {
-                                    _visibleVal = _checkedVal;
-                                }
-                            });
-                        if (!_isCurrentTargetChecked &&
-                            _visibleVal === $currentTarget.val()
-                        ) {
-                            _visibleVal = null;
-                        }
-                        if (DEBUG_VS_ON) {
-                            console.log("- _visibleVal:", _visibleVal);
-                        }
-                        // var DEBUG_VS_ON = false;
-                    } else if (_visibleOnName.match(/\[\]$/gi)) {
-                        if (!$container.length) {
-                            $container = $currentTarget.closest(".checkbox-container");
-                        }
-                        _visibleOnName = _visibleOnName.substr(
-                            0,
-                            _visibleOnName.length - 2
-                        );
-                        $container = $container.closest(".checkbox-container");
+                        var DEBUG_VISIBLE_ON_ONLY = false;
                         if (DEBUG_VS_ON) {
                             console.log(
-                                "- this is checkbox?",
-                                $currentTarget.is(":checkbox")
+                                "*** Input [" + _visibleOnName + "] changed ***"
                             );
                         }
-                        if ($currentTarget.is(":checkbox")) {
-                            _visibleVal = "";
-                            $container.find(":checkbox:checked").each(function() {
-                                var _checkedVal = $(this).val();
-                                if (
-                                    _.indexOf(field.options.visibleon.values, _checkedVal) > -1
-                                ) {
-                                    _visibleVal = _checkedVal;
-                                }
-                            });
+                        var $currentTarget = $(e.currentTarget),
+                            $container = parentContainer ?
+                            $currentTarget.parents(parentContainer) :
+                            $currentTarget,
+                            $containerOptions,
+                            $nextContainer,
+                            _addressArray = [],
+                            _visibleVal = $currentTarget.val(),
+                            _checkBindingArray = ["", "[]"],
+                            debug = false;
+
+                        // console.log('$currentTarget:', $currentTarget);
+
+
+                        if (!$container.length &&
+                            parentContainer === field.options.visibleon.parentcontainer
+                        ) {
+                            $container = $currentTarget
+                                .parents(".form-render")
+                                .find(parentContainer);
                         }
-                    } else if ($currentTarget.is(":radio") && !parentContainer) {
-                        // console.log('[x] Radio Found in VisibleOn.');
-                        // console.log(_visibleVal);
                         // console.log($currentTarget);
-                        $container = $currentTarget.closest(".radio-container");
-                    }
-                    if (DEBUG_VS_ON) {
-                        console.log("- $container:", $container);
-                        console.log("- field.options.visibleon:", field.options.visibleon);
-                        console.log("- _visibleVal:", _visibleVal);
-                    }
-                    // Added: Steps to Validate Logic
-                    var isValidSteps = true;
-                    if (field && field.options && field.options.visibleon) {
-                        // debugger;
-                        if (field.options.visibleon.steps) {
-                            if (!_.isArray(field.options.visibleon.steps) ||
-                                !field.options.visibleon.steps.length
-                            ) {
-                                throw new Error(
-                                    field.name + " must not contain an empty VisibleOn.Steps"
-                                );
+                        // if (field.name === 'ReproducedDataPublication') {
+                        //   debug = true;
+                        // }
+                        // if (debug) {
+                        //   console.log($container);
+                        // }
+                        var _currentInputName = $currentTarget.attr("name");
+
+                        if (!_currentInputName) {
+                            if (DEBUG_VS_ON) {
+                                console.log('[x] No attribute by "Name", get by "ID"');
+                                console.log("- _visibleVal:", _visibleVal, typeof _visibleVal);
                             }
-                            // var DEBUG = true;
-                            var _steps = field.options.visibleon.steps;
-                            if (DEBUG) {
-                                console.log("[*] Debug: VisibleOn with Steps");
-                                // console.log(that);
-                                console.log(_visibleVal);
-                                console.log(field.name);
-                                console.log(_steps);
-                            }
-                            for (var i = 0; i < _steps.length; i++) {
-                                var _currentStep = _steps[i];
-                                var _stepValues = _currentStep.values;
-                                if (!_stepValues || !_.isArray(_stepValues)) {
-                                    var _tempError =
-                                        typeof JSON !== "undefined" && JSON && JSON.stringify ?
-                                        JSON.stringify(_currentStep) :
-                                        null;
-                                    throw new Error(
-                                        'Expects an array for "Values" in "' + _tempError + '"'
-                                    );
+                            _currentInputName = $currentTarget.attr("id");
+
+                            if (!_visibleVal) {
+                                if (DEBUG_VS_ON) {
+                                    console.log("[x] There is no value to get, try get as html");
                                 }
-                                var $stepTargetValue = $(
-                                    ':input[name="' + _currentStep.name + '"]'
-                                );
-                                var _stepVal = $.trim($stepTargetValue.val());
-                                var _inArray = _.indexOf(_stepValues, _stepVal);
-                                var _stepResult = _currentStep.notin ?
-                                    _inArray < 0 :
-                                    _inArray > -1;
-                                if (DEBUG) {
-                                    console.log("[*] Step: " + i);
-                                    console.log($stepTargetValue);
-                                    console.log(_currentStep);
-                                    console.log(_stepVal);
-                                    console.log(_stepValues);
-                                    console.log(_inArray);
-                                    console.log(_stepResult);
+
+                                _visibleVal = $currentTarget.text();
+                                if (!_visibleVal) {
+                                    _visibleVal = $currentTarget.html();
                                 }
-                                if (!_stepResult) {
-                                    isValidSteps = false;
-                                    break;
-                                }
-                            }
-                        } else if (
-                            field.options.visibleon.notin &&
-                            field.options.visibleon.values
-                        ) {
-                            var DEBUG_NOTIN = false;
-                            var $stepTargetValue = $(
-                                ':input[name="' + field.options.visibleon.name + '"]'
-                            );
-                            var _stepVal = $.trim($stepTargetValue.val());
-                            var _inArray = _.indexOf(
-                                field.options.visibleon.values,
-                                _stepVal
-                            );
-                            var _stepResult = field.options.visibleon.notin ?
-                                _inArray < 0 :
-                                _inArray > -1;
-                            if (!_stepResult) {
-                                isValidSteps = false;
-                            }
-                            if (DEBUG_NOTIN) {
-                                console.log("- $stepTargetValue:", $stepTargetValue);
-                                console.log("- _stepVal:", _stepVal);
-                                console.log("- _inArray:", _inArray);
-                                console.log("- _stepResult", _stepResult);
-                                console.log("- isValidSteps", isValidSteps);
                             }
                         }
-                    }
-                    if (DEBUG_VS_ON) {
-                        console.log(
-                            "- field.options.visibleon.values:",
-                            field.options.visibleon.values
-                        );
-                        console.log("- _visibleVal:", _visibleVal);
-                        console.log("- isValidSteps:", isValidSteps);
-                    }
-                    // isValidSteps: This is the variabled that determined if the VisibleOn show
-                    if (
-                        (!field.options.visibleon.notin &&
-                            _.indexOf(field.options.visibleon.values, _visibleVal) > -1 &&
-                            isValidSteps) ||
-                        (field.options.visibleon.notin && isValidSteps)
-                    ) {
+
                         if (DEBUG_VS_ON) {
-                            console.log(
-                                "[x] Match Value with VisibleOn, will render [" +
-                                field.name +
-                                "]."
-                            );
-                            console.log($currentTarget);
-                            console.log("- htmlTmpl");
-                            console.log(htmlTmpl);
-                            console.log(
-                                "- length:",
-                                $(".options-visible-on-" + field.name, that.el).length
-                            );
+                            console.log("- _currentInputName:", _currentInputName);
                         }
-                        // Insert this into markup
-                        if ($(".options-visible-on-" + field.name, that.el).length < 1) {
-                            if (DEBUG_VS_ON) {
-                                console.log("- $container:", $container);
-                            }
-                            $container.after(htmlTmpl);
-                            // console.log(htmlTmpl);
-                            // if (debug) {
-                            //   console.log($container);
-                            // }
-                            if (DEBUG_VS_ON) {
-                                console.log($container);
-                            }
-                            $containerOptions = $container
-                                .next(".options-visible-on-" + field.name)
-                                .fadeIn("slow", function() {
-                                    // console.log('[x] Render VisibleOn for "' + field.name + '"');
-                                    var $_element = $(this)
-                                        .addClass("visible-parent-" + _visibleOnName)
-                                        .attr("data-parent", _visibleOnName);
-                                    // If this is select might have select2
-                                    Utils.setupSelect2($_element);
-                                    // Remove the class that not belong to this visibleOn
-                                    var $parent = $(
-                                        ".options-visible-on-" + _visibleOnName,
-                                        that.el
-                                    );
-                                    // Caution: this can cause the previous markup to disappear.
-                                    // Fix in Release 0.1.0
-                                    $('[class*="visible-parent-' + _visibleOnName + '"]', that.el)
-                                        .not(
-                                            ".visible-parent-" +
-                                            _visibleOnName +
-                                            ",.options-visible-on-" +
-                                            _visibleOnName +
-                                            ",.visible-parent-" +
-                                            $parent.attr("data-parent")
-                                        )
-                                        .remove();
-                                    if (_typeLowerCase === "multifiles") {
-                                        $("#" + field.name + "_multifiles_wrapper", this).trigger(
-                                            "visibleOnRenderComplete"
-                                        );
-                                    } else {
-                                        $(':input[name="' + field.name + '"]', this).trigger(
-                                            "visibleOnRenderComplete"
+
+                        // _currentInputName = 'lol_lol';
+                        var _hasBracket = _currentInputName.match(/\w+\[\]$/gi);
+                        var _visibleValInArray =
+                            field.options.visibleon.values === _visibleVal;
+                        if (_.isArray(field.options.visibleon.values)) {
+                            _visibleValInArray = _.find(
+                                field.options.visibleon.values,
+                                function(value) {
+                                    if (DEBUG_VS_ON) {
+                                        console.log(
+                                            "- value:",
+                                            value,
+                                            ", _visibleVal:",
+                                            _visibleVal,
+                                            ", result = ",
+                                            value === _visibleVal
                                         );
                                     }
-                                    // Need to rebind the ModelBinder
-                                    if (!that.model.bindings[field.name] &&
-                                        _.indexOf(that.model.notBinding, field.name) < 0
-                                    ) {
-                                        var _bindingName = field.name;
-                                        _.each(_checkBindingArray, function(_suffix) {
-                                            if (_bindingName !== field.name) {
-                                                return;
-                                            }
-                                            if (
-                                                $(':input[name="' + _bindingName + _suffix + '"]')
-                                                .length
-                                            ) {
-                                                _bindingName = field.name + _suffix;
-                                            }
-                                        });
-                                        if (
-                                            $(':input[name="' + _bindingName + '"]').length &&
-                                            _typeLowerCase !== "checkbox"
-                                        ) {
-                                            // console.log('[x] Binding Values');
-                                            // console.log(that.model.bindings);
-                                            that.model.bindModelBinder(_bindingName, field.type);
-                                            // console.log('*** Before Binding for ' + _bindingName + ', Type: ' + field.type + ' Lowercase: ' + _typeLowerCase + ' ***');
-                                            // console.log('that.model:', that.model);
-                                            // console.log('that.el:', that.el);
-                                            // console.log(
-                                            //     "that.model.bindings:",
-                                            //     that.model.bindings
-                                            // );
-
-                                            that._modelBinder.bind(
-                                                that.model,
-                                                that.el,
-                                                that.model.bindings
-                                            );
-                                            // console.log(that.model.bindings);
-                                            // console.log('***');
+                                    return value === _visibleVal;
+                                }
+                            );
+                            // console.log('- _visibleValInArray:', _visibleValInArray);
+                        }
+                        if (_hasBracket && _hasBracket.length) {
+                            _hasBracket = true;
+                        }
+                        if (DEBUG_VS_ON) {
+                            console.log("");
+                            console.log("- _visibleOnName:", _visibleOnName);
+                            console.log("- $currentTarget:", $currentTarget);
+                            console.log("- _currentInputName:", _currentInputName);
+                            console.log("- _hasBracket:", _hasBracket);
+                            // console.log('- $container:', $container);
+                            console.log("- _visibleVal:", _visibleVal);
+                            console.log(
+                                "- field.options.visibleon.values:",
+                                field.options.visibleon.values
+                            );
+                            console.log("- _visibleValInArray:", _visibleValInArray);
+                            console.log("");
+                        }
+                        if (_hasBracket) {
+                            var _isCurrentTargetChecked = $currentTarget.is(":checked");
+                            $currentTarget
+                                .closest(".checkbox-container")
+                                .find(":checkbox:checked")
+                                .each(function(el) {
+                                    var _checkedVal = $(this).val();
+                                    if (DEBUG_VS_ON) {
+                                        console.log("- _checkedVal:", _checkedVal);
+                                    }
+                                    if (!_isCurrentTargetChecked && _visibleVal === _checkedVal) {
+                                        _visibleVal = null;
+                                        if (DEBUG_VS_ON) {
+                                            console.log("- Set _visibleVal to :", _visibleVal);
                                         }
+                                        return;
+                                    }
+                                    if (
+                                        _visibleVal !== _checkedVal &&
+                                        _.indexOf(field.options.visibleon.values, _checkedVal) > -1
+                                    ) {
+                                        _visibleVal = _checkedVal;
                                     }
                                 });
-                            // Some browser that still not support the placeholder
-                            $nextContainer = $container.next("div");
-                            if ($nextContainer.length === 0) {
-                                $nextContainer = $container.parent();
+                            if (!_isCurrentTargetChecked &&
+                                _visibleVal === $currentTarget.val()
+                            ) {
+                                _visibleVal = null;
                             }
-                            // DEBUG_VS_ON = "OnWhatDateDidYour" === field.name;
-                            $nextContainer
-                                .find(":input")
-                                .not('input[type="hidden"]')
-                                .placeholder();
                             if (DEBUG_VS_ON) {
-                                console.log("***** " + field.name + " *****");
-                                console.log("- _typeLowerCase:", _typeLowerCase);
-                                console.log("- that.model.validation:", that.model.validation);
+                                console.log("- _visibleVal:", _visibleVal);
                             }
-                            // VisibleOn Debug Location for mapping field value
-                            // Adding Validation Scheme, if has one
-                            if (_typeLowerCase === "fullname") {
-                                var _full_name_key = field.name + "_fullname_first_name";
-                                if (that.options.formSchema.validation[_full_name_key]) {
-                                    that.model.validation[_full_name_key] =
-                                        that.options.formSchema.validation[_full_name_key];
-                                }
-                                _addressArray.push(_full_name_key);
-                                _full_name_key = field.name + "_fullname_last_name";
-                                if (that.options.formSchema.validation[_full_name_key]) {
-                                    that.model.validation[_full_name_key] =
-                                        that.options.formSchema.validation[_full_name_key];
-                                }
-                                _addressArray.push(_full_name_key);
-                            } else if (_typeLowerCase === "address") {
-                                var _address_name = field.name + "_address_street";
-                                if (that.options.formSchema.validation[_address_name]) {
-                                    that.model.validation[_address_name] =
-                                        that.options.formSchema.validation[_address_name];
-                                }
-                                _addressArray.push(_address_name);
-                                _address_name = field.name + "_address_city";
-                                if (that.options.formSchema.validation[_address_name]) {
-                                    that.model.validation[_address_name] =
-                                        that.options.formSchema.validation[_address_name];
-                                }
-                                _addressArray.push(_address_name);
-                                _address_name = field.name + "_address_state";
-                                if (that.options.formSchema.validation[_address_name]) {
-                                    that.model.validation[_address_name] =
-                                        that.options.formSchema.validation[_address_name];
-                                }
-                                _addressArray.push(_address_name);
-                                _address_name = field.name + "_address_zip";
-                                if (that.options.formSchema.validation[_address_name]) {
-                                    that.model.validation[_address_name] =
-                                        that.options.formSchema.validation[_address_name];
-                                }
-                                _addressArray.push(_address_name);
-                                _address_name = field.name + "_address_country";
-                                if (that.options.formSchema.validation[_address_name]) {
-                                    that.model.validation[_address_name] =
-                                        that.options.formSchema.validation[_address_name];
-                                }
-                                _addressArray.push(_address_name);
-                                _address_name = field.name + "_address_street_number";
-                                if (that.options.formSchema.validation[_address_name]) {
-                                    that.model.validation[_address_name] =
-                                        that.options.formSchema.validation[_address_name];
-                                }
-                                _addressArray.push(_address_name);
-                                _address_name = field.name + "_address_unit_number";
-                                if (that.options.formSchema.validation[_address_name]) {
-                                    that.model.validation[_address_name] =
-                                        that.options.formSchema.validation[_address_name];
-                                }
-                                _addressArray.push(_address_name);
-                                if (field.options.hidecountry) {
-                                    that.model.set(_address_name, "US");
-                                }
-                            } else if (
-                                that.options.formSchema.validation[field.name] &&
-                                _typeLowerCase !== "html"
-                            ) {
-                                that.model.validation[field.name] =
-                                    that.options.formSchema.validation[field.name];
-                                _addressArray.push(field.name);
-                            } else if (
-                                that.options.formSchema.validation[field.name + "[]"]
-                            ) {
-                                that.model.validation[field.name + "[]"] =
-                                    that.options.formSchema.validation[field.name + "[]"];
-                                _addressArray.push(field.name + "[]");
+                            // var DEBUG_VS_ON = false;
+                        } else if (_visibleOnName.match(/\[\]$/gi)) {
+                            if (!$container.length) {
+                                $container = $currentTarget.closest(".checkbox-container");
                             }
+                            _visibleOnName = _visibleOnName.substr(
+                                0,
+                                _visibleOnName.length - 2
+                            );
+                            $container = $container.closest(".checkbox-container");
                             if (DEBUG_VS_ON) {
                                 console.log(
-                                    "that.options.mode:",
-                                    that.options.mode
+                                    "- this is checkbox?",
+                                    $currentTarget.is(":checkbox")
                                 );
                             }
-                            if (that.options.mode === "update" && _addressArray.length > 0) {
-                                _.each(_addressArray, function(element) {
-                                    if (that.options.formData.fields[element]) {
-                                        // Need to set default value to the model
-                                        that.model.set(
-                                            element,
-                                            that.options.formData.fields[element]
-                                        );
-                                        var $inputTmp = $(
-                                            ':input[name="' + element + '"]',
-                                            $containerOptions
-                                        );
-                                        // console.log('*** Checked ***');
-                                        // console.log($inputTmp);
-                                        switch (_typeLowerCase) {
-                                            case "radio":
-                                            case "check":
-                                            case "checkbox":
-                                                $inputTmp
-                                                    .filter(
-                                                        '[value="' +
-                                                        that.options.formData.fields[element] +
-                                                        '"]'
-                                                    )
-                                                    .prop("checked", true);
-                                                break;
-                                            default:
-                                                if (!($inputTmp.is(":radio") || $inputTmp.is(":checkbox"))) {
-                                                    $inputTmp.val(that.options.formData.fields[element]);
-                                                }
-                                        }
-                                        // console.log($inputTmp);
+                            if ($currentTarget.is(":checkbox")) {
+                                _visibleVal = "";
+                                $container.find(":checkbox:checked").each(function() {
+                                    var _checkedVal = $(this).val();
+                                    if (
+                                        _.indexOf(field.options.visibleon.values, _checkedVal) > -1
+                                    ) {
+                                        _visibleVal = _checkedVal;
                                     }
                                 });
-                            } else if (that.options.mode === "update") {
+                            }
+                        } else if ($currentTarget.is(":radio") && !parentContainer) {
+                            // console.log('[x] Radio Found in VisibleOn.');
+                            // console.log(_visibleVal);
+                            // console.log($currentTarget);
+                            $container = $currentTarget.closest(".radio-container");
+                        }
+                        if (DEBUG_VS_ON) {
+                            console.log("- $container:", $container);
+                            console.log("- field.options.visibleon:", field.options.visibleon);
+                            console.log("- _visibleVal:", _visibleVal);
+                        }
+                        // Added: Steps to Validate Logic
+                        var isValidSteps = true;
+                        if (field && field.options && field.options.visibleon) {
+                            // debugger;
+                            if (field.options.visibleon.steps) {
+                                if (!_.isArray(field.options.visibleon.steps) ||
+                                    !field.options.visibleon.steps.length
+                                ) {
+                                    throw new Error(
+                                        field.name + " must not contain an empty VisibleOn.Steps"
+                                    );
+                                }
                                 // var DEBUG = true;
+                                var _steps = field.options.visibleon.steps;
                                 if (DEBUG) {
-                                    console.log("- Check for Field. " + field.name);
+                                    console.log("[*] Debug: VisibleOn with Steps");
+                                    // console.log(that);
+                                    console.log(_visibleVal);
                                     console.log(field.name);
-                                    console.log(that.options.formData.fields);
+                                    console.log(_steps);
                                 }
-                                if (DEBUG) {
-                                    console.log("Current Type: ", _typeLowerCase);
-                                }
-                                switch (_typeLowerCase) {
-                                    case "fullname":
-                                        _.each(
-                                            [
-                                                "_fullname_first_name",
-                                                "_fullname_middle_name",
-                                                "_fullname_last_name"
-                                            ],
-                                            function(append) {
-                                                var tKey = field.name + append;
-                                                var $inputTmp = $(
-                                                    ':input[name="' + tKey + '"]',
-                                                    $containerOptions
-                                                );
-                                                if (
-                                                    $inputTmp.length &&
-                                                    that.options.formData.fields[tKey]
-                                                ) {
-                                                    $inputTmp.val(that.options.formData.fields[tKey]);
-                                                }
-                                            }
+                                for (var i = 0; i < _steps.length; i++) {
+                                    var _currentStep = _steps[i];
+                                    var _stepValues = _currentStep.values;
+                                    if (!_stepValues || !_.isArray(_stepValues)) {
+                                        var _tempError =
+                                            typeof JSON !== "undefined" && JSON && JSON.stringify ?
+                                            JSON.stringify(_currentStep) :
+                                            null;
+                                        throw new Error(
+                                            'Expects an array for "Values" in "' + _tempError + '"'
                                         );
+                                    }
+                                    var $stepTargetValue = $(
+                                        ':input[name="' + _currentStep.name + '"]'
+                                    );
+                                    var _stepVal = $.trim($stepTargetValue.val());
+                                    var _inArray = _.indexOf(_stepValues, _stepVal);
+                                    var _stepResult = _currentStep.notin ?
+                                        _inArray < 0 :
+                                        _inArray > -1;
+                                    if (DEBUG) {
+                                        console.log("[*] Step: " + i);
+                                        console.log($stepTargetValue);
+                                        console.log(_currentStep);
+                                        console.log(_stepVal);
+                                        console.log(_stepValues);
+                                        console.log(_inArray);
+                                        console.log(_stepResult);
+                                    }
+                                    if (!_stepResult) {
+                                        isValidSteps = false;
                                         break;
-                                    default:
-                                        if (that.options.formData.fields[field.name]) {
+                                    }
+                                }
+                            } else if (
+                                field.options.visibleon.notin &&
+                                field.options.visibleon.values
+                            ) {
+                                var DEBUG_NOTIN = false;
+                                var $stepTargetValue = $(
+                                    ':input[name="' + field.options.visibleon.name + '"]'
+                                );
+                                var _stepVal = $.trim($stepTargetValue.val());
+                                var _inArray = _.indexOf(
+                                    field.options.visibleon.values,
+                                    _stepVal
+                                );
+                                var _stepResult = field.options.visibleon.notin ?
+                                    _inArray < 0 :
+                                    _inArray > -1;
+                                if (!_stepResult) {
+                                    isValidSteps = false;
+                                }
+                                if (DEBUG_NOTIN) {
+                                    console.log("- $stepTargetValue:", $stepTargetValue);
+                                    console.log("- _stepVal:", _stepVal);
+                                    console.log("- _inArray:", _inArray);
+                                    console.log("- _stepResult", _stepResult);
+                                    console.log("- isValidSteps", isValidSteps);
+                                }
+                            }
+                        }
+                        if (DEBUG_VS_ON) {
+                            console.log(
+                                "- field.options.visibleon.values:",
+                                field.options.visibleon.values
+                            );
+                            console.log("- _visibleVal:", _visibleVal);
+                            console.log("- isValidSteps:", isValidSteps);
+                        }
+                        // isValidSteps: This is the variabled that determined if the VisibleOn show
+                        if (
+                            (!field.options.visibleon.notin &&
+                                _.indexOf(field.options.visibleon.values, _visibleVal) > -1 &&
+                                isValidSteps) ||
+                            (field.options.visibleon.notin && isValidSteps)
+                        ) {
+                            if (DEBUG_VS_ON) {
+                                console.log(
+                                    "[x] Match Value with VisibleOn, will render [" +
+                                    field.name +
+                                    "]."
+                                );
+                                console.log($currentTarget);
+                                console.log("- htmlTmpl");
+                                console.log(htmlTmpl);
+                                console.log(
+                                    "- length:",
+                                    $(".options-visible-on-" + field.name, that.el).length
+                                );
+                            }
+                            // Insert this into markup
+                            if ($(".options-visible-on-" + field.name, that.el).length < 1) {
+                                if (DEBUG_VS_ON) {
+                                    console.log("- $container:", $container);
+                                }
+                                $container.after(htmlTmpl);
+                                // console.log(htmlTmpl);
+                                // if (debug) {
+                                //   console.log($container);
+                                // }
+                                if (DEBUG_VS_ON) {
+                                    console.log($container);
+                                }
+                                $containerOptions = $container
+                                    .next(".options-visible-on-" + field.name)
+                                    .fadeIn("slow", function() {
+                                        // console.log('[baseField] Render VisibleOn for "' + field.name + '" *****');
+                                        var $_element = $(this)
+                                            .addClass("visible-parent-" + _visibleOnName)
+                                            .attr("data-parent", _visibleOnName);
+                                        // If this is select might have select2
+                                        Utils.setupSelect2($_element);
+                                        // Remove the class that not belong to this visibleOn
+                                        var $parent = $(
+                                            ".options-visible-on-" + _visibleOnName,
+                                            that.el
+                                        );
+                                        // Caution: this can cause the previous markup to disappear.
+                                        // Fix in Release 0.1.0
+                                        $('[class*="visible-parent-' + _visibleOnName + '"]', that.el)
+                                            .not(
+                                                ".visible-parent-" +
+                                                _visibleOnName +
+                                                ",.options-visible-on-" +
+                                                _visibleOnName +
+                                                ",.visible-parent-" +
+                                                $parent.attr("data-parent")
+                                            )
+                                            .remove();
+                                        if (_typeLowerCase === "multifiles") {
+                                            $("#" + field.name + "_multifiles_wrapper", this).trigger(
+                                                "visibleOnRenderComplete"
+                                            );
+                                        } else {
+                                            $(':input[name="' + field.name + '"]', this).trigger(
+                                                "visibleOnRenderComplete"
+                                            );
+                                        }
+                                        // Need to rebind the ModelBinder
+                                        // console.log('[baseField] that.model.notBinding:', that.model.notBinding);
+
+                                        // console.log('[baseField] that.model.bindings[field.name]:', that.model.bindings[field.name]);
+
+                                        if (!that.model.bindings[field.name] &&
+                                            _.indexOf(that.model.notBinding, field.name) < 0
+                                        ) {
+                                            var _bindingName = field.name;
+                                            // console.log('try to rebind:', _bindingName);
+
+                                            _.each(_checkBindingArray, function(_suffix) {
+                                                if (_bindingName !== field.name) {
+                                                    return;
+                                                }
+                                                if (
+                                                    $(':input[name="' + _bindingName + _suffix + '"]')
+                                                    .length
+                                                ) {
+                                                    _bindingName = field.name + _suffix;
+                                                }
+                                            });
+
+                                            // console.log('found rebind name:', _bindingName, '_typeLowerCase:', _typeLowerCase);
+
+                                            var $targetFoundInputBinding = $(':input[name="' + _bindingName + '"]');
+
+                                            // console.log('$targetFoundInputBinding:', $targetFoundInputBinding);
+                                            // console.log('that:', that);
+
+
+                                            if (
+                                                $targetFoundInputBinding.length &&
+                                                _typeLowerCase !== "checkbox"
+                                            ) {
+                                                // console.log('[x] Binding Values');
+                                                // console.log(that.model.bindings);
+                                                that.model.bindModelBinder(_bindingName, field.type);
+                                                // console.log(that.model.bindings);
+                                                // console.log('*** Before Binding for ' + _bindingName + ', Type: ' + field.type + ' Lowercase: ' + _typeLowerCase + ' ***');
+                                                // console.log('that.model:', that.model);
+                                                // console.log('that.el:', that.el);
+                                                // console.log('that.cid:', that.cid);
+                                                // console.log('subformViewObj.el:', subformViewObj.el);
+                                                // console.log('subformViewObj.cid:', subformViewObj.cid);
+
+                                                // console.log(
+                                                //     "that.model.bindings:",
+                                                //     that.model.bindings
+                                                // );
+
+                                                // console.log('[baseField] that._modelBinder.bind <-------------', _bindingName, field.type);
+                                                // console.log('[baseField] that.model:', that.model);
+                                                // console.log('[baseField] that.model.validation:', JSON.stringify(_.keys(that.model.validation)));
+
+                                                that._modelBinder.bind(
+                                                    that.model,
+                                                    that.el,
+                                                    that.model.bindings
+                                                );
+                                                // console.log(that.model.bindings);
+                                                // console.log('***');
+                                            }
+                                        }
+                                    });
+                                // Some browser that still not support the placeholder
+                                $nextContainer = $container.next("div");
+                                if ($nextContainer.length === 0) {
+                                    $nextContainer = $container.parent();
+                                }
+                                // DEBUG_VS_ON = "OnWhatDateDidYour" === field.name;
+                                $nextContainer
+                                    .find(":input")
+                                    .not('input[type="hidden"]')
+                                    .placeholder();
+
+                                // var DEBUG_VS_ON = true;
+                                if (DEBUG_VS_ON) {
+                                    console.log("***** " + field.name + " *****");
+                                    console.log("- _typeLowerCase:", _typeLowerCase);
+                                    console.log("- that.model.validation:", that.model.validation);
+                                }
+                                // VisibleOn Debug Location for mapping field value
+                                // Adding Validation Scheme, if has one
+                                if (_typeLowerCase === "fullname") {
+                                    var _full_name_key = field.name + "_fullname_first_name";
+                                    if (that.options.formSchema.validation[_full_name_key]) {
+                                        that.model.validation[_full_name_key] =
+                                            that.options.formSchema.validation[_full_name_key];
+                                    }
+                                    _addressArray.push(_full_name_key);
+                                    _full_name_key = field.name + "_fullname_last_name";
+                                    if (that.options.formSchema.validation[_full_name_key]) {
+                                        that.model.validation[_full_name_key] =
+                                            that.options.formSchema.validation[_full_name_key];
+                                    }
+                                    _addressArray.push(_full_name_key);
+                                } else if (_typeLowerCase === "address") {
+                                    var _address_name = field.name + "_address_street";
+                                    if (that.options.formSchema.validation[_address_name]) {
+                                        that.model.validation[_address_name] =
+                                            that.options.formSchema.validation[_address_name];
+                                    }
+                                    _addressArray.push(_address_name);
+                                    _address_name = field.name + "_address_city";
+                                    if (that.options.formSchema.validation[_address_name]) {
+                                        that.model.validation[_address_name] =
+                                            that.options.formSchema.validation[_address_name];
+                                    }
+                                    _addressArray.push(_address_name);
+                                    _address_name = field.name + "_address_state";
+                                    if (that.options.formSchema.validation[_address_name]) {
+                                        that.model.validation[_address_name] =
+                                            that.options.formSchema.validation[_address_name];
+                                    }
+                                    _addressArray.push(_address_name);
+                                    _address_name = field.name + "_address_zip";
+                                    if (that.options.formSchema.validation[_address_name]) {
+                                        that.model.validation[_address_name] =
+                                            that.options.formSchema.validation[_address_name];
+                                    }
+                                    _addressArray.push(_address_name);
+                                    _address_name = field.name + "_address_country";
+                                    if (that.options.formSchema.validation[_address_name]) {
+                                        that.model.validation[_address_name] =
+                                            that.options.formSchema.validation[_address_name];
+                                    }
+                                    _addressArray.push(_address_name);
+                                    _address_name = field.name + "_address_street_number";
+                                    if (that.options.formSchema.validation[_address_name]) {
+                                        that.model.validation[_address_name] =
+                                            that.options.formSchema.validation[_address_name];
+                                    }
+                                    _addressArray.push(_address_name);
+                                    _address_name = field.name + "_address_unit_number";
+                                    if (that.options.formSchema.validation[_address_name]) {
+                                        that.model.validation[_address_name] =
+                                            that.options.formSchema.validation[_address_name];
+                                    }
+                                    _addressArray.push(_address_name);
+                                    if (field.options.hidecountry) {
+                                        that.model.set(_address_name, "US");
+                                    }
+                                } else if (
+                                    that.options.formSchema.validation[field.name] &&
+                                    _typeLowerCase !== "html"
+                                ) {
+                                    that.model.validation[field.name] =
+                                        that.options.formSchema.validation[field.name];
+                                    _addressArray.push(field.name);
+                                } else if (
+                                    that.options.formSchema.validation[field.name + "[]"]
+                                ) {
+                                    that.model.validation[field.name + "[]"] =
+                                        that.options.formSchema.validation[field.name + "[]"];
+                                    _addressArray.push(field.name + "[]");
+                                }
+                                if (DEBUG_VS_ON) {
+                                    console.log('that.model.validation:', that.model.validation);
+
+                                    console.log(
+                                        "that.options.mode:",
+                                        that.options.mode
+                                    );
+                                }
+                                if (that.options.mode === "update" && _addressArray.length > 0) {
+                                    _.each(_addressArray, function(element) {
+                                        if (that.options.formData.fields[element]) {
+                                            // Need to set default value to the model
+                                            that.model.set(
+                                                element,
+                                                that.options.formData.fields[element]
+                                            );
                                             var $inputTmp = $(
-                                                ':input[name="' + field.name + '"]',
+                                                ':input[name="' + element + '"]',
                                                 $containerOptions
                                             );
-                                            // console.log('*** Checked [' + field.name + '] ***');
-                                            // console.log(that.options.formData.fields[field.name]);
-                                            if ($inputTmp.is(":radio") || $inputTmp.is(":checkbox")) {
-                                                // console.log($inputTmp);
-                                                // console.log(that.model.get(field.name));
-                                                // if (!_.isObject(that.options.formData.fields[field.name])) {
-                                                //   $inputTmp.filter('[value="' + that.options.formData.fields[field.name] + '"]').prop('checked', true);
-                                                // }
-                                            } else {
-                                                // console.log('field.name:', field.name);
-
-                                                $inputTmp.val(that.options.formData.fields[field.name]);
-                                                that.model.set(
-                                                    field.name,
-                                                    that.options.formData.fields[field.name]
-                                                );
+                                            // console.log('*** Checked ***');
+                                            // console.log($inputTmp);
+                                            switch (_typeLowerCase) {
+                                                case "radio":
+                                                case "check":
+                                                case "checkbox":
+                                                    $inputTmp
+                                                        .filter(
+                                                            '[value="' +
+                                                            that.options.formData.fields[element] +
+                                                            '"]'
+                                                        )
+                                                        .prop("checked", true);
+                                                    break;
+                                                default:
+                                                    if (!($inputTmp.is(":radio") || $inputTmp.is(":checkbox"))) {
+                                                        $inputTmp.val(that.options.formData.fields[element]);
+                                                    }
                                             }
                                             // console.log($inputTmp);
                                         }
+                                    });
+                                } else if (that.options.mode === "update") {
+                                    // var DEBUG = true;
+                                    if (DEBUG) {
+                                        console.log("- Check for Field. " + field.name);
+                                        console.log(field.name);
+                                        console.log(that.options.formData.fields);
+                                    }
+                                    if (DEBUG) {
+                                        console.log("Current Type: ", _typeLowerCase);
+                                    }
+                                    switch (_typeLowerCase) {
+                                        case "fullname":
+                                            _.each(
+                                                [
+                                                    "_fullname_first_name",
+                                                    "_fullname_middle_name",
+                                                    "_fullname_last_name"
+                                                ],
+                                                function(append) {
+                                                    var tKey = field.name + append;
+                                                    var $inputTmp = $(
+                                                        ':input[name="' + tKey + '"]',
+                                                        $containerOptions
+                                                    );
+                                                    if (
+                                                        $inputTmp.length &&
+                                                        that.options.formData.fields[tKey]
+                                                    ) {
+                                                        $inputTmp.val(that.options.formData.fields[tKey]);
+                                                    }
+                                                }
+                                            );
+                                            break;
+                                        default:
+                                            if (that.options.formData.fields[field.name]) {
+                                                var $inputTmp = $(
+                                                    ':input[name="' + field.name + '"]',
+                                                    $containerOptions
+                                                );
+                                                // console.log('*** Checked [' + field.name + '] ***');
+                                                // console.log(that.options.formData.fields[field.name]);
+                                                if ($inputTmp.is(":radio") || $inputTmp.is(":checkbox")) {
+                                                    // console.log($inputTmp);
+                                                    // console.log(that.model.get(field.name));
+                                                    // if (!_.isObject(that.options.formData.fields[field.name])) {
+                                                    //   $inputTmp.filter('[value="' + that.options.formData.fields[field.name] + '"]').prop('checked', true);
+                                                    // }
+                                                } else {
+                                                    // console.log('field.name:', field.name);
+
+                                                    $inputTmp.val(that.options.formData.fields[field.name]);
+                                                    that.model.set(
+                                                        field.name,
+                                                        that.options.formData.fields[field.name]
+                                                    );
+                                                }
+                                                // console.log($inputTmp);
+                                            }
+                                    }
                                 }
-                            }
-                            // Check to see if this has UserId Field Type
-                            if (_typeLowerCase === "userid") {
-                                Utils.setupUserIdAjaxCall($("form.form-render"));
-                                if (!that.model.validation[field.name].pattern &&
-                                    !(
-                                        field.options.render &&
-                                        field.options.render.toLowerCase() === "select"
-                                    )
-                                ) {
-                                    that.model.validation[field.name].pattern = "email";
+                                // Check to see if this has UserId Field Type
+                                if (_typeLowerCase === "userid") {
+                                    Utils.setupUserIdAjaxCall($("form.form-render"));
+                                    if (!that.model.validation[field.name].pattern &&
+                                        !(
+                                            field.options.render &&
+                                            field.options.render.toLowerCase() === "select"
+                                        )
+                                    ) {
+                                        that.model.validation[field.name].pattern = "email";
+                                    }
                                 }
-                            }
-                            Utils.setupUrlAjaxCall(
-                                $("form.form-render"),
-                                $("#" + field.name)
-                            );
-                            // If there are DatePicker
-                            // var DEBUG = true;
-                            if (that._hasDate) {
-                                if (DEBUG || DEBUG_VS_ON) {
-                                    console.log(
-                                        "[*] baseField.setupVisibleOn - _hasDate"
-                                    );
-                                    console.log(that.el);
-                                    console.log(that.$el);
-                                }
-                                Utils.setupDateInput(
-                                    that.el,
-                                    that,
-                                    DEBUG_VS_ON
+                                Utils.setupUrlAjaxCall(
+                                    $("form.form-render"),
+                                    $("#" + field.name)
                                 );
-                                // if ("OnWhatDateDidYour" === field.name) {
-                                //     debugger;
-                                // }
-                            }
-                            if (that._hasTime) {
-                                if (DEBUG || DEBUG_VS_ON) {
-                                    console.log(
-                                        "[*] baseField.setupVisibleOn - _hasTime"
+                                // If there are DatePicker
+                                // var DEBUG = true;
+                                if (that._hasDate) {
+                                    if (DEBUG || DEBUG_VS_ON) {
+                                        console.log(
+                                            "[*] baseField.setupVisibleOn - _hasDate"
+                                        );
+                                        console.log(that.el);
+                                        console.log(that.$el);
+                                    }
+                                    Utils.setupDateInput(
+                                        that.el,
+                                        that,
+                                        DEBUG_VS_ON
                                     );
-                                    console.log(that.el);
-                                    console.log(that.$el);
+                                    // if ("OnWhatDateDidYour" === field.name) {
+                                    //     debugger;
+                                    // }
                                 }
-                                Utils.setupTimeInput(that.el, that);
+                                if (that._hasTime) {
+                                    if (DEBUG || DEBUG_VS_ON) {
+                                        console.log(
+                                            "[*] baseField.setupVisibleOn - _hasTime"
+                                        );
+                                        console.log(that.el);
+                                        console.log(that.$el);
+                                    }
+                                    Utils.setupTimeInput(that.el, that);
+                                }
+                                // Adding Birth Date Binder
+                                if (
+                                    that._hasBDate &&
+                                    field &&
+                                    field.type &&
+                                    field.options &&
+                                    field.options.render
+                                ) {
+                                    if (field.type.toLowerCase() === "date") {
+                                        var _dateRenderVisibleOn = field.options.render;
+                                        try {
+                                            _dateRenderVisibleOn = _dateRenderVisibleOn.toLowerCase();
+                                            var currentBDateClass = ".options-visible-on-" + field.name;
+                                            if (typeof that.el === "string") {
+                                                currentBDateClass = that.el + " " + currentBDateClass;
+                                            }
+                                            switch (_dateRenderVisibleOn) {
+                                                case "select":
+                                                    Utils.setupBDateInput(currentBDateClass, that.model);
+                                                    break;
+                                            }
+                                        } catch (err) {
+                                            if (console && console.error) {
+                                                console.error(err);
+                                            }
+                                        }
+                                    }
+                                }
+                                // If this is Radio, will need to do magic work by set the value that match with Model
+                                // var modelVal = that.model.get(field.name);
+                                // if (_typeLowerCase === 'radio' && that.options.mode === 'update' && modelVal) {
+                                //   console.log('*** Check Model and Input Value: ' + field.name + ' ***');
+                                //   console.log(modelVal);
+                                //   var currentRadios = $(':input[name="' + field.name + '"]', $containerOptions);
+                                //   console.log(currentRadios);
+                                // }
+
+                                // var DEBUG_VISIBLE_ON_ONLY = true;
+                                // Check for Validation
+                                if (DEBUG_VISIBLE_ON_ONLY) {
+                                    console.log("[baseField] Check for Validation [insert element]");
+                                    // console.log(that);
+                                    // console.log('[baseField]', JSON.stringify(that.model.validation));
+                                    console.log('[baseField]', field.name, JSON.stringify(_.keys(that.model.validation)));
+                                    // console.log('[baseField] that._isListFieldType:', that._isListFieldType);
+                                    // console.log('[baseField] that._hasVisibleOn:', that._hasVisibleOn);
+                                }
+
+                                if (that._isListFieldType && that._hasVisibleOn) {
+                                    if (false && DEBUG_VISIBLE_ON_ONLY) {
+                                        console.log('[baseField] Called Backbone.Validation.bind: <------------------------');
+
+                                    }
+                                    // that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                                    // Backbone.Validation.bind(that, {
+                                    //     forceUpdate: true
+                                    // });
+                                }
                             }
-                            // Adding Birth Date Binder
+                        } else {
+                            // console.log('[baseField] (Start) that.model.validation:', field.name, JSON.stringify(_.keys(that.model.validation)));
+
+                            // Trigger Event to let other objects know that this fields will go out of markup
+                            // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '" ' + _typeLowerCase);
+                            var $removeVisibleOnElement = $("#" + field.name, that.el);
+                            if ($removeVisibleOnElement && $removeVisibleOnElement.length) {
+                                if ($removeVisibleOnElement.val()) {
+                                    $removeVisibleOnElement.val("").trigger("change");
+                                }
+                            }
+                            // console.log($removeVisibleOnElement);
+                            // console.log($removeVisibleOnElement.val());
+                            // console.log(that.model.get(field.name));
+                            $removeVisibleOnElement.trigger("removeVisibleOn");
+                            // Remove this out of the markup
+                            $(".options-visible-on-" + field.name, that.el).remove();
+                            // Need to remove the "visible-parent-{name}"
+
+                            // console.log("_typeLowerCase:", _typeLowerCase);
+
+                            $(".visible-parent-" + field.name, that.el).remove();
                             if (
-                                that._hasBDate &&
-                                field &&
-                                field.type &&
+                                _typeLowerCase === "date" &&
                                 field.options &&
                                 field.options.render
                             ) {
-                                if (field.type.toLowerCase() === "date") {
-                                    var _dateRenderVisibleOn = field.options.render;
-                                    try {
-                                        _dateRenderVisibleOn = _dateRenderVisibleOn.toLowerCase();
-                                        var currentBDateClass = ".options-visible-on-" + field.name;
-                                        if (typeof that.el === "string") {
-                                            currentBDateClass = that.el + " " + currentBDateClass;
-                                        }
-                                        switch (_dateRenderVisibleOn) {
-                                            case "select":
-                                                Utils.setupBDateInput(currentBDateClass, that.model);
-                                                break;
-                                        }
-                                    } catch (err) {
-                                        if (console && console.error) {
-                                            console.error(err);
-                                        }
-                                    }
-                                }
-                            }
-                            // If this is Radio, will need to do magic work by set the value that match with Model
-                            // var modelVal = that.model.get(field.name);
-                            // if (_typeLowerCase === 'radio' && that.options.mode === 'update' && modelVal) {
-                            //   console.log('*** Check Model and Input Value: ' + field.name + ' ***');
-                            //   console.log(modelVal);
-                            //   var currentRadios = $(':input[name="' + field.name + '"]', $containerOptions);
-                            //   console.log(currentRadios);
-                            // }
-                        }
-                    } else {
-                        // Trigger Event to let other objects know that this fields will go out of markup
-                        // console.log('[x] Remove VisibleOn from Markup for "' + field.name + '" ' + _typeLowerCase);
-                        var $removeVisibleOnElement = $("#" + field.name, that.el);
-                        if ($removeVisibleOnElement && $removeVisibleOnElement.length) {
-                            if ($removeVisibleOnElement.val()) {
-                                $removeVisibleOnElement.val("").trigger("change");
-                            }
-                        }
-                        // console.log($removeVisibleOnElement);
-                        // console.log($removeVisibleOnElement.val());
-                        // console.log(that.model.get(field.name));
-                        $removeVisibleOnElement.trigger("removeVisibleOn");
-                        // Remove this out of the markup
-                        $(".options-visible-on-" + field.name, that.el).remove();
-                        // Need to remove the "visible-parent-{name}"
-
-                        // console.log("_typeLowerCase:", _typeLowerCase);
-
-                        $(".visible-parent-" + field.name, that.el).remove();
-                        if (
-                            _typeLowerCase === "date" &&
-                            field.options &&
-                            field.options.render
-                        ) {
-                            var _dateRenderNotVisibleOn = field.options.render;
-                            try {
-                                _dateRenderNotVisibleOn = _dateRenderNotVisibleOn.toLowerCase();
-                                switch (_dateRenderNotVisibleOn) {
-                                    case "select":
-                                        var _bdate_select_remove_name = field.name + "_birth";
-                                        if (typeof _ === "undefined" || !_) {
-                                            if (console && console.error) {
-                                                console.error('Could not be able to locate "_".');
-                                            }
-                                        } else {
-                                            // console.log(_bdate_select_remove_name);
-                                            // console.log(that.model.validation);
-                                            _.map(["day", "month", "year"], function(_val) {
-                                                var _currentKey =
-                                                    _bdate_select_remove_name + "[" + _val + "]";
-                                                if (that.model.validation[_currentKey]) {
-                                                    delete that.model.validation[_currentKey];
-                                                }
-                                            });
-                                            if (that.model.validation[field.name]) {
-                                                delete that.model.validation[field.name];
-                                            }
-                                        }
-                                        break;
-                                    default:
-                                        throw new Error(
-                                            'Not implement delete for "' +
-                                            _dateRenderNotVisibleOn +
-                                            '"'
-                                        );
-                                }
-                            } catch (err) {
-                                if (console && console.error) {
-                                    console.error(err);
-                                }
-                            }
-                        } else if (_typeLowerCase === "fullname") {
-                            _.map(["_fullname_first_name", "_fullname_last_name"], function(
-                                _val
-                            ) {
-                                var _currentKey = field.name + _val;
-                                if (that.model.validation[_currentKey]) {
-                                    delete that.model.validation[_currentKey];
-                                }
-                            });
-                        } else if (_typeLowerCase === "address") {
-                            var _address_name = field.name + "_address_street";
-                            that.model.set(_address_name, "");
-                            if (that.options.formSchema.validation[_address_name]) {
-                                that.model.validation[_address_name] =
-                                    that.options.formSchema.validation[_address_name];
-                                delete that.model.validation[_address_name];
-                            }
-                            _address_name = field.name + "_address_city";
-                            that.model.set(_address_name, "");
-                            if (that.options.formSchema.validation[_address_name]) {
-                                that.model.validation[_address_name] =
-                                    that.options.formSchema.validation[_address_name];
-                                delete that.model.validation[_address_name];
-                            }
-                            _address_name = field.name + "_address_state";
-                            that.model.set(_address_name, "");
-                            if (that.options.formSchema.validation[_address_name]) {
-                                that.model.validation[_address_name] =
-                                    that.options.formSchema.validation[_address_name];
-                                delete that.model.validation[_address_name];
-                            }
-                            _address_name = field.name + "_address_zip";
-                            that.model.set(_address_name, "");
-                            if (that.options.formSchema.validation[_address_name]) {
-                                that.model.validation[_address_name] =
-                                    that.options.formSchema.validation[_address_name];
-                                delete that.model.validation[_address_name];
-                            }
-                            _address_name = field.name + "_address_country";
-                            that.model.set(_address_name, "");
-                            if (that.options.formSchema.validation[_address_name]) {
-                                that.model.validation[_address_name] =
-                                    that.options.formSchema.validation[_address_name];
-                                delete that.model.validation[_address_name];
-                            }
-                            _address_name = field.name + "_address_street_number";
-                            that.model.set(_address_name, "");
-                            if (that.options.formSchema.validation[_address_name]) {
-                                that.model.validation[_address_name] =
-                                    that.options.formSchema.validation[_address_name];
-                                delete that.model.validation[_address_name];
-                            }
-                            _address_name = field.name + "_address_unit_number";
-                            that.model.set(_address_name, "");
-                            if (that.options.formSchema.validation[_address_name]) {
-                                that.model.validation[_address_name] =
-                                    that.options.formSchema.validation[_address_name];
-                                delete that.model.validation[_address_name];
-                            }
-                        } else if (_typeLowerCase !== "html") {
-                            // console.log("_typeLowerCase:", _typeLowerCase);
-
-                            // console.log('[*] Model values for "' + field.name + '"');
-                            // console.log(that.model.get(field.name));
-                            that.model.set(field.name, "");
-                            // console.log(that.model.get(field.name));
-                            // console.log(that.model.toJSON());
-                            if (that.model.validation[field.name]) {
-                                // Remove Validation Scheme, if has one
-                                delete that.model.validation[field.name];
-                            } else if (that.model.validation[field.name + "[]"]) {
-                                delete that.model.validation[field.name + "[]"];
-                            }
-                            // Need to unbind the ModelBinder
-                            var _bindingName = field.name;
-                            // console.log('_checkBindingArray:', _checkBindingArray);
-
-                            _.each(_checkBindingArray, function(_suffix) {
-                                if (that.model.bindings[_bindingName + _suffix]) {
-                                    that.model.unbindModelBinder(
-                                        _bindingName + _suffix,
-                                        field.type
-                                    );
-                                    var _vsNotGood = true;
-                                    while (_vsNotGood) {
-                                        try {
-                                            that._modelBinder.bind(
-                                                that.model,
-                                                that.el,
-                                                that.model.bindings
-                                            );
-                                            _vsNotGood = false;
-                                        } catch (err) {
-                                            _vsNotGood = false;
-                                            // Need to parse the name
-                                            // Bad binding found. No elements returned for binding selector [name="SpecialAccommodationRequest"]
-                                            var _needToRemove = err.match(/name="(\w+)"/i);
-                                            if (!_needToRemove) {
+                                var _dateRenderNotVisibleOn = field.options.render;
+                                try {
+                                    _dateRenderNotVisibleOn = _dateRenderNotVisibleOn.toLowerCase();
+                                    switch (_dateRenderNotVisibleOn) {
+                                        case "select":
+                                            var _bdate_select_remove_name = field.name + "_birth";
+                                            if (typeof _ === "undefined" || !_) {
                                                 if (console && console.error) {
-                                                    console.error(err);
+                                                    console.error('Could not be able to locate "_".');
                                                 }
-                                            }
-                                            if (_needToRemove.length === 2) {
-                                                var _targetName = _needToRemove[1];
-                                                _.each(_checkBindingArray, function(_s) {
-                                                    if (that.model.bindings[_targetName + _s]) {
-                                                        that.model.unbindModelBinder(
-                                                            _targetName + _s,
-                                                            field.type
-                                                        );
-                                                        if (that.model.validation[_targetName + _s]) {
-                                                            delete that.model.validation[_targetName + _s];
-                                                        }
-                                                        _vsNotGood = true;
+                                            } else {
+                                                // console.log(_bdate_select_remove_name);
+                                                // console.log(that.model.validation);
+                                                _.map(["day", "month", "year"], function(_val) {
+                                                    var _currentKey =
+                                                        _bdate_select_remove_name + "[" + _val + "]";
+                                                    if (that.model.validation[_currentKey]) {
+                                                        delete that.model.validation[_currentKey];
                                                     }
                                                 });
+                                                if (that.model.validation[field.name]) {
+                                                    delete that.model.validation[field.name];
+                                                }
+                                            }
+                                            break;
+                                        default:
+                                            throw new Error(
+                                                'Not implement delete for "' +
+                                                _dateRenderNotVisibleOn +
+                                                '"'
+                                            );
+                                    }
+                                } catch (err) {
+                                    if (console && console.error) {
+                                        console.error(err);
+                                    }
+                                }
+                            } else if (_typeLowerCase === "fullname") {
+                                _.map(["_fullname_first_name", "_fullname_last_name"], function(
+                                    _val
+                                ) {
+                                    var _currentKey = field.name + _val;
+                                    if (that.model.validation[_currentKey]) {
+                                        delete that.model.validation[_currentKey];
+                                    }
+                                });
+                            } else if (_typeLowerCase === "address") {
+                                var _address_name = field.name + "_address_street";
+                                that.model.set(_address_name, "");
+                                if (that.options.formSchema.validation[_address_name]) {
+                                    that.model.validation[_address_name] =
+                                        that.options.formSchema.validation[_address_name];
+                                    delete that.model.validation[_address_name];
+                                }
+                                _address_name = field.name + "_address_city";
+                                that.model.set(_address_name, "");
+                                if (that.options.formSchema.validation[_address_name]) {
+                                    that.model.validation[_address_name] =
+                                        that.options.formSchema.validation[_address_name];
+                                    delete that.model.validation[_address_name];
+                                }
+                                _address_name = field.name + "_address_state";
+                                that.model.set(_address_name, "");
+                                if (that.options.formSchema.validation[_address_name]) {
+                                    that.model.validation[_address_name] =
+                                        that.options.formSchema.validation[_address_name];
+                                    delete that.model.validation[_address_name];
+                                }
+                                _address_name = field.name + "_address_zip";
+                                that.model.set(_address_name, "");
+                                if (that.options.formSchema.validation[_address_name]) {
+                                    that.model.validation[_address_name] =
+                                        that.options.formSchema.validation[_address_name];
+                                    delete that.model.validation[_address_name];
+                                }
+                                _address_name = field.name + "_address_country";
+                                that.model.set(_address_name, "");
+                                if (that.options.formSchema.validation[_address_name]) {
+                                    that.model.validation[_address_name] =
+                                        that.options.formSchema.validation[_address_name];
+                                    delete that.model.validation[_address_name];
+                                }
+                                _address_name = field.name + "_address_street_number";
+                                that.model.set(_address_name, "");
+                                if (that.options.formSchema.validation[_address_name]) {
+                                    that.model.validation[_address_name] =
+                                        that.options.formSchema.validation[_address_name];
+                                    delete that.model.validation[_address_name];
+                                }
+                                _address_name = field.name + "_address_unit_number";
+                                that.model.set(_address_name, "");
+                                if (that.options.formSchema.validation[_address_name]) {
+                                    that.model.validation[_address_name] =
+                                        that.options.formSchema.validation[_address_name];
+                                    delete that.model.validation[_address_name];
+                                }
+                            } else if (_typeLowerCase !== "html") {
+                                // console.log("_typeLowerCase:", _typeLowerCase);
+
+                                // console.log('[*] Model values for "' + field.name + '"');
+                                // console.log(that.model.get(field.name));
+                                that.model.set(field.name, "");
+                                // console.log(that.model.get(field.name));
+                                // console.log(that.model.toJSON());
+                                // console.log('that.model.validation:', JSON.stringify(_.keys(that.model.validation)));
+                                if (that.model.validation[field.name]) {
+                                    // console.log('[baseField] remove validation:', field.name);
+
+                                    // Remove Validation Scheme, if has one
+                                    delete that.model.validation[field.name];
+                                } else if (that.model.validation[field.name + "[]"]) {
+                                    // console.log('[baseField] remove validation:', field.name);
+                                    delete that.model.validation[field.name + "[]"];
+                                }
+                                // Need to unbind the ModelBinder
+                                var _bindingName = field.name;
+                                // console.log('[baseField] _checkBindingArray:', _bindingName, _checkBindingArray);
+
+                                _.each(_checkBindingArray, function(_suffix) {
+                                    // if (_.indexOf(_.keys(that.model.validation), 'ContactTelephone') < 0) {
+                                    //     debugger;
+                                    // }
+                                    // console.log('[baseField] _.keys(that.model.validation):', _.keys(that.model.validation));
+
+                                    if (that.model.bindings[_bindingName + _suffix]) {
+                                        // console.log('[baseField] unbindModelBinder');
+
+                                        that.model.unbindModelBinder(
+                                            _bindingName + _suffix,
+                                            field.type
+                                        );
+                                        var _vsNotGood = true;
+                                        while (_vsNotGood) {
+                                            try {
+                                                that._modelBinder.bind(
+                                                    that.model,
+                                                    that.el,
+                                                    that.model.bindings
+                                                );
+                                                _vsNotGood = false;
+                                            } catch (err) {
+                                                _vsNotGood = false;
+                                                // Need to parse the name
+                                                // Bad binding found. No elements returned for binding selector [name="SpecialAccommodationRequest"]
+                                                var _needToRemove = err.match(/name="(\w+)"/i);
+                                                // console.log('[baseField] _needToRemove:', _needToRemove);
+
+                                                if (!_needToRemove) {
+                                                    if (console && console.error) {
+                                                        console.error(err);
+                                                    }
+                                                }
+                                                if (_needToRemove.length === 2) {
+                                                    var _targetName = _needToRemove[1];
+                                                    // console.log('[baseFields] that.model.validation:', JSON.stringify(_.keys(that.model.validation)));
+
+                                                    _.each(_checkBindingArray, function(_s) {
+                                                        if (that.model.bindings[_targetName + _s]) {
+                                                            that.model.unbindModelBinder(
+                                                                _targetName + _s,
+                                                                field.type
+                                                            );
+                                                            if (that.model.validation[_targetName + _s]) {
+                                                                // console.log('[baseField] remove validation:', _targetName + _s);
+
+                                                                delete that.model.validation[_targetName + _s];
+                                                            }
+                                                            _vsNotGood = true;
+                                                        }
+                                                    });
+                                                    // console.log('[baseFields] that.model.validation:', JSON.stringify(_.keys(that.model.validation)));
+                                                }
+                                            }
+                                        }
+                                        // For Checkbox, this caused the value to be set to empty string.
+                                        if (!$currentTarget.is(":checkbox")) {
+                                            var _currentTargetName = $currentTarget.attr("name");
+                                            // Check the Model Value
+                                            // console.log('[x] Set Value for "' + _currentTargetName + '"" with "' + _visibleVal + '"');
+                                            // console.log($currentTarget);
+                                            if (!$currentTarget.is(":radio")) {
+                                                $currentTarget.val(_visibleVal);
+                                            }
+                                            if (that.model.get(_currentTargetName) !== _visibleVal) {
+                                                // console.log('[*] Model value for "' + _currentTargetName + '" before, ' + that.model.get(_currentTargetName));
+                                                that.model.set(_currentTargetName, _visibleVal);
+                                                // console.log('[*] Model value for "' + _currentTargetName + '" after, ' + that.model.get(_currentTargetName));
                                             }
                                         }
                                     }
-                                    // For Checkbox, this caused the value to be set to empty string.
-                                    if (!$currentTarget.is(":checkbox")) {
-                                        var _currentTargetName = $currentTarget.attr("name");
-                                        // Check the Model Value
-                                        // console.log('[x] Set Value for "' + _currentTargetName + '"" with "' + _visibleVal + '"');
-                                        // console.log($currentTarget);
-                                        if (!$currentTarget.is(":radio")) {
-                                            $currentTarget.val(_visibleVal);
-                                        }
-                                        if (that.model.get(_currentTargetName) !== _visibleVal) {
-                                            // console.log('[*] Model value for "' + _currentTargetName + '" before, ' + that.model.get(_currentTargetName));
-                                            that.model.set(_currentTargetName, _visibleVal);
-                                            // console.log('[*] Model value for "' + _currentTargetName + '" after, ' + that.model.get(_currentTargetName));
-                                        }
-                                    }
+                                });
+                                if ($currentTarget.is(":radio")) {
+                                    $currentTarget.prop("checked", true);
                                 }
-                            });
-                            if ($currentTarget.is(":radio")) {
-                                $currentTarget.prop("checked", true);
+                            }
+                            // var DEBUG_VISIBLE_ON_ONLY = true;
+                            // Check for Validation
+                            if (DEBUG_VISIBLE_ON_ONLY) {
+                                console.log("[baseField] on change ended", field.name, hashLut);
+                                // console.log(that);
+                                // console.log('[baseField]', JSON.stringify(that.model.validation));
+                                console.log('[baseField]', field.name, JSON.stringify(_.keys(that.model.validation)));
+                                // console.log('[baseField] that._isListFieldType:', that._isListFieldType);
+                                // console.log('[baseField] that._hasVisibleOn:', that._hasVisibleOn);
+                            }
+                            if (that._isListFieldType && that._hasVisibleOn) {
+                                if (false && DEBUG_VISIBLE_ON_ONLY) {
+                                    console.log('[baseField] Called Backbone.Validation.bind: <------------------------');
+                                }
+                                // that._modelBinder.bind(that.model, that.el, that.model.bindings);
+                                // Backbone.Validation.bind(that, {
+                                //     forceUpdate: true
+                                // });
                             }
                         }
-                        // Check for Validation
-                        if (DEBUG_VISIBLE_ON_ONLY) {
-                            console.log("[*] Check for Validation");
-                            console.log(that.model.validation);
-                        }
-                    }
-                });
+                    });
+                }
 
                 // First Time to Fired for Update Mode
                 if (DEBUG) {

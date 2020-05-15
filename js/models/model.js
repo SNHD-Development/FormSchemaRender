@@ -460,6 +460,9 @@ define([
                     }
                 }
             });
+            // console.log('[model] _validation:', JSON.stringify(_.keys(_validation)));
+            // console.log('[model] model.bindings:', JSON.stringify(model.bindings));
+
             model.validation = _validation;
             return _attrs;
         },
@@ -483,6 +486,11 @@ define([
             this.notBinding = []; // will be used to check what field will not need to render.
             this.escapeHtmlInputs = []; // Inputs that need to escape the HTML.
             this._listFieldType = {}; // Save the reference for _listFieldType
+            this.is_list_field = (this.attributes && this.attributes.is_list_field) ? this.attributes.is_list_field: false;
+            // console.log('***** Model *****');
+            // console.log('[model] this.is_list_field:', this.is_list_field);
+
+            // console.log(JSON.stringify(this.attributes));
 
             // Important Function to Parse FormData
             var _attrs = parseFields(
@@ -498,7 +506,7 @@ define([
             this.on("validated:invalid", function(model, errors) {
                 var DEBUG = false;
                 if ("console" in window && console && console.log) {
-                    console.log("Invalid Fields", errors);
+                    console.log("Invalid Fields", JSON.stringify(errors));
                 }
                 if (DEBUG) {
                     console.log("Check Model Values", model.toJSON());
@@ -561,6 +569,8 @@ define([
 
             // Save the Reference of Collection for List
             _.each(this.subFormLists, function(keyName) {
+                // console.log('[model] keyName:', keyName);
+
                 if (self && self.has && self.has(keyName)) {
                     var _collection = self.get(keyName);
                     if (_collection && _collection.add) {
