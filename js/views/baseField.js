@@ -1125,6 +1125,14 @@ define([
                             this._DatePickerLogicArr[field.name] =
                                 field.options.datepickeroptions;
                             field.attributes["data-has-datepicker-options"] = true;
+
+                            // If we have Comparison
+                            if (field.options.datepickeroptions.comparison) {
+                                field.attributes["class"] = Utils.setupClassAttr(
+                                    field.attributes["class"],
+                                    "date-picker-not-allow-typing"
+                                )
+                            }
                         }
 
                         if (field.options.render && this.options.mode !== "read") {

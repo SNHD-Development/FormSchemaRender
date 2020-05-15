@@ -285,6 +285,13 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
     if (typeof formActionUrl !== "undefined") {
       _opts.formActionUrl = formActionUrl;
     }
+    // Block Input
+    jQuery('#app').on('keydown', '.date-picker-not-allow-typing', function(e) {
+      // console.log('lololol');
+      e.preventDefault();
+      return false;
+    });
+
     // Send beforeRender Event
     $("div#app").trigger(_opts.formSchema.name + ".init", _opts);
     // Clean Up Global Object
