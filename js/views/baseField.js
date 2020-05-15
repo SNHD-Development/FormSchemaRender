@@ -2878,6 +2878,8 @@ define([
                             // setTimeout(function() {
                             //   Utils.setupDateInput($subFormView, subFormView, true);
                             // }, 2000);
+
+                            Utils.finalSetup(subFormView);
                         },
                         done: function() {
                             // console.log('Fired: ' + e.data.formId + ' show done');

@@ -1884,7 +1884,7 @@ define([
                     }
                 });
             }
-            if (view._multiFiles.length > 0) {
+            if (view._multiFiles && view._multiFiles.length > 0) {
                 _.each(view._multiFiles, function(value) {
                     require([
                         "views/file-upload/multifiles",
@@ -1917,7 +1917,7 @@ define([
                 });
             });
             // Setup Ajax Call for fields
-            if (view._ajaxDataCall.length > 0) {
+            if (view._ajaxDataCall && view._ajaxDataCall.length > 0) {
                 this.setupAjaxCall(view, $form);
             }
             // Setup UserId Field
@@ -1942,13 +1942,13 @@ define([
                 this.setupCheckBoxOtherTextBox($form);
             }
             // If there are radio buttons.
-            if (view._radioFieldName.length) {
+            if (view._radioFieldName && view._radioFieldName.length) {
                 this.setupRadioButtonsValue(view);
             }
             // Setup ButtonCondition
             // By Default, will require all data to be valid
             // Default Success Call Back must return JSON with key = "value"
-            if (view._buttonDecision.length > 0) {
+            if (view._buttonDecision && view._buttonDecision.length > 0) {
                 _.each(view._buttonDecision, function(element) {
                     var $btn_decision = $("a#" + element.name, view.el),
                         _html_tmp =

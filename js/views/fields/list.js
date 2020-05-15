@@ -438,6 +438,9 @@ define([
                             console.log(that.model.bindings);
                         }
 
+                        var _modelDataJson =
+                            that.model && that.model.toJSON ? that.model.toJSON() : null;
+
                         if (visibleOnArray && visibleOnArray.length) {
                             that._hasVisibleOn = true;
                             // console.log('[list] that._visibleOnEvents:', that._visibleOnEvents);
@@ -450,14 +453,33 @@ define([
                             });
                             // console.log('[list] after setupVisibleOn: that.model.bindings', that.model.bindings);
 
+                            if (_modelDataJson) {
+                                // console.log('that.el:', that.el);
+                                // console.log('that.$el:', that.$el);
+
+                                // console.log('_modelDataJson:', _modelDataJson);
+                                _.each(_modelDataJson, function(value, name) {
+                                    if (!value) {
+                                        return;
+                                    }
+                                    var $input = $(':input[name="' + name + '"]', that.$el);
+
+                                    if ($input.is(':radio')) {
+                                        $input = $(':input[name="' + name + '"]:checked', that.$el);
+                                    }
+
+                                    $input.trigger(
+                                        "change"
+                                    );
+                                });
+                            }
                         }
 
                         // console.log('- current model:', JSON.stringify(that.options.model));
                         that._modelBinder.bind(that.model, that.el, that.model.bindings);
                         // console.log('- current model:', JSON.stringify(that.options.model));
                         // Some Element
-                        var _modelDataJson =
-                            that.model && that.model.toJSON ? that.model.toJSON() : null;
+
                         if (!_.isEmpty(_modelDataJson)) {
                             _.each(_modelDataJson, function(_modelVal, _modelKey) {
                                 // var DEBUG = true;
