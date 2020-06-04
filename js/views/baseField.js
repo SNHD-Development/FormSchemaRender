@@ -2732,6 +2732,9 @@ define([
             // console.log('- this:', this);
             // var _listOptions = _options.options;
             // console.log('- _listOptions:', _listOptions);
+            // console.log('this.el:', this.el);
+            // console.log('event:', id + ".add");
+
             $(this.el)
                 .on("click", "#" + id + "_add_btn", _options, this.displaySubForm)
                 // User click cancel button
@@ -2769,6 +2772,12 @@ define([
                         that.options.formData,
                         field.name
                     );
+                    // console.log("[*] " + _options.formId + ".listViewCreated <-----------------------");
+                    // console.log('currentFieldFormData:', currentFieldFormData);
+                    // console.log('that.options.formData:', that.options.formData);
+                    // console.log('field.name:', field.name);
+                    // console.log('list:', list);
+
                     $(that.el).trigger(id + ".add", [list, currentFieldFormData]);
                     _listView.off();
                 });
@@ -2880,6 +2889,11 @@ define([
                 if (!hidden) {
                     $subFormView.show({
                         complete: function() {
+                            /**
+                             * This is the event when subform has been loaded
+                             */
+
+                            // var DEBUG = true;
                             // console.log('*** SubForm.show.complete ***', subFormView.cid);
 
                             // console.log('Fired: ' + e.data.formId + ' show complete');
@@ -2887,11 +2901,44 @@ define([
                             //   Utils.setupDateInput($subFormView, subFormView, true);
                             // }, 2000);
 
+                            if (DEBUG) {
+                                if (model && model.toJSON) {
+                                    console.log('[*] complete <----------');
+
+                                    console.log('model.toJSON:', model.toJSON());
+                                    console.log('subFormView:', subFormView);
+                                    console.log('subFormView.$el:', subFormView.$el);
+                                    console.log('$(subFormView.el):', $(subFormView.el));
+                                }
+                            }
+
                             Utils.finalSetup(subFormView);
+
+                            // Check for TimePicker
+                            // if (model && model.toJSON) {
+                            //     var $timepickers = $(subFormView.el).find('.timepicker');
+                            //     if (DEBUG) {
+                            //         console.log('$timepickers:', $timepickers);
+
+                            //     }
+                            //     debugger;
+                            // }
                         },
                         done: function() {
                             // console.log('Fired: ' + e.data.formId + ' show done');
                             // Utils.setupDateInput($subFormView, subFormView);
+
+                            // var DEBUG = true;
+
+                            if (DEBUG) {
+                                if (model && model.toJSON) {
+                                    console.log('[*] done <----------');
+                                    console.log('model.toJSON:', model.toJSON());
+                                    console.log('subFormView:', subFormView);
+                                    console.log('subFormView.$el:', subFormView.$el);
+                                    console.log('$(subFormView.el):', $(subFormView.el));
+                                }
+                            }
                         }
                     });
                     $subFormView.addClass("active");
@@ -3054,7 +3101,7 @@ define([
          * This will load table.js to render table view
          **/
         addSubformData: function(e, list, models, reset) {
-            // var DEBUG = true;
+            var DEBUG = false;
             if (DEBUG) {
                 console.log("[*] baseField.addSubformData");
                 console.log(arguments);

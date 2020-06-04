@@ -580,7 +580,7 @@ define([
                     var _inputName = that.$el.find(':input[name="' + key + '"]'),
                         _val = _inputName.val(),
                         _modelVal = that.model.get(key);
-                    // var DEBUG = true;
+                    var DEBUG = false;
                     if (DEBUG) {
                         console.log("    - " + key);
                         console.log(_val);
@@ -590,6 +590,16 @@ define([
                     if (_inputName.is(":radio")) {
                         // console.log(' - is radio:', _inputName);
                         // Skipped, if this is radio
+                        return;
+                    }
+                    if (_inputName.hasClass('timepicker')) {
+                        if (_val !== _modelVal) {
+                            if (DEBUG) {
+                                console.log('updated timepicker:', _val, _modelVal);
+
+                            }
+                            _inputName.val(_modelVal)
+                        }
                         return;
                     }
                     if (_val === "" || _.isNull(_val)) {
@@ -631,7 +641,7 @@ define([
                     }
                 }
                 // Find the first input in the form
-                var $fInput = that
+                /* var $fInput = that
                     .$(":input")
                     .not(":hidden")
                     .first()
@@ -642,7 +652,7 @@ define([
                         },
                         1000
                     );
-                }
+                } */
                 // If this is read mode
                 if (readMode) {
                     var $allInput = that.$(":input").not(":button.btn-cancel");
@@ -661,6 +671,10 @@ define([
                 // console.log('Fired: ' + _id + '.listViewShowed');
                 formView.trigger(_id + ".listViewShowed", formView);
                 // console.log('- current model:', JSON.stringify(that.options.model));
+
+                setTimeout(function() {
+                    Utils.focusOnFirstInput(that, true);
+                }, 300);
             });
         },
         /**
@@ -886,6 +900,7 @@ define([
             Utils.setupEmailInput(this.el);
         },
         removeAttachedEvents: function() {
+            var debug = false;
             // var DEBUG = false;
             var $el = this.$el;
             if (DEBUG) {
@@ -899,7 +914,10 @@ define([
             }
             if (DEBUG) {
                 console.log($el.hasClass("attached-e-radio-container"));
+                console.log('[*] removeAttachedEvents <--------');
+                console.log(this);
             }
+            Utils.removeTimeInput(this.el, this, debug);
         }
     });
 });

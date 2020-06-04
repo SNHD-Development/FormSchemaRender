@@ -828,6 +828,34 @@ define([
                 // console.log(model.get('Result'));
             }
         },
+        removeTimeInput: function(el, view, debug) {
+            var DEBUG = debug;
+            var $allTimepicker = $(".timepicker", el);
+            if (!$allTimepicker || !$allTimepicker.length) {
+                return;
+            }
+            if (DEBUG) {
+                console.log('[*] removeTimeInput', arguments);
+            }
+            $allTimepicker.each(function() {
+                var $this = $(this);
+                if (DEBUG) {
+                    console.log($this);
+                }
+                var timepickerObject = $this.timepicker();
+                if (DEBUG) {
+                    console.log('timepickerObject:', timepickerObject);
+                }
+                if (timepickerObject) {
+                    if (timepickerObject.destroy) {
+                        timepickerObject.destroy();
+                        if (DEBUG) {
+                            console.log('timepickerObject.destroy');
+                        }
+                    }
+                }
+            });
+        },
         /**
          * Setup Time Input
          * Link: https://timepicker.co/
@@ -852,8 +880,12 @@ define([
                 console.log("    Found: " + $allTimepicker.length);
                 console.log($allTimepicker);
             }
+            if (!$allTimepicker || !$allTimepicker.length) {
+                return;
+            }
             // DEBUG = true;
             $allTimepicker.each(function() {
+                // return;
                 var $this = $(this);
                 var dataOptions = $this.attr("data-timepicker-options");
                 if (DEBUG) {
@@ -874,22 +906,45 @@ define([
                         dataOptions = parseJsonOptions;
                     }
                 }
+                var timeFormat = dataOptions && dataOptions.timeFormat ? dataOptions.timeFormat: 'h:mm p';
+                if (timeFormat) {
+                    timeFormat = timeFormat.replace('p', 'A');
+                }
+                if (DEBUG) {
+                    console.log('- timeFormat:', timeFormat);
+                }
                 if (_.isObject(dataOptions)) {
                     dataOptions.change = function(e) {
-                        // var DEBUG = true;
+                        var DEBUG = false;
                         var $this = $(this);
                         var value = $this.val();
+                        var timePortion = null;
+                        if (e) {
+                            timePortion = moment(e)
+                            if (timePortion && timePortion.isValid && timePortion.isValid()) {
+                                timePortion = timePortion.format(timeFormat);
+                            } else {
+                                timePortion = null;
+                            }
+                        }
                         if (DEBUG) {
-                            console.log("- change:", "- $this:", $this, "- value:", value);
+                            console.log("- change:", "- $this:", $this, "- value:", value, 'timePortion:', timePortion, 'e:', e);
                         }
                         $this.removeClass("invalid");
                         // var DEBUG = true;
                         if (DEBUG) {
-                            console.log("- value:", value);
+                            console.log("- value:", value, 'e:', e);
+                            if (_model) {
+                                console.log('_model:', _model.toJSON());
+
+                            }
                         }
-                        $this.trigger("change");
+                        // $this.trigger("change");
+                        if (timePortion !== value) {
+                            $this.trigger("change");
+                        }
                         if (DEBUG) {
-                            console.log("- value:", value);
+                            console.log("- value:", value, 'e:', e);
                         }
                     };
                 }
@@ -4494,29 +4549,62 @@ define([
         /**
          * Focus on First Input
          */
-        focusOnFirstInput: function(view) {
+        focusOnFirstInput: function(view, moveToParent) {
+            moveToParent = moveToParent || false;
             var DEBUG = false;
-            view = view || null;
+            view = view || {};
+            var options = view.options || {};
+            var mode = options.mode || null;
+            var $form = (view.el) ? $(view.el).find("form:first"): null;
+            if (!$form || !$form.length) {
+                if (view.el) {
+                    // debugger;
+                    $form = $(view.el).find(".sub_form_render");
+                }
+            }
             if (DEBUG) {
-                console.log("[*] notFocus");
+                console.log("[*] focusOnFirstInput <-------");
                 console.log(arguments);
+                console.log('view:', view);
+
+                if ($form) {
+                    console.log('$form:', $form);
+                    console.log('$form.length:', $form.length);
+                }
             }
             var q = "input:visible:enabled:first";
             var $inputFirst;
-            if (view.$el) {
-                $inputFirst = view.$el.find("form:first").find(q);
+            if (view.el) {
+                $inputFirst = $form.find(q);
             }
+            // var DEBUG = true;
             // console.log('- $inputFirst:', $inputFirst)
             if (
                 $inputFirst &&
-                $inputFirst.length &&
-                !($inputFirst.is(":radio") || $inputFirst.is(":checkbox"))
+                $inputFirst.length
             ) {
-                // $inputFirst.focus().blur();
-                $inputFirst.focus();
-                if ($inputFirst.hasClass("datepicker")) {
-                    $inputFirst.datepicker("hide");
+                if (!($inputFirst.is(":radio") || $inputFirst.is(":checkbox") || $inputFirst.hasClass("timepicker") || $inputFirst.hasClass("datepicker"))) {
+                    // $inputFirst.focus().blur();
+                    if (DEBUG) {
+                        console.log("focus on", $inputFirst);
+                    }
+                    $inputFirst.focus();
+                    if ($inputFirst.hasClass("datepicker")) {
+                        $inputFirst.datepicker("hide");
+                    }
+                    return;
                 }
+            }
+
+            if (moveToParent && $form && $form.length) {
+                var t = jQuery($form).offset().top;
+                if (DEBUG) {
+                    console.log('before animate!', $form, 'top:', t);
+
+                }
+                $('html, body').animate({
+                    scrollTop: t
+                }, 1000);
             }
         },
         /**
