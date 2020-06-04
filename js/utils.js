@@ -914,9 +914,11 @@ define([
                     console.log('- timeFormat:', timeFormat);
                 }
                 if (_.isObject(dataOptions)) {
+                    var customChange = dataOptions.change || null;
                     dataOptions.change = function(e) {
                         var DEBUG = false;
                         var $this = $(this);
+                        var id = $this.attr('id');
                         var value = $this.val();
                         var timePortion = null;
                         if (e) {
@@ -933,19 +935,33 @@ define([
                         $this.removeClass("invalid");
                         // var DEBUG = true;
                         if (DEBUG) {
-                            console.log("- value:", value, 'e:', e);
-                            if (_model) {
+                            console.log("- value:", value, 'timePortion:', timePortion);
+                            if (false && _model) {
                                 console.log('_model:', _model.toJSON());
 
                             }
                         }
                         // $this.trigger("change");
                         if (timePortion !== value) {
+                            if (DEBUG) {
+                                console.log('trigger change:', $this);
+                            }
                             $this.trigger("change");
+                            if (DEBUG) {
+                                value = $this.val();
+                                console.log("- value:", value, 'timePortion:', timePortion);
+                            }
                         }
+                        if (customChange && typeof customChange === 'function') {
+                            customChange(e);
+                        }
+                        // var DEBUG = true;
+                        var eventName = id + ".change";
                         if (DEBUG) {
-                            console.log("- value:", value, 'e:', e);
+                            console.log('fired:', eventName, $this);
+
                         }
+                        $this.trigger(eventName, [e]);
                     };
                 }
                 $this.timepicker(dataOptions);
