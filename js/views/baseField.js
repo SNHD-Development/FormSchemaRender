@@ -143,6 +143,8 @@ define([
         ),
         "default-input-date": _.template(readModeUpdatedefaultInputDateTemplate)
     };
+    // Use to save reference to subform view
+    var subFormViewLUT = {};
     // Function to build simple HTML form markup
     function buildHtmlBasicFormMarkup(field, templates) {
         var html,
@@ -2717,6 +2719,8 @@ define([
          * Subform Events
          **/
         attachSubFormEvent: function(id, field, validation) {
+
+            var debugAddSubformData = false;
             field = _.extend(field, {
                 validation: validation
             });
@@ -2729,13 +2733,17 @@ define([
                     options: this.options
                 },
                 _listView = _.extend({}, Backbone.Events);
+
+            var subFormOptions = field.options || {};
+            var mode = this.options.mode || 'create';
             // console.log('- this:', this);
             // var _listOptions = _options.options;
             // console.log('- _listOptions:', _listOptions);
             // console.log('this.el:', this.el);
             // console.log('event:', id + ".add");
 
-            $(this.el)
+            var $mainForm = $(this.el);
+            $mainForm
                 .on("click", "#" + id + "_add_btn", _options, this.displaySubForm)
                 // User click cancel button
                 .on(id + ".close", this.closeSubForm)
@@ -2749,6 +2757,108 @@ define([
                     ),
                     this.addSubformData
                 );
+
+            if (debugAddSubformData) {
+                console.log('[*] _options:', _options, '<----------------------------');
+                console.log('[*] subFormOptions:', subFormOptions);
+                console.log('[*] subFormOptions.enabledaddevent:', subFormOptions.enabledaddevent);
+            }
+
+            var enabledAddEvent = subFormOptions.enabledaddevent || false;
+
+            if (enabledAddEvent && mode !== 'read') {
+                if (debugAddSubformData) {
+                    console.log('attached event:', id + ".addDataToList");
+                }
+                $mainForm.on(id + ".addDataToList", _.extend({
+                        formId: id
+                    },
+                    this
+                ), function(e, dataNeedToTrigger, clearData) {
+                    clearData = clearData || false;
+                    var subFormLUTName = 'SubFormViewsubform_' + field.name;
+                    var list = subFormViewLUT[subFormLUTName];
+                    if (!list) {
+                        console.log('[x] Could not find ', subFormLUTName, 'in subFormViewLUT!', subFormViewLUT);
+                        throw new Error('Could not find "' + subFormLUTName + '"');
+                    }
+                    if (debugAddSubformData) {
+                        console.log('fired:', id + ".addDataToList <------------------------");
+                        console.log('e:', e);
+                        console.log('dataNeedToTrigger:', dataNeedToTrigger);
+                        console.log('clearData:', clearData);
+                        console.log('_options:', _options);
+                        console.log('that:', that);
+                        console.log('subFormViewLUT:', subFormViewLUT);
+                        console.log('list:', list);
+                        console.log('field:', field);
+                        if (that.options && that.options.formData && that.options.formData.toJSON) {
+                            console.log('that.options.formData:', that.options.formData.toJSON());
+
+                        }
+                        if (field && field.name) {
+                            console.log('field.name:', field.name);
+
+                        }
+                    }
+
+                    // console.log('list:', list);
+
+                    if (debugAddSubformData) {
+                        console.log('currentFieldFormData:', currentFieldFormData);
+                        console.log('that.options:', that.options);
+                        console.log('_options:', _options);
+                        if (that.model) {
+                            console.log('that.model:', that.model);
+                            if (that.model.toJSON) {
+                                console.log('that.model.toJSON:', that.model.toJSON());
+
+                            }
+                        }
+                    }
+
+                    if (!clearData) {
+                        var debugClearData = false;
+                        if (debugClearData) {
+                            console.log('currentFieldFormData:', currentFieldFormData);
+                            console.log('list:', list);
+                            console.log('that:', that);
+                            console.log('that.options:', that.options);
+                            console.log('_options:', _options);
+                            if (list.model) {
+                                console.log('list.model:', list.model);
+                                if (list.model.toJSON) {
+                                    console.log('list.model.toJSON:', list.model.toJSON());
+
+                                }
+                            }
+                            if (that.model) {
+                                console.log('that.model:', that.model);
+                                if (that.model.toJSON) {
+                                    console.log('that.model.toJSON:', that.model.toJSON());
+
+                                }
+                            }
+                        }
+
+                        var currentModel = that.model && that.model.has(field.name) ? that.model.get(field.name): null;
+                        if (currentModel) {
+                            // console.log('currentModel:', currentModel);
+
+                            if (currentModel.reset) {
+                                currentModel.reset();
+                            }
+                        }
+                        // throw new Error('Need to work on adding into existing list models')
+                    }
+
+                    // Need to start adding to list model process
+
+                    // var opt = _.extend({}, _options);
+                    $(that.el).trigger(id + ".add", [list, dataNeedToTrigger]);
+                });
+            }
+
             // If there are subform data
             // console.log('- that:', that);
             // console.log('- that._listSchema:', that._listSchema);
@@ -2759,6 +2869,11 @@ define([
                 typeof this.options.formData.fields[field.name] !== "undefined" &&
                 this.options.formData.fields[field.name].length > 0
             ) {
+                var debuglistViewCreated = false;
+                if (debuglistViewCreated) {
+                    console.log('attached event:', _options.formId + ".listViewCreated");
+
+                }
                 _listView.on(_options.formId + ".listViewCreated", function(list) {
                     // console.log("- " + _options.formId + ".listViewCreated");
                     // console.log(" - that.el:", that.el);
@@ -2772,11 +2887,15 @@ define([
                         that.options.formData,
                         field.name
                     );
-                    // console.log("[*] " + _options.formId + ".listViewCreated <-----------------------");
-                    // console.log('currentFieldFormData:', currentFieldFormData);
-                    // console.log('that.options.formData:', that.options.formData);
-                    // console.log('field.name:', field.name);
-                    // console.log('list:', list);
+                    if (debuglistViewCreated) {
+                        console.log("[*] " + _options.formId + ".listViewCreated <-----------------------");
+                        console.log('currentFieldFormData:', currentFieldFormData);
+                        console.log('that.options.formData:', that.options.formData);
+                        console.log('field.name:', field.name);
+                        console.log('list:', list);
+                        console.log('that.el:', that.el);
+                        console.log('fired:', id + ".add");
+                    }
 
                     $(that.el).trigger(id + ".add", [list, currentFieldFormData]);
                     _listView.off();
@@ -2834,15 +2953,17 @@ define([
             if (!e.data) {
                 return;
             }
-            // var DEBUG = true;
+            var DEBUG = false;
             if (DEBUG) {
-                console.log("[*] baseField.displaySubForm");
+                console.log("[*] baseField.displaySubForm <------------------------------");
                 if (model && model.toJSON) {
                     console.log(model.toJSON());
                 }
-                console.log(hidden);
-                console.log(listView);
-                console.log(read);
+                console.log('e:', e);
+                console.log('e.data:', e.data);
+                console.log('hidden:', hidden);
+                console.log('listView:', listView);
+                console.log('read:', read);
             }
             // debugger;
             model = model || {};
@@ -2861,111 +2982,8 @@ define([
             $(this)
                 .parents("div.actions")
                 .fadeOut();
-            require(["views/fields/list"], function(SubFormView) {
-                var $expose;
-                // var DEBUG = true;
-                if (DEBUG) {
-                    console.log("*** displaySubForm: Render List ***");
-                    console.log('hidden:', hidden);
 
-                    if (_data.model) {
-                        console.log(JSON.stringify(_data.model));
-                    }
-                }
-                var subFormView = Vm.create(that, _id, SubFormView, _data),
-                    $subFormView = $(subFormView.el);
-                if (hidden) {
-                    $subFormView.hide();
-                }
-                if (DEBUG) {
-                    console.log('subFormView:', subFormView);
-                }
-                subFormView.render(hidden, read);
-                if (DEBUG) {
-                    console.log('After: subFormView.render', subFormView.cid);
-                    console.log('subFormView:', subFormView);
-
-                }
-                if (!hidden) {
-                    $subFormView.show({
-                        complete: function() {
-                            /**
-                             * This is the event when subform has been loaded
-                             */
-
-                            // var DEBUG = true;
-                            // console.log('*** SubForm.show.complete ***', subFormView.cid);
-
-                            // console.log('Fired: ' + e.data.formId + ' show complete');
-                            // setTimeout(function() {
-                            //   Utils.setupDateInput($subFormView, subFormView, true);
-                            // }, 2000);
-
-                            if (DEBUG) {
-                                if (model && model.toJSON) {
-                                    console.log('[*] complete <----------');
-
-                                    console.log('model.toJSON:', model.toJSON());
-                                    console.log('subFormView:', subFormView);
-                                    console.log('subFormView.$el:', subFormView.$el);
-                                    console.log('$(subFormView.el):', $(subFormView.el));
-                                }
-                            }
-
-                            Utils.finalSetup(subFormView);
-
-                            // Check for TimePicker
-                            // if (model && model.toJSON) {
-                            //     var $timepickers = $(subFormView.el).find('.timepicker');
-                            //     if (DEBUG) {
-                            //         console.log('$timepickers:', $timepickers);
-
-                            //     }
-                            //     debugger;
-                            // }
-                        },
-                        done: function() {
-                            // console.log('Fired: ' + e.data.formId + ' show done');
-                            // Utils.setupDateInput($subFormView, subFormView);
-
-                            // var DEBUG = true;
-
-                            if (DEBUG) {
-                                if (model && model.toJSON) {
-                                    console.log('[*] done <----------');
-                                    console.log('model.toJSON:', model.toJSON());
-                                    console.log('subFormView:', subFormView);
-                                    console.log('subFormView.$el:', subFormView.$el);
-                                    console.log('$(subFormView.el):', $(subFormView.el));
-                                }
-                            }
-                        }
-                    });
-                    $subFormView.addClass("active");
-                    $expose = $subFormView.expose({
-                        closeOnEsc: false,
-                        closeOnClick: false,
-                        color: "#000",
-                        zIndex: 1025,
-                        renderBody: false
-                    });
-                }
-                if (listView) {
-                    // console.log('Fired: ' + e.data.formId + '.listViewCreated');
-                    listView.trigger(e.data.formId + ".listViewCreated", subFormView);
-                }
-                /*if (!hidden) {
-                  console.log('Fired: ' + e.data.formId + '.listViewShowed');
-                  subFormView.trigger(e.data.formId + '.listViewShowed', subFormView);
-                }*/
-                /*if (!hidden) {
-                  setTimeout(function() {
-                    console.log('- subFormView: ', subFormView);
-                    console.log('- $subFormView: ', $subFormView);
-                    Utils.setupDateInput($subFormView, subFormView, true);
-                  }, 1000);
-                }*/
-            });
+            createSubFormView(e, that, _id, _data, listView, read, hidden);
         },
         /**
          * Set Up SubForm events when contain
@@ -3099,11 +3117,12 @@ define([
         /**
          * Add model to List
          * This will load table.js to render table view
+         * Called by: .add event
          **/
         addSubformData: function(e, list, models, reset) {
             var DEBUG = false;
             if (DEBUG) {
-                console.log("[*] baseField.addSubformData");
+                console.log("[*] baseField.addSubformData <-----------------");
                 console.log(arguments);
             }
             // console.log('***** addSubformData *****');
@@ -3120,10 +3139,11 @@ define([
             var currentModel = e.data.model.get(_key);
             if (DEBUG) {
                 console.log("- addSubformData:currentModel");
-                console.log(_key);
+                console.log('_key:', _key);
+                console.log('e.data:', e.data);
                 // console.log(currentModel);
                 console.log("- currentModel: ", currentModel, typeof currentModel);
-                if (currentModel.toJSON) {
+                if (currentModel && currentModel.toJSON) {
                     console.log(currentModel.toJSON());
                 }
             }
@@ -4628,4 +4648,126 @@ define([
             return _html;
         }
     });
+
+    return;
+
+    function createSubFormView(e, that, _id, _data, listView, read, hidden) {
+        require(["views/fields/list"], function(SubFormView) {
+            // console.log('[*] createSubFormView **************************', _id);
+            // console.log(that);
+
+            // console.log('subFormViewLUT:', subFormViewLUT);
+
+
+            var $expose;
+            // var DEBUG = true;
+            if (DEBUG) {
+                console.log("*** displaySubForm: Render List ***");
+                console.log('hidden:', hidden);
+
+                if (_data.model) {
+                    console.log(JSON.stringify(_data.model));
+                }
+            }
+            var subFormView = Vm.create(that, _id, SubFormView, _data),
+                $subFormView = $(subFormView.el);
+
+            subFormViewLUT[_id] = subFormView;
+
+            if (hidden) {
+                $subFormView.hide();
+            }
+            if (DEBUG) {
+                console.log('subFormView:', subFormView);
+            }
+            subFormView.render(hidden, read);
+            if (DEBUG) {
+                console.log('After: subFormView.render', subFormView.cid);
+                console.log('subFormView:', subFormView);
+
+            }
+            if (!hidden) {
+                $subFormView.show({
+                    complete: function() {
+                        /**
+                         * This is the event when subform has been loaded
+                         */
+
+                        // var DEBUG = true;
+                        // console.log('*** SubForm.show.complete ***', subFormView.cid);
+
+                        // console.log('Fired: ' + e.data.formId + ' show complete');
+                        // setTimeout(function() {
+                        //   Utils.setupDateInput($subFormView, subFormView, true);
+                        // }, 2000);
+
+                        if (DEBUG) {
+                            if (model && model.toJSON) {
+                                console.log('[*] complete <----------');
+
+                                console.log('model.toJSON:', model.toJSON());
+                                console.log('subFormView:', subFormView);
+                                console.log('subFormView.$el:', subFormView.$el);
+                                console.log('$(subFormView.el):', $(subFormView.el));
+                            }
+                        }
+
+                        Utils.finalSetup(subFormView);
+
+                        // Check for TimePicker
+                        // if (model && model.toJSON) {
+                        //     var $timepickers = $(subFormView.el).find('.timepicker');
+                        //     if (DEBUG) {
+                        //         console.log('$timepickers:', $timepickers);
+
+                        //     }
+                        //     debugger;
+                        // }
+                    },
+                    done: function() {
+                        // console.log('Fired: ' + e.data.formId + ' show done');
+                        // Utils.setupDateInput($subFormView, subFormView);
+
+                        // var DEBUG = true;
+
+                        if (DEBUG) {
+                            if (model && model.toJSON) {
+                                console.log('[*] done <----------');
+                                console.log('model.toJSON:', model.toJSON());
+                                console.log('subFormView:', subFormView);
+                                console.log('subFormView.$el:', subFormView.$el);
+                                console.log('$(subFormView.el):', $(subFormView.el));
+                            }
+                        }
+                    }
+                });
+                $subFormView.addClass("active");
+                $expose = $subFormView.expose({
+                    closeOnEsc: false,
+                    closeOnClick: false,
+                    color: "#000",
+                    zIndex: 1025,
+                    renderBody: false
+                });
+            }
+            if (listView) {
+
+                // console.log('listView:', listView, 'subFormView:', subFormView);
+
+                // console.log('Fired: ' + e.data.formId + '.listViewCreated');
+                listView.trigger(e.data.formId + ".listViewCreated", subFormView);
+            }
+            /*if (!hidden) {
+              console.log('Fired: ' + e.data.formId + '.listViewShowed');
+              subFormView.trigger(e.data.formId + '.listViewShowed', subFormView);
+            }*/
+            /*if (!hidden) {
+              setTimeout(function() {
+                console.log('- subFormView: ', subFormView);
+                console.log('- $subFormView: ', $subFormView);
+                Utils.setupDateInput($subFormView, subFormView, true);
+              }, 1000);
+            }*/
+        });
+    }
 });

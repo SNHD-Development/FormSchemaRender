@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+use Config;
+
+# print "$Config{osname}\n";
+# print "$Config{archname}\n";
+
 # Please install r.js
 # npm install -g requirejs
 
@@ -12,6 +17,12 @@ system("perl js/libs/parsetmpl.pl");
 #
 # 2. Minified with r.js with `r.js -o js/libs/build.js`
 
-system("r.js -o js/libs/build.js");
+if( "$Config{osname}" eq 'msys' ) {
+    print "process with windows command";
+    system("r.js.cmd -o js/libs/build.js");
+} else {
+    print "process with linux command";
+    system("r.js -o js/libs/build.js");
+}
 
 exit;

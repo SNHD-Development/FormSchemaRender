@@ -1298,6 +1298,43 @@ Example,
         }]
     }
 
+To enabled add data event, this mostly use when you want to write a custom logic to generate list data. Set Options.EnabledAddEvent = true.
+
+Then you can simply initiate trigger event by
+
+    var formName = "NameOfMainForm";
+    var subFormName = "NameOfListType";
+    var addEvent = "subform_" + subFormName + ".addDataToList";
+    var $form = $("#" + formName);
+    var clearData = false; // If true, will reset data before adding to list model
+    $form.trigger(addEvent, [dataNeedToTrigger, clearData]);
+
+Example,
+
+    {
+        "Name": "SubFormExample",
+        "Description": "Add a To Do",
+        "Type": "List",
+        "View": "table",
+        "Options": {
+            "Btn-Align": "Right",
+            "ReadModeDescription": "To Do",
+            "ShowViewBtn": true,
+            "SelfOnly": true,
+            "EnabledAddEvent": true
+        },
+        "Fields": [{
+            "Name": "ToDo",
+            "Type": "TextBox",
+            "Description": "What do you want to do?",
+            "Options": {
+                "SortBy": "int",
+                "ShowOnTable": false
+            }
+        }]
+    }
+
+
 ## Internal Only Options
 
 These options will be used in internal only mode.
