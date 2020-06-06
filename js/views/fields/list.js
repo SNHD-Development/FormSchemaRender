@@ -563,6 +563,8 @@ define([
                 if (formView._hasTime) {
                     // console.log('- Here');
                     Utils.setupTimeInput(that.$el, formView);
+
+                    Utils.setupTimeInputEvents(formView._timeInputs, formView);
                 }
                 // If this is the first time need to click cancel button
                 if (firstTime) {

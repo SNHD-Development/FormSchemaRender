@@ -856,6 +856,7 @@ define([
                 }
             });
         },
+        setupTimeInputEvents: setupTimeInputEvents,
         /**
          * Setup Time Input
          * Link: https://timepicker.co/
