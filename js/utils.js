@@ -872,6 +872,7 @@ define([
             if (view && view.model) {
                 _model = view.model;
             }
+
             var $allTimepicker = $(".timepicker", el);
             if (DEBUG) {
                 if (_model && _model.toJSON) {
@@ -883,29 +884,65 @@ define([
             if (!$allTimepicker || !$allTimepicker.length) {
                 return;
             }
+            // console.log('view:', view);
+
             // DEBUG = true;
             $allTimepicker.each(function() {
                 // return;
+                var DEBUG = false;
                 var $this = $(this);
                 var dataOptions = $this.attr("data-timepicker-options");
+                var dataTimeOptions = $this.attr("data-time-options");
+                var fieldId = $this.attr('id')
                 if (DEBUG) {
+                    console.log('***** ' + fieldId + ' *****');
                     console.log("- dataOptions:", dataOptions);
+                    console.log('- dataTimeOptions:', dataTimeOptions);
                 }
-                if (!dataOptions || _.isEmpty(dataOptions)) {
-                    dataOptions = {};
-                } else if (_.isString(dataOptions)) {
-                    var parseJsonOptions = $.parseJSON(dataOptions);
-                    if (
-                        parseJsonOptions &&
-                        !_.isEmpty(parseJsonOptions) &&
-                        _.isObject(parseJsonOptions)
-                    ) {
-                        if (DEBUG) {
-                            console.log("- dataOptions:", dataOptions);
+                var lutTimePicker = view._timeInputs || {};
+
+                if (lutTimePicker && lutTimePicker[fieldId]) {
+                    if (lutTimePicker[fieldId].dataTimepickerOptions) {
+                        dataOptions = lutTimePicker[fieldId].dataTimepickerOptions
+                    }
+                    if (lutTimePicker[fieldId].dataTimeOptions) {
+                        dataTimeOptions = lutTimePicker[fieldId].dataTimeOptions
+                    }
+                } else {
+                    if (!dataOptions || _.isEmpty(dataOptions)) {
+                        dataOptions = {};
+                    } else if (_.isString(dataOptions)) {
+                        var parseJsonOptions = $.parseJSON(dataOptions);
+                        if (
+                            parseJsonOptions &&
+                            !_.isEmpty(parseJsonOptions) &&
+                            _.isObject(parseJsonOptions)
+                        ) {
+                            if (DEBUG) {
+                                console.log("- dataOptions:", dataOptions);
+                            }
+                            dataOptions = parseJsonOptions;
                         }
-                        dataOptions = parseJsonOptions;
+                    }
+
+                    if (!dataTimeOptions || _.isEmpty(dataTimeOptions)) {
+                        dataTimeOptions = {};
+                    } else if (_.isString(dataTimeOptions)) {
+                        var parseJsonOptions = $.parseJSON(dataTimeOptions);
+                        if (
+                            parseJsonOptions &&
+                            !_.isEmpty(parseJsonOptions) &&
+                            _.isObject(parseJsonOptions)
+                        ) {
+                            if (DEBUG) {
+                                console.log("- dataTimeOptions:", dataTimeOptions);
+                            }
+                            dataTimeOptions = parseJsonOptions;
+                        }
                     }
                 }
+
+                // var DEBUG = true;
                 var timeFormat = dataOptions && dataOptions.timeFormat ? dataOptions.timeFormat: 'h:mm p';
                 if (timeFormat) {
                     timeFormat = timeFormat.replace('p', 'A');
@@ -914,6 +951,7 @@ define([
                     console.log('- timeFormat:', timeFormat);
                 }
                 if (_.isObject(dataOptions)) {
+                    var id = $this.attr('id');
                     var customChange = dataOptions.change || null;
                     dataOptions.change = function(e) {
                         var DEBUG = false;
@@ -941,30 +979,46 @@ define([
 
                             }
                         }
-                        // $this.trigger("change");
-                        if (timePortion !== value) {
-                            if (DEBUG) {
-                                console.log('trigger change:', $this);
-                            }
-                            $this.trigger("change");
-                            if (DEBUG) {
-                                value = $this.val();
-                                console.log("- value:", value, 'timePortion:', timePortion);
-                            }
-                        }
-                        if (customChange && typeof customChange === 'function') {
-                            customChange(e);
-                        }
-                        // var DEBUG = true;
-                        var eventName = id + ".change";
+                        var eventName = id + ".timeChange";
                         if (DEBUG) {
                             console.log('fired:', eventName, $this);
 
                         }
-                        $this.trigger(eventName, [e]);
+                        var modelValue = _model && _model.get(id) ? _model.get(id): null;
+                        // $this.trigger("change");
+                        if (timePortion !== value || modelValue !== value) {
+                            if (DEBUG) {
+                                console.log('trigger change:', $this);
+                            }
+                            // $this.trigger("change");
+                            $this.trigger(eventName, [e]);
+                            if (DEBUG) {
+                                console.log("- value:", value, 'timePortion:', timePortion);
+                            }
+                            _model.set(id, value);
+                            if (customChange && typeof customChange === 'function') {
+                                customChange(e);
+                            }
+                        }
                     };
                 }
                 $this.timepicker(dataOptions);
+                var currentVal = $this.val();
+                var currentModelVal = _model.get(id);
+                // $this.trigger('change');
+                $this.val(currentVal);
+                $this.timepicker().setTime(currentVal);
+                if (_model && _model.has(id)) {
+                    // console.log(_model.toJSON());
+                    // console.log(id, currentModelVal, currentVal);
+
+                    var defaultValue = $this.attr('default-time-value');
+                    currentVal = defaultValue || currentModelVal || currentVal;
+                    _model.set(id, currentVal);
+                }
+                // var currentVal = $this.val();
+                // console.log('currentVal:', currentVal, 'id:', $this.attr('id'));
+
             });
         },
         /**
@@ -2210,6 +2264,11 @@ define([
                     });
                 });
             }
+
+            // console.log('view:', view);
+
+
+            setupTimeInputEvents(view._timeInputs, view);
         },
         isRenderVisibleOn: function(view, value, typeLowerCase) {
             var _DEBUG = false;
@@ -5141,6 +5200,41 @@ define([
         return currentFieldFormData;
     }
 
+    function setupTimeInputEvents(lutTimePicker, view) {
+        if (!lutTimePicker || _.isEmpty(lutTimePicker)) {
+            return;
+        }
+        // Setup Event
+        _.each(lutTimePicker, function(value, key) {
+            // console.log('key:', key);
+            var mainFormName = view.options.formSchema.name;
+            // console.log(el, view);
+
+            var dataTimeOptions = value.dataTimeOptions || {};
+            var timeBefore, timeAfter;
+            if (dataTimeOptions) {
+                timeBefore = (dataTimeOptions && dataTimeOptions.before) ? dataTimeOptions.before: null;
+                timeAfter = (dataTimeOptions && dataTimeOptions.after) ? dataTimeOptions.after: null;
+                if (DEBUG) {
+                    console.log('fieldId:', fieldId);
+
+                    console.log("- timeBefore:", timeBefore);
+                    console.log("- timeAfter:", timeAfter);
+                }
+            }
+            if (timeBefore && key && !value.attachedEventTimeBefore) {
+                // console.log('set up: setupTimePickerFromToEvent', key);
+                setupTimePickerFromToEvent(mainFormName, key, timeBefore);
+                lutTimePicker[key].attachedEventTimeBefore = true;
+            }
+            if (timeAfter && key && !value.attachedEventTimeAfter) {
+                // console.log('set up: setupTimePickerToFromEvent', key);
+                setupTimePickerToFromEvent(mainFormName, key, timeAfter);
+                lutTimePicker[key].attachedEventTimeAfter = true;
+            }
+        });
+    }
+
     function convertDataURIToBlob(dataURI, fileName) {
         // convert base64 to raw binary data held in a string
         // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
@@ -5172,5 +5266,222 @@ define([
         var check = false;
         (function(a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true; })(navigator.userAgent || navigator.vendor || window.opera);
         return check;
+    }
+
+
+
+    function setupTimePickerFromToEvent(mainFormName, fromId, toId) {
+        $("div#app").on(
+            mainFormName + ".renderCompleted",
+            function() {
+                var $html = $("html");
+                // console.log('added:', fromId);
+
+                $html.off(fromId + ".timeChange", "#" + fromId, setupEvent);
+                $html.on(fromId + ".timeChange", "#" + fromId, setupEvent);
+            }
+        );
+        return;
+
+        function setupEvent(e, time) {
+            var currentTimeChange = timeChange.bind(this);
+            // console.log('fired:', fromId, 'set isLessThan=true');
+            currentTimeChange(e, time, toId, true);
+        }
+    }
+
+    function setupTimePickerToFromEvent(mainFormName, toId, fromId) {
+        $("div#app").on(
+            mainFormName + ".renderCompleted",
+            function() {
+                var $html = $("html");
+                // console.log('added:', toId);
+                $html.off(toId + ".timeChange", "#" + toId, setupEvent);
+                $html.on(toId + ".timeChange", "#" + toId, setupEvent);
+            }
+        );
+        return;
+
+        function setupEvent(e, time) {
+            var currentTimeChange = timeChange.bind(this);
+            // console.log('fired:', toId, 'set isLessThan=false');
+            currentTimeChange(e, time, fromId, false);
+        }
+    }
+
+    function timeChange(e, time, toId, isLessThan) {
+        var debug = false;
+
+        // console.log('this:', this);
+
+        var $this = $(this);
+        var valThis = $this.val();
+        var currentFieldId = $this.attr('id');
+        var $endInput = $("#" + toId);
+        var timeMoment = convertToMoment(time);
+
+        if (debug) {
+            console.log("***** timeChange *****");
+            console.log('  currentFieldId:', currentFieldId);
+            console.log('  isLessThan:', isLessThan);
+
+            console.log("  time:", time);
+            // Sun Dec 31 1899 10:00:00 GMT-0800 (Pacific Standard Time)
+        }
+
+        if (!timeMoment) {
+            if (isLessThan) {
+                if (debug) {
+                    console.log('  set $endInput to blank');
+
+                }
+                $endInput.val("");
+            }
+            return;
+        }
+        if (!$endInput || !$endInput.length) {
+            return;
+        }
+        // var debug = true;
+        // set min time
+        var $thisInputTimepicker = $this.timepicker() || {};
+        var $endInputTimepicker = $endInput.timepicker() || {};
+        var thisinputOpts = $thisInputTimepicker.options;
+        var endinputOpts = $endInputTimepicker.options;
+        var val = $endInput.val();
+        if (debug) {
+            console.log("  $thisInputTimepicker:", $thisInputTimepicker);
+            console.log('  thisinputOpts:', thisinputOpts);
+
+            console.log("  $endInputTimepicker:", $endInputTimepicker);
+            console.log('  endinputOpts:', endinputOpts);
+
+            console.log('  this.val:', valThis, 'end.val:', val, 'time:', time);
+
+        }
+        if (!endinputOpts) {
+            endinputOpts = $endInputTimepicker.attr('data-timepicker-options');
+            if (!endinputOpts || _.isEmpty(endinputOpts)) {
+                endinputOpts = {};
+            } else if (_.isString(endinputOpts)) {
+                var parseJsonOptions = $.parseJSON(endinputOpts);
+                if (
+                    parseJsonOptions &&
+                    !_.isEmpty(parseJsonOptions) &&
+                    _.isObject(parseJsonOptions)
+                ) {
+                    if (DEBUG) {
+                        console.log("- endinputOpts:", endinputOpts);
+                    }
+                    endinputOpts = parseJsonOptions;
+                }
+            }
+        }
+        if (endinputOpts) {
+            // console.log('***** ' + currentFieldId + ':endinputOpts ******');
+
+            if (isLessThan) {
+                endinputOpts.minTime = valThis;
+            } else {
+                endinputOpts.maxTime = valThis;
+            }
+
+            if ($endInputTimepicker.destroy) {
+                $endInputTimepicker.destroy();
+                $endInput.timepicker(endinputOpts);
+                $endInput.val(val);
+            }
+        }
+
+        if (debug) {
+            console.log("end.val:", val, "timeMoment:", timeMoment);
+        }
+        var timeMomentEnd = convertToMomentFromTime(val);
+        if (!timeMomentEnd) {
+            if (debug) {
+                console.log('  timeMomentEnd:', timeMomentEnd, 'return');
+
+            }
+            return;
+        }
+        var diff = timeMomentEnd - timeMoment;
+        if (debug) {
+            console.log(
+                "  from:",
+                timeMoment.format(),
+                "end:",
+                timeMomentEnd.format(),
+                'isLessThan:', isLessThan
+            );
+            console.log("diff:", diff);
+        }
+        if (isLessThan) {
+            if (diff < 0) {
+                if (debug) {
+                    console.log('  set $endInput to blank');
+
+                }
+                $endInput.val("");
+            }
+        } else {
+            if (diff > 0) {
+                if (debug) {
+                    console.log('  set $endInput to blank');
+
+                }
+                $endInput.val("");
+            }
+        }
+    }
+
+    function convertToMoment(strDate) {
+        var debug = false;
+        var timeMoment = strDate ? moment(strDate) : null;
+        if (debug) {
+            console.log(
+                "[*] convertToMoment, strDate:",
+                strDate,
+                "timeMoment:",
+                timeMoment
+            );
+        }
+        if (!timeMoment || (timeMoment.isValid && !timeMoment.isValid())) {
+            if (debug) {
+                console.log("  [x] invalid");
+            }
+            return;
+        }
+        return timeMoment;
+    }
+
+    function convertToMomentFromTime(strTime) {
+        var debug = false;
+        var formats = ["h:m A", "h:m a", "H:m", "hh:mm A", "hh:mm a", "HH:mm"];
+        for (var i in formats) {
+            var format = formats[i];
+            var timeMoment = strTime ? moment(strTime, format) : null;
+            if (debug) {
+                console.log(
+                "[*] convertToMomentFromTime, strTime:",
+                strTime
+                //   "timeMoment:",
+                //   timeMoment
+                );
+            }
+        if (!timeMoment || (timeMoment.isValid && !timeMoment.isValid())) {
+            if (false && debug) {
+                console.log("  [x] invalid, format:", format);
+            }
+            continue;
+            }
+            // Dec 31 1899
+            timeMoment = moment(
+                "1899-12-31 " + timeMoment.format("HH:mm"),
+                "YYYY-MM-DD HH:mm"
+            );
+
+            return timeMoment;
+        }
+        return;
     }
 });

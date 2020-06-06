@@ -1025,6 +1025,52 @@ To pass in Time Field Configuration, please look below
         }
     }
 
+If you want to add logic to automatic validate time between two fields, simply use
+
+    {
+        "Name": "FromTimeField",
+        "Type": "Time",
+        "Description": "Time Field",
+        "Options": {
+            "Configuration": {
+                "timeFormat": "h:mm p",
+                "interval": 30,
+                "minTime": "8:00am",
+                "maxTime": "5:00pm",
+                "defaultTime": "12:00pm",
+                "startTime": "8:00",
+                "dynamic": false,
+                "dropdown": true,
+                "scrollbar": true
+            },
+            "TimeOptions": {
+                "before" : "ToTimeField"
+            }
+        }
+    }
+
+    {
+        "Name": "ToTimeField",
+        "Type": "Time",
+        "Description": "Time Field",
+        "Options": {
+            "Configuration": {
+                "timeFormat": "h:mm p",
+                "interval": 30,
+                "minTime": "8:00am",
+                "maxTime": "5:00pm",
+                "defaultTime": "12:00pm",
+                "startTime": "8:00",
+                "dynamic": false,
+                "dropdown": true,
+                "scrollbar": true
+            },
+            "TimeOptions": {
+                "after" : "FromTimeField"
+            }
+        }
+    }
+
 ### ButtonDecision
 
 When we want to control the flow of the form, we can have the button to look up the result with Ajax and has the options to render the data and let the user select what information is corrected.

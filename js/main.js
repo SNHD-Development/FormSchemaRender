@@ -362,6 +362,7 @@ require(["jquery", "views/app", "vm", "utils", "libs/date", "moment"], function(
           var value = $this.val();
           console.log('- $this:', $this, ': value=', value);
         });*/
+        // console.log('appView:', appView);
       }, 800);
     } catch (err) {
       Utils.renderError(appView.$el, err);

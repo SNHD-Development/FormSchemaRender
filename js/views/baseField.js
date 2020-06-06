@@ -290,6 +290,7 @@ define([
             this._stepDiv = 0; // Count number of open div for step (wizard view)
             this._currentStep = 1; // Current Step
             this._stepValidated = []; // Hold the field names for each validation step
+            this._timeInputs = {};
             this._modelBinder = new Modelbinder();
             // Setup Keys
             this.options.formSchema.validation =
@@ -1002,10 +1003,27 @@ define([
                         field.options = {};
                     }
                     var timeConfig = field.options.configuration;
+                    var timeOptions = field.options.timeoptions;
+                    if (!(field.name in this._timeInputs)) {
+                        this._timeInputs[field.name] = {};
+                    }
                     if (timeConfig && !_.isEmpty(timeConfig) && _.isObject(timeConfig)) {
                         field.attributes["data-timepicker-options"] = JSON.stringify(
                             timeConfig
                         );
+                        this._timeInputs[field.name].dataTimepickerOptions = timeConfig;
+                    }
+                    if (timeOptions && !_.isEmpty(timeOptions) && _.isObject(timeOptions)) {
+                        field.attributes["data-time-options"] = JSON.stringify(
+                            timeOptions
+                        );
+                        this._timeInputs[field.name].dataTimeOptions = timeOptions;
+                    }
+                    if (this.options.formData && this.options.formData.fields) {
+                        var _currentDateValue = this.options.formData.fields[field.name];
+                        if (_currentDateValue) {
+                            field.attributes["default-time-value"] = _currentDateValue;
+                        }
                     }
                     break;
                 case "dateinput":
