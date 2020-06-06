@@ -886,6 +886,8 @@ define([
             }
             // console.log('view:', view);
 
+            var _timeInputsObjCached = view._timeInputsObjCached;
+
             // DEBUG = true;
             $allTimepicker.each(function() {
                 // return;
@@ -893,7 +895,7 @@ define([
                 var $this = $(this);
                 var dataOptions = $this.attr("data-timepicker-options");
                 var dataTimeOptions = $this.attr("data-time-options");
-                var fieldId = $this.attr('id')
+                var fieldId = $this.attr('id');
                 if (DEBUG) {
                     console.log('***** ' + fieldId + ' *****');
                     console.log("- dataOptions:", dataOptions);
@@ -979,45 +981,59 @@ define([
 
                             }
                         }
-                        var eventName = id + ".timeChange";
+                        var eventName = fieldId + ".timeChange";
                         if (DEBUG) {
                             console.log('fired:', eventName, $this);
 
                         }
-                        var modelValue = _model && _model.get(id) ? _model.get(id): null;
+                        var modelValue = _model && _model.get(fieldId) ? _model.get(fieldId): null;
                         // $this.trigger("change");
                         if (timePortion !== value || modelValue !== value) {
                             if (DEBUG) {
                                 console.log('trigger change:', $this);
                             }
+                            // console.log(fieldId, modelValue, value, timePortion);
                             // $this.trigger("change");
                             $this.trigger(eventName, [e]);
                             if (DEBUG) {
                                 console.log("- value:", value, 'timePortion:', timePortion);
                             }
-                            _model.set(id, value);
+                            _model.set(fieldId, timePortion);
+                            $this.val(timePortion)
                             if (customChange && typeof customChange === 'function') {
                                 customChange(e);
                             }
                         }
                     };
                 }
+                /* if (fieldId in view._timeInputsObjCached) {
+                    console.log('destroy: timepicker', fieldId);
+                    view._timeInputsObjCached[fieldId].timepicker().destroy();
+                    delete view._timeInputsObjCached[fieldId];
+                } */
                 $this.timepicker(dataOptions);
+                view._timeInputsObjCached[fieldId] = $this;
+
+                // console.log('adding:', fieldId, view._timeInputsObjCached[fieldId]);
+
                 var currentVal = $this.val();
-                var currentModelVal = _model.get(id);
+                var currentModelVal = _model.get(fieldId);
                 // $this.trigger('change');
                 $this.val(currentVal);
                 $this.timepicker().setTime(currentVal);
-                if (_model && _model.has(id)) {
+                if (_model && _model.has(fieldId)) {
                     // console.log(_model.toJSON());
-                    // console.log(id, currentModelVal, currentVal);
+                    // console.log(fieldId, currentModelVal, currentVal);
 
                     var defaultValue = $this.attr('default-time-value');
                     currentVal = defaultValue || currentModelVal || currentVal;
-                    _model.set(id, currentVal);
+                    // console.log('currentVal:', currentVal);
+
+                    _model.set(fieldId, currentVal);
+                    $this.val(currentVal);
                 }
                 // var currentVal = $this.val();
-                // console.log('currentVal:', currentVal, 'id:', $this.attr('id'));
+                // console.log('currentVal:', currentVal, 'fieldId:', $this.attr('fieldId'));
 
             });
         },
@@ -2265,8 +2281,7 @@ define([
                 });
             }
 
-            // console.log('view:', view);
-
+            // console.log('setupTimeInputEvents', 'view:', view);
 
             setupTimeInputEvents(view._timeInputs, view);
         },
@@ -5202,6 +5217,8 @@ define([
 
     function setupTimeInputEvents(lutTimePicker, view) {
         if (!lutTimePicker || _.isEmpty(lutTimePicker)) {
+            // console.log('skipped: no lutTimePicker');
+
             return;
         }
         // Setup Event
@@ -5271,16 +5288,14 @@ define([
 
 
     function setupTimePickerFromToEvent(mainFormName, fromId, toId) {
-        $("div#app").on(
-            mainFormName + ".renderCompleted",
-            function() {
-                var $html = $("html");
-                // console.log('added:', fromId);
+        // console.log('attached: ', mainFormName, 'setupTimePickerFromToEvent');
 
-                $html.off(fromId + ".timeChange", "#" + fromId, setupEvent);
-                $html.on(fromId + ".timeChange", "#" + fromId, setupEvent);
-            }
-        );
+        var $html = $("html");
+        // console.log('added:', fromId);
+
+        $html.off(fromId + ".timeChange", "#" + fromId, setupEvent);
+        $html.on(fromId + ".timeChange", "#" + fromId, setupEvent);
+
         return;
 
         function setupEvent(e, time) {
@@ -5291,15 +5306,12 @@ define([
     }
 
     function setupTimePickerToFromEvent(mainFormName, toId, fromId) {
-        $("div#app").on(
-            mainFormName + ".renderCompleted",
-            function() {
-                var $html = $("html");
-                // console.log('added:', toId);
-                $html.off(toId + ".timeChange", "#" + toId, setupEvent);
-                $html.on(toId + ".timeChange", "#" + toId, setupEvent);
-            }
-        );
+        // console.log('attached: ', mainFormName, 'setupTimePickerToFromEvent');
+        var $html = $("html");
+        // console.log('added:', toId);
+        $html.off(toId + ".timeChange", "#" + toId, setupEvent);
+        $html.on(toId + ".timeChange", "#" + toId, setupEvent);
+
         return;
 
         function setupEvent(e, time) {
@@ -5347,18 +5359,11 @@ define([
         var $thisInputTimepicker = $this.timepicker() || {};
         var $endInputTimepicker = $endInput.timepicker() || {};
         var thisinputOpts = $thisInputTimepicker.options;
+        if (!thisinputOpts) {
+            return;
+        }
         var endinputOpts = $endInputTimepicker.options;
         var val = $endInput.val();
-        if (debug) {
-            console.log("  $thisInputTimepicker:", $thisInputTimepicker);
-            console.log('  thisinputOpts:', thisinputOpts);
-
-            console.log("  $endInputTimepicker:", $endInputTimepicker);
-            console.log('  endinputOpts:', endinputOpts);
-
-            console.log('  this.val:', valThis, 'end.val:', val, 'time:', time);
-
-        }
         if (!endinputOpts) {
             endinputOpts = $endInputTimepicker.attr('data-timepicker-options');
             if (!endinputOpts || _.isEmpty(endinputOpts)) {
@@ -5376,6 +5381,18 @@ define([
                     endinputOpts = parseJsonOptions;
                 }
             }
+        }
+        if (debug) {
+            console.log('  $this:', $this);
+
+            console.log("  $thisInputTimepicker:", $thisInputTimepicker);
+            console.log('  thisinputOpts:', thisinputOpts);
+
+            console.log("  $endInputTimepicker:", $endInputTimepicker);
+            console.log('  endinputOpts:', endinputOpts);
+
+            console.log('  this.val:', valThis, 'end.val:', val, 'time:', time);
+
         }
         if (endinputOpts) {
             // console.log('***** ' + currentFieldId + ':endinputOpts ******');

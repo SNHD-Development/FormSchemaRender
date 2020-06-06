@@ -228,6 +228,8 @@ define([
                             that.options.formSchema.name + ".renderCompleted",
                             that
                         );
+                        // console.log(that.options.formSchema.name + ".renderCompleted", 'fired!');
+
                         // Final Setup for All Mode
                         Utils.finalSetupAllMode(that.formView);
                         // Set the Action if has one

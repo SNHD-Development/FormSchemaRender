@@ -291,6 +291,7 @@ define([
             this._currentStep = 1; // Current Step
             this._stepValidated = []; // Hold the field names for each validation step
             this._timeInputs = {};
+            this._timeInputsObjCached = {};
             this._modelBinder = new Modelbinder();
             // Setup Keys
             this.options.formSchema.validation =
@@ -1005,6 +1006,8 @@ define([
                     var timeConfig = field.options.configuration;
                     var timeOptions = field.options.timeoptions;
                     if (!(field.name in this._timeInputs)) {
+                        // console.log('adding: _timeInputs', field.name);
+
                         this._timeInputs[field.name] = {};
                     }
                     if (timeConfig && !_.isEmpty(timeConfig) && _.isObject(timeConfig)) {
