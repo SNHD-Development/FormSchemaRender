@@ -1001,9 +1001,21 @@ define([
                             }
                             _model.set(fieldId, timePortion);
                             $this.val(timePortion)
-                            if (customChange && typeof customChange === 'function') {
-                                customChange(e);
-                            }
+                            
+                                // ToDo: Need to fix
+                                // Issue: Uncaught TypeError: Cannot read property 'toLowerCase' of undefined (time picker, jquery)
+                                // This is a temporary fix.
+                                // - Prut and Phillip 2020-08-11
+                                try {
+                                    if (customChange && (typeof customChange) === 'function') {
+                                        customChange(e);    
+                                    }
+                                } catch(e) {
+                                    // console.log(e);
+                                    // debugger;
+                                }
+                                
+                            
                         }
                     };
                 }
