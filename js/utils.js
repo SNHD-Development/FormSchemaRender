@@ -665,11 +665,21 @@ define([
                         _options.defaultdate = model.get(_options.id);
                     }
                 }
+                // console.log('_options:', _options);
+                if (_options && _options.defaultdate && _options.defaultdate.$date) {
+                    var mdbDate = moment(_options.defaultdate.$date)
+                    // console.log('mdbDate:', mdbDate);
+                    // console.log('format:', mdbDate.format('MM/DD/YYYY'));
+                    if (mdbDate && mdbDate.isValid && mdbDate.isValid()) {
+                        _options.defaultdate = mdbDate.format('MM/DD/YYYY');
+                    }
+                }
                 $(this).birthdaypicker(_options);
                 var $hidden = $(':input[type="hidden"]', this);
                 var _token, $month, $day, $year;
                 var _value = $hidden.val();
                 if (_value !== "" && model.get($hidden.attr("name")) !== "") {
+                    // console.log('_value:', _value);
                     _token = _value.split("/");
                     if (_token.length === 3) {
                         if (_token[0][0] === "0") {
