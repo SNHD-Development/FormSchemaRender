@@ -464,6 +464,11 @@ define([
             // console.log('[model] model.bindings:', JSON.stringify(model.bindings));
 
             model.validation = _validation;
+
+            // if (false) {
+            //     console.log('_attrs:', _attrs);
+            // }
+
             return _attrs;
         },
         /**

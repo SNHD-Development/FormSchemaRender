@@ -1036,12 +1036,19 @@ define([
                     // Check for $date
                     if (this.options.formData && this.options.formData.fields) {
                         var _currentDateValue = this.options.formData.fields[field.name];
+                        if (_debug_date) {
+                            console.log('field.name:', field.name);
+                            console.log('_currentDateValue:', _currentDateValue);
+                        }
                         if (
                             _currentDateValue &&
                             typeof _currentDateValue === "object" &&
                             _currentDateValue.$date
                         ) {
                             var _tmpDate = new Date(_currentDateValue.$date);
+                            if (_debug_date) {
+                                console.log('_tmpDate:', _tmpDate);
+                            }
                             var _month = _tmpDate.getMonth() + 1;
                             if (_month < 10) {
                                 _month = "0" + _month;
@@ -4681,7 +4688,7 @@ define([
 
 
             var $expose;
-            // var DEBUG = true;
+            var DEBUG = false;
             if (DEBUG) {
                 console.log("*** displaySubForm: Render List ***");
                 console.log('hidden:', hidden);
@@ -4689,6 +4696,8 @@ define([
                 if (_data.model) {
                     console.log(JSON.stringify(_data.model));
                 }
+
+                console.log('_data:', _data);
             }
             var subFormView = Vm.create(that, _id, SubFormView, _data),
                 $subFormView = $(subFormView.el);

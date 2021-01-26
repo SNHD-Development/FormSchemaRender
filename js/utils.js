@@ -1011,21 +1011,21 @@ define([
                             }
                             _model.set(fieldId, timePortion);
                             $this.val(timePortion)
-                            
+
                                 // ToDo: Need to fix
                                 // Issue: Uncaught TypeError: Cannot read property 'toLowerCase' of undefined (time picker, jquery)
                                 // This is a temporary fix.
                                 // - Prut and Phillip 2020-08-11
                                 try {
                                     if (customChange && (typeof customChange) === 'function') {
-                                        customChange(e);    
+                                        customChange(e);
                                     }
                                 } catch(e) {
                                     // console.log(e);
                                     // debugger;
                                 }
-                                
-                            
+
+
                         }
                     };
                 }
@@ -1099,12 +1099,13 @@ define([
                 console.log($allDatepicker);
             }
             $allDatepicker.each(function() {
-                // var DEBUG = true;
                 var _options = {},
                     maxDate,
                     nowTemp,
                     $this = $(this);
                 var _id = $this.attr("name");
+
+                // var DEBUG = (_id === 'ExpirationDate');
 
                 // if (_id === 'LastDateOfContact') {
                 //     DEBUG = false;
@@ -1123,6 +1124,7 @@ define([
                     var _tmpVal = _model.get(_id);
                     if (DEBUG) {
                         console.log("[setupDateInput] _id:", _id, '_tmpVal:', _tmpVal);
+                        console.log('_model: ', _model.toJSON());
                     }
                     if (_tmpVal && _tmpVal.$date) {
                         _tmpVal = moment(_tmpVal.$date);
@@ -1137,13 +1139,14 @@ define([
                             // console.log(_id, '$this.val:', $this.val(), _model.get(_id));
                     }
                 }
+                // var DEBUG = (_id === 'ExpirationDate');
                 // DEBUG = false;
                 if (DEBUG) {
                     console.log("   Loop: .datepicker:", _id);
                     console.log(_id);
                     console.log($this);
                     if (fViewArr && fViewArr[_id]) {
-                        console.log(fViewArr[_id]);
+                        console.log('fViewArr:', fViewArr[_id]);
                     }
                     console.log("- hasDatepickerOptions: ", hasDatepickerOptions);
                     console.log("- _tmpVal: ", _tmpVal);
@@ -1188,6 +1191,7 @@ define([
                     _options.onRender = function(date) {
                         // console.log('date:', date);
 
+                        // var DEBUG = (_id === 'ExpirationDate');
                         var targetDate = logicOpts.getvaluefrom;
                         if (DEBUG) {
                             console.log("[onRender] _id:", _id, "targetDate:", targetDate, 'logicOpts:', logicOpts);
@@ -1452,6 +1456,7 @@ define([
                     case "datetime":
                         break;
                 }
+                // var DEBUG = (_id === 'ExpirationDate');
                 if (DEBUG) {
                     console.log(
                         "_options:",
@@ -1459,7 +1464,7 @@ define([
                         "optionsRender:",
                         optionsRender
                     );
-
+                    console.log('input value: ', $this.val());
                 }
 
                 var $dpicker = $this
@@ -1469,6 +1474,9 @@ define([
                         var _dateInput = $(e.currentTarget);
                         // This could have special Event
                         var dateId = _dateInput.attr("id");
+
+                        // var DEBUG = (dateId === 'ExpirationDate');
+
                         if (DEBUG) {
                             console.log("_id [changeDate]", _id, 'dateId:', dateId);
                         }
@@ -1485,6 +1493,7 @@ define([
                         _dateInput.datepicker("hide");
                     })
                     .on("click", function(e) {
+                        // var DEBUG = true;
                         var logicDate = $this.attr("logic-date"),
                             currentVal = $this.val(),
                             $currentTarget = $(e.currentTarget);

@@ -149,7 +149,7 @@ define(['jquery', 'lodash', 'backbone', 'vm', 'utils', 'events', 'views/baseFiel
                             break;
                         case 'date':
                             var _tempDate = model[element.name];
-                            // console.log('- _tempDate:', _tempDate);
+                            // console.log('- _tempDate:', _tempDate, 'element.name:', element.name);
                             if (_tempDate && _tempDate.$date) {
                                 _tempDate = moment(_tempDate.$date);
                                 if (!_tempDate.isValid()) {

@@ -603,6 +603,20 @@ define([
                             _inputName.val(_modelVal)
                         }
                         return;
+                    } else if (_inputName.hasClass('datepicker')) {
+                        if (_val !== _modelVal) {
+                            if (_modelVal && _modelVal.$date) {
+                                var _modelValM = moment(_modelVal.$date);
+                                if (_modelValM && _modelValM.isValid()) {
+                                    _modelVal = _modelValM.format("MM/DD/YYYY");
+                                }
+                            }
+                            if (DEBUG) {
+                                console.log('updated datepicker:', _val, _modelVal);
+
+                            }
+                            _inputName.val(_modelVal)
+                        }
                     }
                     if (_val === "" || _.isNull(_val)) {
                         // console.log(_inputName.is('select'));

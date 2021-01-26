@@ -19,7 +19,7 @@ system("perl js/libs/parsetmpl.pl");
 
 if( "$Config{osname}" eq 'msys' ) {
     print "process with windows command";
-    system("r.js.cmd -o js/libs/build.js");
+    system("./node_modules/.bin/r.js.cmd -o js/libs/build.js");
 } else {
     print "process with linux command";
     system("r.js -o js/libs/build.js");
