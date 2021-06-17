@@ -940,11 +940,17 @@ define([
                     title: "Application Error",
                     content: errorTxt,
                 };
-                $submitBtn
+                var $currentPopover = $submitBtn
                     .attr("disabled", true)
                     .popover(_opt)
                     .popover("show")
                     .next(".popover");
+
+                var cntDownTime = 2800;
+                setTimeout(function() {
+                    $currentPopover.popover('destroy');
+                    $submitBtn.removeAttr('disabled');
+                }, cntDownTime);
             } else {
                 alert(errorTxt + ", please try again later.");
                 if (console && console.log && jqXHR.responseText) {

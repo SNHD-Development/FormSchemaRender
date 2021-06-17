@@ -231,3 +231,4 @@ form-schema-render.code-workspace
 data/
 yarn.lock
 node_modules/
+*.code-workspace
