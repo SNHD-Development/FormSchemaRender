@@ -927,6 +927,9 @@ define([
                             console.log("*** Error ***");
                             console.log(errorTxt.message);
                         }
+                        if (errorTxt && errorTxt.message) {
+                            errorThrown = errorTxt.message;
+                        }
                     } catch (err) {
                         console.log("*** Error (Exception) ***");
                         console.log(err);
