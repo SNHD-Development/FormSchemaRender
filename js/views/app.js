@@ -943,16 +943,18 @@ define([
                     title: "Application Error",
                     content: errorTxt,
                 };
-                var $currentPopover = $submitBtn
+                $submitBtn
                     .attr("disabled", true)
                     .popover(_opt)
                     .popover("show")
                     .next(".popover");
 
-                var cntDownTime = 2800;
+                var $form = $("form.form_submitted.validation_pass");
+                var cntDownTime = 3000;
                 setTimeout(function() {
-                    $currentPopover.popover('destroy');
+                    $submitBtn.popover('destroy');
                     $submitBtn.removeAttr('disabled');
+                    $form.removeClass("form_submitted validation_pass");
                 }, cntDownTime);
             } else {
                 alert(errorTxt + ", please try again later.");
