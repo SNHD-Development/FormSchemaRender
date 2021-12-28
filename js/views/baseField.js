@@ -1843,6 +1843,7 @@ define([
                     break;
                     // Step Field Type only render for wizard view
                 case "step":
+                    //debugger;
                     if (
                         "view" in this.options.formSchema &&
                         this.options.formSchema.view === "wizard"
@@ -3200,7 +3201,9 @@ define([
                 _.each(models, function(element) {
                     var _element = new _model();
                     _element.set(element);
-                    currentModel.add(_element);
+                    if (currentModel && currentModel.add) {
+                        currentModel.add(_element);
+                    }
                 });
                 if (DEBUG) {
                     console.log("- addSubformData:");

@@ -720,6 +720,7 @@ define([
          **/
         getBDateinput: function(el, model) {
             $("fieldset.birthday-picker", el).each(function() {
+                //debugger
                 var _nan = /NaN/i,
                     $bdateInput = $(':input[type="hidden"]', this),
                     $day = $(".not_sending.birth-day", this),
@@ -730,6 +731,16 @@ define([
                     _year = parseInt($year.val()),
                     _error = false,
                     _val;
+
+                    // console.log('$day:', $day);
+                    // console.log('$day.val():', $day.val());
+
+                    // console.log('$month:', $month);
+                    // console.log('$month.val():', $month.val());
+
+                    // console.log('$year:', $year);
+                    // console.log('$year.val():', $year.val());
+
                 if (String(_day).match(_nan)) {
                     $day.val("");
                     _error = true;
@@ -743,19 +754,23 @@ define([
                     _error = true;
                 }
                 if (_error) {
+                    // console.log('- $bdateInput: Error', _error)
                     $bdateInput.val("");
                 } else {
                     if (_month < 10) {
-                        _month += 0 + _month;
+                        _month = '0' + _month;
                     }
                     if (_day < 10) {
-                        _day += 0 + _day;
+                        _day = '0' + _day;
                     }
                     _val = _month + "/" + _day + "/" + _year;
-                    $bdateInput.val();
+                    $bdateInput.val(_val);
                 }
-                // console.log('- $bdateInput:', $bdateInput);
+                //  console.log('- $bdateInput:', $bdateInput);
+                //  console.log('- $bdateInput.attr("name"):', $bdateInput.attr("name"));
+                //  console.log('- $bdateInput.val():', $bdateInput.val());
                 model.set($bdateInput.attr("name"), $bdateInput.val());
+                // console.log('model', model.toJSON());
             });
         },
         /**

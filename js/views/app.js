@@ -183,9 +183,13 @@ define([
                 // Will render Form
                 // Render Form Layout
                 // Async Call
+                // console.log('- formLayout:', formLayout);
                 require(["views/form-layouts/" + formLayout], function(FormView) {
                     try {
+                        //console.log('- FormView:', FormView);
+                        //debugger;
                         that.formView = Vm.create(that, "FormView", FormView, _opts);
+                        // console.log('- _opts:', _opts);
                         that.formView.render();
                     } catch (err) {
                         if (console && console.log) {
@@ -479,10 +483,14 @@ define([
                     // console.log($this.val());
                 });
             }
+            // Adding Save Form Feature.
+            var shouldSkippedValidation = jQuery('form.form-render').hasClass('save-form-enabled');
+            // console.log('--***** Skip Validation *****--', shouldSkippedValidation);
             if (
-                this.formView.model.isValid(true) &&
+                shouldSkippedValidation ||
+                (this.formView.model.isValid(true) &&
                 this.formView.model.isSubformValid() &&
-                _isCheckBoxGood
+                _isCheckBoxGood)
             ) {
                 // If there is an hidden type that has data-value, then will need to send this as well
                 $form.find(":input:hidden[data-value]").each(function() {
@@ -659,6 +667,7 @@ define([
                 // }
                 // return false;
             } else {
+                // console.log('--***** Skip Validation *****--', shouldSkippedValidation);
                 console.log("************* Model Invalid *************");
                 console.log("Is model valid?", this.formView.model.isValid(true));
                 console.log(

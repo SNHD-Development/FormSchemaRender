@@ -47,20 +47,36 @@ define([
                 _html = "",
                 visibleOnArray = [],
                 fieldsType = {};
+
+            // In formschema, RenderView.update == wizard
+            var _renderView = this.options.formSchema.renderview || {};
+            var _renderViewWizard = ((this.options.mode in _renderView) && _renderView[this.options.mode] && _renderView[this.options.mode].toLowerCase() === 'wizard') ? true : false;
+            // console.log('_renderView', _renderView);
+            // console.log('_renderViewWizard', _renderViewWizard);
+
+            if (_renderViewWizard) {
+                _html += "<div>";
+            }
             _.each(this.options.formSchema.fields, function(value, key, list) {
                 var _temp = "",
                     _typeLowerCase = value.type.toLowerCase();
-
+                // console.log('_typeLowerCase', _typeLowerCase);
                 if (!Utils.shouldRenderShowOnUser(value)) {
                     return "";
                 }
                 // Check for Show On Mode
-                if (!BaseFieldView.prototype.checkShowOnMode.call(
+                var _shouldRender = BaseFieldView.prototype.checkShowOnMode.call(
                         that,
                         value,
                         that.options.mode,
                         that.options.formData.status
-                    )) {
+                    );
+                // console.log('_shouldRender', _shouldRender);
+                if (!_shouldRender && _renderViewWizard && _typeLowerCase === 'step') {
+                    _shouldRender = true;
+                }
+
+                if (!_shouldRender) {
                     return "";
                 }
                 if (
